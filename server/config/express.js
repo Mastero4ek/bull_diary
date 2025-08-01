@@ -31,8 +31,8 @@ app.use(
 					"'self'",
 					'data:',
 					'blob:',
-					'http://localhost:5001',
-					'http://localhost:5001/uploads/*',
+					process.env.API_URL,
+					process.env.API_URL + '/uploads/*',
 				],
 			},
 		},
@@ -40,12 +40,14 @@ app.use(
 )
 
 const apiLimiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 30 minutes
-	max: 1000, // limit each IP to 10 requests per windowMs
+	windowMs: parseInt(process.env.RATE_LIMIT_MS) || 5 * 60 * 1000,
+	max: parseInt(process.env.RATE_LIMIT_MAX) || 1000,
 	handler: (req, res) => {
 		res.status(429).json({
 			message:
-				'Too many requests from this IP, please try again after 15 minutes',
+				'Too many requests from this IP, please try again after ' +
+				parseInt(process.env.RATE_LIMIT_MS) / 60000 +
+				' minutes',
 			code: 429,
 		})
 	},
@@ -78,13 +80,13 @@ app.use(
 
 app.use(
 	session({
-		secret: process.env.SESSION_SECRET || 'bull_diary_master_key',
+		secret: process.env.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
 		cookie: {
-			secure: process.env.NODE_ENV === 'production',
+			secure: process.env.NODE_ENV === 'prod',
 			sameSite: 'lax',
-			maxAge: 24 * 60 * 60 * 1000,
+			maxAge: parseInt(process.env.SESSION_MAX_AGE) || 24 * 60 * 60 * 1000,
 		},
 		store: new session.MemoryStore(),
 	})

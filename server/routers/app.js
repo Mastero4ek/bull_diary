@@ -9,11 +9,10 @@ const ValidationSchema = require('../validation/validation-schema')
 const upload = require('../config/multer')
 const fileValidation = require('../middlewares/file-validation')
 
-// User profile image validation options
 const profileImageValidation = fileValidation({
 	allowedTypes: ['image/jpeg', 'image/png'],
-	maxSize: 5 * 1024 * 1024, // 5MB
-	minSize: 1024, // 1KB
+	maxSize: parseInt(process.env.MAX_FILE_SIZE),
+	minSize: 1024,
 })
 
 router.post(

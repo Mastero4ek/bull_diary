@@ -29,16 +29,16 @@ router.get(
 			await tokenService.saveToken(userDto.id, tokens.refresh_token, req.lng)
 
 			res.cookie('refresh_token', tokens.refresh_token, {
-				maxAge: 30 * 24 * 60 * 60 * 1000,
+				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
+				secure: process.env.NODE_ENV === 'prod',
 				sameSite: 'lax',
 			})
 
 			res.cookie('access_token', tokens.access_token, {
-				maxAge: 15 * 60 * 1000,
+				maxAge: parseInt(process.env.ACCESS_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
+				secure: process.env.NODE_ENV === 'prod',
 				sameSite: 'lax',
 			})
 

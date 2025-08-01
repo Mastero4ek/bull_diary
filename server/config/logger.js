@@ -8,7 +8,7 @@ if (!fs.existsSync(logsDir)) {
 	fs.mkdirSync(logsDir, { recursive: true })
 }
 
-const isDevelopment = process.env.NODE_ENV !== 'production'
+const isDevelopment = process.env.NODE_ENV !== 'prod'
 const logLevel = process.env.LOG_LEVEL || 'info'
 
 const writeToFile = (level, message, data = {}) => {
@@ -29,7 +29,7 @@ const baseOptions = {
 	level: logLevel,
 	base: {
 		service: 'diary-server',
-		environment: process.env.NODE_ENV || 'development',
+		environment: process.env.NODE_ENV || 'dev',
 		pid: process.pid,
 		hostname: require('os').hostname(),
 	},
@@ -151,7 +151,7 @@ const rotateLogs = () => {
 }
 
 const cleanOldLogs = () => {
-	const maxAge = 30 * 24 * 60 * 60 * 1000
+	const maxAge = parseInt(process.env.REFRESH_TOKEN_MAX_AGE)
 	const now = Date.now()
 
 	fs.readdir(logsDir, (err, files) => {

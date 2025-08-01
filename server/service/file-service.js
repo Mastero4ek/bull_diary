@@ -15,11 +15,12 @@ class FileService {
 				throw ApiError.BadRequest(i18next.t('errors.file_required', { lng }))
 			}
 
-			const maxSize = 5 * 1024 * 1024
-
-			if (cover.size > maxSize) {
+			if (cover.size > parseInt(process.env.MAX_FILE_SIZE)) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.file_too_large', { lng, maxSize: '5MB' })
+					i18next.t('errors.file_too_large', {
+						lng,
+						maxSize: parseInt(process.env.MAX_FILE_SIZE) / 1024 / 1024 + 'MB',
+					})
 				)
 			}
 

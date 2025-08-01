@@ -31,7 +31,7 @@ class UserController {
 			)
 
 			res.cookie('refresh_token', user_data.refresh_token, {
-				maxAge: 30 * 24 * 60 * 60 * 1000,
+				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
 			})
 
@@ -58,7 +58,7 @@ class UserController {
 			const user_data = await userService.signIn(email, password, req.lng)
 
 			res.cookie('refresh_token', user_data.refresh_token, {
-				maxAge: 30 * 24 * 60 * 60 * 1000,
+				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
 			})
 
@@ -104,16 +104,16 @@ class UserController {
 			}
 
 			res.cookie('refresh_token', user_data.refresh_token, {
-				maxAge: 30 * 24 * 60 * 60 * 1000,
+				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
+				secure: process.env.NODE_ENV === 'prod',
 				sameSite: 'strict',
 			})
 
 			res.cookie('access_token', user_data.access_token, {
-				maxAge: 15 * 60 * 1000,
+				maxAge: parseInt(process.env.ACCESS_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
+				secure: process.env.NODE_ENV === 'prod',
 				sameSite: 'strict',
 			})
 
@@ -139,27 +139,23 @@ class UserController {
 			}
 
 			res.cookie('refresh_token', user_data.refresh_token, {
-				maxAge: 30 * 24 * 60 * 60 * 1000,
+				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
+				secure: process.env.NODE_ENV === 'prod',
 				sameSite: 'lax',
 				path: '/',
 				domain:
-					process.env.NODE_ENV === 'production'
-						? process.env.DOMAIN
-						: 'localhost',
+					process.env.NODE_ENV === 'prod' ? process.env.DOMAIN : 'localhost',
 			})
 
 			res.cookie('access_token', user_data.access_token, {
-				maxAge: 15 * 60 * 1000,
+				maxAge: parseInt(process.env.ACCESS_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
+				secure: process.env.NODE_ENV === 'prod',
 				sameSite: 'lax',
 				path: '/',
 				domain:
-					process.env.NODE_ENV === 'production'
-						? process.env.DOMAIN
-						: 'localhost',
+					process.env.NODE_ENV === 'prod' ? process.env.DOMAIN : 'localhost',
 			})
 
 			const { access_token, refresh_token, ...user_data_safe } = user_data

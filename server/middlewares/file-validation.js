@@ -6,11 +6,10 @@ const fileValidation = (options = {}) => {
 
 		const {
 			allowedTypes = ['image/jpeg', 'image/png', 'image/gif'],
-			maxSize = 5 * 1024 * 1024, // 5MB
-			minSize = 1024, // 1KB
+			maxSize = parseInt(process.env.MAX_FILE_SIZE),
+			minSize = 1024,
 		} = options
 
-		// Check file type
 		if (!allowedTypes.includes(req.file.mimetype)) {
 			return next(
 				ApiError.BadRequest(

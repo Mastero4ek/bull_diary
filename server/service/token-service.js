@@ -18,12 +18,16 @@ class TokenService {
 				)
 			}
 
-			const access_token = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
+			const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
 				expiresIn: '30m',
 			})
-			const refresh_token = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
-				expiresIn: '30d',
-			})
+			const refresh_token = jwt.sign(
+				payload,
+				process.env.REFRESH_TOKEN_SECRET,
+				{
+					expiresIn: '30d',
+				}
+			)
 
 			return {
 				access_token,
@@ -122,7 +126,7 @@ class TokenService {
 				return null
 			}
 
-			const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+			const userData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
 			return userData
 		} catch (error) {
@@ -138,7 +142,7 @@ class TokenService {
 				return null
 			}
 
-			const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET)
+			const userData = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
 			return userData
 		} catch (error) {
 			logError(error, { context: 'refresh token validation' })
