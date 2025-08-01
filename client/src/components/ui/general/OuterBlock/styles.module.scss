@@ -1,0 +1,7 @@
+.outer_block {
+	border-radius: 20rem;
+	background: var(--bgDark);
+	box-shadow: var(--shadowOuter);
+	transition: all 0.15s ease-in-out;
+	position: relative;
+}

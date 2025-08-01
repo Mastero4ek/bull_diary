@@ -1,0 +1,17 @@
+@mixin font($weight, $size, $height) {
+	font-weight: $weight;
+	font-size: $size;
+	line-height: $height;
+}
+
+@mixin phone {
+	@media (max-width: 767px) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (min-width: 768px) {
+		@content;
+	}
+}

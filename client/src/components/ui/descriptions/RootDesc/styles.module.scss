@@ -1,0 +1,15 @@
+@import '@/styles/mixins.scss';
+
+.root_desc {
+	width: fit-content;
+	@include font(400, 18rem, 120%);
+
+	b,
+	span {
+		transition: all 0.15s ease-in-out;
+	}
+
+	b {
+		font-weight: 800;
+	}
+}

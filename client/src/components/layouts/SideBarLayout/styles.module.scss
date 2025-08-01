@@ -1,0 +1,148 @@
+@import '@/styles/mixins.scss';
+
+.sidebar_wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 10rem;
+	min-height: 100vh;
+	height: 100%;
+	width: 100rem;
+	overflow: hidden;
+	transition: all 0.15s ease-in-out;
+	border-radius: 0 20rem 20rem 0;
+	background: var(--bgLight);
+	box-shadow: var(--shadowOuter);
+}
+
+.sidebar_open {
+	width: 300rem;
+}
+
+.sidebar_header {
+	width: 100%;
+	padding: 20rem;
+}
+
+.sidebar_body {
+	display: flex;
+	flex-direction: column;
+	gap: 16rem;
+	padding: 40rem 20rem;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	scrollbar-width: none;
+	border-radius: 40rem;
+	margin-bottom: 40rem;
+	min-height: 90rem;
+
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+	}
+}
+
+.sidebar_back_button {
+	width: 100%;
+
+	button {
+		width: 100%;
+		margin: 0;
+		flex-direction: row-reverse;
+	}
+}
+
+.sidebar_body_item {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 20rem;
+	width: 100%;
+	min-width: max-content;
+	padding: 8rem 15rem;
+	cursor: pointer;
+	overflow: visible;
+
+	svg {
+		width: 30rem;
+		height: 30rem;
+		fill: var(--text);
+		transition: all 0.15s ease-in-out;
+	}
+
+	&:hover {
+		svg {
+			transform: scale(1.2);
+			fill: var(--primaryHov);
+		}
+
+		span {
+			letter-spacing: 2rem;
+			color: var(--primaryHov);
+		}
+	}
+}
+
+.sidebar_item_desc {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: max-content;
+	gap: 30rem;
+	position: relative;
+	animation: visible 0.4s ease-in-out forwards;
+}
+
+@keyframes visible {
+	0% {
+		left: -100rem;
+		opacity: 0;
+	}
+	35% {
+		opacity: 0;
+	}
+	100% {
+		left: 0;
+		opacity: 1;
+	}
+}
+
+.item_theme {
+	pointer-events: none;
+
+	article {
+		pointer-events: all;
+	}
+
+	&:hover {
+		svg {
+			transform: scale(1);
+			fill: var(--text);
+		}
+
+		span {
+			letter-spacing: normal;
+			color: var(--text);
+		}
+	}
+}
+
+.active {
+	pointer-events: none;
+
+	svg {
+		fill: var(--primaryDef);
+	}
+
+	span {
+		color: var(--primaryDef);
+	}
+}
+
+.sidebar_footer {
+	margin-top: auto;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 16rem;
+	padding: 0 20rem 20rem;
+}

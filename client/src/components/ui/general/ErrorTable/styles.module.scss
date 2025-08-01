@@ -1,0 +1,23 @@
+.error {
+	width: 100% !important;
+	height: 100% !important;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	position: absolute;
+	z-index: 100;
+	border-radius: inherit;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	div {
+		max-width: 80%;
+	}
+
+	span {
+		font-family: 'RAYDIS', sans-serif;
+		font-size: 20rem;
+	}
+}

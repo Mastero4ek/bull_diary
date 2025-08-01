@@ -1,0 +1,69 @@
+@import '@/styles/mixins.scss';
+
+.control {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	label {
+		position: relative;
+
+		svg {
+			pointer-events: all;
+			position: absolute;
+			top: 50%;
+			right: 15rem;
+			transform: translateY(-50%);
+			cursor: pointer;
+			width: 24rem;
+			height: 24rem;
+			transition: all 0.15s ease-in-out;
+		}
+
+		span {
+			width: 100%;
+			position: absolute;
+			top: -17.5rem;
+			text-align: left;
+			left: 0;
+			@include font(500, 18rem, 120%);
+			transition: all 0.15s ease-in-out;
+			color: var(--red);
+		}
+	}
+}
+
+.input {
+	width: 450rem;
+	padding: 15rem;
+	padding-right: 40rem;
+	@include font(500, 18rem, 120%);
+	border-radius: 10rem;
+	border: 1rem solid transparent;
+	transition: all 0.15s ease-in;
+	color: var(--text);
+	box-shadow: var(--shadowOuter);
+	background: var(--bgDark);
+
+	&:focus {
+		background: var(--bgLight);
+		box-shadow: var(--shadowInner);
+	}
+
+	&:disabled {
+		cursor: default;
+		pointer-events: none;
+		opacity: 0.5;
+
+		~ svg {
+			opacity: 0.5;
+			cursor: default;
+			pointer-events: none;
+		}
+	}
+}
+
+.error {
+	border: 1rem solid var(--red);
+}

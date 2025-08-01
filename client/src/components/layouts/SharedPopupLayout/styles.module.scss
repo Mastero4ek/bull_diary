@@ -1,0 +1,54 @@
+@import '@/styles/mixins.scss';
+
+.info_wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 40rem;
+	background: var(--bgLight);
+	box-shadow: var(--shadowInner);
+	padding: 30rem 40rem;
+	border-radius: 20rem;
+	position: relative;
+}
+
+.info_head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: var(--bgLight);
+}
+
+.info_head_name {
+	width: 320rem;
+
+	article {
+		padding: 5rem 20rem;
+		padding-top: 10rem;
+	}
+
+	h2 {
+		text-align: center;
+		color: var(--primaryDef);
+		@include font(700, 35rem, 100%);
+	}
+}
+
+.info_wrap {
+	display: flex;
+	align-items: flex-start;
+	gap: 60rem;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.info_exchange {
+	position: absolute;
+	bottom: 20rem;
+	left: 40rem;
+	opacity: 0.25;
+
+	img {
+		width: auto;
+		height: 120rem;
+	}
+}

@@ -1,0 +1,102 @@
+.select_head {
+	width: 100%;
+	padding: 0 15rem;
+	padding-right: 8rem;
+	height: 50rem;
+	border-radius: 20rem;
+	display: flex;
+	justify-content: space-between;
+	overflow: hidden;
+	gap: 12rem;
+	align-items: center;
+	cursor: pointer;
+	transition: all 0.15s ease-in-out;
+
+	svg {
+		pointer-events: none;
+		cursor: pointer;
+		width: 24rem;
+		height: 24rem;
+		transition: all 0.15s ease-in-out;
+		fill: var(--text);
+	}
+
+	div {
+		width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	span {
+		display: inline-block;
+		transition: all 0.15s ease-in-out;
+	}
+
+	&:hover {
+		svg {
+			fill: var(--primaryHov);
+		}
+
+		span {
+			color: var(--primaryHov);
+		}
+	}
+}
+
+.select_list {
+	width: fit-content;
+	position: absolute;
+	z-index: 500;
+	left: 0;
+	top: 70rem;
+	display: flex;
+	flex-direction: column;
+	padding: 20rem 10rem;
+	border-radius: 20rem;
+	transition: all 0.15s ease-in-out;
+	height: 0;
+	overflow: hidden;
+	transform-origin: 0 0;
+	transform: rotateX(-90deg);
+	visibility: hidden;
+	opacity: 0;
+
+	background: var(--bgLight);
+	box-shadow: var(--shadowOuter);
+
+	li {
+		padding: 10rem 15rem;
+		display: flex;
+		align-items: center;
+		text-align: center;
+		border-radius: 10rem;
+		justify-content: space-between;
+		transition: all 0.15s ease-in-out;
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--bgDark);
+			box-shadow: var(--shadowInner);
+			color: var(--primaryHov);
+		}
+
+		div {
+			width: 100%;
+			text-align: center;
+		}
+
+		span {
+			text-align: center;
+			display: inline-block;
+		}
+	}
+}
+
+.select_list_active {
+	height: auto;
+	transition: all 0.15s ease-in-out;
+	opacity: 1;
+	visibility: visible;
+	transform: rotateX(0deg);
+}

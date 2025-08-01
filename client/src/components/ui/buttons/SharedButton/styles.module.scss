@@ -1,0 +1,31 @@
+.shared_button {
+	width: 40rem;
+	height: 40rem;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	transition: all 0.15s ease-in-out;
+	background: var(--primaryDef);
+	position: relative;
+
+	svg {
+		width: 18rem;
+		height: 18rem;
+	}
+
+	&:hover {
+		background: var(--primaryHov);
+	}
+
+	&:disabled {
+		pointer-events: none;
+		opacity: 0.5;
+		background: var(--disabled);
+	}
+
+	&:active {
+		transform: scale(0.9);
+	}
+}

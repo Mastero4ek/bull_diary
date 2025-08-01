@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: diary-server-dev
+    ports:
+      - '5001:5001'
+    env_file:
+      - ./server/.env
+    environment:
+      - NODE_ENV=
+      - MONGO_URI=
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      - mongo_dev
+      - redis
+    command: npm run dev
+    networks:
+      - diary-network
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: diary-client-dev
+    ports:
+      - '5173:5173'
+    env_file:
+      - ./client/.env
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
+    command: npm run dev -- --host 0.0.0.0
+    networks:
+      - diary-network
+    restart: unless-stopped
+
+  mongo_dev:
+    image: mongo:latest
+    container_name: diary-mongo-dev
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_dev_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=
+      - MONGO_INITDB_ROOT_PASSWORD=
+      - MONGO_INITDB_DATABASE=
+    networks:
+      - diary-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: diary-redis
+    ports:
+      - '6380:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - diary-network
+    restart: unless-stopped
+
+volumes:
+  mongo_dev_data:
+  redis_data:
+
+networks:
+  diary-network:
+    driver: bridge

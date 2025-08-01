@@ -1,0 +1,69 @@
+:root[data-theme='false'] {
+	--red: rgba(255, 51, 100, 1);
+	--redLight: #f5797d;
+	--green: #28d5ca;
+	--orange: #ff7a00;
+	--white: rgba(255, 255, 255, 1);
+	--text: rgba(79, 104, 137, 1);
+	--bgLight: rgba(241, 247, 255, 1);
+	--bgDark: linear-gradient(
+		180deg,
+		rgba(234, 241, 252, 1) 0%,
+		var(--bgLight) 100%
+	);
+	--disabled: rgba(230, 236, 243, 1);
+	--disabled: rgba(60, 70, 78, 1);
+	--primaryDef: #c270f8;
+	--primaryHov: #e2b6ff;
+	--shadowOuter: 12rem 12rem 21rem 0 rgba(223, 232, 245, 1),
+		-12rem -12rem 28rem 0 rgba(255, 255, 255, 0.8);
+	--shadowInner: 12rem 12rem 21rem 0 rgba(205, 218, 236, 0.78) inset,
+		-12rem -12rem 28rem 0 rgba(255, 255, 255, 0.6) inset;
+
+	--buttonBgDef: linear-gradient(
+		-45deg,
+		rgba(226, 182, 255, 1) 25%,
+		rgba(194, 112, 248, 1) 75%
+	);
+	--buttonBgHov: linear-gradient(
+		-45deg,
+		rgba(194, 112, 248, 1) 25%,
+		rgba(226, 182, 255, 1) 75%
+	);
+}
+
+:root[data-theme='true'] {
+	--red: rgba(255, 55, 55, 1);
+	--redLight: #f5797d;
+	--green: #11958d;
+	--orange: #ff7a00;
+	--white: rgba(255, 255, 255, 1);
+	--text: rgba(185, 200, 215, 1);
+
+	--shadowOuter: 10rem 10rem 20rem 0 rgba(27, 36, 45, 0.85),
+		-10rem -10rem 20rem 0 rgba(70, 80, 90, 0.2);
+	--shadowInner: 12rem 12rem 21rem 0 rgba(21, 29, 36, 1) inset,
+		-6rem -6rem 12rem 0 rgba(205, 230, 255, 0.07) inset;
+
+	--bgLight: rgba(38, 46, 54, 1);
+	--bgDark: linear-gradient(
+		180deg,
+		rgba(31, 40, 48, 0.75) 0%,
+		var(--bgLight) 100%
+	);
+
+	--disabled: rgba(128, 128, 128, 1);
+	--primaryDef: #24eaa4;
+	--primaryHov: #79fdce;
+
+	--buttonBgDef: linear-gradient(
+		-45deg,
+		rgba(121, 253, 206, 1) 25%,
+		rgba(36, 234, 164, 1) 75%
+	);
+	--buttonBgHov: linear-gradient(
+		-45deg,
+		rgba(36, 234, 164, 1) 25%,
+		rgba(121, 253, 206, 1) 75%
+	);
+}

@@ -1,0 +1,123 @@
+@import '@/styles/mixins.scss';
+
+.info_wrapper {
+	display: flex;
+	align-items: flex-start;
+	gap: 40rem;
+	justify-content: space-between;
+	padding: 40rem;
+	border-radius: 20rem;
+	background: var(--bgLight);
+	position: relative;
+}
+
+.info_level {
+	article {
+		border-radius: 50%;
+		padding: 25rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	img {
+		width: 230rem;
+		height: 230rem;
+	}
+}
+
+.info_stats {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 40rem;
+
+	h4 {
+		@include font(700, 18rem, 125%);
+	}
+
+	ul {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 30rem;
+
+		li {
+			position: relative;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			gap: 30rem;
+
+			&:not(:last-child) {
+				&::after {
+					content: '';
+					position: absolute;
+					width: 100%;
+					height: 1rem;
+					background: var(--text);
+					opacity: 0.25;
+					bottom: -15rem;
+				}
+			}
+
+			div:nth-child(2) {
+				margin-left: auto;
+			}
+		}
+	}
+}
+
+.info_stats_head {
+	display: grid;
+	grid-template-columns: 1fr 40rem;
+	gap: 20rem;
+
+	h2 {
+		@include font(700, 30rem, 125%);
+	}
+
+	button {
+		margin: 0;
+	}
+}
+
+.line_chart {
+	width: 100%;
+	padding: 20rem 10rem;
+	display: flex;
+	flex-direction: column;
+	gap: 10rem;
+	align-items: center;
+}
+
+.line_chart_details {
+	display: flex;
+	align-items: center;
+	gap: 20rem;
+	width: 100%;
+	padding: 0 20rem;
+
+	button {
+		margin: 0;
+		margin-left: auto;
+
+		svg {
+			stroke: var(--white);
+			stroke-width: 2rem;
+		}
+	}
+}
+
+.line_chart_details_warning {
+	div {
+		display: flex;
+		align-items: center;
+		gap: 10rem;
+
+		svg {
+			width: 20rem;
+			height: 20rem;
+		}
+	}
+}

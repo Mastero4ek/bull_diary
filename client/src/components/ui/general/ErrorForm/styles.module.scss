@@ -1,0 +1,16 @@
+.error {
+	width: 100%;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+
+	div {
+		width: 100%;
+		text-align: center;
+
+		span {
+			display: inline-block;
+			color: var(--red);
+		}
+	}
+}

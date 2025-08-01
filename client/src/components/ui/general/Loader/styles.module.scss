@@ -1,0 +1,90 @@
+@import '@/styles/mixins.scss';
+
+.loader {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 8rem;
+	position: absolute;
+	z-index: 10000;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	transition: all 0.15s ease-in-out;
+	border-radius: inherit;
+	backdrop-filter: blur(10rem);
+
+	div {
+		padding: 0;
+
+		img {
+			width: 80rem;
+			height: 80rem;
+			margin: 0;
+		}
+	}
+
+	i {
+		pointer-events: none;
+		display: inline-block;
+		font-style: normal;
+
+		span {
+			pointer-events: none;
+			color: var(--primaryDef);
+			padding: 0 5rem;
+			@include font(600, 24rem, 125%);
+			animation: loading 2s infinite ease-in-out;
+			filter: blur(5rem);
+
+			&:nth-child(1) {
+				animation-delay: -0.7s;
+			}
+
+			&:nth-child(2) {
+				animation-delay: -0.6s;
+			}
+
+			&:nth-child(3) {
+				animation-delay: -0.5s;
+			}
+
+			&:nth-child(4) {
+				animation-delay: -0.4s;
+			}
+
+			&:nth-child(5) {
+				animation-delay: -0.3s;
+			}
+
+			&:nth-child(6) {
+				animation-delay: -0.2s;
+			}
+
+			&:nth-child(7) {
+				animation-delay: -0.1s;
+			}
+
+			&:nth-child(8) {
+				animation-delay: 0s;
+			}
+		}
+	}
+}
+
+@keyframes loading {
+	0% {
+		filter: blur(5rem);
+	}
+
+	50% {
+		filter: blur(0);
+	}
+
+	100% {
+		filter: blur(5rem);
+	}
+}

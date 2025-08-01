@@ -1,0 +1,21 @@
+.closed {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 106%;
+	height: 106%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 300;
+	border-radius: inherit;
+	backdrop-filter: grayscale(100%) blur(2rem);
+	cursor: default;
+	pointer-events: all;
+
+	svg {
+		position: relative;
+		z-index: 500;
+	}
+}

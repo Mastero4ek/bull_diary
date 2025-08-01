@@ -1,0 +1,12 @@
+@import '@/styles/mixins.scss';
+
+.info_wrapper {
+	display: flex;
+	align-items: flex-start;
+	gap: 40rem;
+	justify-content: space-between;
+	padding: 40rem;
+	border-radius: 20rem;
+	background: var(--bgLight);
+	position: relative;
+}

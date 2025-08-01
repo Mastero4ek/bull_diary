@@ -1,0 +1,52 @@
+.download_button_wrapper {
+	position: relative;
+}
+
+.download_button_desc {
+	position: absolute;
+	top: -30rem;
+	left: 50%;
+	transform: translateX(-50%);
+
+	span {
+		color: var(--red);
+	}
+}
+
+.download_button {
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 16rem;
+	padding: 12rem 25rem;
+	border-radius: 20rem;
+	text-align: center;
+	transition: all 0.15s ease-in-out;
+	background: var(--primaryDef);
+
+	span {
+		color: var(--white);
+		transition: all 0.15s ease-in-out;
+		display: inline-block;
+	}
+
+	svg {
+		width: 24rem;
+		height: 24rem;
+		fill: var(--white);
+	}
+
+	&:hover {
+		background: var(--primaryHov);
+	}
+
+	&:disabled {
+		pointer-events: none;
+		background: var(--disabled);
+	}
+
+	&:active {
+		transform: scale(0.9);
+	}
+}

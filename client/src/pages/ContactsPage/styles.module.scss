@@ -1,0 +1,33 @@
+.contacts_form {
+	padding: 40rem;
+	position: relative;
+	border-radius: 40rem;
+}
+
+.contacts_desc_bottom {
+	width: 100%;
+	margin-top: auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16rem;
+}
+
+.contacts_desc_link {
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12rem 25rem;
+	border-radius: 20rem;
+	text-align: center;
+	transition: all 0.15s ease-in-out;
+	background: var(--primaryDef);
+	color: var(--white);
+	font-weight: 600;
+
+	&:hover {
+		color: var(--white);
+		background: var(--primaryHov);
+	}
+}

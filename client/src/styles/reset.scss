@@ -1,0 +1,159 @@
+@import './fonts.scss';
+@import './variables.scss';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+*::focus:not(:focus-visible) {
+	outline: none;
+}
+
+html {
+	width: 100%;
+	font-size: 1px;
+	font-family: 'IBM Plex Sans', sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	text-rendering: auto;
+	margin: 0;
+	padding: 0;
+	-webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 1920px) {
+	html {
+		font-size: 0.0520835vw;
+	}
+}
+
+@media (max-width: 767px) {
+	html {
+		font-size: 1px;
+	}
+}
+
+body {
+	font-style: normal;
+	font-weight: normal;
+	text-rendering: auto;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	color: var(--text);
+	background: var(--bgLight);
+}
+
+a {
+	color: var(--text);
+	transition: all 0.15s linear;
+}
+
+a:hover {
+	color: var(--text);
+}
+
+input,
+textarea {
+	line-height: inherit;
+	margin: 0;
+	padding: 0;
+}
+
+input,
+button {
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type='number'],
+input[type='number']:hover,
+input[type='number']:focus {
+	appearance: none;
+	-moz-appearance: textfield;
+}
+
+button,
+input,
+a,
+textarea {
+	outline: none;
+	cursor: pointer;
+	font: inherit;
+
+	&:focus {
+		outline: none;
+	}
+
+	&:active {
+		outline: none;
+	}
+}
+
+img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font: inherit;
+	margin: 0;
+	padding: 0;
+}
+
+p {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+code,
+kbd,
+samp {
+	font-family: monospace, monospace;
+	font-size: inherit;
+}
+
+button {
+	border: none;
+	color: inherit;
+	font: inherit;
+	text-align: inherit;
+	padding: 0;
+	background-color: inherit;
+	text-rendering: auto;
+}
+
+ul {
+	padding: 0;
+	margin: 0;
+
+	li {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+svg {
+	pointer-events: none;
+}

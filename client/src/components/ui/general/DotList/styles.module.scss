@@ -1,0 +1,27 @@
+@import '@/styles/mixins.scss';
+
+.dot_list {
+	display: flex;
+	flex-direction: column;
+	gap: 10rem;
+	text-align: left;
+
+	li {
+		position: relative;
+		padding-left: 25rem;
+
+		span {
+			font-size: 20rem;
+		}
+
+		&::after {
+			position: absolute;
+			content: '★';
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 20rem;
+			color: var(--primaryDef);
+		}
+	}
+}

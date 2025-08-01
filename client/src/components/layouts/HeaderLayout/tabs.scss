@@ -1,0 +1,102 @@
+.tabs_wrapper {
+	margin-right: auto;
+}
+
+.tabs {
+	border-radius: 20rem;
+	display: flex;
+	align-items: center;
+	position: relative;
+	padding: 10rem;
+	height: 70rem;
+	width: fit-content;
+
+	span {
+		pointer-events: none;
+		position: relative;
+		z-index: 100;
+	}
+
+	label {
+		padding: 15rem 0;
+	}
+
+	input {
+		display: none;
+	}
+
+	> input {
+		&:hover + label {
+			color: var(--primaryHov);
+		}
+
+		&:checked + label {
+			pointer-events: none;
+			transition: all 0.15s ease-in-out;
+			color: var(--primaryDef);
+		}
+	}
+
+	&-control {
+		&-0,
+		&-1,
+		&-2,
+		&-3 {
+			width: 120rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			cursor: pointer;
+			color: var(--greyDark);
+			transition: all 0.15s ease-in-out;
+			position: relative;
+			border-radius: 10rem;
+
+			&:hover {
+				color: var(--text);
+			}
+
+			i {
+				width: 95%;
+				height: 80%;
+			}
+		}
+
+		&-color {
+			position: absolute;
+			height: 50rem;
+			width: 120rem;
+			border-radius: 10rem;
+			pointer-events: none;
+			box-shadow: var(--shadowInner);
+		}
+	}
+}
+
+.disabled {
+	pointer-events: none;
+	cursor: default;
+	opacity: 0.7;
+}
+
+#tab {
+	&-0:checked ~ .tabs-control-color {
+		transform: translateX(0);
+		transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+	}
+
+	&-1:checked ~ .tabs-control-color {
+		transform: translateX(120rem);
+		transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+	}
+
+	&-2:checked ~ .tabs-control-color {
+		transform: translateX(240rem);
+		transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+	}
+
+	&-3:checked ~ .tabs-control-color {
+		transform: translateX(360rem);
+		transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+	}
+}

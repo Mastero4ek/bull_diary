@@ -1,0 +1,258 @@
+@import '@/styles/mixins.scss';
+
+.react-daterange-picker {
+	margin-right: auto;
+
+	&--open {
+		.react-daterange-picker__clear-button {
+			display: block;
+		}
+
+		.react-daterange-picker__wrapper {
+			box-shadow: var(--shadowInner);
+		}
+
+		.react-daterange-picker__calendar-button {
+			display: none;
+		}
+	}
+
+	&--closed {
+		.react-daterange-picker__clear-button {
+			display: none;
+		}
+
+		.react-daterange-picker__calendar-button {
+			display: block;
+		}
+	}
+
+	&__wrapper {
+		width: 100%;
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+		width: 300rem;
+		border-radius: 120rem;
+		box-shadow: var(--shadowOuter);
+		background: var(--bgDark);
+		color: var(--text);
+	}
+
+	&__inputGroup {
+		overflow: hidden;
+		@include font(400, 18rem, 100%);
+
+		&__input {
+			width: 25rem !important;
+			height: 50rem !important;
+			text-align: center;
+			transition: all 0.15s ease-in-out;
+			color: var(--text);
+			background: transparent;
+
+			&:hover {
+				color: var(--primaryHov);
+			}
+
+			&:focus {
+				color: var(--primaryHov);
+			}
+
+			&::placeholder {
+				opacity: 1;
+
+				color: var(--text);
+			}
+		}
+
+		&__year {
+			width: 55rem !important;
+		}
+	}
+
+	&__calendar {
+		inset: 0 !important;
+		top: 70rem !important;
+		transition: all 0.15s ease-in-out;
+		transform: rotateX(-90deg);
+		opacity: 0;
+
+		&--open {
+			z-index: 10000;
+			transition: all 0.15s ease-in-out;
+			transform: rotateX(0deg);
+			opacity: 1;
+		}
+
+		&--close {
+			transition: all 0.15s ease-in-out;
+			transform: rotateX(-90deg);
+			opacity: 0;
+		}
+	}
+
+	&__clear-button {
+		margin-left: 10rem;
+
+		&__icon {
+			width: 24rem !important;
+			height: 24rem !important;
+			stroke-linecap: round !important;
+			transition: all 0.15s ease-in-out;
+			fill: none !important;
+			stroke: var(--text) !important;
+
+			svg {
+				pointer-events: none;
+			}
+		}
+	}
+
+	&__calendar-button {
+		margin-left: 10rem;
+
+		svg {
+			pointer-events: none;
+			width: 24rem !important;
+			height: 24rem !important;
+			stroke-linecap: round !important;
+			fill: none !important;
+			transition: all 0.15s ease-in-out;
+			stroke: var(--text) !important;
+		}
+	}
+}
+
+.react-calendar {
+	padding: 20rem;
+	padding-bottom: 35rem;
+	border-radius: 20rem;
+
+	background: var(--bgLight);
+	box-shadow: var(--shadowOuter);
+
+	&__navigation {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 6rem;
+
+		span {
+			@include font(400, 14rem, 100%);
+		}
+
+		button {
+			padding: 10rem;
+			@include font(400, 18rem, 100%);
+			transition: all 0.15s ease-in-out;
+
+			&:hover {
+				color: var(--primaryHov);
+			}
+		}
+
+		&__arrow {
+			svg {
+				pointer-events: none;
+				width: 24rem;
+				height: 24rem;
+				transition: all 0.15s ease-in-out;
+				fill: var(--text) !important;
+			}
+
+			&:hover {
+				svg {
+					fill: var(--primaryHov) !important;
+				}
+			}
+		}
+
+		&__label {
+			text-transform: uppercase;
+			text-align: center;
+
+			&__labelText {
+				@include font(400, 18rem, 100%);
+				transition: all 0.15s ease-in-out;
+
+				&:hover {
+					color: var(--primaryHov);
+				}
+			}
+		}
+	}
+
+	&__month-view__weekdays {
+		margin-bottom: 20rem;
+		@include font(400, 14rem, 100%);
+
+		&__weekday {
+			text-align: center;
+		}
+	}
+
+	&__month-view__days,
+	&__year-view__months {
+		@include font(400, 18rem, 100%);
+
+		button {
+			padding-top: 10rem;
+			padding-bottom: 10rem;
+			text-align: center;
+			transition: all 0.15s ease-in-out;
+			background: var(--bgDark);
+
+			&:hover {
+				color: var(--primaryHov);
+				box-shadow: var(--shadowInner);
+			}
+
+			&:disabled {
+				opacity: 0.5;
+				pointer-events: none;
+			}
+		}
+	}
+
+	&__decade-view__years,
+	&__century-view__decades {
+		@include font(400, 14rem, 100%);
+
+		button {
+			text-align: center;
+			padding-top: 10rem;
+			padding-bottom: 10rem;
+			transition: all 0.15s ease-in-out;
+			background: var(--bgDark);
+
+			&:hover {
+				color: var(--primaryHov);
+				box-shadow: var(--shadowInner);
+			}
+
+			&:disabled {
+				opacity: 0.5;
+				pointer-events: none;
+			}
+		}
+	}
+
+	&__tile {
+		&--active {
+			font-weight: 700;
+			color: var(--primaryHov);
+			box-shadow: var(--shadowInner);
+		}
+
+		&--hover {
+			box-shadow: var(--shadowInner);
+		}
+	}
+}
+
+.react-calendar__month-view__days__day--weekend {
+	color: var(--red);
+}

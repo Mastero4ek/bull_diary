@@ -1,0 +1,18 @@
+@import '@/styles/mixins.scss';
+
+.timer_wrapper {
+	width: 320rem;
+	display: flex;
+	align-items: center;
+	gap: 6rem;
+	justify-content: space-between;
+	padding: 10rem 30rem;
+
+	div:nth-child(2) {
+		width: 130rem;
+	}
+
+	h4 {
+		@include font(700, 18rem, 125%);
+	}
+}
