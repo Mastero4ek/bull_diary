@@ -251,7 +251,7 @@ export const removeUser = createAsyncThunk(
 )
 
 export const updateKeys = createAsyncThunk(
-	'user/update-keys',
+	'user/api-keys',
 	async ({ exchange, api, secret }, { rejectWithValue }) => {
 		try {
 			const response = await KeysService.updateKeys(exchange, api, secret)

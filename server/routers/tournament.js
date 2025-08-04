@@ -6,32 +6,34 @@ const { checkSchema } = require('express-validator')
 const ValidationSchema = require('../validation/validation-schema')
 const upload = require('../config/multer')
 
+router.get('/tournaments', authMiddleware, tournamentController.getTournaments)
+
 router.post(
-	'/tournament',
+	'/tournaments/user/:id',
 	authMiddleware,
 	checkSchema(ValidationSchema.tournament),
-	tournamentController.getTournament
-)
-router.post(
-	'/add_tournament_user',
-	authMiddleware,
 	tournamentController.addTournamentUser
 )
+
 router.post(
-	'/create_tournament',
+	'/tournaments',
 	authMiddleware,
 	upload.single('cover'),
+	checkSchema(ValidationSchema.tournament),
 	tournamentController.createTournament
 )
-router.post(
-	'/remove_tournament_user',
+
+router.delete(
+	'/tournaments/user/:id',
 	authMiddleware,
+	checkSchema(ValidationSchema.tournament),
 	tournamentController.removeTournamentUser
 )
+
 router.delete(
-	'/tournament/:id',
+	'/tournaments/:id',
 	authMiddleware,
-	tournamentController.deleteTournament
+	tournamentController.removeTournament
 )
 
 module.exports = router

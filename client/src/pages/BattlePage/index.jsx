@@ -1,36 +1,44 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import moment from 'moment'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
-
-import avatarDefault from '@/assets/images/general/default_avatar.png'
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { TableLayout } from '@/components/layouts/TableLayout'
-import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { ClosedContent } from '@/components/ui/general/ClosedContent'
-import { CountdownTimer } from '@/components/ui/general/CountdownTimer'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { capitalize } from '@/helpers/functions'
-import { NewTournamentPopup } from '@/popups/NewTournamentPopup'
-import { getUser } from '@/redux/slices/candidateSlice'
+import moment from 'moment';
 import {
-	addTournamentUser,
-	clearTournaments,
-	deleteTournament,
-	getTournament,
-	removeTournamentUser,
-	setPage,
-	setSort,
-} from '@/redux/slices/tournamentSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import styles from './styles.module.scss'
+import avatarDefault from '@/assets/images/general/default_avatar.png';
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { TableLayout } from '@/components/layouts/TableLayout';
+import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { ClosedContent } from '@/components/ui/general/ClosedContent';
+import { CountdownTimer } from '@/components/ui/general/CountdownTimer';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { capitalize } from '@/helpers/functions';
+import { NewTournamentPopup } from '@/popups/NewTournamentPopup';
+import { getUser } from '@/redux/slices/candidateSlice';
+import {
+  addTournamentUser,
+  clearTournaments,
+  deleteTournament,
+  getTournaments,
+  removeTournamentUser,
+  setPage,
+  setSort,
+} from '@/redux/slices/tournamentSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import styles from './styles.module.scss';
 
 export const BattlePage = () => {
 	const { openPopup } = usePopup()
@@ -168,7 +176,7 @@ export const BattlePage = () => {
 				const originalPromiseResult1 = unwrapResult(resultAction1)
 
 				const resultAction2 = await dispatch(
-					getTournament({
+					getTournaments({
 						exchange: exchange.name,
 						page,
 						size: limit,
@@ -183,8 +191,12 @@ export const BattlePage = () => {
 					showError('Error removing user from tournament! Please try again.')
 				}
 			} catch (e) {
-				showError('Error removing user from tournament! Please try again.')
-				console.log(e)
+				console.log('Remove tournament user error:', e)
+				if (e?.payload?.message) {
+					showError(e.payload.message)
+				} else {
+					showError('Error removing user from tournament! Please try again.')
+				}
 			}
 		},
 		[
@@ -202,7 +214,7 @@ export const BattlePage = () => {
 	const handleClickUpdate = async () => {
 		try {
 			const resultAction = await dispatch(
-				getTournament({
+				getTournaments({
 					exchange: exchange.name,
 					page,
 					size: limit,
@@ -232,6 +244,7 @@ export const BattlePage = () => {
 				addTournamentUser({
 					exchange: capitalize(exchange.name),
 					email: user.email,
+					id: user?.id,
 				})
 			)
 			const originalPromiseResult = unwrapResult(resultAction)
@@ -274,7 +287,7 @@ export const BattlePage = () => {
 			dispatch(setPage(1))
 
 			dispatch(
-				getTournament({
+				getTournaments({
 					exchange: exchange.name,
 					page: 1,
 					size: limit,
@@ -287,7 +300,7 @@ export const BattlePage = () => {
 	useEffect(() => {
 		if (exchange?.name) {
 			dispatch(
-				getTournament({
+				getTournaments({
 					exchange: exchange.name,
 					page,
 					size: limit,
@@ -310,6 +323,7 @@ export const BattlePage = () => {
 	const registrationClosed = moment(tournament?.registration_date).isBefore(
 		moment()
 	)
+
 	const alreadyJoined =
 		users &&
 		users.length > 0 &&
@@ -386,7 +400,7 @@ export const BattlePage = () => {
 						{user?.role === 'admin' && tournament?.name && (
 							<div className={styles.battle_desc_bottom_button_delete}>
 								<RootButton
-									disabled={fakeUsers}
+									// disabled={fakeUsers}
 									icon={'cross'}
 									text={'Delete tournament'}
 									onClickBtn={handleClickDeleteTournament}
@@ -396,7 +410,7 @@ export const BattlePage = () => {
 
 						{user?.role === 'admin' && !tournament?.name && (
 							<RootButton
-								disabled={fakeUsers}
+								// disabled={fakeUsers}
 								onClickBtn={handleClickNewTournament}
 								text={'New tournament'}
 								icon={'join'}
@@ -405,7 +419,7 @@ export const BattlePage = () => {
 
 						{tournament?.registration_date && (
 							<RootButton
-								disabled={alreadyJoined || registrationClosed || fakeUsers}
+								disabled={alreadyJoined || registrationClosed}
 								onClickBtn={handleClickJoin}
 								text={'Join'}
 								icon={'join'}

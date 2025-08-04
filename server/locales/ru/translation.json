@@ -119,7 +119,9 @@
 		"invalid_refresh_token": "Неверный refresh token!",
 		"refresh_token_not_found": "Refresh token не найден!",
 		"failed_refresh_token": "Не удалось обновить токен!",
-		"failed_to_get_user_data_after_activation": "Не удалось получить данные пользователя после активации!"
+		"failed_to_get_user_data_after_activation": "Не удалось получить данные пользователя после активации!",
+		"order_required": "Ордер обязателен!",
+		"tournament_creation_failed": "Не удалось создать турнир!"
 	},
 	"success": {
 		"file_saved": "Файл успешно сохранен!",
@@ -132,6 +134,14 @@
 			"required": "Имя обязательно!",
 			"string": "Имя должно быть строкой!",
 			"length": "Имя должно быть от 2 до 50 символов!"
+		},
+		"start_date": {
+			"required": "Дата начала обязательна!",
+			"invalid": "Неверный формат даты начала!"
+		},
+		"end_date": {
+			"required": "Дата окончания обязательна!",
+			"invalid": "Неверный формат даты окончания!"
 		},
 		"email": {
 			"required": "Email обязателен!",
@@ -173,6 +183,18 @@
 			"string": "Биржа должна быть строкой!",
 			"invalid": "Неверная биржа!"
 		},
+		"api": {
+			"required": "API ключ обязателен!",
+			"string": "API ключ должен быть строкой!"
+		},
+		"secret": {
+			"required": "API секрет обязателен!",
+			"string": "API секрет должен быть строкой!"
+		},
+		"order": {
+			"required": "Ордер обязателен!",
+			"object": "Ордер должен быть объектом!"
+		},
 		"cursor": {
 			"string": "Cursor должен быть строкой!"
 		},
@@ -187,6 +209,18 @@
 		},
 		"end_time": {
 			"invalid": "Неверный формат времени окончания!"
+		},
+		"description": {
+			"string": "Описание должно быть строкой!"
+		},
+		"registration_date": {
+			"invalid": "Неверный формат даты регистрации!"
+		},
+		"tournament_id": {
+			"string": "ID турнира должен быть строкой!"
+		},
+		"user_id": {
+			"string": "ID пользователя должен быть строкой!"
 		}
 	}
 }

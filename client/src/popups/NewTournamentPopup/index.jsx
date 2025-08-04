@@ -1,26 +1,38 @@
-import './calendar.scss'
+import './calendar.scss';
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-import moment from 'moment'
-import DatePicker from 'react-date-picker'
-import { Controller, useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment';
+import DatePicker from 'react-date-picker';
+import {
+  Controller,
+  useForm,
+} from 'react-hook-form';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import coverDefault from '@/assets/images/general/default_tournament.png'
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { RootSelect } from '@/components/ui/inputs/RootSelect'
-import { createTournament } from '@/redux/slices/tournamentSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import coverDefault from '@/assets/images/general/default_tournament.png';
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import {
+  PopupDescLayout,
+} from '@/components/layouts/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { RootSelect } from '@/components/ui/inputs/RootSelect';
+import { createTournament } from '@/redux/slices/tournamentSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const NewTournamentPopup = () => {
 	const {
@@ -71,7 +83,8 @@ export const NewTournamentPopup = () => {
 				end_date: endDate.toISOString(),
 				registration_date: registrationDate.toISOString(),
 			}
-			const resultAction = await dispatch(createTournament(fullData))
+
+			const resultAction = await dispatch(createTournament({ data: fullData }))
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
@@ -87,8 +100,12 @@ export const NewTournamentPopup = () => {
 				showError('Error creating tournament! Please try again.')
 			}
 		} catch (e) {
-			showError('Error creating tournament! Please try again.')
-			console.log(e)
+			console.log('Tournament creation error:', e)
+			if (e?.payload?.message) {
+				showError(e.payload.message)
+			} else {
+				showError('Error creating tournament! Please try again.')
+			}
 		}
 	}
 

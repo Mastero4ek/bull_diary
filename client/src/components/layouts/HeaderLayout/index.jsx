@@ -1,27 +1,34 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
-import Cookies from 'js-cookie'
-import moment from 'moment'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
-
-import avatarDefault from '@/assets/images/general/default_avatar.png'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { Logo } from '@/components/ui/general/Logo'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch'
-import { SignInPopup } from '@/popups/SignInPopup'
+import Cookies from 'js-cookie';
+import moment from 'moment';
 import {
-	setIsLoadingTheme,
-	setLanguage,
-	setTheme,
-} from '@/redux/slices/settingsSlice'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import { Exchange } from './Exchange'
-import styles from './styles.module.scss'
+import avatarDefault from '@/assets/images/general/default_avatar.png';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { Logo } from '@/components/ui/general/Logo';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
+import { SignInPopup } from '@/popups/SignInPopup';
+import {
+  setIsLoadingTheme,
+  setLanguage,
+  setTheme,
+} from '@/redux/slices/settingsSlice';
+
+import { Exchange } from './Exchange';
+import styles from './styles.module.scss';
 
 export const HeaderLayout = React.memo(() => {
 	const dispatch = useDispatch()
@@ -93,7 +100,7 @@ export const HeaderLayout = React.memo(() => {
 				<OuterBlock>
 					<div className={styles.header_user}>
 						<RootDesc>
-							<span>{`${user?.last_name} ${user?.name}` || 'User_name'}</span>
+							<span>{`${user?.name} ${user?.last_name}` || 'User_name'}</span>
 						</RootDesc>
 
 						<div className={styles.header_avatar}>

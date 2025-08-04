@@ -1,7 +1,10 @@
-import { fakeUsers } from '@/helpers/constants'
-import { resError } from '@/helpers/functions'
-import UserService from '@/services/UserService'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { fakeUsers } from '@/helpers/constants';
+import { resError } from '@/helpers/functions';
+import UserService from '@/services/UserService';
+import {
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 export const userDefault = {
 	name: '',
@@ -46,9 +49,13 @@ export const getUsers = createAsyncThunk(
 
 export const removeUser = createAsyncThunk(
 	'users/remove-user',
-	async ({ current_email, fill_email }, { rejectWithValue }) => {
+	async ({ current_email, fill_email, userId }, { rejectWithValue }) => {
 		try {
-			const response = await UserService.removeUser(current_email, fill_email)
+			const response = await UserService.removeUser(
+				current_email,
+				fill_email,
+				userId
+			)
 
 			return response?.data
 		} catch (e) {

@@ -39,6 +39,31 @@ app.use(
 	})
 )
 
+app.use((req, res, next) => {
+	const allowedOrigins = [process.env.CLIENT_URL]
+
+	const origin = req.headers.origin
+	if (allowedOrigins.includes(origin)) {
+		res.header('Access-Control-Allow-Origin', origin)
+	}
+
+	res.header('Access-Control-Allow-Credentials', true)
+	res.header(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+	)
+	res.header(
+		'Access-Control-Allow-Methods',
+		'GET, POST, PUT, DELETE, PATCH, OPTIONS'
+	)
+
+	if (req.method === 'OPTIONS') {
+		res.sendStatus(200)
+	} else {
+		next()
+	}
+})
+
 const apiLimiter = rateLimit({
 	windowMs: parseInt(process.env.RATE_LIMIT_MS) || 5 * 60 * 1000,
 	max: parseInt(process.env.RATE_LIMIT_MAX) || 1000,
@@ -72,7 +97,7 @@ app.use(
 
 app.use(
 	cors({
-		methods: 'GET,POST,PUT,DELETE',
+		methods: 'GET,POST,PUT,DELETE,PATCH',
 		credentials: true,
 		origin: [process.env.CLIENT_URL],
 	})

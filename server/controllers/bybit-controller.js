@@ -10,7 +10,22 @@ class BybitController {
 	async getBybitOrdersPnl(req, res, next) {
 		try {
 			const { exchange, sort, search, page, limit, start_time, end_time } =
-				req.body
+				req.query
+			const parsedPage = page ? parseInt(page) : undefined
+			const parsedLimit = limit ? parseInt(limit) : undefined
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
+			if (!start_time || !end_time) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.time_range_required', { lng: req.lng })
+				)
+			}
+
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
 
@@ -44,8 +59,8 @@ class BybitController {
 				endMsPnl,
 				sort,
 				search,
-				page,
-				limit
+				parsedPage,
+				parsedLimit
 			)
 
 			const total = await Helpers.calculateTotalPnl(result.orders)
@@ -58,8 +73,8 @@ class BybitController {
 				exchange,
 				null, // sort
 				null, // search
-				page, // page
-				limit // limit
+				parsedPage, // page
+				parsedLimit // limit
 			)
 
 			return res.json({
@@ -76,7 +91,14 @@ class BybitController {
 
 	async getBybitTickers(req, res, next) {
 		try {
-			const { exchange } = req.body
+			const { exchange } = req.query
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
 
@@ -107,7 +129,19 @@ class BybitController {
 
 	async getBybitWallet(req, res, next) {
 		try {
-			const { exchange, start_time, end_time } = req.body
+			const { exchange, start_time, end_time } = req.query
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
+			if (!start_time || !end_time) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.time_range_required', { lng: req.lng })
+				)
+			}
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
 
@@ -165,7 +199,16 @@ class BybitController {
 
 	async getBybitPositions(req, res, next) {
 		try {
-			const { exchange, sort, search, page, limit } = req.body
+			const { exchange, sort, search, page, limit } = req.query
+			const parsedPage = page ? parseInt(page) : undefined
+			const parsedLimit = limit ? parseInt(limit) : undefined
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
 
@@ -230,8 +273,8 @@ class BybitController {
 
 			const paginated_positions = await Helpers.paginate(
 				positions,
-				page,
-				limit,
+				parsedPage,
+				parsedLimit,
 				sort,
 				search
 			)
@@ -248,7 +291,20 @@ class BybitController {
 
 	async getBybitWalletChangesByDay(req, res, next) {
 		try {
-			const { exchange, start_time, end_time } = req.body
+			const { exchange, start_time, end_time } = req.query
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
+			if (!start_time || !end_time) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.time_range_required', { lng: req.lng })
+				)
+			}
+
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
 
@@ -427,7 +483,22 @@ class BybitController {
 	async getBybitTransactions(req, res, next) {
 		try {
 			const { exchange, start_time, end_time, sort, search, page, limit } =
-				req.body
+				req.query
+			const parsedPage = page ? parseInt(page) : undefined
+			const parsedLimit = limit ? parseInt(limit) : undefined
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
+			if (!start_time || !end_time) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.time_range_required', { lng: req.lng })
+				)
+			}
+
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
 
@@ -468,8 +539,8 @@ class BybitController {
 				endDate,
 				sort,
 				search,
-				page,
-				limit
+				parsedPage,
+				parsedLimit
 			)
 
 			const formattedTransactions = result.transactions.map(transaction => ({

@@ -17,6 +17,16 @@ module.exports = function (err, req, res, next) {
 		ip: req.ip || req.connection.remoteAddress
 	})
 
+	// Handle Rate Limiting Errors
+	if (err.status === 429) {
+		return res.status(429).json({
+			message: err.message || 'Too many requests from this IP, please try again after 15 minutes.',
+			errors: null,
+			code: 429,
+			requestId,
+		})
+	}
+
 	// Handle API Errors
 	if (err instanceof ApiError) {
 		return res.status(err.status).json({

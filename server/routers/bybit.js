@@ -2,40 +2,40 @@ const Router = require('express').Router
 const router = new Router()
 const authMiddleware = require('../middlewares/auth-middleware')
 const bybitController = require('../controllers/bybit-controller')
-const { checkSchema } = require('express-validator')
-const ValidationSchema = require('../validation/validation-schema')
+const ordersController = require('../controllers/orders-controller')
 
-router.post(
+router.get(
 	'/bybit-orders-pnl',
 	authMiddleware,
 	bybitController.getBybitOrdersPnl
 )
 
-router.post(
-	'/bybit-tickers',
-	authMiddleware,
-	checkSchema(ValidationSchema.orders),
-	bybitController.getBybitTickers
-)
+router.get('/bybit-tickers', authMiddleware, bybitController.getBybitTickers)
 
-router.post('/bybit-wallet', authMiddleware, bybitController.getBybitWallet)
+router.get('/bybit-wallet', authMiddleware, bybitController.getBybitWallet)
 
-router.post(
+router.get(
 	'/bybit-positions',
 	authMiddleware,
 	bybitController.getBybitPositions
 )
 
-router.post(
+router.get(
 	'/bybit-wallet-changes-by-day',
 	authMiddleware,
 	bybitController.getBybitWalletChangesByDay
 )
 
-router.post(
+router.get(
 	'/bybit-transactions',
 	authMiddleware,
 	bybitController.getBybitTransactions
+)
+
+router.get(
+	'/bybit-saved-orders/:all?',
+	authMiddleware,
+	ordersController.getBybitSavedOrders
 )
 
 module.exports = router

@@ -119,7 +119,9 @@
 		"invalid_refresh_token": "Invalid refresh token!",
 		"refresh_token_not_found": "Refresh token not found!",
 		"failed_refresh_token": "Failed to refresh token!",
-		"failed_to_get_user_data_after_activation": "Failed to get user data after activation!"
+		"failed_to_get_user_data_after_activation": "Failed to get user data after activation!",
+		"order_required": "Order is required!",
+		"tournament_creation_failed": "Failed to create tournament!"
 	},
 	"success": {
 		"file_saved": "File saved successfully!",
@@ -132,6 +134,14 @@
 			"required": "Name is required!",
 			"string": "Name must be a string!",
 			"length": "Name must be between 2 and 50 characters!"
+		},
+		"start_date": {
+			"required": "Start date is required!",
+			"invalid": "Invalid start date format!"
+		},
+		"end_date": {
+			"required": "End date is required!",
+			"invalid": "Invalid end date format!"
 		},
 		"email": {
 			"required": "Email is required!",
@@ -173,6 +183,18 @@
 			"string": "Exchange must be a string!",
 			"invalid": "Invalid exchange!"
 		},
+		"api": {
+			"required": "API key is required!",
+			"string": "API key must be a string!"
+		},
+		"secret": {
+			"required": "API secret is required!",
+			"string": "API secret must be a string!"
+		},
+		"order": {
+			"required": "Order is required!",
+			"object": "Order must be an object!"
+		},
 		"cursor": {
 			"string": "Cursor must be a string!"
 		},
@@ -187,6 +209,18 @@
 		},
 		"end_time": {
 			"invalid": "Invalid end time format!"
+		},
+		"description": {
+			"string": "Description must be a string!"
+		},
+		"registration_date": {
+			"invalid": "Invalid registration date format!"
+		},
+		"tournament_id": {
+			"string": "Tournament ID must be a string!"
+		},
+		"user_id": {
+			"string": "User ID must be a string!"
 		}
 	}
 }

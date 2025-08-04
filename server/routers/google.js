@@ -21,11 +21,10 @@ router.get(
 			const user = req.user
 			const keys = await KeysModel.findOne({ user: user._id })
 			const level = await LevelModel.findOne({ user: user._id })
-
 			const userDto = new UserDto(user)
 			const keysDto = new KeysDto(keys)
-
 			const tokens = await tokenService.generateTokens({ ...userDto }, req.lng)
+
 			await tokenService.saveToken(userDto.id, tokens.refresh_token, req.lng)
 
 			res.cookie('refresh_token', tokens.refresh_token, {

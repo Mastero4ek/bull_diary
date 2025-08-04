@@ -6,21 +6,14 @@ const { checkSchema } = require('express-validator')
 const ValidationSchema = require('../validation/validation-schema')
 
 router.post(
-	'/bybit-saved-orders/:all?',
-	authMiddleware,
-	checkSchema(ValidationSchema.orders),
-	ordersController.getBybitSavedOrders
-)
-
-router.post(
-	'/saved-order',
+	'/order/:id',
 	authMiddleware,
 	checkSchema(ValidationSchema.orders),
 	ordersController.savedOrder
 )
 
-router.post(
-	'/removed-order',
+router.delete(
+	'/order/:id',
 	authMiddleware,
 	checkSchema(ValidationSchema.orders),
 	ordersController.removedOrder

@@ -124,7 +124,13 @@ class TournamentService {
 		}
 	}
 
-	async getTournament(exchange, lng = 'en', page = 1, size = 5, cursor = null) {
+	async getTournaments(
+		exchange,
+		lng = 'en',
+		page = 1,
+		size = 5,
+		cursor = null
+	) {
 		try {
 			if (!exchange) {
 				throw ApiError.BadRequest(
@@ -190,7 +196,7 @@ class TournamentService {
 			Helpers.handleDatabaseError(
 				error,
 				lng,
-				'getTournament',
+				'getTournaments',
 				'errors.tournament_fetch_failed'
 			)
 		}
@@ -277,7 +283,7 @@ class TournamentService {
 				})
 			}
 
-			const tournament = await this.getTournament(exchange, lng, 1, 5)
+			const tournament = await this.getTournaments(exchange, lng, 1, 5)
 
 			return tournament
 		} catch (error) {

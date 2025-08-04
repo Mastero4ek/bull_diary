@@ -1,15 +1,18 @@
 const tournamentService = require('../service/tournament-service')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
+const { validationResult } = require('express-validator')
+const { logInfo } = require('../config/logger')
 
 class TournamentController {
 	async addTournamentUser(req, res, next) {
 		try {
 			const { exchange } = req.body
-			const user = req.user
+			const { id } = req.params
+
 			const bid_user = await tournamentService.addTournamentUser(
 				exchange,
-				user.id,
+				id,
 				req.lng
 			)
 
@@ -19,11 +22,18 @@ class TournamentController {
 		}
 	}
 
-	async getTournament(req, res, next) {
+	async getTournaments(req, res, next) {
 		try {
-			const { exchange } = req.body
+			const { exchange } = req.query
 			const { page, size } = req.query
-			const tournament = await tournamentService.getTournament(
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
+			const tournament = await tournamentService.getTournaments(
 				exchange,
 				req.lng,
 				page,
@@ -38,6 +48,14 @@ class TournamentController {
 
 	async createTournament(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.tournament_creation_failed', { lng: req.lng })
+				)
+			}
+
 			const tournament = await tournamentService.createTournament(
 				req.body,
 				req.file,
@@ -50,7 +68,7 @@ class TournamentController {
 		}
 	}
 
-	async deleteTournament(req, res, next) {
+	async removeTournament(req, res, next) {
 		try {
 			const { id } = req.params
 			const deleted = await tournamentService.removeTournament(id, req.lng)
@@ -69,7 +87,15 @@ class TournamentController {
 
 	async removeTournamentUser(req, res, next) {
 		try {
-			const { tournamentId, userId } = req.body
+			const { userId } = req.body
+			const { id: tournamentId } = req.params
+
+			if (!userId) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.user_id_required', { lng: req.lng })
+				)
+			}
+
 			const result = await tournamentService.removeTournamentUser(
 				tournamentId,
 				userId,

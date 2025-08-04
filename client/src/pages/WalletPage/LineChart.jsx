@@ -1,26 +1,29 @@
-import React, { useCallback, useMemo } from 'react'
+import React, {
+  useCallback,
+  useMemo,
+} from 'react';
 
 import {
-	CategoryScale,
-	Chart as ChartJS,
-	Filler,
-	Legend,
-	LinearScale,
-	LineElement,
-	PointElement,
-	Tooltip,
-} from 'chart.js'
-import _ from 'lodash'
-import moment from 'moment'
-import { Line } from 'react-chartjs-2'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Tooltip,
+} from 'chart.js';
+import _ from 'lodash';
+import moment from 'moment';
+import { Line } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Icon } from '@/components/ui/general/Icon'
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+import { Icon } from '@/components/ui/general/Icon';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 ChartJS.register(
 	LineElement,
@@ -65,6 +68,7 @@ export const LineChart = React.memo(() => {
 
 	const hasTransactionData = useCallback(() => {
 		const dataSource = walletChangesByDay || fakeWalletChangesByDay
+
 		if (!dataSource || dataSource.length === 0) return false
 
 		return dataSource.some(
@@ -75,9 +79,11 @@ export const LineChart = React.memo(() => {
 
 	const normalizeDate = useCallback(dateStr => {
 		if (!dateStr) return dateStr
+
 		if (dateStr.includes('T') || dateStr.includes('Z')) {
 			return dateStr
 		}
+
 		if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
 			return moment(dateStr).toISOString()
 		}
@@ -150,9 +156,11 @@ export const LineChart = React.memo(() => {
 	const processPeriodData = useCallback(
 		period => {
 			const config = periodConfig[period]
+
 			if (!config) return { labels: [], chartData: [] }
 
 			const dataSource = walletChangesByDay || fakeWalletChangesByDay
+
 			if (!dataSource || dataSource.length === 0) {
 				return { labels: [], chartData: [] }
 			}
@@ -206,7 +214,6 @@ export const LineChart = React.memo(() => {
 			const period = filter?.name?.toLowerCase()
 			const idx = context.dataIndex
 			const dataSource = walletChangesByDay || fakeWalletChangesByDay
-
 			const normalizedDataSource = dataSource.map(item => ({
 				...item,
 				date: normalizeDate(item.date),
@@ -219,6 +226,7 @@ export const LineChart = React.memo(() => {
 			if (period === 'year') {
 				const year = moment().year()
 				const monthKey = moment({ year, month: idx }).format('YYYY-MM')
+
 				return normalizedDataSource
 					.filter(item => moment(item.date).format('YYYY-MM') === monthKey)
 					.reduce((acc, item) => acc + (item.count || 0), 0)
@@ -262,13 +270,8 @@ export const LineChart = React.memo(() => {
 			const balanceRounded =
 				typeof balance === 'number' ? balance.toFixed(2) : balance
 			const count = getTransactionCount(context)
-			const hasTransactions = hasTransactionData()
 
-			if (hasTransactions) {
-				return `USDT: ${balanceRounded}, Transactions: ${count}`
-			} else {
-				return `USDT: ${balanceRounded} (No transactions in this period)`
-			}
+			return `USDT: ${balanceRounded}, Transactions: ${count || 0}`
 		},
 		[getTransactionCount, hasTransactionData]
 	)

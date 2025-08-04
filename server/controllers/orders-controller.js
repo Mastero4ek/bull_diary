@@ -1,9 +1,20 @@
 const Helpers = require('../helpers/helpers')
 const OrdersService = require('../service/orders-service')
+const { validationResult } = require('express-validator')
+const { ApiError } = require('../exceptions/api-error')
+const i18next = require('i18next')
 
 class OrdersController {
 	async savedOrder(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.order_required', { lng: req.lng })
+				)
+			}
+
 			const { order, exchange } = req.body
 			const user = req.user
 			const new_order = await OrdersService.savedOrder(
@@ -21,6 +32,14 @@ class OrdersController {
 
 	async removedOrder(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.order_required', { lng: req.lng })
+				)
+			}
+
 			const {
 				order,
 				exchange,
@@ -63,7 +82,22 @@ class OrdersController {
 	async getBybitSavedOrders(req, res, next) {
 		try {
 			const { sort, search, page, limit, start_time, end_time, exchange } =
-				req.body
+				req.query
+			const parsedPage = page ? parseInt(page) : undefined
+			const parsedLimit = limit ? parseInt(limit) : undefined
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
+			if (!start_time || !end_time) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.time_range_required', { lng: req.lng })
+				)
+			}
+
 			const { all } = req.params
 			const user = req.user
 
@@ -97,8 +131,8 @@ class OrdersController {
 				exchange,
 				sort,
 				search,
-				page,
-				limit
+				parsedPage,
+				parsedLimit
 			)
 			const total = await Helpers.calculateTotalPnl(result.orders)
 

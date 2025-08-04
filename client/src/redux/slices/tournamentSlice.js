@@ -1,13 +1,16 @@
-import { fakeUsers } from '@/helpers/constants'
-import { resError } from '@/helpers/functions'
-import TournamentService from '@/services/TournamentService'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { fakeUsers } from '@/helpers/constants';
+import { resError } from '@/helpers/functions';
+import TournamentService from '@/services/TournamentService';
+import {
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 
-export const getTournament = createAsyncThunk(
-	'get-tournament',
+export const getTournaments = createAsyncThunk(
+	'get-tournaments',
 	async ({ exchange, page, size }, { rejectWithValue }) => {
 		try {
-			const response = await TournamentService.getTournament(
+			const response = await TournamentService.getTournaments(
 				exchange,
 				page,
 				size
@@ -22,7 +25,7 @@ export const getTournament = createAsyncThunk(
 
 export const createTournament = createAsyncThunk(
 	'create-tournament',
-	async (data, { rejectWithValue }) => {
+	async ({ data }, { rejectWithValue }) => {
 		try {
 			const response = await TournamentService.createTournament(data)
 
@@ -35,11 +38,12 @@ export const createTournament = createAsyncThunk(
 
 export const addTournamentUser = createAsyncThunk(
 	'add-tournament-user',
-	async ({ email, exchange }, { rejectWithValue }) => {
+	async ({ email, exchange, id }, { rejectWithValue }) => {
 		try {
 			const response = await TournamentService.addTournamentUser(
 				email,
-				exchange
+				exchange,
+				id
 			)
 
 			return response?.data
@@ -121,11 +125,11 @@ const tournamentSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			//tournaments
-			.addCase(getTournament.pending, state => {
+			.addCase(getTournaments.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
 			})
-			.addCase(getTournament.fulfilled, (state, action) => {
+			.addCase(getTournaments.fulfilled, (state, action) => {
 				state.errorMessage = action.payload.message || null
 				state.serverStatus =
 					action.payload.users?.length === 0 ? 'error' : 'success'
@@ -136,7 +140,7 @@ const tournamentSlice = createSlice({
 					? Math.ceil(action.payload.total / state.size)
 					: state.totalPages
 			})
-			.addCase(getTournament.rejected, (state, action) => {
+			.addCase(getTournaments.rejected, (state, action) => {
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'error'
 				state.fakeUsers = fakeUsers

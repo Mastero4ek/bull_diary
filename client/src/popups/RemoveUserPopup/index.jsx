@@ -1,31 +1,43 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
-
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { ErrorForm } from '@/components/ui/general/ErrorForm'
-import { Icon } from '@/components/ui/general/Icon'
-import { Loader } from '@/components/ui/general/Loader'
+import { useForm } from 'react-hook-form';
 import {
-	removeUser as removeUserCandidate,
-	setChangeUser as setChangeUserCandidate,
-} from '@/redux/slices/candidateSlice'
-import {
-	getUsers,
-	removeUser as removeUserUsers,
-	setChangeUser as setChangeUserUsers,
-} from '@/redux/slices/usersSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import styles from './styles.module.scss'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import {
+  PopupDescLayout,
+} from '@/components/layouts/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+import { ErrorForm } from '@/components/ui/general/ErrorForm';
+import { Icon } from '@/components/ui/general/Icon';
+import { Loader } from '@/components/ui/general/Loader';
+import {
+  removeUser as removeUserCandidate,
+  setChangeUser as setChangeUserCandidate,
+} from '@/redux/slices/candidateSlice';
+import {
+  getUsers,
+  removeUser as removeUserUsers,
+  setChangeUser as setChangeUserUsers,
+} from '@/redux/slices/usersSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import styles from './styles.module.scss';
 
 export const RemoveUserPopup = React.memo(({ item }) => {
 	const { closePopup } = usePopup()
@@ -55,10 +67,12 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 					? removeUserUsers({
 							current_email: item.email,
 							fill_email: data.email,
+							userId: item.id,
 					  })
 					: removeUserCandidate({
 							current_email: item.email,
 							fill_email: data.email,
+							userId: item.id,
 					  })
 			)
 			const originalPromiseResult1 = unwrapResult(resultAction1)

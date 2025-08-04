@@ -2,7 +2,7 @@ import $api from '../http';
 
 export default class UserService {
 	static async getUsers(sort, search, page, limit, start_time, end_time) {
-		return $api.get('/all-users', {
+		return $api.get('/users', {
 			params: {
 				sort,
 				search,
@@ -32,9 +32,9 @@ export default class UserService {
 		if (phone) formData.append('phone', phone)
 		if (cover) formData.append('cover', cover)
 
-		const url = userId ? `/edit-user/${userId}` : '/edit-user'
+		const url = userId ? `/user/${userId}` : '/user'
 
-		return $api.post(url, formData, {
+		return $api.patch(url, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},
@@ -43,14 +43,14 @@ export default class UserService {
 	}
 
 	static async removeCover(filename, userId = null) {
-		const url = userId
-			? `/remove-cover/${filename}/${userId}`
-			: `/remove-cover/${filename}`
-		return $api.post(url)
+		const url = userId ? `/cover/${filename}/${userId}` : `/cover/${filename}`
+		return $api.delete(url)
 	}
 
-	static async removeUser(current_email, fill_email) {
-		return $api.post('/remove-user', { current_email, fill_email })
+	static async removeUser(current_email, fill_email, userId) {
+		return $api.delete(`/user/${userId}`, {
+			data: { current_email, fill_email },
+		})
 	}
 
 	static async getUser(id) {

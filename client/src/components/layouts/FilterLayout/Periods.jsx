@@ -1,40 +1,44 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import moment from 'moment'
-import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { setDate, setFilter, setRemoveBtn } from '@/redux/slices/filtersSlice'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { PERIODS } from '@/helpers/constants';
+import {
+  setDate,
+  setFilter,
+  setRemoveBtn,
+} from '@/redux/slices/filtersSlice';
 
-import styles from './styles.module.scss'
-
-const periods = [
-	{ name: 'Week', id: 0 },
-	{ name: 'Month', id: 1 },
-	{ name: 'Quarter', id: 2 },
-	{ name: 'Year', id: 3 },
-]
-
-const getStartDate = filterId => {
-	switch (filterId) {
-		case 0:
-			return moment().startOf('isoWeek').toISOString()
-		case 1:
-			return moment().startOf('month').toISOString()
-		case 2:
-			return moment().startOf('quarter').toISOString()
-		case 3:
-			return moment().startOf('year').toISOString()
-		default:
-			return null
-	}
-}
+import styles from './styles.module.scss';
 
 export const Periods = React.memo(() => {
 	const dispatch = useDispatch()
 	const { id } = useSelector(state => state.filters.filter)
+
+	const getStartDate = useCallback(filterId => {
+		switch (filterId) {
+			case 0:
+				return moment().startOf('isoWeek').toISOString()
+			case 1:
+				return moment().startOf('month').toISOString()
+			case 2:
+				return moment().startOf('quarter').toISOString()
+			case 3:
+				return moment().startOf('year').toISOString()
+			default:
+				return null
+		}
+	}, [])
 
 	const changeDate = useCallback(
 		filterId => {
@@ -49,7 +53,7 @@ export const Periods = React.memo(() => {
 				)
 			}
 		},
-		[dispatch, id]
+		[dispatch, id, getStartDate]
 	)
 
 	const onChangeFilter = useCallback(
@@ -58,7 +62,7 @@ export const Periods = React.memo(() => {
 			dispatch(setRemoveBtn(false))
 			changeDate(filter.id)
 		},
-		[dispatch, id]
+		[dispatch, id, changeDate]
 	)
 
 	useEffect(() => {
@@ -67,9 +71,9 @@ export const Periods = React.memo(() => {
 
 	return (
 		<ul className={styles.periods}>
-			{periods &&
-				periods.length > 0 &&
-				periods.map(item => {
+			{PERIODS &&
+				PERIODS.length > 0 &&
+				PERIODS.map(item => {
 					const ItemBlock = item?.id === id ? InnerBlock : OuterBlock
 
 					return (

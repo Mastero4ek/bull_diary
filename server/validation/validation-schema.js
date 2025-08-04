@@ -191,6 +191,44 @@ const ValidationSchema = {
 		},
 	},
 
+	updateKeys: {
+		exchange: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.exchange.required', { lng: req.lng }),
+			},
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.exchange.string', { lng: req.lng }),
+			},
+			isIn: {
+				options: [['bybit', 'mexc', 'okx']],
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.exchange.invalid', { lng: req.lng }),
+			},
+		},
+		api: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.api.required', { lng: req.lng }),
+			},
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.api.string', { lng: req.lng }),
+			},
+		},
+		secret: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.secret.required', { lng: req.lng }),
+			},
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.secret.string', { lng: req.lng }),
+			},
+		},
+	},
+
 	tournament: {
 		exchange: {
 			exists: {
@@ -205,6 +243,79 @@ const ValidationSchema = {
 				options: [['bybit', 'mexc', 'okx']],
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.exchange.invalid', { lng: req.lng }),
+			},
+		},
+		email: {
+			optional: true,
+			isEmail: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.email.invalid', { lng: req.lng }),
+			},
+		},
+		name: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.name.required', { lng: req.lng }),
+			},
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.name.string', { lng: req.lng }),
+			},
+			isLength: {
+				options: { min: 2, max: 100 },
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.name.length', { lng: req.lng }),
+			},
+		},
+		description: {
+			optional: true,
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.description.string', { lng: req.lng }),
+			},
+		},
+		start_date: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.start_date.required', { lng: req.lng }),
+			},
+			isISO8601: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.start_date.invalid', { lng: req.lng }),
+			},
+		},
+		end_date: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.end_date.required', { lng: req.lng }),
+			},
+			isISO8601: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.end_date.invalid', { lng: req.lng }),
+			},
+		},
+		registration_date: {
+			optional: true,
+			isISO8601: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.registration_date.invalid', { lng: req.lng }),
+			},
+		},
+		tournamentId: {
+			optional: true,
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.tournament_id.string', { lng: req.lng }),
+			},
+		},
+		userId: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.user_id.required', { lng: req.lng }),
+			},
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.user_id.string', { lng: req.lng }),
 			},
 		},
 		cursor: {
@@ -226,6 +337,16 @@ const ValidationSchema = {
 	},
 
 	orders: {
+		order: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.order.required', { lng: req.lng }),
+			},
+			isObject: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.order.object', { lng: req.lng }),
+			},
+		},
 		exchange: {
 			exists: {
 				errorMessage: (value, { req }) =>

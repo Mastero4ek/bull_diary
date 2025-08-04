@@ -10,10 +10,29 @@ export const resError = error => {
 			return { field: item?.path, value: item?.value }
 		}) || []
 
+	// Определяем тип ошибки
+	let message = 'An unknown error occurred'
+	
+	if (error?.response?.data?.message) {
+		message = error.response.data.message
+	} else if (error?.code === 'NETWORK_ERROR') {
+		message = 'Network error. Please check your internet connection.'
+	} else if (error?.code === 'ECONNABORTED') {
+		message = 'Request timeout. Please try again.'
+	} else if (error?.response?.status === 429) {
+		message = 'Too many requests. Please try again later.'
+	} else if (error?.response?.status === 401) {
+		message = 'Authentication required. Please log in again.'
+	} else if (error?.response?.status === 403) {
+		message = 'Access denied. You do not have permission for this action.'
+	} else if (error?.response?.status === 404) {
+		message = 'Resource not found.'
+	} else if (error?.response?.status >= 500) {
+		message = 'Server error. Please try again later.'
+	}
+
 	return {
-		message:
-			error?.response?.data?.message ||
-			'An unknown error occurred, possibly due to too many requests from this IP. Please try again after 15 minutes.',
+		message,
 		errors: currentErrors.length > 0 ? currentErrors : null,
 	}
 }

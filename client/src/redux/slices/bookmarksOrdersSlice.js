@@ -1,7 +1,10 @@
-import { fakePnlOrders } from '@/helpers/constants'
-import { resError } from '@/helpers/functions'
-import OrdersService from '@/services/OrdersService'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { fakePnlOrders } from '@/helpers/constants';
+import { resError } from '@/helpers/functions';
+import OrdersService from '@/services/OrdersService';
+import {
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 export const getBybitSavedOrders = createAsyncThunk(
 	'get-saved-orders',
@@ -129,7 +132,7 @@ const bookmarksOrdersSlice = createSlice({
 				state.serverStatus = 'error'
 			})
 
-			//saved-order
+			//order
 			.addCase(savedOrder.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
@@ -147,7 +150,7 @@ const bookmarksOrdersSlice = createSlice({
 				state.serverStatus = 'error'
 			})
 
-			//removed-order
+			//order
 			.addCase(removedOrder.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
