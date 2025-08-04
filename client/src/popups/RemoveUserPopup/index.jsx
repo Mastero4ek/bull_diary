@@ -8,7 +8,10 @@ import {
   useDispatch,
   useSelector,
 } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
 import {
   useNotification,
@@ -42,6 +45,7 @@ import styles from './styles.module.scss';
 export const RemoveUserPopup = React.memo(({ item }) => {
 	const { closePopup } = usePopup()
 	const location = useLocation()
+	const navigate = useNavigate()
 	const isAdminContext = location.pathname.includes('/all-users')
 
 	const { errorMessage, errorArray, serverStatus, isAuth } = useSelector(
@@ -104,6 +108,10 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 				)
 				reset()
 				closePopup()
+
+				if (location.pathname.match(/\/all-users\/[^\/]+$/)) {
+					navigate(-1)
+				}
 			} else {
 				showError(
 					isAdminContext

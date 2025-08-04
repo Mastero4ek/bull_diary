@@ -1,28 +1,40 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import moment from 'moment'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
-
-import avatarDefault from '@/assets/images/general/default_avatar.png'
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { TableLayout } from '@/components/layouts/TableLayout'
-import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
-import { getUser } from '@/redux/slices/candidateSlice'
+import moment from 'moment';
 import {
-	clearUsers,
-	getUsers,
-	setPage,
-	setSort,
-} from '@/redux/slices/usersSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import styles from './styles.module.scss'
+import avatarDefault from '@/assets/images/general/default_avatar.png';
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { TableLayout } from '@/components/layouts/TableLayout';
+import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
+import { getUser } from '@/redux/slices/candidateSlice';
+import {
+  clearUsers,
+  getUsers,
+  setPage,
+  setSort,
+} from '@/redux/slices/usersSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import styles from './styles.module.scss';
 
 export const UsersPage = () => {
 	const location = useLocation()
@@ -177,6 +189,10 @@ export const UsersPage = () => {
 		[navigate]
 	)
 
+	const handleClickAddUser = useCallback(() => {
+		console.log('create user')
+	}, [navigate])
+
 	useEffect(() => {
 		if (date?.start_date && date?.end_date) {
 			dispatch(setPage(1))
@@ -248,7 +264,13 @@ export const UsersPage = () => {
 					description={
 						'Registered users of the platform. You can view their profiles and their statistics.'
 					}
-				/>
+				>
+					<RootButton
+						icon={'sign-up'}
+						text={'Create user'}
+						onClickBtn={() => handleClickAddUser()}
+					/>
+				</DescLayout>
 			</OuterBlock>
 		</PageLayout>
 	)
