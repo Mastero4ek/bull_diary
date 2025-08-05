@@ -154,41 +154,6 @@ const ValidationSchema = {
 			},
 			normalizeEmail: true,
 		},
-		phone: {
-			optional: true,
-			isString: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.phone.string', { lng: req.lng }),
-			},
-			matches: {
-				options: /^\+?[\d\s-()]+$/,
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.phone.invalid', { lng: req.lng }),
-			},
-		},
-	},
-
-	createKeys: {
-		keys: {
-			isArray: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.keys.array', { lng: req.lng }),
-			},
-			custom: {
-				options: value => {
-					if (!Array.isArray(value)) return false
-					return value.every(
-						key =>
-							typeof key === 'object' &&
-							typeof key.name === 'string' &&
-							typeof key.api === 'string' &&
-							typeof key.secret === 'string'
-					)
-				},
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.keys.invalid', { lng: req.lng }),
-			},
-		},
 	},
 
 	updateKeys: {
@@ -267,13 +232,6 @@ const ValidationSchema = {
 					i18next.t('validation.name.length', { lng: req.lng }),
 			},
 		},
-		description: {
-			optional: true,
-			isString: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.description.string', { lng: req.lng }),
-			},
-		},
 		start_date: {
 			exists: {
 				errorMessage: (value, { req }) =>
@@ -300,39 +258,6 @@ const ValidationSchema = {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.registration_date.invalid', { lng: req.lng }),
 			},
-		},
-		tournamentId: {
-			optional: true,
-			isString: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.tournament_id.string', { lng: req.lng }),
-			},
-		},
-		userId: {
-			exists: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.user_id.required', { lng: req.lng }),
-			},
-			isString: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.user_id.string', { lng: req.lng }),
-			},
-		},
-		cursor: {
-			optional: true,
-			isString: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.cursor.string', { lng: req.lng }),
-			},
-		},
-		limit: {
-			optional: true,
-			isInt: {
-				options: { min: 1, max: 100 },
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.limit.invalid', { lng: req.lng }),
-			},
-			toInt: true,
 		},
 	},
 
@@ -376,24 +301,6 @@ const ValidationSchema = {
 					i18next.t('validation.end_time.invalid', { lng: req.lng }),
 			},
 		},
-		page: {
-			optional: true,
-			isInt: {
-				options: { min: 1 },
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.page.invalid', { lng: req.lng }),
-			},
-			toInt: true,
-		},
-		limit: {
-			optional: true,
-			isInt: {
-				options: { min: 1, max: 100 },
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.limit.invalid', { lng: req.lng }),
-			},
-			toInt: true,
-		},
 	},
 
 	wallet: {
@@ -410,6 +317,66 @@ const ValidationSchema = {
 				options: [['bybit', 'mexc', 'okx']],
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.exchange.invalid', { lng: req.lng }),
+			},
+		},
+	},
+
+	createUser: {
+		name: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.name.required', { lng: req.lng }),
+			},
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.name.string', { lng: req.lng }),
+			},
+			trim: true,
+			isLength: {
+				options: { min: 2, max: 50 },
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.name.length', { lng: req.lng }),
+			},
+		},
+		email: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.email.required', { lng: req.lng }),
+			},
+			isEmail: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.email.invalid', { lng: req.lng }),
+			},
+			normalizeEmail: true,
+		},
+		password: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.password.required', { lng: req.lng }),
+			},
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.password.string', { lng: req.lng }),
+			},
+			isLength: {
+				options: { min: 6, max: 50 },
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.password.length', { lng: req.lng }),
+			},
+		},
+		role: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.role.required', { lng: req.lng }),
+			},
+			isString: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.role.string', { lng: req.lng }),
+			},
+			isIn: {
+				options: [['admin', 'user']],
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.role.invalid', { lng: req.lng }),
 			},
 		},
 	},

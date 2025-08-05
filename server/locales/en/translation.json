@@ -221,6 +221,11 @@
 		},
 		"user_id": {
 			"string": "User ID must be a string!"
+		},
+		"role": {
+			"required": "Role is required!",
+			"string": "Role must be a string!",
+			"invalid": "Invalid role! Must be 'admin' or 'user'."
 		}
 	}
 }

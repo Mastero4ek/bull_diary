@@ -1,5 +1,5 @@
 const Router = require('express').Router
-const userController = require('../controllers/user-controller')
+const authController = require('../controllers/auth-controller')
 const router = new Router()
 const { checkSchema } = require('express-validator')
 const ValidationSchema = require('../validation/validation-schema')
@@ -7,17 +7,17 @@ const ValidationSchema = require('../validation/validation-schema')
 router.post(
 	'/sign-up',
 	checkSchema(ValidationSchema.registration),
-	userController.signUp
+	authController.signUp
 )
 
 router.post(
 	'/sign-in',
 	checkSchema(ValidationSchema.login),
-	userController.signIn
+	authController.signIn
 )
 
-router.get('/refresh', userController.refresh)
+router.get('/refresh', authController.refresh)
 
-router.post('/logout', userController.logout)
+router.post('/logout', authController.logout)
 
 module.exports = router

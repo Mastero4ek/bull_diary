@@ -1,5 +1,4 @@
 const fileService = require('../service/file-service')
-const i18next = require('i18next')
 
 class FileController {
 	async removeCover(req, res, next) {

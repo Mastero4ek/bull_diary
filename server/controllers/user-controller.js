@@ -8,10 +8,9 @@ const keysService = require('../service/keys-service')
 const i18next = require('i18next')
 
 class UserController {
-	async signUp(req, res, next) {
+	async createUser(req, res, next) {
 		try {
 			const errors = validationResult(req)
-			const { name, email, password, source } = req.body
 
 			if (!errors.isEmpty()) {
 				return next(
@@ -22,149 +21,20 @@ class UserController {
 				)
 			}
 
-			const user_data = await userService.signUp(
+			const { name, last_name, email, password, phone, role } = req.body
+			const cover = req.file
+
+			const user = await userService.createUser(
 				name,
+				last_name,
 				email,
 				password,
-				req.lng,
-				source || 'self'
+				phone,
+				role,
+				cover
 			)
 
-			res.cookie('refresh_token', user_data.refresh_token, {
-				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
-				httpOnly: true,
-			})
-
-			return res.json(user_data)
-		} catch (e) {
-			next(e)
-		}
-	}
-
-	async signIn(req, res, next) {
-		try {
-			const errors = validationResult(req)
-			const { email, password } = req.body
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
-
-			const user_data = await userService.signIn(email, password, req.lng)
-
-			res.cookie('refresh_token', user_data.refresh_token, {
-				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
-				httpOnly: true,
-			})
-
-			return res.json(user_data)
-		} catch (e) {
-			next(e)
-		}
-	}
-
-	async logout(req, res, next) {
-		try {
-			const { refresh_token } = req.cookies
-
-			await userService.logout(refresh_token, req.lng)
-
-			req.session.destroy(err => {
-				if (err) {
-					return next(err)
-				}
-
-				res.clearCookie('refresh_token')
-				res.clearCookie('access_token')
-
-				return res.json({ message: 'Logged out successfully' })
-			})
-		} catch (e) {
-			next(e)
-		}
-	}
-
-	async refresh(req, res, next) {
-		try {
-			const { refresh_token: existing_refresh_token } = req.cookies
-			const user = req.user
-			let user_data = {}
-
-			if (user && (user.source === 'github' || user.source === 'google')) {
-				user_data = await userService.checkSourceAuth(user.email, req.lng)
-			} else if (existing_refresh_token && !user) {
-				user_data = await userService.refresh(existing_refresh_token, req.lng)
-			} else {
-				return res.json({})
-			}
-
-			res.cookie('refresh_token', user_data.refresh_token, {
-				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'prod',
-				sameSite: 'strict',
-			})
-
-			res.cookie('access_token', user_data.access_token, {
-				maxAge: parseInt(process.env.ACCESS_TOKEN_MAX_AGE),
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'prod',
-				sameSite: 'strict',
-			})
-
-			const { access_token, refresh_token, ...user_data_safe } = user_data
-
-			return res.json(user_data_safe)
-		} catch (e) {
-			next(e)
-		}
-	}
-
-	async activate(req, res, next) {
-		try {
-			const activation_link = req.params.link
-			const user_data = await userService.activate(activation_link, req.lng)
-
-			if (!user_data || !user_data.user) {
-				throw ApiError.InternalError(
-					i18next.t('errors.failed_to_get_user_data_after_activation', {
-						lng: req.lng,
-					})
-				)
-			}
-
-			res.cookie('refresh_token', user_data.refresh_token, {
-				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'prod',
-				sameSite: 'lax',
-				path: '/',
-				domain:
-					process.env.NODE_ENV === 'prod' ? process.env.DOMAIN : 'localhost',
-			})
-
-			res.cookie('access_token', user_data.access_token, {
-				maxAge: parseInt(process.env.ACCESS_TOKEN_MAX_AGE),
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'prod',
-				sameSite: 'lax',
-				path: '/',
-				domain:
-					process.env.NODE_ENV === 'prod' ? process.env.DOMAIN : 'localhost',
-			})
-
-			const { access_token, refresh_token, ...user_data_safe } = user_data
-
-			return res.redirect(
-				`${process.env.CLIENT_URL}/wallet?user=${encodeURIComponent(
-					JSON.stringify({ user: user_data_safe.user })
-				)}`
-			)
+			return res.json(user)
 		} catch (e) {
 			next(e)
 		}
@@ -173,11 +43,14 @@ class UserController {
 	async editUser(req, res, next) {
 		try {
 			const errors = validationResult(req)
+
 			if (!errors.isEmpty()) {
-				return res.status(400).json({
-					message: errors.array()[0].msg,
-					errors: errors.array(),
-				})
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
 			}
 
 			const { name, last_name, email, password, phone } = req.body
@@ -239,6 +112,16 @@ class UserController {
 	async removeUser(req, res, next) {
 		try {
 			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { current_email, fill_email } = req.body
 			const current_user = await UserModel.findOne({ email: current_email })
 
@@ -254,15 +137,6 @@ class UserController {
 				return next(
 					ApiError.BadRequest(
 						i18next.t('errors.email_mismatch', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
 						errors.array()
 					)
 				)

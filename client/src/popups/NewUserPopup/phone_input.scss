@@ -1,0 +1,149 @@
+@import '@/styles/mixins.scss';
+
+.special-label {
+	display: none;
+}
+
+.react-tel-input {
+	@include font(500, 18rem, 120%);
+	width: 100%;
+}
+
+.react-tel-input .form-control {
+	width: 100%;
+	@include font(500, 18rem, 120%);
+	border-radius: 10rem;
+	border: 1rem solid transparent;
+	transition: all 0.15s ease-in-out;
+	color: var(--text);
+	box-shadow: var(--shadowOuter);
+	background: var(--bgDark);
+	background: transparent;
+	transition: all 0.15s linear;
+
+	&:disabled {
+		pointer-events: none;
+		cursor: auto;
+	}
+}
+
+.react-tel-input .flag-dropdown {
+	background: transparent;
+	border: none;
+}
+
+.react-tel-input .selected-flag:focus {
+	background: transparent;
+}
+
+.react-tel-input .selected-flag {
+	@include desktop {
+		&:hover {
+			background: transparent;
+		}
+	}
+}
+
+.react-tel-input .selected-flag {
+	width: 38rem;
+	padding: 0 0 0 8rem;
+	border-radius: 0;
+
+	@include phone {
+		padding: 0;
+		width: 28rem;
+	}
+}
+
+.react-tel-input .country-list {
+	margin: 0;
+	margin-top: 10rem;
+	border: 2rem solid rgba(247, 207, 221, 0.5);
+	box-shadow: 50rem 43rem 18rem 0rem rgba(138, 106, 203, 0),
+		32rem 27rem 17rem 0rem rgba(138, 106, 203, 0.01),
+		18rem 15rem 14rem 0rem rgba(138, 106, 203, 0.04),
+		8rem 7rem 11rem 0rem rgba(138, 106, 203, 0.07),
+		2rem 2rem 6rem 0rem rgba(138, 106, 203, 0.08);
+	width: 376rem;
+	max-height: 250rem;
+	overflow-y: scroll;
+	border-radius: 40rem;
+	padding: 10rem 20rem;
+	padding-top: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8rem;
+	scrollbar-width: none;
+
+	@include phone {
+		position: absolute;
+		left: -10rem;
+		width: 315rem;
+	}
+}
+
+.country-list::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+
+.react-tel-input .country-list .search {
+	background-color: var(--white);
+	padding: 10rem 0;
+}
+
+.react-tel-input .country-list .search-box {
+	border: none;
+	border-radius: 0;
+	border-bottom: 1rem solid var(--grey);
+	transition: all 0.15s linear;
+	font-family: 'IBM Plex Sans', sans-serif;
+	@include font(400, 18rem, 120%);
+	margin-left: 0;
+	padding: 5rem 10rem;
+	width: 100%;
+}
+
+.react-tel-input .country-list .country {
+	padding: 10rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16rem;
+	transition: all 0.15s linear;
+	border-radius: 20rem;
+}
+
+.react-tel-input .country-list .country {
+	@include desktop {
+		&:hover {
+			background: #fcf7fd;
+		}
+	}
+}
+
+.react-tel-input .country-list .country-name {
+	transition: all 0.15s linear;
+	font-family: 'IBM Plex Sans', sans-serif;
+	@include font(400, 18rem, 120%);
+	width: fit-content;
+	margin-right: 0;
+}
+
+.react-tel-input .country-list .country .dial-code {
+	color: var(--grey);
+	width: fit-content;
+}
+.react-tel-input .country-list .flag {
+	margin-top: 0;
+	margin-right: 0;
+}
+
+.react-tel-input .flag-dropdown.open .selected-flag {
+	background: transparent;
+	border-radius: 0;
+}
+
+.react-tel-input .flag-dropdown.open {
+	background: transparent;
+}

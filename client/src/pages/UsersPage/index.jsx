@@ -24,6 +24,7 @@ import { TableLayout } from '@/components/layouts/TableLayout';
 import { ControlButton } from '@/components/ui/buttons/ControlButton';
 import { RootButton } from '@/components/ui/buttons/RootButton';
 import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { NewUserPopup } from '@/popups/NewUserPopup';
 import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
 import { getUser } from '@/redux/slices/candidateSlice';
 import {
@@ -190,7 +191,7 @@ export const UsersPage = () => {
 	)
 
 	const handleClickAddUser = useCallback(() => {
-		console.log('create user')
+		openPopup(<NewUserPopup />)
 	}, [navigate])
 
 	useEffect(() => {
@@ -265,11 +266,13 @@ export const UsersPage = () => {
 						'Registered users of the platform. You can view their profiles and their statistics.'
 					}
 				>
-					<RootButton
-						icon={'sign-up'}
-						text={'Create user'}
-						onClickBtn={() => handleClickAddUser()}
-					/>
+					{user && user?.role === 'admin' && (
+						<RootButton
+							icon={'sign-up'}
+							text={'Create user'}
+							onClickBtn={() => handleClickAddUser()}
+						/>
+					)}
 				</DescLayout>
 			</OuterBlock>
 		</PageLayout>

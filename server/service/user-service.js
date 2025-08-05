@@ -799,6 +799,79 @@ class UserService {
 			)
 		}
 	}
+
+	async createUser(
+		name,
+		last_name,
+		email,
+		password,
+		phone,
+		role,
+		cover = null,
+		lng = 'en'
+	) {
+		try {
+			const normalizedEmail = email.toLowerCase()
+			const existingUser = await UserModel.findOne({ email: normalizedEmail })
+
+			if (existingUser) {
+				throw ApiError.BadRequest(i18next.t('errors.email_exists', { lng }))
+			}
+
+			const salt = await bcrypt.genSalt(10)
+			const hashedPassword = await bcrypt.hash(password, salt)
+
+			const userData = {
+				name,
+				last_name,
+				email: normalizedEmail,
+				password: hashedPassword,
+				phone,
+				role,
+				source: 'self',
+				updated_at: new Date(),
+				created_at: new Date(),
+			}
+
+			const user = await UserModel.create(userData)
+
+			// Handle cover upload if provided
+			if (cover) {
+				const fileService = require('./file-service')
+				await fileService.uploadCover(cover, user._id, lng)
+
+				// Update user with cover path
+				const updatedUser = await UserModel.findByIdAndUpdate(
+					user._id,
+					{
+						$set: {
+							cover:
+								process.env.API_URL + '/uploads/' + path.basename(cover.path),
+						},
+					},
+					{ returnDocument: 'after' }
+				)
+
+				if (updatedUser) {
+					user.cover = updatedUser.cover
+				}
+			}
+
+			const keys = await KeysModel.create({ user: user._id })
+			const level = await LevelModel.create({ user: user._id })
+
+			const user_dto = new UserDto(user)
+
+			return { user: { ...user_dto, ...new KeysDto(keys), level: level.level } }
+		} catch (error) {
+			Helpers.handleDatabaseError(
+				error,
+				lng,
+				'createUser',
+				'errors.failed_create_user'
+			)
+		}
+	}
 }
 
 module.exports = new UserService()

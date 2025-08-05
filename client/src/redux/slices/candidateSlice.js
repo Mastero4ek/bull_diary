@@ -276,6 +276,19 @@ export const getUser = createAsyncThunk(
 	}
 )
 
+export const createUser = createAsyncThunk(
+	'candidate/createUser',
+	async ({ data }, { rejectWithValue }) => {
+		try {
+			const response = await UserService.createUser(data)
+
+			return response?.data?.user
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
 const initialState = {
 	user: userDefault,
 	changeUser: userDefault,
@@ -551,6 +564,22 @@ const candidateSlice = createSlice({
 			.addCase(getUser.rejected, (state, action) => {
 				state.serverStatus = 'error'
 				state.errorMessage = action.payload?.message || 'Failed to fetch user'
+			})
+
+			// create user
+			.addCase(createUser.pending, state => {
+				state.serverStatus = 'loading'
+				state.errorMessage = null
+			})
+			.addCase(createUser.fulfilled, (state, action) => {
+				state.serverStatus = 'success'
+				state.errorMessage = null
+				state.errorArray = null
+			})
+			.addCase(createUser.rejected, (state, action) => {
+				state.serverStatus = 'error'
+				state.errorMessage = action.payload?.message
+				state.errorArray = action.payload?.errors
 			})
 	},
 })

@@ -56,4 +56,22 @@ export default class UserService {
 	static async getUser(id) {
 		return $api.get(`/user/${id}`)
 	}
+
+	static async createUser(data) {
+		const formData = new FormData()
+
+		if (data.name) formData.append('name', data.name)
+		if (data.last_name) formData.append('last_name', data.last_name)
+		if (data.email) formData.append('email', data.email)
+		if (data.password) formData.append('password', data.password)
+		if (data.phone) formData.append('phone', data.phone)
+		if (data.role) formData.append('role', data.role)
+		if (data.cover) formData.append('cover', data.cover)
+
+		return $api.post('/user', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+	}
 }

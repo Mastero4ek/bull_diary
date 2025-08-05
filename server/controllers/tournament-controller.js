@@ -2,50 +2,8 @@ const tournamentService = require('../service/tournament-service')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
 const { validationResult } = require('express-validator')
-const { logInfo } = require('../config/logger')
 
 class TournamentController {
-	async addTournamentUser(req, res, next) {
-		try {
-			const { exchange } = req.body
-			const { id } = req.params
-
-			const bid_user = await tournamentService.addTournamentUser(
-				exchange,
-				id,
-				req.lng
-			)
-
-			return res.json(bid_user)
-		} catch (e) {
-			next(e)
-		}
-	}
-
-	async getTournaments(req, res, next) {
-		try {
-			const { exchange } = req.query
-			const { page, size } = req.query
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng: req.lng })
-				)
-			}
-
-			const tournament = await tournamentService.getTournaments(
-				exchange,
-				req.lng,
-				page,
-				size
-			)
-
-			return res.json(tournament)
-		} catch (e) {
-			next(e)
-		}
-	}
-
 	async createTournament(req, res, next) {
 		try {
 			const errors = validationResult(req)
@@ -80,6 +38,47 @@ class TournamentController {
 			}
 
 			return res.json({ message: 'Tournament deleted successfully' })
+		} catch (e) {
+			next(e)
+		}
+	}
+
+	async getTournaments(req, res, next) {
+		try {
+			const { exchange } = req.query
+			const { page, size } = req.query
+
+			if (!exchange) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_required', { lng: req.lng })
+				)
+			}
+
+			const tournament = await tournamentService.getTournaments(
+				exchange,
+				req.lng,
+				page,
+				size
+			)
+
+			return res.json(tournament)
+		} catch (e) {
+			next(e)
+		}
+	}
+
+	async addTournamentUser(req, res, next) {
+		try {
+			const { exchange } = req.body
+			const { id } = req.params
+
+			const bid_user = await tournamentService.addTournamentUser(
+				exchange,
+				id,
+				req.lng
+			)
+
+			return res.json(bid_user)
 		} catch (e) {
 			next(e)
 		}

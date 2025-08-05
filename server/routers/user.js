@@ -40,4 +40,13 @@ router.delete(
 
 router.get('/users', authMiddleware, userController.getUsers)
 
+router.post(
+	'/user',
+	authMiddleware,
+	upload.single('cover'),
+	profileImageValidation,
+	checkSchema(ValidationSchema.createUser),
+	userController.createUser
+)
+
 module.exports = router
