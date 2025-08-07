@@ -1,19 +1,10 @@
 const Helpers = require('../helpers/helpers')
 const OrdersService = require('../services/orders-service')
-const { validationResult } = require('express-validator')
-const { ApiError } = require('../exceptions/api-error')
-const i18next = require('i18next')
 
 class OrdersController {
 	async savedOrder(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.order_required', { lng: req.lng })
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { order, exchange } = req.body
 			const user = req.user
@@ -32,13 +23,7 @@ class OrdersController {
 
 	async removedOrder(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.order_required', { lng: req.lng })
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const {
 				order,
@@ -81,16 +66,7 @@ class OrdersController {
 
 	async getBybitSavedOrders(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { sort, search, page, limit, start_time, end_time, exchange } =
 				req.query

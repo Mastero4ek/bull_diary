@@ -1,10 +1,10 @@
 const Router = require('express').Router
 const router = new Router()
-const authMiddleware = require('../middlewares/auth-middleware')
-const tournamentController = require('../controllers/tournament-controller')
+const authMiddleware = require('../../middlewares/auth-middleware')
+const tournamentController = require('../../controllers/tournament-controller')
 const { checkSchema } = require('express-validator')
-const ValidationSchema = require('../validation/validation-schema')
-const upload = require('../config/multer')
+const ValidationSchema = require('../../validation/validation-schema')
+const upload = require('../../config/multer')
 
 router.get(
 	'/tournaments',

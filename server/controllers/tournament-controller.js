@@ -1,18 +1,12 @@
 const tournamentService = require('../services/tournament-service')
+const Helpers = require('../helpers/helpers')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
-const { validationResult } = require('express-validator')
 
 class TournamentController {
 	async createTournament(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.tournament_creation_failed', { lng: req.lng })
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const tournament = await tournamentService.createTournament(
 				req.body,
@@ -28,16 +22,7 @@ class TournamentController {
 
 	async removeTournament(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { id } = req.params
 			const deleted = await tournamentService.removeTournament(id, req.lng)
@@ -56,16 +41,7 @@ class TournamentController {
 
 	async getTournaments(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange } = req.query
 			const { page, size } = req.query
@@ -85,16 +61,7 @@ class TournamentController {
 
 	async addTournamentUser(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange } = req.body
 			const { id } = req.params
@@ -113,16 +80,7 @@ class TournamentController {
 
 	async removeTournamentUser(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { userId } = req.body
 			const { id: tournamentId } = req.params

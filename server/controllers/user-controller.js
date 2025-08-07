@@ -1,5 +1,5 @@
 const userService = require('../services/user-service')
-const { validationResult } = require('express-validator')
+const Helpers = require('../helpers/helpers')
 const { ApiError } = require('../exceptions/api-error')
 const UserModel = require('../models/user-model')
 const TokenModel = require('../models/token-model')
@@ -10,16 +10,7 @@ const i18next = require('i18next')
 class UserController {
 	async createUser(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { name, last_name, email, password, phone, role } = req.body
 			const cover = req.file
@@ -42,16 +33,7 @@ class UserController {
 
 	async editUser(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { name, last_name, email, password, phone } = req.body
 			const cover = req.file
@@ -107,16 +89,7 @@ class UserController {
 
 	async removeUser(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { current_email, fill_email } = req.body
 			const current_user = await UserModel.findOne({ email: current_email })
@@ -172,16 +145,7 @@ class UserController {
 
 	async getUser(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { id } = req.params
 			const user = await userService.getUser(id, req.lng)
@@ -194,16 +158,7 @@ class UserController {
 
 	async getUsers(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { sort, search, page, limit, start_time, end_time } = req.query
 

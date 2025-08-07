@@ -1,4 +1,4 @@
-import $api from '../http';
+import $api from '../http'
 
 export default class OrdersService {
 	static async getBybitOrdersPnl(
@@ -10,7 +10,7 @@ export default class OrdersService {
 		start_time,
 		end_time
 	) {
-		return $api.get(`/bybit-orders-pnl`, {
+		return $api.get(`/v1/bybit-orders-pnl`, {
 			params: {
 				exchange,
 				sort,
@@ -33,7 +33,7 @@ export default class OrdersService {
 		exchange,
 		all = false
 	) {
-		const url = all ? `/bybit-saved-orders/all` : `/bybit-saved-orders`
+		const url = all ? `/v1/bybit-saved-orders/all` : `/v1/bybit-saved-orders`
 
 		return $api.get(url, {
 			params: {
@@ -49,17 +49,17 @@ export default class OrdersService {
 	}
 
 	static async getBybitTickers(exchange) {
-		return $api.get(`/bybit-tickers`, {
+		return $api.get(`/v1/bybit-tickers`, {
 			params: { exchange },
 		})
 	}
 
 	static async savedOrder(order, exchange) {
-		return $api.post(`/order/${order.id}`, { order, exchange })
+		return $api.post(`/v1/order/${order.id}`, { order, exchange })
 	}
 
 	static async removedOrder(order, exchange, start_time, end_time) {
-		return $api.delete(`/order/${order.id}`, {
+		return $api.delete(`/v1/order/${order.id}`, {
 			data: {
 				order,
 				exchange,

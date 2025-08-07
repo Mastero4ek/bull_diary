@@ -1,12 +1,12 @@
 const Router = require('express').Router
 const router = new Router()
 const passport = require('passport')
-const tokenService = require('../services/token-service')
-const UserDto = require('../dtos/user-dto')
-const KeysDto = require('../dtos/keys-dto')
-const KeysModel = require('../models/keys-model')
-const LevelModel = require('../models/level-model')
-const { logError } = require('../config/logger')
+const tokenService = require('../../services/token-service')
+const UserDto = require('../../dtos/user-dto')
+const KeysDto = require('../../dtos/keys-dto')
+const KeysModel = require('../../models/keys-model')
+const LevelModel = require('../../models/level-model')
+const { logError } = require('../../config/logger')
 
 router.get(
 	'/github',

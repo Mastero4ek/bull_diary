@@ -1,21 +1,10 @@
 const fileService = require('../services/file-service')
-const { validationResult } = require('express-validator')
-const { ApiError } = require('../exceptions/api-error')
-const i18next = require('i18next')
+const Helpers = require('../helpers/helpers')
 
 class FileController {
 	async removeCover(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const file_name = req.params.filename
 			const user = req.user

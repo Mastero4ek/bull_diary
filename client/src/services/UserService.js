@@ -1,8 +1,8 @@
-import $api from '../http';
+import $api from '../http'
 
 export default class UserService {
 	static async getUsers(sort, search, page, limit, start_time, end_time) {
-		return $api.get('/users', {
+		return $api.get('/v1/users', {
 			params: {
 				sort,
 				search,
@@ -32,7 +32,7 @@ export default class UserService {
 		if (phone) formData.append('phone', phone)
 		if (cover) formData.append('cover', cover)
 
-		const url = userId ? `/user/${userId}` : '/user'
+		const url = userId ? `/v1/user/${userId}` : '/v1/user'
 
 		return $api.patch(url, formData, {
 			headers: {
@@ -43,18 +43,20 @@ export default class UserService {
 	}
 
 	static async removeCover(filename, userId = null) {
-		const url = userId ? `/cover/${filename}/${userId}` : `/cover/${filename}`
+		const url = userId
+			? `/v1/cover/${filename}/${userId}`
+			: `/v1/cover/${filename}`
 		return $api.delete(url)
 	}
 
 	static async removeUser(current_email, fill_email, userId) {
-		return $api.delete(`/user/${userId}`, {
+		return $api.delete(`/v1/user/${userId}`, {
 			data: { current_email, fill_email },
 		})
 	}
 
 	static async getUser(id) {
-		return $api.get(`/user/${id}`)
+		return $api.get(`/v1/user/${id}`)
 	}
 
 	static async createUser(data) {
@@ -68,7 +70,7 @@ export default class UserService {
 		if (data.role) formData.append('role', data.role)
 		if (data.cover) formData.append('cover', data.cover)
 
-		return $api.post('/user', formData, {
+		return $api.post('/v1/user', formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},

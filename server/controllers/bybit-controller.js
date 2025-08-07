@@ -3,23 +3,13 @@ const KeysService = require('../services/keys-service')
 const Helpers = require('../helpers/helpers')
 const OrdersService = require('../services/orders-service')
 const { ApiError } = require('../exceptions/api-error')
-const { validationResult } = require('express-validator')
 const moment = require('moment')
 const i18next = require('i18next')
 
 class BybitController {
 	async getBybitOrdersPnl(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange, sort, search, page, limit, start_time, end_time } =
 				req.query
@@ -91,16 +81,7 @@ class BybitController {
 
 	async getBybitTickers(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange } = req.query
 
@@ -134,16 +115,7 @@ class BybitController {
 
 	async getBybitWallet(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange, start_time, end_time } = req.query
 			const user = req.user
@@ -203,16 +175,7 @@ class BybitController {
 
 	async getBybitPositions(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange, sort, search, page, limit } = req.query
 			const parsedPage = page ? parseInt(page) : undefined
@@ -300,16 +263,7 @@ class BybitController {
 
 	async getBybitWalletChangesByDay(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange, start_time, end_time } = req.query
 
@@ -490,16 +444,7 @@ class BybitController {
 
 	async getBybitTransactions(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange, start_time, end_time, sort, search, page, limit } =
 				req.query

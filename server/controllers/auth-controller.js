@@ -1,21 +1,10 @@
 const userService = require('../services/user-service')
-const { validationResult } = require('express-validator')
-const { ApiError } = require('../exceptions/api-error')
-const i18next = require('i18next')
+const Helpers = require('../helpers/helpers')
 
 class AuthController {
 	async signUp(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { name, email, password, source } = req.body
 
@@ -40,16 +29,7 @@ class AuthController {
 
 	async signIn(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { email, password } = req.body
 
@@ -68,16 +48,7 @@ class AuthController {
 
 	async logout(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { refresh_token } = req.cookies
 
@@ -100,16 +71,7 @@ class AuthController {
 
 	async refresh(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { refresh_token: existing_refresh_token } = req.cookies
 			const user = req.user

@@ -1,8 +1,8 @@
 const Router = require('express').Router
-const authController = require('../controllers/auth-controller')
+const authController = require('../../controllers/auth-controller')
 const router = new Router()
 const { checkSchema } = require('express-validator')
-const ValidationSchema = require('../validation/validation-schema')
+const ValidationSchema = require('../../validation/validation-schema')
 
 router.post(
 	'/sign-up',

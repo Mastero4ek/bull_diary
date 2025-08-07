@@ -401,23 +401,10 @@ const ValidationSchema = {
 
 	savedOrder: {
 		id: {
+			in: ['params'],
 			exists: {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.id.required', { lng: req.lng }),
-			},
-			isMongoId: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.id.invalid', { lng: req.lng }),
-			},
-		},
-		order: {
-			exists: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.order.required', { lng: req.lng }),
-			},
-			isObject: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.order.object', { lng: req.lng }),
 			},
 		},
 		exchange: {
@@ -435,17 +422,24 @@ const ValidationSchema = {
 					i18next.t('validation.exchange.invalid', { lng: req.lng }),
 			},
 		},
+		order: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.order.required', { lng: req.lng }),
+			},
+			isObject: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.order.object', { lng: req.lng }),
+			},
+		},
 	},
 
 	removedOrder: {
 		id: {
+			in: ['params'],
 			exists: {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.id.required', { lng: req.lng }),
-			},
-			isMongoId: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.id.invalid', { lng: req.lng }),
 			},
 		},
 		order: {
@@ -515,13 +509,10 @@ const ValidationSchema = {
 
 	addTournamentUser: {
 		id: {
+			in: ['params'],
 			exists: {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.id.required', { lng: req.lng }),
-			},
-			isMongoId: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.id.invalid', { lng: req.lng }),
 			},
 		},
 		exchange: {
@@ -603,13 +594,10 @@ const ValidationSchema = {
 
 	removeTournamentUser: {
 		id: {
+			in: ['params'],
 			exists: {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.id.required', { lng: req.lng }),
-			},
-			isMongoId: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.id.invalid', { lng: req.lng }),
 			},
 		},
 		userId: {
@@ -726,13 +714,10 @@ const ValidationSchema = {
 
 	removeUser: {
 		id: {
+			in: ['params'],
 			exists: {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.id.required', { lng: req.lng }),
-			},
-			isMongoId: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.id.invalid', { lng: req.lng }),
 			},
 		},
 		current_email: {
@@ -765,7 +750,8 @@ const ValidationSchema = {
 	},
 
 	getUsers: {
-		start_date: {
+		start_time: {
+			in: ['query'],
 			exists: {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.start_date.required', { lng: req.lng }),
@@ -775,7 +761,8 @@ const ValidationSchema = {
 					i18next.t('validation.start_date.invalid', { lng: req.lng }),
 			},
 		},
-		end_date: {
+		end_time: {
+			in: ['query'],
 			exists: {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.end_date.required', { lng: req.lng }),

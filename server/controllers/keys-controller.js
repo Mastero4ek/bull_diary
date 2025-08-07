@@ -1,21 +1,10 @@
 const keysService = require('../services/keys-service')
-const { validationResult } = require('express-validator')
-const { ApiError } = require('../exceptions/api-error')
-const i18next = require('i18next')
+const Helpers = require('../helpers/helpers')
 
 class KeysController {
 	async updateKeys(req, res, next) {
 		try {
-			const errors = validationResult(req)
-
-			if (!errors.isEmpty()) {
-				return next(
-					ApiError.BadRequest(
-						i18next.t('errors.validation', { lng: req.lng }),
-						errors.array()
-					)
-				)
-			}
+			Helpers.validationError(req, next)
 
 			const { exchange, api, secret } = req.body
 			const user = req.user

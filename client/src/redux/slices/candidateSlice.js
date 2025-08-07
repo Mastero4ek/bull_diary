@@ -1,13 +1,10 @@
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
 
-import { resError } from '@/helpers/functions';
-import AuthService from '@/services/AuthService';
-import KeysService from '@/services/KeysService';
-import UserService from '@/services/UserService';
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { resError } from '@/helpers/functions'
+import AuthService from '@/services/AuthService'
+import KeysService from '@/services/KeysService'
+import UserService from '@/services/UserService'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const userDefault = {
 	name: '',
@@ -96,7 +93,7 @@ export const checkAuth = createAsyncThunk(
 	async (_, { rejectWithValue }) => {
 		try {
 			const { default: $api } = await import('@/http')
-			const response = await $api.get('/refresh')
+			const response = await $api.get('/v1/refresh')
 			const processedData = handleTokens(response)
 
 			if (!processedData?.user) {

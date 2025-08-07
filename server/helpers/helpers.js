@@ -2,6 +2,7 @@ const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
 const redis = require('../config/redis')
 const { logError, logWarn } = require('../config/logger')
+const { validationResult } = require('express-validator')
 
 class Helpers {
 	/**
@@ -465,6 +466,16 @@ class Helpers {
 			lossCount: parseFloat(Number(lossCount)),
 			profitCount: parseFloat(Number(profitCount)),
 		}
+	}
+
+	validationError(req, next) {
+		const errors = validationResult(req)
+
+		if (!errors.isEmpty()) {
+			return next(ApiError.BadRequest('Validation error', errors.array()))
+		}
+
+		return true
 	}
 }
 

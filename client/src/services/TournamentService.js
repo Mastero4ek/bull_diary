@@ -1,14 +1,14 @@
-import $api from '../http';
+import $api from '../http'
 
 export default class TournamentService {
 	static async getTournaments(exchange, page, size) {
-		return $api.get(`/tournaments`, {
+		return $api.get(`/v1/tournaments`, {
 			params: { exchange, page, size },
 		})
 	}
 
 	static async addTournamentUser(email, exchange, id) {
-		return $api.post(`/tournaments/user/${id}`, { email, exchange })
+		return $api.post(`/v1/tournaments/user/${id}`, { email, exchange })
 	}
 
 	static async createTournament(data) {
@@ -22,7 +22,7 @@ export default class TournamentService {
 		formData.append('end_date', data.end_date)
 		formData.append('registration_date', data.registration_date)
 
-		return $api.post(`/tournaments`, formData, {
+		return $api.post(`/v1/tournaments`, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 			},
@@ -30,11 +30,11 @@ export default class TournamentService {
 	}
 
 	static async deleteTournament(id) {
-		return $api.delete(`/tournaments/${id}`)
+		return $api.delete(`/v1/tournaments/${id}`)
 	}
 
 	static async removeTournamentUser(tournamentId, userId) {
-		return $api.delete(`/tournaments/user/${tournamentId}`, {
+		return $api.delete(`/v1/tournaments/user/${tournamentId}`, {
 			data: { userId },
 		})
 	}

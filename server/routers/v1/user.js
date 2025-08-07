@@ -1,12 +1,12 @@
 const Router = require('express').Router
-const userController = require('../controllers/user-controller')
-const fileController = require('../controllers/file-controller')
+const userController = require('../../controllers/user-controller')
+const fileController = require('../../controllers/file-controller')
 const router = new Router()
 const { checkSchema } = require('express-validator')
-const authMiddleware = require('../middlewares/auth-middleware')
-const ValidationSchema = require('../validation/validation-schema')
-const upload = require('../config/multer')
-const fileValidation = require('../middlewares/file-validation')
+const authMiddleware = require('../../middlewares/auth-middleware')
+const ValidationSchema = require('../../validation/validation-schema')
+const upload = require('../../config/multer')
+const fileValidation = require('../../middlewares/file-validation')
 
 const profileImageValidation = fileValidation({
 	allowedTypes: ['image/jpeg', 'image/png'],
