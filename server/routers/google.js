@@ -1,7 +1,7 @@
 const Router = require('express').Router
 const router = new Router()
 const passport = require('passport')
-const tokenService = require('../service/token-service')
+const tokenService = require('../services/token-service')
 const UserDto = require('../dtos/user-dto')
 const KeysDto = require('../dtos/keys-dto')
 const KeysModel = require('../models/keys-model')

@@ -1,5 +1,5 @@
 const Helpers = require('../helpers/helpers')
-const OrdersService = require('../service/orders-service')
+const OrdersService = require('../services/orders-service')
 const { validationResult } = require('express-validator')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
@@ -81,23 +81,21 @@ class OrdersController {
 
 	async getBybitSavedOrders(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { sort, search, page, limit, start_time, end_time, exchange } =
 				req.query
 			const parsedPage = page ? parseInt(page) : undefined
 			const parsedLimit = limit ? parseInt(limit) : undefined
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng: req.lng })
-				)
-			}
-
-			if (!start_time || !end_time) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.time_range_required', { lng: req.lng })
-				)
-			}
-
 			const { all } = req.params
 			const user = req.user
 

@@ -11,6 +11,13 @@ if (!fs.existsSync(logsDir)) {
 const isDevelopment = process.env.NODE_ENV !== 'prod'
 const logLevel = process.env.LOG_LEVEL || 'info'
 
+// Логируем информацию о среде при инициализации
+console.log(
+	`[Logger] Environment: ${
+		process.env.NODE_ENV || 'undefined'
+	}, isDevelopment: ${isDevelopment}, logLevel: ${logLevel}`
+)
+
 const writeToFile = (level, message, data = {}) => {
 	const timestamp = new Date().toISOString()
 	const hostname = require('os').hostname()

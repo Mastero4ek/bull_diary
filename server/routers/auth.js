@@ -6,18 +6,26 @@ const ValidationSchema = require('../validation/validation-schema')
 
 router.post(
 	'/sign-up',
-	checkSchema(ValidationSchema.registration),
+	checkSchema(ValidationSchema.signUp),
 	authController.signUp
 )
 
 router.post(
 	'/sign-in',
-	checkSchema(ValidationSchema.login),
+	checkSchema(ValidationSchema.signIn),
 	authController.signIn
 )
 
-router.get('/refresh', authController.refresh)
+router.get(
+	'/refresh',
+	checkSchema(ValidationSchema.refresh),
+	authController.refresh
+)
 
-router.post('/logout', authController.logout)
+router.post(
+	'/logout',
+	checkSchema(ValidationSchema.logout),
+	authController.logout
+)
 
 module.exports = router

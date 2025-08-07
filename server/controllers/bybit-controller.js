@@ -1,30 +1,30 @@
-const BybitService = require('../service/bybit-service')
-const KeysService = require('../service/keys-service')
+const BybitService = require('../services/bybit-service')
+const KeysService = require('../services/keys-service')
 const Helpers = require('../helpers/helpers')
-const OrdersService = require('../service/orders-service')
+const OrdersService = require('../services/orders-service')
 const { ApiError } = require('../exceptions/api-error')
+const { validationResult } = require('express-validator')
 const moment = require('moment')
 const i18next = require('i18next')
 
 class BybitController {
 	async getBybitOrdersPnl(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { exchange, sort, search, page, limit, start_time, end_time } =
 				req.query
 			const parsedPage = page ? parseInt(page) : undefined
 			const parsedLimit = limit ? parseInt(limit) : undefined
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng: req.lng })
-				)
-			}
-
-			if (!start_time || !end_time) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.time_range_required', { lng: req.lng })
-				)
-			}
 
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
@@ -91,13 +91,18 @@ class BybitController {
 
 	async getBybitTickers(req, res, next) {
 		try {
-			const { exchange } = req.query
+			const errors = validationResult(req)
 
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng: req.lng })
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
 				)
 			}
+
+			const { exchange } = req.query
 
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
@@ -129,19 +134,18 @@ class BybitController {
 
 	async getBybitWallet(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { exchange, start_time, end_time } = req.query
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng: req.lng })
-				)
-			}
-
-			if (!start_time || !end_time) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.time_range_required', { lng: req.lng })
-				)
-			}
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
 
@@ -199,15 +203,20 @@ class BybitController {
 
 	async getBybitPositions(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { exchange, sort, search, page, limit } = req.query
 			const parsedPage = page ? parseInt(page) : undefined
 			const parsedLimit = limit ? parseInt(limit) : undefined
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng: req.lng })
-				)
-			}
 
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
@@ -291,19 +300,18 @@ class BybitController {
 
 	async getBybitWalletChangesByDay(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { exchange, start_time, end_time } = req.query
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng: req.lng })
-				)
-			}
-
-			if (!start_time || !end_time) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.time_range_required', { lng: req.lng })
-				)
-			}
 
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)
@@ -482,22 +490,21 @@ class BybitController {
 
 	async getBybitTransactions(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { exchange, start_time, end_time, sort, search, page, limit } =
 				req.query
 			const parsedPage = page ? parseInt(page) : undefined
 			const parsedLimit = limit ? parseInt(limit) : undefined
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng: req.lng })
-				)
-			}
-
-			if (!start_time || !end_time) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.time_range_required', { lng: req.lng })
-				)
-			}
 
 			const user = req.user
 			const keys = await KeysService.findKeys(user.id, req.lng)

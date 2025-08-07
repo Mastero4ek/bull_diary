@@ -1,10 +1,10 @@
-const userService = require('../service/user-service')
+const userService = require('../services/user-service')
 const { validationResult } = require('express-validator')
 const { ApiError } = require('../exceptions/api-error')
 const UserModel = require('../models/user-model')
 const TokenModel = require('../models/token-model')
-const fileService = require('../service/file-service')
-const keysService = require('../service/keys-service')
+const fileService = require('../services/file-service')
+const keysService = require('../services/keys-service')
 const i18next = require('i18next')
 
 class UserController {
@@ -57,10 +57,6 @@ class UserController {
 			const cover = req.file
 			const user = req.user
 			const targetUserId = req.params.id
-
-			if (!user) {
-				return next(ApiError.UnauthorizedError())
-			}
 
 			let targetUser
 
@@ -176,6 +172,17 @@ class UserController {
 
 	async getUser(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { id } = req.params
 			const user = await userService.getUser(id, req.lng)
 
@@ -187,6 +194,17 @@ class UserController {
 
 	async getUsers(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { sort, search, page, limit, start_time, end_time } = req.query
 
 			const users = await userService.getUsers(

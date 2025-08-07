@@ -9,7 +9,9 @@
 		"seed:users": "node scripts/users-seeder.js",
 		"clean:db": "node scripts/clean-database.js",
 		"clean:uploads": "node scripts/clean-uploads.js",
-		"clean:db:uploads": "node scripts/clean-database.js --clean-uploads"
+		"clean:db:uploads": "node scripts/clean-database.js --clean-uploads",
+		"backup:db": "node scripts/backup-mongodb.js",
+		"restore:db": "node scripts/restore-mongodb.js"
 	},
 	"keywords": [],
 	"author": "",

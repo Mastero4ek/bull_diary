@@ -7,26 +7,6 @@ const Helpers = require('../helpers/helpers')
 class OrdersService {
 	async savedOrder(lng = 'en', userId, order, exchange) {
 		try {
-			if (!userId) {
-				throw ApiError.BadRequest(i18next.t('errors.user_id_required', { lng }))
-			}
-
-			if (!order) {
-				throw ApiError.BadRequest(i18next.t('errors.order_required', { lng }))
-			}
-
-			if (!order.id) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.order_id_required', { lng })
-				)
-			}
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng })
-				)
-			}
-
 			const existing_order = await OrderModel.findOne({
 				user: userId,
 				exchange,
@@ -74,32 +54,6 @@ class OrdersService {
 		exchange
 	) {
 		try {
-			if (!userId) {
-				throw ApiError.BadRequest(i18next.t('errors.user_id_required', { lng }))
-			}
-
-			if (!order) {
-				throw ApiError.BadRequest(i18next.t('errors.order_required', { lng }))
-			}
-
-			if (!order.id) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.order_id_required', { lng })
-				)
-			}
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng })
-				)
-			}
-
-			if (!start_time || !end_time) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.time_range_required', { lng })
-				)
-			}
-
 			const removed_order = await OrderModel.findOneAndDelete({
 				user: userId,
 				exchange,
@@ -150,22 +104,6 @@ class OrdersService {
 		limit
 	) {
 		try {
-			if (!userId) {
-				throw ApiError.BadRequest(i18next.t('errors.user_id_required', { lng }))
-			}
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng })
-				)
-			}
-
-			if (!start_time || !end_time) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.time_range_required', { lng })
-				)
-			}
-
 			if (page === null || limit === null) {
 				//
 			} else {

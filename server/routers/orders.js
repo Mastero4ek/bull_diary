@@ -8,14 +8,14 @@ const ValidationSchema = require('../validation/validation-schema')
 router.post(
 	'/order/:id',
 	authMiddleware,
-	checkSchema(ValidationSchema.orders),
+	checkSchema(ValidationSchema.savedOrder),
 	ordersController.savedOrder
 )
 
 router.delete(
 	'/order/:id',
 	authMiddleware,
-	checkSchema(ValidationSchema.orders),
+	checkSchema(ValidationSchema.removedOrder),
 	ordersController.removedOrder
 )
 

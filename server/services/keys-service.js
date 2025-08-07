@@ -8,10 +8,6 @@ const Helpers = require('../helpers/helpers')
 class KeysService {
 	async findKeys(userId, lng = 'en') {
 		try {
-			if (!userId) {
-				throw ApiError.BadRequest(i18next.t('errors.user_id_required', { lng }))
-			}
-
 			const keys = await KeysModel.findOne({ user: userId })
 
 			if (!keys) {
@@ -31,22 +27,6 @@ class KeysService {
 
 	async updateKeys(userId, exchange, api, secret, lng = 'en') {
 		try {
-			if (!userId) {
-				throw ApiError.BadRequest(i18next.t('errors.user_id_required', { lng }))
-			}
-
-			if (!exchange) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_required', { lng })
-				)
-			}
-
-			if (!api || !secret) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.api_secret_required', { lng })
-				)
-			}
-
 			const keys = await KeysModel.findOne({ user: userId })
 
 			if (!keys) {
@@ -90,10 +70,6 @@ class KeysService {
 
 	async removeKeys(email, lng = 'en') {
 		try {
-			if (!email) {
-				throw ApiError.BadRequest(i18next.t('errors.email_required', { lng }))
-			}
-
 			const user = await UserModel.findOne({ email })
 
 			if (!user) {

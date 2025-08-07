@@ -8,16 +8,6 @@ const { logError } = require('../config/logger')
 class TokenService {
 	async generateTokens(payload, lng = 'en') {
 		try {
-			if (!payload) {
-				throw ApiError.BadRequest(i18next.t('errors.payload_required', { lng }))
-			}
-
-			if (!payload.id || !payload.email) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.invalid_payload_format', { lng })
-				)
-			}
-
 			const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
 				expiresIn: '30m',
 			})
@@ -45,20 +35,11 @@ class TokenService {
 
 	async saveToken(userId, refresh_token, lng = 'en') {
 		try {
-			if (!userId) {
-				throw ApiError.BadRequest(i18next.t('errors.user_id_required', { lng }))
-			}
-
-			if (!refresh_token) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.refresh_token_required', { lng })
-				)
-			}
-
 			const tokenData = await TokenModel.findOne({ user: userId })
 
 			if (tokenData) {
 				tokenData.refresh_token = refresh_token
+
 				return await tokenData.save()
 			}
 
@@ -80,12 +61,6 @@ class TokenService {
 
 	async removeToken(refresh_token, lng = 'en') {
 		try {
-			if (!refresh_token) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.refresh_token_required', { lng })
-				)
-			}
-
 			const tokenData = await TokenModel.deleteOne({ refresh_token })
 
 			return tokenData
@@ -101,12 +76,6 @@ class TokenService {
 
 	async findToken(refresh_token, lng = 'en') {
 		try {
-			if (!refresh_token) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.refresh_token_required', { lng })
-				)
-			}
-
 			const tokenData = await TokenModel.findOne({ refresh_token })
 
 			return tokenData
@@ -122,10 +91,6 @@ class TokenService {
 
 	validateAccessToken(token) {
 		try {
-			if (!token) {
-				return null
-			}
-
 			const userData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
 			return userData
@@ -138,11 +103,8 @@ class TokenService {
 
 	validateRefreshToken(token) {
 		try {
-			if (!token) {
-				return null
-			}
-
 			const userData = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)
+
 			return userData
 		} catch (error) {
 			logError(error, { context: 'refresh token validation' })

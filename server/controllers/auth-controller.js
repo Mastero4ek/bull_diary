@@ -1,4 +1,4 @@
-const userService = require('../service/user-service')
+const userService = require('../services/user-service')
 const { validationResult } = require('express-validator')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
@@ -7,7 +7,6 @@ class AuthController {
 	async signUp(req, res, next) {
 		try {
 			const errors = validationResult(req)
-			const { name, email, password, source } = req.body
 
 			if (!errors.isEmpty()) {
 				return next(
@@ -17,6 +16,8 @@ class AuthController {
 					)
 				)
 			}
+
+			const { name, email, password, source } = req.body
 
 			const user_data = await userService.signUp(
 				name,
@@ -40,7 +41,6 @@ class AuthController {
 	async signIn(req, res, next) {
 		try {
 			const errors = validationResult(req)
-			const { email, password } = req.body
 
 			if (!errors.isEmpty()) {
 				return next(
@@ -50,6 +50,8 @@ class AuthController {
 					)
 				)
 			}
+
+			const { email, password } = req.body
 
 			const user_data = await userService.signIn(email, password, req.lng)
 
@@ -66,6 +68,17 @@ class AuthController {
 
 	async logout(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { refresh_token } = req.cookies
 
 			await userService.logout(refresh_token, req.lng)
@@ -87,8 +100,20 @@ class AuthController {
 
 	async refresh(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const { refresh_token: existing_refresh_token } = req.cookies
 			const user = req.user
+
 			let user_data = {}
 
 			if (user && (user.source === 'github' || user.source === 'google')) {

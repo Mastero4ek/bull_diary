@@ -1,5 +1,22 @@
 require('dotenv').config()
 
+// Настройка обработки неперехваченных исключений в самом начале
+const { logError } = require('./config/logger')
+
+process.on('uncaughtException', error => {
+	console.error('Uncaught Exception:', error.message)
+	console.error('Stack:', error.stack)
+	logError(error, { context: 'Uncaught Exception' })
+	process.exit(1)
+})
+
+process.on('unhandledRejection', (reason, promise) => {
+	console.error('Unhandled Rejection at:', promise, 'reason:', reason)
+	const error = reason instanceof Error ? reason : new Error(String(reason))
+	logError(error, { context: 'Unhandled Rejection' })
+	process.exit(1)
+})
+
 const app = require('./config/express')
 const passport = require('./config/passport')
 const connectDB = require('./config/database')
@@ -23,7 +40,7 @@ const Backend = require('i18next-fs-backend')
 const path = require('path')
 const langMiddleware = require('./middlewares/lang-middleware')
 
-const { logInfo, logError } = require('./config/logger')
+const { logInfo } = require('./config/logger')
 
 i18next.use(Backend).init({
 	preload: ['en', 'ru'],

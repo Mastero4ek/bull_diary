@@ -1,10 +1,22 @@
-const userService = require('../service/user-service')
+const userService = require('../services/user-service')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
+const { validationResult } = require('express-validator')
 
 class MailController {
 	async activate(req, res, next) {
 		try {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return next(
+					ApiError.BadRequest(
+						i18next.t('errors.validation', { lng: req.lng }),
+						errors.array()
+					)
+				)
+			}
+
 			const activation_link = req.params.link
 			const user_data = await userService.activate(activation_link, req.lng)
 

@@ -23,34 +23,6 @@ const { logError, logInfo, logWarn } = require('../config/logger')
 class UserService {
 	async signUp(name, email, password, lng = 'en', source = 'self') {
 		try {
-			if (!name) {
-				throw ApiError.BadRequest(i18next.t('errors.name_required', { lng }))
-			}
-
-			if (!email) {
-				throw ApiError.BadRequest(i18next.t('errors.email_required', { lng }))
-			}
-
-			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-			if (!emailRegex.test(email)) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.invalid_email_format', { lng })
-				)
-			}
-
-			if (source === 'self' && !password) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.password_required', { lng })
-				)
-			}
-
-			if (source === 'self' && password && password.length < 6) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.password_too_short', { lng })
-				)
-			}
-
 			const normalizedEmail = email.toLowerCase()
 			const existingUser = await UserModel.findOne({ email: normalizedEmail })
 
@@ -141,16 +113,6 @@ class UserService {
 
 	async signIn(email, password, lng = 'en') {
 		try {
-			if (!email) {
-				throw ApiError.BadRequest(i18next.t('errors.email_required', { lng }))
-			}
-
-			if (!password) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.password_required', { lng })
-				)
-			}
-
 			const normalizedEmail = email.toLowerCase()
 			const user = await UserModel.findOne({ email: normalizedEmail })
 
@@ -218,10 +180,6 @@ class UserService {
 
 	async checkSourceAuth(email, lng = 'en') {
 		try {
-			if (!email) {
-				throw ApiError.BadRequest(i18next.t('errors.email_required', { lng }))
-			}
-
 			const normalizedEmail = email.toLowerCase()
 			const user = await UserModel.findOne({ email: normalizedEmail })
 
@@ -280,12 +238,6 @@ class UserService {
 
 	async logout(refresh_token, lng = 'en') {
 		try {
-			if (!refresh_token) {
-				throw ApiError.UnauthorizedError(
-					i18next.t('errors.refresh_token_required', { lng })
-				)
-			}
-
 			return await tokenService.removeToken(refresh_token, lng)
 		} catch (error) {
 			Helpers.handleTokenError(error, lng, 'logout', 'errors.failed_logout')
@@ -294,12 +246,6 @@ class UserService {
 
 	async refresh(refresh_token, lng = 'en') {
 		try {
-			if (!refresh_token) {
-				throw ApiError.UnauthorizedError(
-					i18next.t('errors.refresh_token_required', { lng })
-				)
-			}
-
 			const user_data = tokenService.validateRefreshToken(refresh_token, lng)
 
 			if (!user_data || !user_data.id) {
@@ -373,12 +319,6 @@ class UserService {
 
 	async activate(activation_link, lng = 'en') {
 		try {
-			if (!activation_link) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.activation_link_required', { lng })
-				)
-			}
-
 			const user = await UserModel.findOne({ activation_link })
 
 			if (!user) {
@@ -476,27 +416,6 @@ class UserService {
 		lng = 'en'
 	) {
 		try {
-			if (!userId && !email) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.user_id_or_email_required', { lng })
-				)
-			}
-
-			if (email) {
-				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-				if (!emailRegex.test(email)) {
-					throw ApiError.BadRequest(
-						i18next.t('errors.invalid_email_format', { lng })
-					)
-				}
-			}
-
-			if (password && password.length < 6) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.password_too_short', { lng })
-				)
-			}
-
 			let user
 
 			if (userId) {
@@ -596,10 +515,6 @@ class UserService {
 
 	async removeUser(current_email, refresh_token, lng = 'en') {
 		try {
-			if (!current_email) {
-				throw ApiError.BadRequest(i18next.t('errors.email_required', { lng }))
-			}
-
 			const user = await UserModel.findOneAndDelete({ email: current_email })
 
 			if (!user) {
@@ -698,10 +613,6 @@ class UserService {
 
 	async getUser(userId, lng = 'en') {
 		try {
-			if (!userId) {
-				throw ApiError.BadRequest(i18next.t('errors.user_id_required', { lng }))
-			}
-
 			const user = await UserModel.findById(userId)
 
 			if (!user) {
@@ -740,18 +651,6 @@ class UserService {
 		lng = 'en'
 	) {
 		try {
-			if (!page || page < 1) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.invalid_page_number', { lng })
-				)
-			}
-
-			if (!limit || limit < 1 || limit > 100) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.invalid_limit_value', { lng })
-				)
-			}
-
 			const filter = {}
 
 			if (start_time && end_time) {
@@ -772,6 +671,7 @@ class UserService {
 			const totalPages = Math.ceil(total / limit)
 
 			let sortObj = {}
+
 			if (sort && typeof sort === 'object') {
 				sortObj[sort.type || 'created_at'] = sort.value === 'asc' ? 1 : -1
 			} else {

@@ -1,6 +1,7 @@
 # Project specific directories
 mails/
 !server/mails/
+server/backups/
 pictures/
 test-api-keys.txt
 

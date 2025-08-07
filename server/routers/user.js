@@ -14,7 +14,11 @@ const profileImageValidation = fileValidation({
 	minSize: 1024,
 })
 
-router.get('/user/:id', userController.getUser)
+router.get(
+	'/user/:id',
+	checkSchema(ValidationSchema.getUser, ['params']),
+	userController.getUser
+)
 
 router.patch(
 	'/user/:id?',
@@ -28,17 +32,23 @@ router.patch(
 router.delete(
 	'/cover/:filename/:userId?',
 	authMiddleware,
+	checkSchema(ValidationSchema.removeCover, ['params']),
 	fileController.removeCover
 )
 
 router.delete(
 	'/user/:id',
 	authMiddleware,
-	checkSchema(ValidationSchema.remove),
+	checkSchema(ValidationSchema.removeUser),
 	userController.removeUser
 )
 
-router.get('/users', authMiddleware, userController.getUsers)
+router.get(
+	'/users',
+	authMiddleware,
+	checkSchema(ValidationSchema.getUsers, ['query']),
+	userController.getUsers
+)
 
 router.post(
 	'/user',

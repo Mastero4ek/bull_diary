@@ -11,32 +11,6 @@ const { logError } = require('../config/logger')
 class FileService {
 	async uploadCover(cover, userId, lng = 'en', tournamentId = null) {
 		try {
-			if (!cover || !cover.filename) {
-				throw ApiError.BadRequest(i18next.t('errors.file_required', { lng }))
-			}
-
-			if (cover.size > parseInt(process.env.MAX_FILE_SIZE)) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.file_too_large', {
-						lng,
-						maxSize: parseInt(process.env.MAX_FILE_SIZE) / 1024 / 1024 + 'MB',
-					})
-				)
-			}
-
-			const allowedMimeTypes = [
-				'image/jpeg',
-				'image/png',
-				'image/gif',
-				'image/webp',
-			]
-
-			if (!allowedMimeTypes.includes(cover.mimetype)) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.invalid_file_type', { lng })
-				)
-			}
-
 			let file
 
 			if (tournamentId) {
@@ -137,16 +111,6 @@ class FileService {
 
 	async removeCover(file_name, userId, lng = 'en') {
 		try {
-			if (!file_name) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.file_name_required', { lng })
-				)
-			}
-
-			if (!userId) {
-				throw ApiError.BadRequest(i18next.t('errors.user_id_required', { lng }))
-			}
-
 			const file = await FileModel.findOneAndDelete({
 				user: userId,
 				name: file_name,

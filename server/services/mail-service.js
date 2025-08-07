@@ -23,32 +23,6 @@ class MailService {
 
 	async sendActivationMail(name, to, lng = 'en', link) {
 		try {
-			if (!name) {
-				throw ApiError.BadRequest(i18next.t('errors.name_required', { lng }))
-			}
-
-			if (!to) {
-				throw ApiError.BadRequest(i18next.t('errors.email_required', { lng }))
-			}
-
-			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-			if (!emailRegex.test(to)) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.invalid_email_format', { lng })
-				)
-			}
-
-			if (!link) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.activation_link_required', { lng })
-				)
-			}
-
-			if (!['en', 'ru'].includes(lng)) {
-				lng = 'en'
-			}
-
 			const headerEnPath = path.join(
 				__dirname,
 				'../mails/assets/images/header-en.png'

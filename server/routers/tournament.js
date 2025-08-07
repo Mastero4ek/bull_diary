@@ -6,12 +6,17 @@ const { checkSchema } = require('express-validator')
 const ValidationSchema = require('../validation/validation-schema')
 const upload = require('../config/multer')
 
-router.get('/tournaments', authMiddleware, tournamentController.getTournaments)
+router.get(
+	'/tournaments',
+	authMiddleware,
+	checkSchema(ValidationSchema.getTournaments, ['query']),
+	tournamentController.getTournaments
+)
 
 router.post(
 	'/tournaments/user/:id',
 	authMiddleware,
-	checkSchema(ValidationSchema.tournament),
+	checkSchema(ValidationSchema.addTournamentUser),
 	tournamentController.addTournamentUser
 )
 
@@ -19,20 +24,21 @@ router.post(
 	'/tournaments',
 	authMiddleware,
 	upload.single('cover'),
-	checkSchema(ValidationSchema.tournament),
+	checkSchema(ValidationSchema.createTournament),
 	tournamentController.createTournament
 )
 
 router.delete(
 	'/tournaments/user/:id',
 	authMiddleware,
-	checkSchema(ValidationSchema.tournament),
+	checkSchema(ValidationSchema.removeTournamentUser),
 	tournamentController.removeTournamentUser
 )
 
 router.delete(
 	'/tournaments/:id',
 	authMiddleware,
+	checkSchema(ValidationSchema.removeTournament, ['params']),
 	tournamentController.removeTournament
 )
 
