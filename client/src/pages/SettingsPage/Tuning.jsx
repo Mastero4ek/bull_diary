@@ -1,24 +1,36 @@
-import Cookies from 'js-cookie'
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import Cookies from 'js-cookie';
 import {
-	setLanguage,
-	setTheme,
-	setMark,
-	setAmount,
-	setColor,
-} from '@/redux/slices/settingsSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import React, { useMemo } from 'react'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import { H2 } from '@/components/ui/titles/H2'
-import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
+import { H2 } from '@/components/ui/titles/H2';
+import i18n from '@/i18n';
+import {
+  setAmount,
+  setColor,
+  setIsLoadingLanguage,
+  setIsLoadingTheme,
+  setLanguage,
+  setMark,
+  setSideBar,
+  setTheme,
+} from '@/redux/slices/settingsSlice';
 
-import styles from './styles.module.scss'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { setIsLoadingTheme, setSideBar } from '@/redux/slices/settingsSlice'
+import styles from './styles.module.scss';
 
 export const Tuning = React.memo(({ handleClickRadio }) => {
 	const dispatch = useDispatch()
@@ -134,10 +146,17 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 
 	const changeLanguage = useCallback(
 		value => {
+			dispatch(setIsLoadingLanguage(true))
+
 			document.documentElement.setAttribute('lang', value)
 			Cookies.set('language', value)
+			i18n.changeLanguage(value)
 
 			dispatch(setLanguage(value))
+
+			setTimeout(() => {
+				dispatch(setIsLoadingLanguage(false))
+			}, 2000)
 		},
 		[dispatch, language]
 	)

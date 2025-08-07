@@ -20,8 +20,10 @@ import { InnerBlock } from '@/components/ui/general/InnerBlock';
 import { Logo } from '@/components/ui/general/Logo';
 import { OuterBlock } from '@/components/ui/general/OuterBlock';
 import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
+import i18n from '@/i18n';
 import { SignInPopup } from '@/popups/SignInPopup';
 import {
+  setIsLoadingLanguage,
   setIsLoadingTheme,
   setLanguage,
   setTheme,
@@ -82,10 +84,16 @@ export const HeaderLayout = React.memo(() => {
 
 	const changeLanguage = useCallback(
 		value => {
+			dispatch(setIsLoadingLanguage(true))
 			document.documentElement.setAttribute('lang', value)
 			Cookies.set('language', value)
+			i18n.changeLanguage(value)
 
 			dispatch(setLanguage(value))
+
+			setTimeout(() => {
+				dispatch(setIsLoadingLanguage(false))
+			}, 2000)
 		},
 		[dispatch, language]
 	)

@@ -19,6 +19,9 @@ class AuthController {
 			res.cookie('refresh_token', user_data.refresh_token, {
 				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
+				secure: false,
+				sameSite: 'lax',
+				path: '/',
 			})
 
 			return res.json(user_data)
@@ -38,6 +41,9 @@ class AuthController {
 			res.cookie('refresh_token', user_data.refresh_token, {
 				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
+				secure: false,
+				sameSite: 'lax',
+				path: '/',
 			})
 
 			return res.json(user_data)
@@ -71,8 +77,6 @@ class AuthController {
 
 	async refresh(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
-
 			const { refresh_token: existing_refresh_token } = req.cookies
 			const user = req.user
 
@@ -89,15 +93,16 @@ class AuthController {
 			res.cookie('refresh_token', user_data.refresh_token, {
 				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'prod',
-				sameSite: 'strict',
+				secure: false,
+				sameSite: 'lax',
+				path: '/',
 			})
-
 			res.cookie('access_token', user_data.access_token, {
 				maxAge: parseInt(process.env.ACCESS_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: process.env.NODE_ENV === 'prod',
-				sameSite: 'strict',
+				secure: false,
+				sameSite: 'lax',
+				path: '/',
 			})
 
 			const { access_token, refresh_token, ...user_data_safe } = user_data

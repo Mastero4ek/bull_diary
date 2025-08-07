@@ -1,38 +1,56 @@
-import { Suspense, useCallback, useEffect, useMemo } from 'react'
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
 
-import Cookies from 'js-cookie'
-import { useDispatch, useSelector } from 'react-redux'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import Cookies from 'js-cookie';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  Navigate,
+  Route,
+  Routes,
+} from 'react-router-dom';
 
-import { FooterLayout } from '@/components/layouts/FooterLayout'
-import { HeaderLayout } from '@/components/layouts/HeaderLayout'
-import { SideBarLayout } from '@/components/layouts/SideBarLayout'
-import { Loader } from '@/components/ui/general/Loader'
-import { BattlePage } from '@/pages/BattlePage'
-import { BookmarksPage } from '@/pages/BookmarksPage'
-import { ContactsPage } from '@/pages/ContactsPage'
-import { DiaryPage } from '@/pages/DiaryPage'
-import { HomePage } from '@/pages/HomePage'
-import { NotFoundPage } from '@/pages/NotFoundPage'
-import { PrivacyPage } from '@/pages/PrivacyPage'
-import { ProfilePage } from '@/pages/ProfilePage'
-import { SettingsPage } from '@/pages/SettingsPage'
-import { TablePage } from '@/pages/TablePage'
-import { TablePositionPage } from '@/pages/TablePositionPage'
-import { TermsPage } from '@/pages/TermsPage'
-import { UsersPage } from '@/pages/UsersPage'
-import { WalletDetailsPage } from '@/pages/WalletDetailsPage'
-import { WalletPage } from '@/pages/WalletPage'
-import { checkAuth } from '@/redux/slices/candidateSlice'
-import { setScreenParams } from '@/redux/slices/settingsSlice'
+import { FooterLayout } from '@/components/layouts/FooterLayout';
+import { HeaderLayout } from '@/components/layouts/HeaderLayout';
+import { SideBarLayout } from '@/components/layouts/SideBarLayout';
+import { Loader } from '@/components/ui/general/Loader';
+import { BattlePage } from '@/pages/BattlePage';
+import { BookmarksPage } from '@/pages/BookmarksPage';
+import { ContactsPage } from '@/pages/ContactsPage';
+import { DiaryPage } from '@/pages/DiaryPage';
+import { HomePage } from '@/pages/HomePage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
+import { PrivacyPage } from '@/pages/PrivacyPage';
+import { ProfilePage } from '@/pages/ProfilePage';
+import { SettingsPage } from '@/pages/SettingsPage';
+import { TablePage } from '@/pages/TablePage';
+import { TablePositionPage } from '@/pages/TablePositionPage';
+import { TermsPage } from '@/pages/TermsPage';
+import { UsersPage } from '@/pages/UsersPage';
+import { WalletDetailsPage } from '@/pages/WalletDetailsPage';
+import { WalletPage } from '@/pages/WalletPage';
+import { checkAuth } from '@/redux/slices/candidateSlice';
+import { setScreenParams } from '@/redux/slices/settingsSlice';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const App = () => {
 	const { isAuth, user, serverStatus } = useSelector(state => state.candidate)
-	const { language, theme, mark, amount, color, isLoadingTheme } = useSelector(
-		state => state.settings
-	)
+	const {
+		language,
+		theme,
+		mark,
+		amount,
+		color,
+		isLoadingTheme,
+		isLoadingLanguage,
+	} = useSelector(state => state.settings)
 
 	const dispatch = useDispatch()
 
@@ -138,7 +156,9 @@ export const App = () => {
 			}
 		>
 			<Suspense fallback={<Loader />}>
-				{(serverStatus === 'loading' || isLoadingTheme) && <Loader />}
+				{(serverStatus === 'loading' ||
+					isLoadingTheme ||
+					isLoadingLanguage) && <Loader />}
 				{isAuth && user.is_activated && <SideBarLayout />}
 
 				<div

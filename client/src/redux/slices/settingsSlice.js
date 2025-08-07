@@ -1,6 +1,6 @@
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 const getTheme = () => {
 	const theme = Cookies.get('dark_theme') === 'true' ? true : false
@@ -30,6 +30,7 @@ const initialState = {
 	},
 	theme: getTheme(),
 	isLoadingTheme: false,
+	isLoadingLanguage: false,
 	mark: getSetting('mark'),
 	amount: getSetting('amount'),
 	color: getSetting('color'),
@@ -67,6 +68,9 @@ export const settingsSlice = createSlice({
 		setLanguage(state, action) {
 			state.language = action.payload
 		},
+		setIsLoadingLanguage(state, action) {
+			state.isLoadingLanguage = action.payload
+		},
 		setScreenParams(state, action) {
 			state.isMobile = action.payload.isMobile
 			state.width = action.payload.width
@@ -84,6 +88,7 @@ export const {
 	setAmount,
 	setColor,
 	setIsLoadingTheme,
+	setIsLoadingLanguage,
 	setScreenParams,
 } = settingsSlice.actions
 

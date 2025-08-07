@@ -16,11 +16,7 @@ router.post(
 	authController.signIn
 )
 
-router.get(
-	'/refresh',
-	checkSchema(ValidationSchema.refresh),
-	authController.refresh
-)
+router.get('/refresh', authController.refresh)
 
 router.post(
 	'/logout',
