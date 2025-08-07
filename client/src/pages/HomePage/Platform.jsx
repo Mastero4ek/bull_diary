@@ -1,49 +1,58 @@
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Pagination, Autoplay } from 'swiper/modules'
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import './platform_slider.scss';
 
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { SignUpPopup } from '@/popups/SignUpPopup'
-import { H1 } from '@/components/ui/titles/H1'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { DotList } from '@/components/ui/general/DotList'
+import { useTranslation } from 'react-i18next';
+import {
+  Autoplay,
+  Pagination,
+} from 'swiper/modules';
+import {
+  Swiper,
+  SwiperSlide,
+} from 'swiper/react';
 
-import styles from './styles.module.scss'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { DotList } from '@/components/ui/general/DotList';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { H1 } from '@/components/ui/titles/H1';
+import { SignUpPopup } from '@/popups/SignUpPopup';
 
-import 'swiper/css'
-import 'swiper/css/pagination'
-import 'swiper/css/navigation'
-import './platform_slider.scss'
+import styles from './styles.module.scss';
 
 export const Platform = () => {
+	const { t } = useTranslation()
+
 	const platformList = [
 		{
 			id: 0,
-			text: 'Clean & User-Friendly Interface',
+			text: t('page.home.platform.list_1.title'),
 		},
 		{
 			id: 1,
-			text: 'Cutting-edge Charting',
+			text: t('page.home.platform.list_2.title'),
 		},
 		{
 			id: 2,
-			text: 'Ultra-fast update of orders in the diary',
+			text: t('page.home.platform.list_3.title'),
 		},
 		{
 			id: 3,
-			text: 'No download - cross browser compatibility',
+			text: t('page.home.platform.list_4.title'),
 		},
 		{
 			id: 4,
-			text: 'Real-time Quotes',
+			text: t('page.home.platform.list_5.title'),
 		},
 		{
 			id: 5,
-			text: 'Interactive Charts',
+			text: t('page.home.platform.list_6.title'),
 		},
 		{
 			id: 6,
-			text: 'Add comments to the order',
+			text: t('page.home.platform.list_7.title'),
 		},
 	]
 
@@ -58,13 +67,13 @@ export const Platform = () => {
 			<div className={styles.container_wrapper}>
 				<div className={styles.benefits_wrapper}>
 					<div className={styles.benefits_content}>
-						<H1>A feature-packed online Platform</H1>
+						<H1>{t('page.home.platform.title')}</H1>
 
 						<DotList listArr={platformList} />
 
 						<RootButton
 							onClickBtn={handleClickSignup}
-							text={'Sign up'}
+							text={t('button.sign_up')}
 							icon='sign-up'
 						/>
 					</div>

@@ -1,30 +1,34 @@
-import { H1 } from '@/components/ui/titles/H1'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { DotList } from '@/components/ui/general/DotList'
+import { useTranslation } from 'react-i18next';
 
-import styles from './styles.module.scss'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { DotList } from '@/components/ui/general/DotList';
+import { H1 } from '@/components/ui/titles/H1';
+
+import styles from './styles.module.scss';
 
 export const Precedence = () => {
+	const { t } = useTranslation()
+
 	const precedenceList = [
 		{
 			id: 0,
-			text: 'Clean & User-Friendly Interface',
+			text: t('page.home.precedence.list_1.title'),
 		},
 		{
 			id: 1,
-			text: 'Cutting-edge Charting',
+			text: t('page.home.precedence.list_2.title'),
 		},
 		{
 			id: 2,
-			text: 'Ultra-fast update of orders in the diary',
+			text: t('page.home.precedence.list_3.title'),
 		},
 		{
 			id: 3,
-			text: 'No download - cross browser compatibility',
+			text: t('page.home.precedence.list_4.title'),
 		},
 		{
 			id: 4,
-			text: 'Real-time Quotes',
+			text: t('page.home.precedence.list_5.title'),
 		},
 	]
 	return (
@@ -37,16 +41,11 @@ export const Precedence = () => {
 
 					<div className={styles.precedence_content}>
 						<H1>
-							<b>Beat the Best</b>
+							<b>{t('page.home.precedence.title')}</b>
 						</H1>
 
 						<RootDesc>
-							<span>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								Voluptas repudiandae reprehenderit qui minus sit soluta totam
-								accusamus sed, expedita ipsam cum at voluptates itaque debitis
-								fuga eveniet officia. Quaerat, ducimus.
-							</span>
+							<span>{t('page.home.precedence.subtitle')}</span>
 						</RootDesc>
 
 						<DotList listArr={precedenceList} />

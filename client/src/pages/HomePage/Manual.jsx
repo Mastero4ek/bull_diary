@@ -1,61 +1,60 @@
-import { H1 } from '@/components/ui/titles/H1'
-import { H4 } from '@/components/ui/titles/H4'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { useTranslation } from 'react-i18next';
 
-import styles from './styles.module.scss'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { H1 } from '@/components/ui/titles/H1';
+import { H4 } from '@/components/ui/titles/H4';
+
+import styles from './styles.module.scss';
 
 export const Manual = () => {
+	const { t } = useTranslation()
+
 	const manualList = [
 		{
 			id: 0,
 			title: (
 				<>
-					<b>1.</b> Register and connect keys
+					<b>1.</b> {t('page.home.manual.step_1.title')}
 				</>
 			),
-			subtitle:
-				'Create an account and enter your API keys. You have the opportunity to connect several accounts from one exchange or accounts from several exchanges at once.',
+			subtitle: t('page.home.manual.step_1.subtitle'),
 		},
 		{
 			id: 1,
 			title: (
 				<>
-					<b>2.</b> Wait for the update
+					<b>2.</b> {t('page.home.manual.step_2.title')}
 				</>
 			),
-			subtitle:
-				'In your personal account, Diary will download the transactions and save them in your account, this will take a couple of minutes. The data is automatically updated by the service; the trader does not need to worry about this.',
+			subtitle: t('page.home.manual.step_2.subtitle'),
 		},
 		{
 			id: 2,
 			title: (
 				<>
-					<b>3.</b> Find a situation
+					<b>3.</b> {t('page.home.manual.step_3.title')}
 				</>
 			),
-			subtitle:
-				'Using signals, scripts or trader chat, you can find an idea for a deal. Open and close a sell position.',
+			subtitle: t('page.home.manual.step_3.subtitle'),
 		},
 		{
 			id: 3,
 			title: (
 				<>
-					<b>4.</b> Post a comment
+					<b>4.</b> {t('page.home.manual.step_4.title')}
 				</>
 			),
-			subtitle:
-				'First, study the transactions on the chart, then evaluate the financial result. Record in the comments why you decided to enter the position, describe your feelings during the transaction.',
+			subtitle: t('page.home.manual.step_4.subtitle'),
 		},
 		{
 			id: 4,
 			title: (
 				<>
-					<b>5.</b> Analyze your trade
+					<b>5.</b> {t('page.home.manual.step_5.title')}
 				</>
 			),
-			subtitle:
-				'Analyze situations and comments regularly. Analyze the situation to identify mistakes in past actions and prevent their repetition.',
+			subtitle: t('page.home.manual.step_5.subtitle'),
 		},
 	]
 
@@ -70,14 +69,11 @@ export const Manual = () => {
 					<div className={styles.manual_wrap}>
 						<div className={styles.manual_content}>
 							<H1>
-								<b>How to Keep a Diary</b>
+								<b>{t('page.home.manual.title')}</b>
 							</H1>
 
 							<RootDesc>
-								<span>
-									Conceived by Traders for a Seamless Trading Experience <br />{' '}
-									from eager novices to sophisticated professionals.
-								</span>
+								<span>{t('page.home.manual.subtitle')}</span>
 							</RootDesc>
 						</div>
 

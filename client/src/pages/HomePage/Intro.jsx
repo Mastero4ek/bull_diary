@@ -1,14 +1,17 @@
-import { H1 } from '@/components/ui/titles/H1'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { SignUpPopup } from '@/popups/SignUpPopup'
-import { Counts } from './Counts'
+import { useTranslation } from 'react-i18next';
 
-import styles from './styles.module.scss'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { H1 } from '@/components/ui/titles/H1';
+import { SignUpPopup } from '@/popups/SignUpPopup';
+
+import { Counts } from './Counts';
+import styles from './styles.module.scss';
 
 export const Intro = () => {
 	const { openPopup } = usePopup()
+	const { t } = useTranslation()
 
 	const handleClickSignup = () => {
 		openPopup(<SignUpPopup />)
@@ -20,21 +23,16 @@ export const Intro = () => {
 				<div className={styles.intro_wrap}>
 					<div className={styles.intro_content}>
 						<H1>
-							<b>Unleash Your Trading Ambitions</b>
+							<b>{t('page.home.intro.title')}</b>
 						</H1>
 
 						<RootDesc>
-							<span>
-								Bull Diary is not only a multifunctional platform that allows
-								you to save trading history and analyze trading decisions. This
-								is also an assistant for identifying errors in trading
-								settlement strategies.
-							</span>
+							<span>{t('page.home.intro.description')}</span>
 						</RootDesc>
 
 						<RootButton
 							onClickBtn={handleClickSignup}
-							text={'Sign up'}
+							text={t('button.sign_up')}
 							icon='sign-up'
 						/>
 					</div>

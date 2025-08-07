@@ -1,32 +1,36 @@
-import CountUp from 'react-countup'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { H2 } from '@/components/ui/titles/H2'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import CountUp from 'react-countup';
+import { useTranslation } from 'react-i18next';
 
-import styles from './styles.module.scss'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { H2 } from '@/components/ui/titles/H2';
+
+import styles from './styles.module.scss';
 
 export const Counts = () => {
+	const { t } = useTranslation()
+
 	const countsList = [
 		{
 			id: 0,
 			countEnd: 1745,
-			text: 'registered users',
+			text: t('page.home.counts.registered_users'),
 		},
 		{
 			id: 1,
 			countEnd: 2698,
-			text: 'deposits saved',
+			text: t('page.home.counts.deposits_saved'),
 		},
 		{
 			id: 2,
 			countEnd: 1002,
-			text: 'users use',
+			text: t('page.home.counts.users_use'),
 		},
 		{
 			id: 3,
 			countEnd: 17,
-			text: 'tournaments held',
+			text: t('page.home.counts.tournaments_held'),
 		},
 	]
 
@@ -54,7 +58,7 @@ export const Counts = () => {
 						<H2>24/7</H2>
 
 						<RootDesc>
-							<span>client support</span>
+							<span>{t('page.home.counts.client_support')}</span>
 						</RootDesc>
 					</InnerBlock>
 				</li>

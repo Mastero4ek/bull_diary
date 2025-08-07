@@ -1,3 +1,158 @@
 {
-	"welcome": "Welcome!"
+	"logo": {
+		"analyze_earn": "analyze & earn"
+	},
+	"footer": {
+		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo.",
+		"terms": "Terms",
+		"privacy": "Privacy",
+		"copyright": "© 2024. Created with love, Mastero4ek."
+	},
+	"button": {
+		"sign_in": "Sign in",
+		"sign_up": "Sign up",
+		"submit": "Submit"
+	},
+	"form": {
+		"label": {
+			"name": "Your Name",
+			"email": "Your email",
+			"subject": "Subject",
+			"message": "Message"
+		},
+		"error": {
+			"name": "Name is required.",
+			"email": "Incorrect email.",
+			"subject": "Subject is required.",
+			"message": "Message is required."
+		}
+	},
+	"user_default": {
+		"name": "User_name"
+	},
+	"page": {
+		"home": {
+			"intro": {
+				"title": "Unleash Your Trading Ambitions",
+				"description": "Bull Diary is not only a multifunctional platform that allows you to save trading history and analyze trading decisions. This is also an assistant for identifying errors in trading settlement strategies."
+			},
+			"counts": {
+				"registered_users": "registered users",
+				"deposits_saved": "deposits saved",
+				"users_use": "users use",
+				"tournaments_held": "tournaments held",
+				"client_support": "client support"
+			},
+			"manual": {
+				"title": "How to Keep a Diary",
+				"subtitle": "Conceived by Traders for a Seamless Trading Experience from eager novices to sophisticated professionals.",
+				"step_1": {
+					"title": "Register and connect keys",
+					"subtitle": "Create an account and enter your API keys. You have the opportunity to connect several accounts from one exchange or accounts from several exchanges at once."
+				},
+				"step_2": {
+					"title": "Wait for the update",
+					"subtitle": "In your personal account, Diary will download the transactions and save them in your account, this will take a couple of minutes. The data is automatically updated by the service; the trader does not need to worry about this."
+				},
+				"step_3": {
+					"title": "Find a situation",
+					"subtitle": "Using signals, scripts or trader chat, you can find an idea for a deal. Open and close a sell position."
+				},
+				"step_4": {
+					"title": "Post a comment",
+					"subtitle": "First, study the transactions on the chart, then evaluate the financial result. Record in the comments why you decided to enter the position, describe your feelings during the transaction."
+				},
+				"step_5": {
+					"title": "Analyze your trade",
+					"subtitle": "Analyze situations and comments regularly. Analyze the situation to identify mistakes in past actions and prevent their repetition."
+				}
+			},
+			"start": {
+				"title": "Start today with Bull Diary",
+				"step_1": {
+					"title": "Register",
+					"subtitle": "Create a profile in less than 2 minutes"
+				},
+				"step_2": {
+					"title": "Add keys",
+					"subtitle": "Select an exchange and add keys"
+				},
+				"step_3": {
+					"title": "Analyze",
+					"subtitle": "Write comments to orders, analyze your path"
+				}
+			},
+			"advantages": {
+				"title": "Why traders choose us?",
+				"subtitle": "Join the 100,000 users who have already chosen Traders Diary as their support platform!",
+				"card_1": {
+					"title": "Read-only keys",
+					"subtitle": "The diary uses 'read-only' keys. Transactions using such keys are prohibited."
+				},
+				"card_2": {
+					"title": "Keeps history",
+					"subtitle": "Upload transaction information to your account. The transaction archive will be securely stored in one place."
+				},
+				"card_3": {
+					"title": "Saves time",
+					"subtitle": "Automatically marks trades on the chart. You don't need to waste time 'manually' transferring trades or calculating trades in Excel."
+				},
+				"card_4": {
+					"title": "Share your strategy",
+					"subtitle": "With Traders Diary, you can share statistics and trades with other people by creating detailed screenshots."
+				},
+				"card_5": {
+					"title": "Complete delete",
+					"subtitle": "Your Diary account can be deleted at any time. The deletion is irreversible and the data will be deleted from the project server."
+				}
+			},
+			"platform": {
+				"title": "A feature-packed online Platform",
+				"list_1": {
+					"title": "Clean & User-Friendly Interface"
+				},
+				"list_2": {
+					"title": "Cutting-edge Charting"
+				},
+				"list_3": {
+					"title": "Ultra-fast update of orders in the diary"
+				},
+				"list_4": {
+					"title": "No download - cross browser compatibility"
+				},
+				"list_5": {
+					"title": "Real-time Quotes"
+				},
+				"list_6": {
+					"title": "Interactive Charts"
+				},
+				"list_7": {
+					"title": "Add comments to the order"
+				}
+			},
+			"precedence": {
+				"title": "Beat the Best",
+				"subtitle": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas repudiandae reprehenderit qui minus sit soluta totam accusamus sed, expedita ipsam cum at voluptates itaque debitis fuga eveniet officia. Quaerat, ducimus.",
+				"list_1": {
+					"title": "Clean & User-Friendly Interface"
+				},
+				"list_2": {
+					"title": "Cutting-edge Charting"
+				},
+				"list_3": {
+					"title": "Ultra-fast update of orders in the diary"
+				},
+				"list_4": {
+					"title": "No download - cross browser compatibility"
+				},
+				"list_5": {
+					"title": "Real-time Quotes"
+				}
+			},
+			"question": {
+				"title": "Still have Questions",
+				"subtitle": "Have a question or require specialist assistance? <br /> Contact our dedicated customer service team <br /> who are available 24/7 to assist you! <br/><br/>Please fill out the form, we will be glad to hear your opinion or write to us on email!"
+			}
+		}
+	}
 }

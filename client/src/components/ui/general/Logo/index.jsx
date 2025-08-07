@@ -1,16 +1,22 @@
-import React, { useMemo } from 'react'
-import styles from './styles.module.scss'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import logoLight from '@/assets/images/logo-light.svg'
-import logoDark from '@/assets/images/logo-dark.svg'
-import { useSelector } from 'react-redux'
+import React, { useMemo } from 'react';
+
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
+import logoDark from '@/assets/images/logo-dark.svg';
+import logoLight from '@/assets/images/logo-light.svg';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+
+import styles from './styles.module.scss';
 
 export const Logo = React.memo(props => {
 	const { desc = true } = props
 	const { theme } = useSelector(state => state.settings)
 
 	const logoSrc = useMemo(() => (theme ? logoDark : logoLight), [theme])
+
+	const { t } = useTranslation()
 
 	return (
 		<div
@@ -29,7 +35,7 @@ export const Logo = React.memo(props => {
 
 					<SmallDesc>
 						<span>
-							<i className={styles.opacity}>analyze & earn</i>
+							<i className={styles.opacity}>{t('logo.analyze_earn')}</i>
 						</span>
 					</SmallDesc>
 				</div>

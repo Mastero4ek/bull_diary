@@ -6,6 +6,7 @@ import React, {
 
 import Cookies from 'js-cookie';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import {
   useDispatch,
   useSelector,
@@ -38,6 +39,7 @@ export const HeaderLayout = React.memo(() => {
 	const { openPopup } = usePopup()
 	const { theme, language } = useSelector(state => state.settings)
 	const { isAuth, user } = useSelector(state => state.candidate)
+	const { t } = useTranslation()
 
 	const [currentTime, setCurrentTime] = useState(
 		moment().format('DD MMMM YYYY, HH:mm:ss')
@@ -108,7 +110,9 @@ export const HeaderLayout = React.memo(() => {
 				<OuterBlock>
 					<div className={styles.header_user}>
 						<RootDesc>
-							<span>{`${user?.name} ${user?.last_name}` || 'User_name'}</span>
+							<span>
+								{`${user?.name} ${user?.last_name}` || t('user_default.name')}
+							</span>
 						</RootDesc>
 
 						<div className={styles.header_avatar}>
@@ -159,7 +163,11 @@ export const HeaderLayout = React.memo(() => {
 				checked={theme}
 			/>
 
-			<RootButton onClickBtn={handleSignIn} text={'Sign in'} icon='sign-in' />
+			<RootButton
+				onClickBtn={handleSignIn}
+				text={t('button.sign_in')}
+				icon='sign-in'
+			/>
 		</div>
 	)
 

@@ -1,16 +1,19 @@
-import { H1 } from '@/components/ui/titles/H1'
-import { H4 } from '@/components/ui/titles/H4'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { SignUpPopup } from '@/popups/SignUpPopup'
+import { useTranslation } from 'react-i18next';
 
-import styles from './styles.module.scss'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { H1 } from '@/components/ui/titles/H1';
+import { H4 } from '@/components/ui/titles/H4';
+import { SignUpPopup } from '@/popups/SignUpPopup';
+
+import styles from './styles.module.scss';
 
 export const Start = () => {
 	const { openPopup } = usePopup()
+	const { t } = useTranslation()
 
 	const handleClickSignup = () => {
 		openPopup(<SignUpPopup />)
@@ -19,20 +22,20 @@ export const Start = () => {
 	const stepList = [
 		{
 			id: 0,
-			title: 'Register',
-			subtitle: 'Create a profile in less than 2 minutes',
+			title: t('page.home.start.step_1.title'),
+			subtitle: t('page.home.start.step_1.subtitle'),
 			step: '01',
 		},
 		{
 			id: 1,
-			title: 'Add keys',
-			subtitle: 'Select an exchange and add keys',
+			title: t('page.home.start.step_2.title'),
+			subtitle: t('page.home.start.step_2.subtitle'),
 			step: '02',
 		},
 		{
 			id: 2,
-			title: 'Analyze',
-			subtitle: 'Write comments to orders, analyze your path',
+			title: t('page.home.start.step_3.title'),
+			subtitle: t('page.home.start.step_3.subtitle'),
 			step: '03',
 		},
 	]
@@ -43,7 +46,7 @@ export const Start = () => {
 				<div className={styles.start_wrapper}>
 					<div className={styles.start_content}>
 						<H1>
-							<b>Start today with Bull Diary</b>
+							<b>{t('page.home.start.title')}</b>
 						</H1>
 					</div>
 
@@ -71,7 +74,7 @@ export const Start = () => {
 
 							<RootButton
 								onClickBtn={handleClickSignup}
-								text={'Sign up'}
+								text={t('button.sign_up')}
 								icon='sign-up'
 							/>
 						</div>

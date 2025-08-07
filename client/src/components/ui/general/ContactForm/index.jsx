@@ -1,16 +1,19 @@
-import { useSelector } from 'react-redux'
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
-import { useForm } from 'react-hook-form'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { Icon } from '@/components/ui/general/Icon'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
-import styles from './styles.module.scss'
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+import { Icon } from '@/components/ui/general/Icon';
+
+import styles from './styles.module.scss';
 
 export const ContactForm = React.memo(() => {
 	const { isAuth, user } = useSelector(state => state.candidate)
+	const { t } = useTranslation()
 
 	const {
 		reset,
@@ -35,7 +38,7 @@ export const ContactForm = React.memo(() => {
 				>
 					<div className={styles.contact_form_control}>
 						<RootDesc>
-							<span>Your Name</span>
+							<span>{t('form.label.name')}</span>
 						</RootDesc>
 
 						{errors.name && (
@@ -43,7 +46,7 @@ export const ContactForm = React.memo(() => {
 								<Icon id={'error-icon'} />
 
 								<SmallDesc>
-									<p>Name is required.</p>
+									<p>{t('form.error.name')}</p>
 								</SmallDesc>
 							</>
 						)}
@@ -63,7 +66,7 @@ export const ContactForm = React.memo(() => {
 				>
 					<div className={styles.contact_form_control}>
 						<RootDesc>
-							<span>Your email</span>
+							<span>{t('form.label.email')}</span>
 						</RootDesc>
 
 						{errors.email && (
@@ -71,7 +74,7 @@ export const ContactForm = React.memo(() => {
 								<Icon id={'error-icon'} />
 
 								<SmallDesc>
-									<p>Incorrect email.</p>
+									<p>{t('form.error.email')}</p>
 								</SmallDesc>
 							</>
 						)}
@@ -95,7 +98,7 @@ export const ContactForm = React.memo(() => {
 				>
 					<div className={styles.contact_form_control}>
 						<RootDesc>
-							<span>Subject</span>
+							<span>{t('form.label.subject')}</span>
 						</RootDesc>
 
 						{errors.subject && (
@@ -103,7 +106,7 @@ export const ContactForm = React.memo(() => {
 								<Icon id={'error-icon'} />
 
 								<SmallDesc>
-									<p>Subject is required.</p>
+									<p>{t('form.error.subject')}</p>
 								</SmallDesc>
 							</>
 						)}
@@ -120,7 +123,7 @@ export const ContactForm = React.memo(() => {
 				>
 					<div className={styles.contact_form_control}>
 						<RootDesc>
-							<span>Message</span>
+							<span>{t('form.label.message')}</span>
 						</RootDesc>
 
 						{errors.message && (
@@ -128,7 +131,7 @@ export const ContactForm = React.memo(() => {
 								<Icon id={'error-icon'} />
 
 								<SmallDesc>
-									<p>Message is required.</p>
+									<p>{t('form.error.message')}</p>
 								</SmallDesc>
 							</>
 						)}
@@ -140,7 +143,7 @@ export const ContactForm = React.memo(() => {
 				<RootButton
 					type={'submit'}
 					onClickBtn={() => console.log('')}
-					text={'Submit'}
+					text={t('button.submit')}
 					icon='submit'
 				/>
 			</form>
