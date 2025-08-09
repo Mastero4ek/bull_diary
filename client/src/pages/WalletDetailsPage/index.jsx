@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import moment from 'moment'
+import moment from 'moment/min/moment-with-locales'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'

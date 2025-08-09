@@ -18,13 +18,17 @@
 			"name": "Your Name",
 			"email": "Your email",
 			"subject": "Subject",
-			"message": "Message"
+			"message": "Message",
+			"password": "Password",
+			"confirm_password": "Confirm password"
 		},
 		"error": {
-			"name": "Name is required.",
-			"email": "Incorrect email.",
-			"subject": "Subject is required.",
-			"message": "Message is required."
+			"name": "Name is required!",
+			"email": "Incorrect email!",
+			"subject": "Subject is required!",
+			"message": "Message is required!",
+			"password": "Password is required!",
+			"confirm_password": "Confirm password is required!"
 		}
 	},
 	"user_default": {
@@ -153,6 +157,33 @@
 				"title": "Still have Questions",
 				"subtitle": "Have a question or require specialist assistance? <br /> Contact our dedicated customer service team <br /> who are available 24/7 to assist you! <br/><br/>Please fill out the form, we will be glad to hear your opinion or write to us on email!"
 			}
+		}
+	},
+	"popup": {
+		"signup": {
+			"title": "Create Account",
+			"subtitle": "or use email for registration",
+			"success": "Signed up successfully!",
+			"error": "Error signing up! Please try again.",
+			"title_signin": "Welcome back!",
+			"subtitle_signin": "To keep connected with us please login with your personal info.",
+			"agreement": "By clicking you agree to our",
+			"privacy_statement": "Privacy Statement"
+		},
+		"signin": {
+			"title": "Sign in to app",
+			"subtitle": "or use email for login",
+			"success": "Signed in successfully!",
+			"error": "Error signing in! Please try again.",
+			"title_signup": "Hello friend!",
+			"subtitle_signup": "Enter your personal details and start journey with us.",
+			"forgot": "Forgot your password?"
+		},
+		"forgot": {
+			"title": "Dear friend!",
+			"subtitle": "To change your password, enter the email address specified when registering your account.<br/><br/> We will send instructions for resetting your password to this address.",
+			"success": "Instruction to reset your password has been sent to your email!",
+			"error": "Error sending email! Please try again."
 		}
 	}
 }

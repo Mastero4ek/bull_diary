@@ -1,37 +1,30 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 
-import Cookies from 'js-cookie';
-import moment from 'moment';
-import { useTranslation } from 'react-i18next';
+import Cookies from 'js-cookie'
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+
+import avatarDefault from '@/assets/images/general/default_avatar.png'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { Logo } from '@/components/ui/general/Logo'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch'
+import i18n from '@/i18n'
+import { SignInPopup } from '@/popups/SignInPopup'
 import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import { useLocation } from 'react-router-dom';
+	setIsLoadingLanguage,
+	setIsLoadingTheme,
+	setLanguage,
+	setTheme,
+} from '@/redux/slices/settingsSlice'
 
-import avatarDefault from '@/assets/images/general/default_avatar.png';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { Logo } from '@/components/ui/general/Logo';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
-import i18n from '@/i18n';
-import { SignInPopup } from '@/popups/SignInPopup';
-import {
-  setIsLoadingLanguage,
-  setIsLoadingTheme,
-  setLanguage,
-  setTheme,
-} from '@/redux/slices/settingsSlice';
-
-import { Exchange } from './Exchange';
-import styles from './styles.module.scss';
+import { Exchange } from './Exchange'
+import styles from './styles.module.scss'
 
 export const HeaderLayout = React.memo(() => {
 	const dispatch = useDispatch()

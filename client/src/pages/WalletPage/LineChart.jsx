@@ -1,29 +1,26 @@
-import React, {
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useCallback, useMemo } from 'react'
 
 import {
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Tooltip,
-} from 'chart.js';
-import _ from 'lodash';
-import moment from 'moment';
-import { Line } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+	CategoryScale,
+	Chart as ChartJS,
+	Filler,
+	Legend,
+	LinearScale,
+	LineElement,
+	PointElement,
+	Tooltip,
+} from 'chart.js'
+import _ from 'lodash'
+import moment from 'moment/min/moment-with-locales'
+import { Line } from 'react-chartjs-2'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { Icon } from '@/components/ui/general/Icon';
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { Icon } from '@/components/ui/general/Icon'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 ChartJS.register(
 	LineElement,

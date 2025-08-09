@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,6 +18,7 @@ import { setIsAuth } from '@/redux/slices/candidateSlice'
 import styles from './styles.module.scss'
 
 export const ForgotPopup = React.memo(() => {
+	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { closePopup } = usePopup()
@@ -32,16 +34,14 @@ export const ForgotPopup = React.memo(() => {
 	const submit = async data => {
 		try {
 			console.log(data)
-			showSuccess(
-				'Instruction to reset your password has been sent to your email!'
-			)
+			showSuccess(t('popup.forgot.success'))
 
 			reset()
 			dispatch(setIsAuth(true))
 			navigate('/wallet')
 			closePopup()
 		} catch (e) {
-			showError('Error sending email! Please try again.')
+			showError(t('popup.forgot.error'))
 			console.log(e)
 		}
 	}
@@ -49,13 +49,13 @@ export const ForgotPopup = React.memo(() => {
 	return (
 		<>
 			<PopupDescLayout
-				title={'Dear friend!'}
+				title={t('popup.forgot.title')}
 				text={
-					<>
-						To change your password, enter the e-mail address specified when
-						registering your account. <br /> <br /> We will send instructions
-						for resetting your password to this address.
-					</>
+					<span
+						dangerouslySetInnerHTML={{
+							__html: t('popup.forgot.subtitle'),
+						}}
+					></span>
 				}
 			/>
 
@@ -72,7 +72,7 @@ export const ForgotPopup = React.memo(() => {
 					>
 						<div className={styles.forgot_form_control}>
 							<RootDesc>
-								<span>Email</span>
+								<span>{t('form.label.email')}</span>
 							</RootDesc>
 
 							{errors.email && (
@@ -80,7 +80,7 @@ export const ForgotPopup = React.memo(() => {
 									<Icon id={'error-icon'} />
 
 									<SmallDesc>
-										<p>Incorrect email.</p>
+										<p>{t('form.error.email')}</p>
 									</SmallDesc>
 								</>
 							)}
@@ -95,12 +95,7 @@ export const ForgotPopup = React.memo(() => {
 						/>
 					</label>
 
-					<RootButton
-						type={'submit'}
-						onClickBtn={() => console.log('')}
-						text={'Send'}
-						icon='submit'
-					/>
+					<RootButton type={'submit'} text={t('button.submit')} icon='submit' />
 				</form>
 			</PopupFormLayout>
 		</>

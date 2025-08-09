@@ -1,44 +1,36 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
-import avatarDefault from '@/assets/images/general/default_avatar.png';
+import avatarDefault from '@/assets/images/general/default_avatar.png'
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { ClosedContent } from '@/components/ui/general/ClosedContent'
+import { CountdownTimer } from '@/components/ui/general/CountdownTimer'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { capitalize } from '@/helpers/functions'
+import { NewTournamentPopup } from '@/popups/NewTournamentPopup'
+import { getUser } from '@/redux/slices/candidateSlice'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { ClosedContent } from '@/components/ui/general/ClosedContent';
-import { CountdownTimer } from '@/components/ui/general/CountdownTimer';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { capitalize } from '@/helpers/functions';
-import { NewTournamentPopup } from '@/popups/NewTournamentPopup';
-import { getUser } from '@/redux/slices/candidateSlice';
-import {
-  addTournamentUser,
-  clearTournaments,
-  deleteTournament,
-  getTournaments,
-  removeTournamentUser,
-  setPage,
-  setSort,
-} from '@/redux/slices/tournamentSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	addTournamentUser,
+	clearTournaments,
+	deleteTournament,
+	getTournaments,
+	removeTournamentUser,
+	setPage,
+	setSort,
+} from '@/redux/slices/tournamentSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const BattlePage = () => {
 	const { openPopup } = usePopup()

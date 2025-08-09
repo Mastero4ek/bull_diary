@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,6 +22,7 @@ import { SignUpPopup } from '../SignUpPopup'
 import styles from './styles.module.scss'
 
 export const SignInPopup = React.memo(() => {
+	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	const { closePopup, openPopup } = usePopup()
@@ -67,12 +69,12 @@ export const SignInPopup = React.memo(() => {
 				reset()
 				navigate('/wallet')
 				closePopup()
-				showSuccess('Signed in successfully!')
+				showSuccess(t('popup.signin.success'))
 			} else {
-				showError('Error signing in! Please try again.')
+				showError(t('popup.signin.error'))
 			}
 		} catch (e) {
-			showError('Error signing in! Please try again.')
+			showError(t('popup.signin.error'))
 			console.log(e)
 		}
 	}
@@ -80,16 +82,20 @@ export const SignInPopup = React.memo(() => {
 	return (
 		<>
 			<PopupDescLayout
-				title={'Hello friend!'}
-				text={'Enter your personal details and start journey with us.'}
+				title={t('popup.signin.title_signup')}
+				text={t('popup.signin.subtitle_signup')}
 			>
-				<RootButton onClickBtn={handleSignUp} text={'Sign up'} icon='sign-up' />
+				<RootButton
+					onClickBtn={handleSignUp}
+					text={t('button.sign_up')}
+					icon='sign-up'
+				/>
 			</PopupDescLayout>
 
 			<PopupFormLayout
-				title={'Sign in to app'}
+				title={t('popup.signin.title')}
 				socials={true}
-				subtitle={'or use email for login'}
+				subtitle={t('popup.signin.subtitle')}
 			>
 				<form
 					className={styles.signin_form_wrapper}
@@ -103,7 +109,7 @@ export const SignInPopup = React.memo(() => {
 					>
 						<div className={styles.signin_form_control}>
 							<RootDesc>
-								<span>Email</span>
+								<span>{t('form.label.email')}</span>
 							</RootDesc>
 
 							{(errors.email || findErrorField('email')) && (
@@ -111,7 +117,7 @@ export const SignInPopup = React.memo(() => {
 									<Icon id={'error-icon'} />
 
 									<SmallDesc>
-										<p>Incorrect email.</p>
+										<p>{t('form.error.email')}</p>
 									</SmallDesc>
 								</>
 							)}
@@ -134,7 +140,7 @@ export const SignInPopup = React.memo(() => {
 					>
 						<div className={styles.signin_form_control}>
 							<RootDesc>
-								<span>Password</span>
+								<span>{t('form.label.password')}</span>
 							</RootDesc>
 
 							{(errors.password || findErrorField('password')) && (
@@ -142,7 +148,7 @@ export const SignInPopup = React.memo(() => {
 									<Icon id={'error-icon'} />
 
 									<SmallDesc>
-										<p>Incorrect password.</p>
+										<p>{t('form.error.password')}</p>
 									</SmallDesc>
 								</>
 							)}
@@ -152,13 +158,13 @@ export const SignInPopup = React.memo(() => {
 					</label>
 
 					<RootDesc>
-						<b onClick={handleClickForgot}>Forgot your password ?</b>
+						<b onClick={handleClickForgot}>{t('popup.signin.forgot')}</b>
 					</RootDesc>
 
 					<RootButton
 						type={'submit'}
 						onClickBtn={() => console.log('')}
-						text={'Sign in'}
+						text={t('button.sign_in')}
 						icon='sign-in'
 					/>
 

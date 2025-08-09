@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -21,7 +22,9 @@ import { SuccessSignUpPopup } from '../SuccessSignUpPopup'
 import styles from './styles.module.scss'
 
 export const SignUpPopup = React.memo(() => {
+	const { t } = useTranslation()
 	const dispatch = useDispatch()
+
 	const { closePopup, openPopup } = usePopup()
 	const { errorMessage, errorArray } = useSelector(state => state.candidate)
 	const { showError, showSuccess } = useNotification()
@@ -62,12 +65,12 @@ export const SignUpPopup = React.memo(() => {
 				setTimeout(() => {
 					openPopup(<SuccessSignUpPopup />, { shared: true })
 				}, 150)
-				showSuccess('Signed up successfully!')
+				showSuccess(t('popup.signup.success'))
 			} else {
-				showError('Error signing up! Please try again.')
+				showError(t('popup.signup.error'))
 			}
 		} catch (e) {
-			showError('Error signing up! Please try again.')
+			showError(t('popup.signup.error'))
 			console.log(e)
 		}
 	}
@@ -75,9 +78,9 @@ export const SignUpPopup = React.memo(() => {
 	return (
 		<>
 			<PopupFormLayout
-				title={'Create Account'}
+				title={t('popup.signup.title')}
 				socials={true}
-				subtitle={'or use email for registration'}
+				subtitle={t('popup.signup.subtitle')}
 			>
 				<form
 					className={styles.signup_form_wrapper}
@@ -91,7 +94,7 @@ export const SignUpPopup = React.memo(() => {
 					>
 						<div className={styles.signup_form_control}>
 							<RootDesc>
-								<span>Name</span>
+								<span>{t('form.label.name')}</span>
 							</RootDesc>
 
 							{(errors.name || findErrorField('name')) && (
@@ -99,7 +102,7 @@ export const SignUpPopup = React.memo(() => {
 									<Icon id={'error-icon'} />
 
 									<SmallDesc>
-										<p>Name is required.</p>
+										<p>{t('form.error.name')}</p>
 									</SmallDesc>
 								</>
 							)}
@@ -116,7 +119,7 @@ export const SignUpPopup = React.memo(() => {
 					>
 						<div className={styles.signup_form_control}>
 							<RootDesc>
-								<span>Email</span>
+								<span>{t('form.label.email')}</span>
 							</RootDesc>
 
 							{(errors.email || findErrorField('email')) && (
@@ -124,7 +127,7 @@ export const SignUpPopup = React.memo(() => {
 									<Icon id={'error-icon'} />
 
 									<SmallDesc>
-										<p>Incorrect email.</p>
+										<p>{t('form.error.email')}</p>
 									</SmallDesc>
 								</>
 							)}
@@ -147,7 +150,7 @@ export const SignUpPopup = React.memo(() => {
 					>
 						<div className={styles.signup_form_control}>
 							<RootDesc>
-								<span>Password</span>
+								<span>{t('form.label.password')}</span>
 							</RootDesc>
 
 							{(errors.password || findErrorField('password')) && (
@@ -155,7 +158,7 @@ export const SignUpPopup = React.memo(() => {
 									<Icon id={'error-icon'} />
 
 									<SmallDesc>
-										<p>Incorrect password.</p>
+										<p>{t('form.error.password')}</p>
 									</SmallDesc>
 								</>
 							)}
@@ -173,7 +176,7 @@ export const SignUpPopup = React.memo(() => {
 					>
 						<div className={styles.signup_form_control}>
 							<RootDesc>
-								<span>Confirm password</span>
+								<span>{t('form.label.confirm_password')}</span>
 							</RootDesc>
 
 							{(errors.confirm_password ||
@@ -182,7 +185,7 @@ export const SignUpPopup = React.memo(() => {
 									<Icon id={'error-icon'} />
 
 									<SmallDesc>
-										<p>Incorrect password.</p>
+										<p>{t('form.error.confirm_password')}</p>
 									</SmallDesc>
 								</>
 							)}
@@ -211,9 +214,9 @@ export const SignUpPopup = React.memo(() => {
 
 							<SmallDesc>
 								<span>
-									By clicking you agree to our{' '}
+									{t('popup.signup.agreement')}
 									<Link to={'/privacy'} onClick={() => closePopup()}>
-										Privacy Statement
+										{t('popup.signup.privacy_statement')}
 									</Link>
 								</span>
 							</SmallDesc>
@@ -223,8 +226,7 @@ export const SignUpPopup = React.memo(() => {
 					<div className={styles.signup_form_btn}>
 						<RootButton
 							type={'submit'}
-							onClickBtn={() => console.log('')}
-							text={'Sign up'}
+							text={t('button.sign_up')}
 							icon='sign-up'
 						/>
 					</div>
@@ -234,10 +236,14 @@ export const SignUpPopup = React.memo(() => {
 			</PopupFormLayout>
 
 			<PopupDescLayout
-				title={'Welcome back!'}
-				text={'To keep connected with us please login with your personal info.'}
+				title={t('popup.signup.title_signin')}
+				text={t('popup.signup.subtitle_signin')}
 			>
-				<RootButton onClickBtn={handleSignIn} text={'Sign in'} icon='sign-in' />
+				<RootButton
+					onClickBtn={handleSignIn}
+					text={t('button.sign_in')}
+					icon='sign-in'
+				/>
 			</PopupDescLayout>
 		</>
 	)
