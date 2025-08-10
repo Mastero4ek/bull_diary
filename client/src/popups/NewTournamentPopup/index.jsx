@@ -141,6 +141,7 @@ export const NewTournamentPopup = () => {
 							rules={{ required: true }}
 							render={({ field, fieldState }) => (
 								<RootSelect
+									arrow={true}
 									className={`${styles.tournament_form_select} ${
 										fieldState.error ? styles.error : ''
 									}`}

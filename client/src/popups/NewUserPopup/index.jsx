@@ -1,41 +1,26 @@
-import './phone_input.scss';
+import './phone_input.scss'
 
-import React, {
-  useCallback,
-  useState,
-} from 'react';
+import React, { useCallback, useState } from 'react'
 
-import {
-  Controller,
-  useForm,
-} from 'react-hook-form';
-import PhoneInput from 'react-phone-input-2';
-import ru from 'react-phone-input-2/lang/ru.json';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { Controller, useForm } from 'react-hook-form'
+import PhoneInput from 'react-phone-input-2'
+import ru from 'react-phone-input-2/lang/ru.json'
+import { useDispatch, useSelector } from 'react-redux'
 
-import coverDefault from '@/assets/images/general/default_tournament.png';
-import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import {
-  PopupDescLayout,
-} from '@/components/layouts/PopupLayout/PopupDescLayout';
-import {
-  PopupFormLayout,
-} from '@/components/layouts/PopupLayout/PopupFormLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { RootSelect } from '@/components/ui/inputs/RootSelect';
-import { createUser } from '@/redux/slices/candidateSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+import coverDefault from '@/assets/images/general/default_tournament.png'
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
+import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { RootSelect } from '@/components/ui/inputs/RootSelect'
+import { createUser } from '@/redux/slices/candidateSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const NewUserPopup = () => {
 	const {
@@ -265,6 +250,7 @@ export const NewUserPopup = () => {
 							rules={{ required: true }}
 							render={({ field, fieldState }) => (
 								<RootSelect
+									arrow={true}
 									className={`${styles.user_form_select} ${
 										fieldState.error ? styles.error : ''
 									}`}

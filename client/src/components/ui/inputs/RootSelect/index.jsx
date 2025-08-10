@@ -9,6 +9,7 @@ import styles from './styles.module.scss'
 
 export const RootSelect = React.memo(
 	({
+		arrow = false,
 		options = [],
 		value,
 		onChange,
@@ -72,6 +73,10 @@ export const RootSelect = React.memo(
 								{selectedOption ? getLabel(selectedOption) : placeholder}
 							</span>
 						</RootDesc>
+
+						{arrow && (
+							<i style={{ transform: `rotate(${open ? 180 : 0}deg)` }}></i>
+						)}
 					</div>
 				</ItemBlock>
 

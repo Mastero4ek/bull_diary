@@ -92,9 +92,7 @@ export const WalletDetailsPage = React.memo(() => {
 		{
 			Header: t('table.type'),
 			accessor: 'type',
-			Cell: ({ cell: { value } }) => (
-				<span>{getTransactionTypeLabel(value)}</span>
-			),
+			Cell: ({ cell: { value } }) => getTransactionTypeLabel(value),
 			width: '100%',
 		},
 		{
@@ -129,7 +127,9 @@ export const WalletDetailsPage = React.memo(() => {
 			Header: t('table.balance'),
 			accessor: 'cashBalance',
 			Cell: ({ cell: { value } }) => (
-				<span style={{ textAlign: 'right' }}>{amount ? '****' : value}</span>
+				<span style={{ display: 'block', textAlign: 'right' }}>
+					{amount ? '****' : value}
+				</span>
 			),
 			width: '100%',
 		},

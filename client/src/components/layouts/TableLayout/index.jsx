@@ -99,8 +99,27 @@ export const TableLayout = props => {
 
 										return (
 											<td {...cell.getCellProps()} key={cell.column.id}>
-												<RootDesc style={isNumber ? { margin: 'auto' } : {}}>
-													<span>{cellValue}</span>
+												<RootDesc
+													style={
+														isNumber
+															? { margin: 'auto' }
+															: cell.column.id === 'type'
+															? { width: '100%' }
+															: {}
+													}
+												>
+													<span
+														style={
+															cell.column.id === 'actions' ||
+															cell.column.id === 'cashBalance'
+																? { width: '100%' }
+																: cell.column.id === 'type'
+																? { width: '100%', maxWidth: '95%' }
+																: {}
+														}
+													>
+														{cellValue}
+													</span>
 												</RootDesc>
 											</td>
 										)

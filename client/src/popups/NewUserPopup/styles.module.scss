@@ -158,26 +158,11 @@
 	}
 
 	ul {
-		top: 70rem;
+		width: 100%;
 
 		li {
 			span {
-				display: flex;
-				align-items: center;
-				gap: 10rem;
 				opacity: 1;
-
-				svg {
-					position: relative;
-					top: unset !important;
-					bottom: unset !important;
-					right: unset !important;
-					left: unset !important;
-					transform: unset !important;
-
-					width: 80rem;
-					height: 24rem;
-				}
 			}
 		}
 	}

@@ -228,6 +228,7 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 									</ul>
 								) : item?.value === 'sidebar' ? (
 									<RootSelect
+										arrow={true}
 										className={styles.tuning_sidebar}
 										options={sideBarOptions}
 										value={sideBar.blocked_value}

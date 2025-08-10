@@ -12,6 +12,17 @@
 	cursor: pointer;
 	transition: all 0.15s ease-in-out;
 
+	i {
+		display: block;
+		width: 0;
+		height: 0;
+		border-left: 5rem solid transparent;
+		border-right: 5rem solid transparent;
+		border-top: 9rem solid var(--disabled);
+		margin-right: 5rem;
+		transition: all 0.15s ease-in-out;
+	}
+
 	svg {
 		pointer-events: none;
 		cursor: pointer;
