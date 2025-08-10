@@ -89,7 +89,8 @@
 	},
 	"closed_title": {
 		"already_joined": "Вы уже присоединились к этому турниру!",
-		"registr_closed": "Регистрация закрыта!"
+		"registr_closed": "Регистрация закрыта!",
+		"coming": "Скоро..."
 	},
 	"form": {
 		"label": {
@@ -343,11 +344,11 @@
 		"wallet": {
 			"update_success": "Кошелек успешно обновлен!",
 			"update_error": "Ошибка обновления кошелька! Попробуйте ещё раз.",
-			"balance": "Баланс Кошелька",
-			"unrealized": "Нереализованный PNL",
+			"balance": "Баланс",
+			"unrealized": "Нереал. PNL",
 			"total_profit": "Общая прибыль",
 			"total_loss": "Общий убыток",
-			"net_profit": "Чистая прибыль/убыток",
+			"net_profit": "Чистая приб./уб.",
 			"win_trades": "Выигрышные сделки",
 			"los_trades": "Убыточные сделки",
 			"winrate": "Винрейт",

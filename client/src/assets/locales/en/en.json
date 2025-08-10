@@ -89,7 +89,8 @@
 	},
 	"closed_title": {
 		"already_joined": "You have already joined this tournament!",
-		"registr_closed": "Registration is closed!"
+		"registr_closed": "Registration is closed!",
+		"coming": "Coming soon..."
 	},
 	"form": {
 		"label": {
