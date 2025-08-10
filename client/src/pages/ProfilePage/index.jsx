@@ -365,6 +365,11 @@ export const ProfilePage = React.memo(() => {
 											? t('form.warning.create_user_password')
 											: undefined
 									}
+									placeholder={
+										changeUser && changeUser?.change_password
+											? '********'
+											: undefined
+									}
 									errorMessage={t('form.error.password')}
 									errors={errors}
 									type='text'
