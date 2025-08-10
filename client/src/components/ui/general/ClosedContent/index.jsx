@@ -9,7 +9,7 @@ import styles from './styles.module.scss'
 export const ClosedContent = React.memo(({ width, title }) => {
 	const { t } = useTranslation()
 
-	title = t('closed_title.coming')
+	title = !title ? t('closed_title.coming') : title
 
 	return (
 		<i title={title} className={styles.closed}>
