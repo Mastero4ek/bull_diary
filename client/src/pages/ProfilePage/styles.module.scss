@@ -164,44 +164,6 @@
 	top: -23rem;
 }
 
-.error {
-	position: relative;
-
-	input,
-	textarea {
-		border: 1rem solid var(--red);
-	}
-
-	svg {
-		width: 28rem;
-		height: 28rem;
-		position: absolute;
-		right: 15rem;
-		top: 35rem;
-	}
-}
-
-.warning {
-	position: relative;
-
-	input,
-	textarea {
-		border: 1rem solid #ff7a00;
-	}
-
-	svg {
-		width: 28rem;
-		height: 28rem;
-		position: absolute;
-		right: 15rem;
-		top: 35rem;
-	}
-
-	p {
-		color: #ff7a00;
-	}
-}
-
 .profile_info {
 	width: 100%;
 	display: flex;

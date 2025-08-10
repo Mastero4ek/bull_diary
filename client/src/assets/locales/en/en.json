@@ -95,6 +95,9 @@
 	"form": {
 		"label": {
 			"name": "Your Name",
+			"last_name": "Last Name",
+			"phone": "Phone",
+			"role": "Role",
 			"battle_name": "Battle Name",
 			"email": "Your email",
 			"subject": "Subject",
@@ -435,6 +438,15 @@
 			"title": "Create Tournament",
 			"create_success": "Tournament created successfully!",
 			"create_error": "Error creating tournament! Please try again."
+		},
+		"new_user": {
+			"role": {
+				"admin": "Admin",
+				"user": "User"
+			},
+			"title": "New User",
+			"create_success": "User created successfully!",
+			"create_error": "Error creating user! Please try again."
 		}
 	}
 }

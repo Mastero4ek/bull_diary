@@ -11,10 +11,9 @@ import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayou
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
 import { ErrorForm } from '@/components/ui/general/ErrorForm'
-import { Icon } from '@/components/ui/general/Icon'
 import { Loader } from '@/components/ui/general/Loader'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import {
 	removeUser as removeUserCandidate,
 	setChangeUser as setChangeUserCandidate,
@@ -162,42 +161,27 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 					className={styles.remove_form_wrapper}
 					onSubmit={handleSubmit(data => submit(data))}
 				>
-					<label
-						htmlFor='email'
-						className={`${styles.remove_form_label} ${
-							(errors.email || findErrorField('email')) && styles.error
-						}`}
-					>
-						<div className={styles.remove_form_control}>
-							<RootDesc>
-								<span>
-									{isAdminContext
-										? t('form.label.user_email')
-										: t('form.label.account_email')}
-								</span>
-							</RootDesc>
-
-							{errors.email && (
-								<>
-									<Icon id={'error-icon'} />
-
-									<SmallDesc>
-										<p>{t('form.error.email')}</p>
-									</SmallDesc>
-								</>
-							)}
-						</div>
-
-						<input
-							value={isAdminContext ? item?.email || '' : ''}
-							readOnly={isAdminContext}
-							{...register('email', {
+					<RootInput
+						name='email'
+						defaultValue={isAdminContext ? item?.email || '' : ''}
+						readOnly={isAdminContext}
+						label={
+							isAdminContext
+								? t('form.label.user_email')
+								: t('form.label.account_email')
+						}
+						errorMessage={t('form.error.email')}
+						errorArray={errorArray}
+						errors={errors}
+						type='email'
+						register={{
+							...register('email', {
 								required: true,
 								pattern:
 									/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-							})}
-						/>
-					</label>
+							}),
+						}}
+					/>
 
 					<RootDesc>
 						<span>

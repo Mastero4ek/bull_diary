@@ -16,10 +16,10 @@ import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
 import { Icon } from '@/components/ui/general/Icon'
 import { InnerBlock } from '@/components/ui/general/InnerBlock'
 import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import { AvatarUserPopup } from '@/popups/AvatarUserPopup'
 import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
 import {
@@ -311,55 +311,28 @@ export const ProfilePage = React.memo(() => {
 							</div>
 
 							<form className={styles.profile_info}>
-								<input
-									type='hidden'
-									{...register('cover', {
-										value: photoFile || changeUser?.cover || '',
+								<RootInput
+									name='name'
+									errorMessage={t('form.error.name')}
+									errors={errors}
+									type='text'
+									placeholder={t('form.placeholder.name')}
+									register={register('name', {
+										required: true,
+										value: changeUser?.name || '',
+										onChange: e => handleChangeField(e, 'name'),
 									})}
 								/>
 
-								<label
-									htmlFor='name'
-									className={`${styles.profile_form_label} ${
-										errors.name && styles.error
-									}`}
-								>
-									<div className={styles.profile_form_control}>
-										{errors.name && (
-											<>
-												<Icon id={'error-icon'} />
-
-												<SmallDesc>
-													<p>{t('form.error.name')}</p>
-												</SmallDesc>
-											</>
-										)}
-									</div>
-
-									<input
-										placeholder={t('form.placeholder.name')}
-										{...register('name', {
-											required: true,
-											value: changeUser?.name || '',
-											onChange: e => handleChangeField(e, 'name'),
-										})}
-									/>
-								</label>
-
-								<label
-									htmlFor='last_name'
-									className={`${styles.profile_form_label} ${
-										errors.last_name && styles.error
-									}`}
-								>
-									<input
-										placeholder={t('form.placeholder.last_name')}
-										{...register('last_name', {
-											value: changeUser?.last_name || '',
-											onChange: e => handleChangeField(e, 'last_name'),
-										})}
-									/>
-								</label>
+								<RootInput
+									name='last_name'
+									type='text'
+									placeholder={t('form.placeholder.last_name')}
+									register={register('last_name', {
+										value: changeUser?.last_name || '',
+										onChange: e => handleChangeField(e, 'last_name'),
+									})}
+								/>
 
 								<label htmlFor='phone' className={styles.profile_form_label}>
 									<PhoneInput
@@ -385,80 +358,39 @@ export const ProfilePage = React.memo(() => {
 									/>
 								</label>
 
-								<label
-									htmlFor='password'
-									className={`${styles.profile_form_label} ${
-										errors.password && styles.error
-									} ${
-										changeUser && !changeUser?.change_password && styles.warning
-									}`}
-								>
-									<div className={styles.profile_form_control}>
-										{errors.password && (
-											<>
-												<Icon id={'error-icon'} />
-
-												<SmallDesc>
-													<p>{t('form.error.password')}</p>
-												</SmallDesc>
-											</>
-										)}
-
-										{changeUser && !changeUser?.change_password && (
-											<>
-												<Icon id={'warning-icon'} />
-
-												<SmallDesc>
-													<p>
-														{isAdminContext
-															? t('form.warning.create_user_password')
-															: t('form.warning.create_password')}
-													</p>
-												</SmallDesc>
-											</>
-										)}
-									</div>
-
-									<input
-										placeholder={t('form.placeholder.password')}
-										{...register('password', {
-											value: password || '',
-											onChange: e => setPassword(e.target.value),
-										})}
-									/>
-								</label>
+								<RootInput
+									name='password'
+									warningMessage={
+										changeUser && !changeUser?.change_password
+											? t('form.warning.create_user_password')
+											: undefined
+									}
+									errorMessage={t('form.error.password')}
+									errors={errors}
+									type='text'
+									register={{
+										...register('password', {
+											required: true,
+										}),
+									}}
+								/>
 
 								{(isAdminContext || user?.role === 'admin') &&
 								changeUser?.source === 'self' ? (
-									<label
-										htmlFor='email'
-										className={`${styles.profile_form_label} ${
-											errors.email && styles.error
-										}`}
-									>
-										<div className={styles.profile_form_control}>
-											{errors.email && (
-												<>
-													<Icon id={'error-icon'} />
-
-													<SmallDesc>
-														<p>{t('form.error.email')}</p>
-													</SmallDesc>
-												</>
-											)}
-										</div>
-
-										<input
-											placeholder={t('form.placeholder.email')}
-											{...register('email', {
-												required: true,
-												pattern:
-													/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-												value: changeUser?.email || '',
-												onChange: e => handleChangeField(e, 'email'),
-											})}
-										/>
-									</label>
+									<RootInput
+										name='email'
+										errorMessage={t('form.error.email')}
+										errors={errors}
+										type='email'
+										placeholder={t('form.placeholder.email')}
+										register={register('email', {
+											required: true,
+											pattern:
+												/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+											value: changeUser?.email || '',
+											onChange: e => handleChangeField(e, 'email'),
+										})}
+									/>
 								) : (
 									<>
 										<label className={styles.profile_form_label}>
@@ -477,6 +409,13 @@ export const ProfilePage = React.memo(() => {
 										/>
 									</>
 								)}
+
+								<input
+									type='hidden'
+									{...register('cover', {
+										value: photoFile || changeUser?.cover || '',
+									})}
+								/>
 							</form>
 						</div>
 

@@ -6,12 +6,11 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
 import { ClosedContent } from '@/components/ui/general/ClosedContent'
 import { Icon } from '@/components/ui/general/Icon'
 import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import { updateKeys } from '@/redux/slices/candidateSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
 
 import styles from './styles.module.scss'
 
@@ -132,59 +131,32 @@ export const KeysForm = ({ exchange }) => {
 					<ClosedContent width={20} />
 				)}
 
-				<label
-					htmlFor={`${currentExchangeName}_api`}
-					className={`${styles.keys_form_label} ${
-						errors[`${currentExchangeName}_api`] && styles.error
-					}`}
-				>
-					{errors[`${currentExchangeName}_api`] && (
-						<div className={styles.keys_form_control}>
-							<Icon id={'error-icon'} />
+				<RootInput
+					name={`${currentExchangeName}_api`}
+					errorMessage={t('form.error.api_key')}
+					errors={errors}
+					type='text'
+					register={register(`${currentExchangeName}_api`, { required: true })}
+					placeholder={
+						exchange.api === '' ? t('form.placeholder.api_key') : exchange.api
+					}
+				/>
 
-							<SmallDesc>
-								<p>{t('form.error.api_key')}</p>
-							</SmallDesc>
-						</div>
-					)}
-
-					<input
-						disabled={exchange.name === 'mexc' || exchange.name === 'okx'}
-						placeholder={
-							exchange.api === '' ? t('form.placeholder.api_key') : exchange.api
-						}
-						{...register(`${currentExchangeName}_api`, { required: true })}
-					/>
-				</label>
-
-				<label
-					htmlFor={`${currentExchangeName}_secret`}
-					className={`${styles.keys_form_label} ${
-						errors[`${currentExchangeName}_secret`] && styles.error
-					}`}
-				>
-					{errors[`${currentExchangeName}_secret`] && (
-						<div className={styles.keys_form_control}>
-							<Icon id={'error-icon'} />
-
-							<SmallDesc>
-								<p>{t('form.error.secret_key')}</p>
-							</SmallDesc>
-						</div>
-					)}
-
-					<input
-						disabled={exchange.name === 'mexc' || exchange.name === 'okx'}
-						placeholder={
-							exchange.secret === ''
-								? t('form.placeholder.secret_key')
-								: exchange.secret
-						}
-						{...register(`${currentExchangeName}_secret`, {
-							required: true,
-						})}
-					/>
-				</label>
+				<RootInput
+					name={`${currentExchangeName}_secret`}
+					errorMessage={t('form.error.secret_key')}
+					errors={errors}
+					type='text'
+					register={register(`${currentExchangeName}_secret`, {
+						required: true,
+					})}
+					placeholder={
+						exchange.secret === ''
+							? t('form.placeholder.secret_key')
+							: exchange.secret
+					}
+					disabled={exchange.name === 'mexc' || exchange.name === 'okx'}
+				/>
 			</form>
 		</div>
 	)

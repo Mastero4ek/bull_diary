@@ -11,9 +11,8 @@ import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayou
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
 import { ErrorForm } from '@/components/ui/general/ErrorForm'
-import { Icon } from '@/components/ui/general/Icon'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import { signIn } from '@/redux/slices/candidateSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
@@ -28,6 +27,13 @@ export const SignInPopup = React.memo(() => {
 	const { closePopup, openPopup } = usePopup()
 	const { showError, showSuccess } = useNotification()
 	const { errorMessage, errorArray } = useSelector(state => state.candidate)
+
+	const {
+		reset,
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm()
 
 	const handleSignUp = useCallback(() => {
 		closePopup()
@@ -44,19 +50,6 @@ export const SignInPopup = React.memo(() => {
 			openPopup(<ForgotPopup />, { shared: true })
 		}, 150)
 	}, [])
-
-	const findErrorField = useCallback(field => {
-		if (errorArray) {
-			return errorArray.find(item => item.field === field)
-		} else return false
-	}, [])
-
-	const {
-		reset,
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm()
 
 	const submit = async data => {
 		try {
@@ -101,61 +94,35 @@ export const SignInPopup = React.memo(() => {
 					className={styles.signin_form_wrapper}
 					onSubmit={handleSubmit(data => submit(data))}
 				>
-					<label
-						htmlFor='email'
-						className={`${styles.signin_form_label} ${
-							(errors.email || findErrorField('email')) && styles.error
-						}`}
-					>
-						<div className={styles.signin_form_control}>
-							<RootDesc>
-								<span>{t('form.label.email')}</span>
-							</RootDesc>
-
-							{(errors.email || findErrorField('email')) && (
-								<>
-									<Icon id={'error-icon'} />
-
-									<SmallDesc>
-										<p>{t('form.error.email')}</p>
-									</SmallDesc>
-								</>
-							)}
-						</div>
-
-						<input
-							{...register('email', {
+					<RootInput
+						name='email'
+						label={t('form.label.email')}
+						errorMessage={t('form.error.email')}
+						errorArray={errorArray}
+						errors={errors}
+						type='email'
+						register={{
+							...register('email', {
 								required: true,
 								pattern:
 									/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-							})}
-						/>
-					</label>
+							}),
+						}}
+					/>
 
-					<label
-						htmlFor='password'
-						className={`${styles.signin_form_label} ${
-							(errors.password || findErrorField('password')) && styles.error
-						}`}
-					>
-						<div className={styles.signin_form_control}>
-							<RootDesc>
-								<span>{t('form.label.password')}</span>
-							</RootDesc>
-
-							{(errors.password || findErrorField('password')) && (
-								<>
-									<Icon id={'error-icon'} />
-
-									<SmallDesc>
-										<p>{t('form.error.password')}</p>
-									</SmallDesc>
-								</>
-							)}
-						</div>
-
-						<input {...register('password', { required: true })} />
-					</label>
+					<RootInput
+						name='password'
+						label={t('form.label.password')}
+						errorMessage={t('form.error.password')}
+						errorArray={errorArray}
+						errors={errors}
+						type='text'
+						register={{
+							...register('password', {
+								required: true,
+							}),
+						}}
+					/>
 
 					<RootDesc>
 						<b onClick={handleClickForgot}>{t('popup.signin.forgot')}</b>

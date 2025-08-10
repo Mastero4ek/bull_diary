@@ -3,6 +3,7 @@ import './phone_input.scss'
 import React, { useCallback, useState } from 'react'
 
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import PhoneInput from 'react-phone-input-2'
 import ru from 'react-phone-input-2/lang/ru.json'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,6 +17,7 @@ import { RootButton } from '@/components/ui/buttons/RootButton'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
 import { Icon } from '@/components/ui/general/Icon'
 import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import { RootSelect } from '@/components/ui/inputs/RootSelect'
 import { createUser } from '@/redux/slices/candidateSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
@@ -23,6 +25,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 import styles from './styles.module.scss'
 
 export const NewUserPopup = () => {
+	const { t } = useTranslation()
 	const {
 		register,
 		handleSubmit,
@@ -39,8 +42,8 @@ export const NewUserPopup = () => {
 	const dispatch = useDispatch()
 
 	const ROLE_OPTIONS = [
-		{ name: 'Admin', value: 'admin' },
-		{ name: 'User', value: 'user' },
+		{ name: t('popup.new_user.role.admin'), value: 'admin' },
+		{ name: t('popup.new_user.role.user'), value: 'user' },
 	]
 
 	const handleCoverChange = e => {
@@ -77,17 +80,17 @@ export const NewUserPopup = () => {
 				setCover(null)
 
 				closePopup()
-				showSuccess('User created successfully!')
+				showSuccess(t('popup.new_user.create_success'))
 			} else {
-				showError('Error creating user! Please try again.')
+				showError(t('popup.new_user.create_error'))
 			}
 		} catch (e) {
-			console.log('User creation error:', e)
+			console.log(e)
 
 			if (e?.payload?.message) {
 				showError(e.payload.message)
 			} else {
-				showError('Error creating user! Please try again.')
+				showError(t('popup.new_user.create_error'))
 			}
 		}
 	}
@@ -100,35 +103,22 @@ export const NewUserPopup = () => {
 
 	return (
 		<>
-			<PopupDescLayout title={'New User'}>
-				<label
-					htmlFor='name'
-					className={`${styles.user_form_label} ${
-						(errors.name || findErrorField('name')) && styles.error
-					}`}
-				>
-					<div className={styles.user_form_control}>
-						<RootDesc>
-							<span>Name</span>
-						</RootDesc>
+			<PopupDescLayout title={t('popup.new_user.title')}>
+				<RootInput
+					name='name'
+					label={t('form.label.name')}
+					errorMessage={t('form.error.name')}
+					errors={errors}
+					type='text'
+					register={register('name', { required: true })}
+				/>
 
-						{(errors.name || findErrorField('name')) && (
-							<Icon id={'error-icon'} />
-						)}
-					</div>
-
-					<input {...register('name', { required: true })} />
-				</label>
-
-				<label htmlFor='last_name' className={`${styles.user_form_label}`}>
-					<div className={styles.user_form_control}>
-						<RootDesc>
-							<span>Last Name</span>
-						</RootDesc>
-					</div>
-
-					<input type='text' {...register('last_name')} />
-				</label>
+				<RootInput
+					name='last_name'
+					label={t('form.label.last_name')}
+					type='text'
+					register={register('last_name')}
+				/>
 
 				<label htmlFor='cover' className={`${styles.user_form_label}`}>
 					<div className={styles.user_form_control}>
@@ -155,7 +145,7 @@ export const NewUserPopup = () => {
 								disabled={!cover}
 								onClickBtn={handleRemoveCover}
 								icon='cancel'
-								text='Remove cover'
+								text={t('button.remove_cover')}
 							/>
 						</div>
 					</div>
@@ -167,54 +157,39 @@ export const NewUserPopup = () => {
 					className={styles.user_form_wrapper}
 					onSubmit={handleSubmit(data => submit(data))}
 				>
-					<label
-						htmlFor='email'
-						className={`${styles.user_form_label} ${
-							(errors.email || findErrorField('email')) && styles.error
-						}`}
-					>
-						<div className={styles.user_form_control}>
-							<RootDesc>
-								<span>Email</span>
-							</RootDesc>
-
-							{(errors.email || findErrorField('email')) && (
-								<Icon id={'error-icon'} />
-							)}
-						</div>
-
-						<input
-							{...register('email', {
+					<RootInput
+						name='email'
+						label={t('form.label.email')}
+						errorMessage={t('form.error.email')}
+						errors={errors}
+						type='email'
+						register={{
+							...register('email', {
 								required: true,
 								pattern:
 									/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-							})}
-						/>
-					</label>
+							}),
+						}}
+					/>
 
-					<label
-						htmlFor='password'
-						className={`${styles.user_form_label} ${
-							(errors.password || findErrorField('password')) && styles.error
-						}`}
-					>
-						<div className={styles.user_form_control}>
-							<RootDesc>
-								<span>Password</span>
-							</RootDesc>
-
-							{(errors.password || findErrorField('password')) && (
-								<Icon id={'error-icon'} />
-							)}
-						</div>
-
-						<input {...register('password', { required: true })} />
-					</label>
+					<RootInput
+						name='password'
+						label={t('form.label.password')}
+						errorMessage={t('form.error.password')}
+						errorArray={errorArray}
+						errors={errors}
+						type='text'
+						register={{
+							...register('password', {
+								required: true,
+							}),
+						}}
+					/>
 
 					<label htmlFor='phone' className={styles.user_form_label}>
 						<div className={styles.user_form_control}>
 							<RootDesc>
-								<span>Phone</span>
+								<span>{t('form.label.phone')}</span>
 							</RootDesc>
 						</div>
 
@@ -240,7 +215,7 @@ export const NewUserPopup = () => {
 					<div className={styles.user_form_label}>
 						<div className={styles.user_form_control}>
 							<RootDesc>
-								<span>Role</span>
+								<span>{t('form.label.role')}</span>
 							</RootDesc>
 						</div>
 
@@ -268,7 +243,11 @@ export const NewUserPopup = () => {
 						/>
 					</div>
 
-					<RootButton type='submit' text='Create User' icon='join' />
+					<RootButton
+						type='submit'
+						text={t('button.create_user')}
+						icon='join'
+					/>
 				</form>
 			</PopupFormLayout>
 		</>

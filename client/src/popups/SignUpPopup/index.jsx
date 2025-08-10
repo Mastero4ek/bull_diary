@@ -10,10 +10,8 @@ import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayou
 import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
 import { ErrorForm } from '@/components/ui/general/ErrorForm'
-import { Icon } from '@/components/ui/general/Icon'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import { signUp } from '@/redux/slices/candidateSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
@@ -29,6 +27,13 @@ export const SignUpPopup = React.memo(() => {
 	const { errorMessage, errorArray } = useSelector(state => state.candidate)
 	const { showError, showSuccess } = useNotification()
 
+	const {
+		reset,
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm()
+
 	const handleSignIn = useCallback(() => {
 		closePopup()
 
@@ -36,19 +41,6 @@ export const SignUpPopup = React.memo(() => {
 			openPopup(<SignInPopup />)
 		}, 150)
 	}, [])
-
-	const findErrorField = useCallback(field => {
-		if (errorArray) {
-			return errorArray.find(item => item.field === field)
-		} else return false
-	}, [])
-
-	const {
-		reset,
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm()
 
 	const submit = async data => {
 		try {
@@ -78,150 +70,88 @@ export const SignUpPopup = React.memo(() => {
 	return (
 		<>
 			<PopupFormLayout
-				title={t('popup.signup.title')}
 				socials={true}
+				title={t('popup.signup.title')}
 				subtitle={t('popup.signup.subtitle')}
 			>
 				<form
 					className={styles.signup_form_wrapper}
 					onSubmit={handleSubmit(data => submit(data))}
 				>
-					<label
-						htmlFor='name'
-						className={`${styles.signup_form_label} ${
-							(errors.name || findErrorField('name')) && styles.error
-						}`}
-					>
-						<div className={styles.signup_form_control}>
-							<RootDesc>
-								<span>{t('form.label.name')}</span>
-							</RootDesc>
+					<RootInput
+						name='name'
+						label={t('form.label.name')}
+						errorMessage={t('form.error.name')}
+						errorArray={errorArray}
+						errors={errors}
+						type='text'
+						register={register('name', { required: true })}
+					/>
 
-							{(errors.name || findErrorField('name')) && (
-								<>
-									<Icon id={'error-icon'} />
-
-									<SmallDesc>
-										<p>{t('form.error.name')}</p>
-									</SmallDesc>
-								</>
-							)}
-						</div>
-
-						<input {...register('name', { required: true })} />
-					</label>
-
-					<label
-						htmlFor='email'
-						className={`${styles.signup_form_label} ${
-							(errors.email || findErrorField('email')) && styles.error
-						}`}
-					>
-						<div className={styles.signup_form_control}>
-							<RootDesc>
-								<span>{t('form.label.email')}</span>
-							</RootDesc>
-
-							{(errors.email || findErrorField('email')) && (
-								<>
-									<Icon id={'error-icon'} />
-
-									<SmallDesc>
-										<p>{t('form.error.email')}</p>
-									</SmallDesc>
-								</>
-							)}
-						</div>
-
-						<input
-							{...register('email', {
+					<RootInput
+						name='email'
+						label={t('form.label.email')}
+						errorMessage={t('form.error.email')}
+						errorArray={errorArray}
+						errors={errors}
+						type='email'
+						register={{
+							...register('email', {
 								required: true,
 								pattern:
 									/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-							})}
-						/>
-					</label>
+							}),
+						}}
+					/>
 
-					<label
-						htmlFor='password'
-						className={`${styles.signup_form_label} ${
-							(errors.password || findErrorField('password')) && styles.error
-						}`}
-					>
-						<div className={styles.signup_form_control}>
-							<RootDesc>
-								<span>{t('form.label.password')}</span>
-							</RootDesc>
+					<RootInput
+						name='password'
+						label={t('form.label.password')}
+						errorMessage={t('form.error.password')}
+						errorArray={errorArray}
+						errors={errors}
+						type='text'
+						register={{
+							...register('password', {
+								required: true,
+							}),
+						}}
+					/>
 
-							{(errors.password || findErrorField('password')) && (
-								<>
-									<Icon id={'error-icon'} />
+					<RootInput
+						name='confirm_password'
+						label={t('form.label.confirm_password')}
+						errorMessage={t('form.error.confirm_password')}
+						errorArray={errorArray}
+						errors={errors}
+						type='text'
+						register={{
+							...register('confirm_password', {
+								required: true,
+							}),
+						}}
+					/>
 
-									<SmallDesc>
-										<p>{t('form.error.password')}</p>
-									</SmallDesc>
-								</>
-							)}
-						</div>
-
-						<input {...register('password', { required: true })} />
-					</label>
-
-					<label
-						htmlFor='confirm_password'
-						className={`${styles.signup_form_label} ${
-							(errors.confirm_password || findErrorField('confirm_password')) &&
-							styles.error
-						}`}
-					>
-						<div className={styles.signup_form_control}>
-							<RootDesc>
-								<span>{t('form.label.confirm_password')}</span>
-							</RootDesc>
-
-							{(errors.confirm_password ||
-								findErrorField('confirm_password')) && (
-								<>
-									<Icon id={'error-icon'} />
-
-									<SmallDesc>
-										<p>{t('form.error.confirm_password')}</p>
-									</SmallDesc>
-								</>
-							)}
-						</div>
-
-						<input {...register('confirm_password', { required: true })} />
-					</label>
-
-					<label htmlFor='agreement' className={styles.signup_form_label}>
-						<input
-							id='agreement'
-							type='checkbox'
-							{...register('agreement', { required: true })}
-						/>
-
-						<div className={styles.signup_form_checkbox}>
-							<i
-								style={
-									errors.agreement || findErrorField('agreement')
-										? { border: '1rem solid var(--red)' }
-										: {}
-								}
-							>
-								<Icon id={'checked'} />
-							</i>
-
-							<SmallDesc>
-								<span>
-									{t('popup.signup.agreement')}
-									<Link to={'/privacy'} onClick={() => closePopup()}>
-										{t('popup.signup.privacy_statement')}
-									</Link>
-								</span>
-							</SmallDesc>
-						</div>
-					</label>
+					<RootInput
+						name='agreement'
+						label={
+							<>
+								{t('popup.signup.agreement')}
+								<Link to={'/privacy'} onClick={() => closePopup()}>
+									{t('popup.signup.privacy_statement')}
+								</Link>
+							</>
+						}
+						errorMessage={t('form.error.agreement')}
+						errorArray={errorArray}
+						errors={errors}
+						type='checkbox'
+						register={{
+							...register('agreement', {
+								required: true,
+							}),
+						}}
+					/>
 
 					<div className={styles.signup_form_btn}>
 						<RootButton

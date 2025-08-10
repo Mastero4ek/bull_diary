@@ -10,9 +10,7 @@ import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayou
 import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Icon } from '@/components/ui/general/Icon'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import { setIsAuth } from '@/redux/slices/candidateSlice'
 
 import styles from './styles.module.scss'
@@ -64,36 +62,20 @@ export const ForgotPopup = React.memo(() => {
 					className={styles.forgot_form_wrapper}
 					onSubmit={handleSubmit(data => submit(data))}
 				>
-					<label
-						htmlFor='email'
-						className={`${styles.forgot_form_label} ${
-							errors.email && styles.error
-						}`}
-					>
-						<div className={styles.forgot_form_control}>
-							<RootDesc>
-								<span>{t('form.label.email')}</span>
-							</RootDesc>
-
-							{errors.email && (
-								<>
-									<Icon id={'error-icon'} />
-
-									<SmallDesc>
-										<p>{t('form.error.email')}</p>
-									</SmallDesc>
-								</>
-							)}
-						</div>
-
-						<input
-							{...register('email', {
+					<RootInput
+						name='email'
+						label={t('form.label.email')}
+						errorMessage={t('form.error.email')}
+						errors={errors}
+						type='email'
+						register={{
+							...register('email', {
 								required: true,
 								pattern:
 									/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
-							})}
-						/>
-					</label>
+							}),
+						}}
+					/>
 
 					<RootButton type={'submit'} text={t('button.submit')} icon='submit' />
 				</form>
