@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
 import avatarDefault from '@/assets/images/general/default_avatar.png'
+import { NotificationLayout } from '@/components/layouts/NotificationLayout'
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
@@ -182,6 +183,8 @@ export const HeaderLayout = React.memo(() => {
 				{isAuth && user.is_activated
 					? renderUserSection()
 					: renderSignInButton()}
+
+				<NotificationLayout />
 			</div>
 		</div>
 	)

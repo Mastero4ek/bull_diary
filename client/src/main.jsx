@@ -1,25 +1,22 @@
-import '@/styles/app.scss';
-import './i18n';
+import '@/styles/app.scss'
+import './i18n'
 
-import React from 'react';
+import React from 'react'
 
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom';
+	createBrowserRouter,
+	createRoutesFromElements,
+	Route,
+	RouterProvider,
+} from 'react-router-dom'
 
-import { App } from '@/components/App';
-import {
-  NotificationLayout,
-  NotificationProvider,
-} from '@/components/layouts/NotificationLayout';
-import { PopupLayout } from '@/components/layouts/PopupLayout/PopupLayout';
-import { PopupProvider } from '@/components/layouts/PopupLayout/PopupProvider';
-import { store } from '@/redux/store';
+import { App } from '@/components/App'
+import { NotificationProvider } from '@/components/layouts/NotificationLayout'
+import { PopupLayout } from '@/components/layouts/PopupLayout/PopupLayout'
+import { PopupProvider } from '@/components/layouts/PopupLayout/PopupProvider'
+import { store } from '@/redux/store'
 
 const rootElem = document.getElementById('root')
 
@@ -47,8 +44,6 @@ if (rootElem) {
 				<PopupProvider>
 					<NotificationProvider>
 						<RouterProvider router={router} />
-
-						<NotificationLayout />
 					</NotificationProvider>
 				</PopupProvider>
 			</Provider>

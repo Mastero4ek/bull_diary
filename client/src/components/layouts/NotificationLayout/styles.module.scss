@@ -2,16 +2,17 @@
 
 .notifications_container {
 	position: fixed;
-	top: 0rem;
+	top: 20rem;
 	right: 40rem;
 	z-index: 5000;
 	display: flex;
 	flex-direction: column;
 	gap: 10rem;
-	max-width: 350rem;
+	max-width: 352rem;
 	width: 100%;
-	height: 110rem;
+	height: 68rem;
 	pointer-events: none;
+	position: absolute;
 }
 
 .notification {
@@ -19,7 +20,7 @@
 	width: 100%;
 	height: 100%;
 	background: var(--bgLight);
-	border-radius: 0 0 20rem 20rem;
+	border-radius: 20rem;
 	box-shadow: var(--shadowOuter);
 	padding: 20rem;
 	pointer-events: auto;
@@ -31,7 +32,6 @@
 	justify-content: center;
 
 	&:hover {
-		// transform: translateX(-8rem);
 		box-shadow: var(--shadowOuter), 0 8rem 24rem rgba(0, 0, 0, 0.15);
 	}
 }
@@ -43,6 +43,7 @@
 .notification_content {
 	display: flex;
 	align-items: center;
+	justify-content: flex-start;
 	gap: 16rem;
 	padding-right: 20rem;
 }
@@ -56,8 +57,8 @@
 
 .notification_close {
 	position: absolute;
-	right: 10rem;
-	top: 10rem;
+	right: 7rem;
+	top: 7rem;
 	cursor: pointer;
 
 	&:hover {

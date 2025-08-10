@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
 
-import { useNotification } from './NotificationProvider';
-import styles from './styles.module.scss';
+import { useNotification } from './NotificationProvider'
+import styles from './styles.module.scss'
 
 export const NotificationLayout = React.memo(() => {
 	const { notifications, removeNotification } = useNotification()
@@ -55,9 +55,9 @@ export const NotificationLayout = React.memo(() => {
 							/>
 						</div>
 
-						<RootDesc>
+						<SmallDesc>
 							<span>{notification.message}</span>
-						</RootDesc>
+						</SmallDesc>
 
 						<div
 							onClick={() => handleRemove(notification.id)}
