@@ -1,27 +1,18 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { PERIODS } from '@/helpers/constants';
-import {
-  setDate,
-  setFilter,
-  setRemoveBtn,
-} from '@/redux/slices/filtersSlice';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { usePeriods } from '@/hooks/Periods'
+import { setDate, setFilter, setRemoveBtn } from '@/redux/slices/filtersSlice'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Periods = React.memo(() => {
+	const { PERIODS } = usePeriods()
 	const dispatch = useDispatch()
 	const { id } = useSelector(state => state.filters.filter)
 

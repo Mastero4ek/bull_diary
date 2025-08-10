@@ -2,25 +2,112 @@
 	"logo": {
 		"analyze_earn": "analyze & earn"
 	},
+	"sidebar": {
+		"wallet": "Wallet",
+		"diary": "Diary",
+		"table": "Table",
+		"bookmarks": "Bookmarks",
+		"battle": "Tournaments",
+		"users": "Users",
+		"settings": "Settings",
+		"contacts": "Contacts",
+		"profile": "Profile",
+		"back_to": "Back to",
+		"theme": "Dark mode",
+		"logout": "Logout"
+	},
+	"dropzone": {
+		"title": "Drag file to upload",
+		"or": "or",
+		"error": "File size exceeds the limit!",
+		"max_size": "Max. file size:",
+		"support": "Supported file types:"
+	},
 	"footer": {
 		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo.",
 		"terms": "Terms",
 		"privacy": "Privacy",
 		"copyright": "© 2024. Created with love, Mastero4ek."
 	},
+	"table": {
+		"sort_by": "Sort by",
+		"avatar": "Avatar",
+		"name": "Name",
+		"email": "Email",
+		"created_at": "Created at",
+		"updated_at": "Updated at",
+		"actions": "Actions",
+		"level": "Level",
+		"score": "Score",
+		"roe": "Roe%",
+		"symbol": "Symbol",
+		"closed_time": "Closed time",
+		"direction": "Direction",
+		"qty": "Qty",
+		"margin": "Margin",
+		"pnl": "Pnl",
+		"leverage": "Leverage",
+		"profit": "Profit",
+		"side": "Side",
+		"type": "Type",
+		"funding": "Funding",
+		"fee": "Fee",
+		"balance": "Balance"
+	},
+	"filter": {
+		"entries": {
+			"placeholder": "Entries",
+			"item": "entries"
+		},
+		"period": {
+			"week": "Week",
+			"month": "Month",
+			"quarter": "Quarter",
+			"year": "Year"
+		},
+		"search": {
+			"placeholder": "All USDT-PERP",
+			"empty": "No results found"
+		}
+	},
 	"button": {
 		"sign_in": "Sign in",
 		"sign_up": "Sign up",
-		"submit": "Submit"
+		"submit": "Submit",
+		"save": "Save",
+		"remove": "Remove",
+		"browse_file": "Browse File",
+		"admin_yes_remove": "Yes, DELETE USER!",
+		"user_yes_remove": "Yes, REMOVE!",
+		"create_user": "Create user",
+		"remove_battle": "Delete tournament",
+		"new_battle": "New tournament",
+		"create_battle": "Create tournament",
+		"join": "Join",
+		"remove_cover": "Remove cover",
+		"details": "Details"
+	},
+	"closed_title": {
+		"already_joined": "You have already joined this tournament!",
+		"registr_closed": "Registration is closed!"
 	},
 	"form": {
 		"label": {
 			"name": "Your Name",
+			"battle_name": "Battle Name",
 			"email": "Your email",
 			"subject": "Subject",
 			"message": "Message",
 			"password": "Password",
-			"confirm_password": "Confirm password"
+			"confirm_password": "Confirm password",
+			"user_email": "User Email",
+			"account_email": "Account Email",
+			"exchange": "Exchange",
+			"cover": "Cover",
+			"description": "Description",
+			"registr_date": "Registration Date",
+			"start_date": "Start date",
+			"end_date": "End date"
 		},
 		"error": {
 			"name": "Name is required!",
@@ -28,7 +115,21 @@
 			"subject": "Subject is required!",
 			"message": "Message is required!",
 			"password": "Password is required!",
-			"confirm_password": "Confirm password is required!"
+			"confirm_password": "Confirm password is required!",
+			"api_key": "Api key is required!",
+			"secret_key": "Secret key is required!"
+		},
+		"placeholder": {
+			"api_key": "Your api key",
+			"secret_key": "Your secret key",
+			"name": "Your name",
+			"last_name": "Your last name",
+			"email": "Your email",
+			"password": "Your password"
+		},
+		"warning": {
+			"create_password": "Create password for enter!",
+			"create_user_password": "Create password for user!"
 		}
 	},
 	"user_default": {
@@ -157,6 +258,135 @@
 				"title": "Still have Questions",
 				"subtitle": "Have a question or require specialist assistance? <br /> Contact our dedicated customer service team <br /> who are available 24/7 to assist you! <br/><br/>Please fill out the form, we will be glad to hear your opinion or write to us on email!"
 			}
+		},
+		"contacts": {
+			"title": "Still have Questions",
+			"description": "Have a question or require specialist assistance? <br /> Contact our dedicated customer service team <br /> who are available 24/7 to assist you! <br/><br/>Please fill out the form, we will be glad to hear your opinion or write to us on email!"
+		},
+		"settings": {
+			"tuning_title": "Application settings",
+			"tuning_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
+			"keys_title": "Connecting the exchange",
+			"keys_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
+			"keys_api_title": "Api keys",
+			"keys_removed_successfully": "Api key removed successfully!",
+			"keys_error_removing": "Error removing Api key! Please try again.",
+			"keys_updated_successfully": "Api key updated successfully!",
+			"keys_error_updating": "Error updating Api key! Please try again.",
+			"tuning_language": "Language",
+			"tuning_theme": "Dark theme",
+			"tuning_shootouts": "Show shootouts",
+			"tuning_amounts": "Hide amounts",
+			"tuning_color": "Highlight text",
+			"tuning_sidebar": "Side bar",
+			"tuning_accordion_title": "Your settings",
+			"tuning_sidebar_open": "Open",
+			"tuning_sidebar_close": "Close",
+			"tuning_sidebar_unblock": "Unblock"
+		},
+		"profile": {
+			"title": "Edit account <br /> or delete it permanently",
+			"subtitle": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
+			"edit_user_action_not_available": "Editing user is not available!",
+			"updated_successfully": "Account updated successfully!",
+			"error_updating": "Error updating account! Please try again.",
+			"cover_removed_successfully": "Cover removed successfully!",
+			"error_removing_cover": "Error removing cover! Please try again."
+		},
+		"users": {
+			"title": "Platform users",
+			"subtitle": "Registered users of the platform. You can view their profiles and their statistics.",
+			"empty_error": "No users found in this period!",
+			"success_update": "Users updated successfully!",
+			"error_update": "Error updating users! Please try again."
+		},
+		"battle": {
+			"title": "Take part in the tournament<br />for the title of the best trader",
+			"subtitle": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo, provident unde! Quasi repellendus enim minus blanditiis dolore, saepe eligendi suscipit a nostrum sit, deleniti in commodi nemo perferendis, error qui?",
+			"remove_user_success": "User removed from tournament!",
+			"remove_user_error": "Error removing user from tournament! Please try again.",
+			"update_success": "Tournament updated successfully!",
+			"update_error": "Error updating tournament! Please try again.",
+			"join_user_success": "You have joined the tournament!",
+			"join_user_error": "Error joining tournament! Please try again.",
+			"remove_battle_success": "Tournament deleted successfully!",
+			"remove_battle_error": "Error deleting tournament! Please try again.",
+			"empty_users": "No tournament participants found for this tournament!",
+			"is_over": "Tournament is over!"
+		},
+		"bookmarks": {
+			"title": "Save and analyze <br /> transactions",
+			"subtitle": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse, maxime porro harum quidem obcaecati nisi rem in voluptas corrupti alias sunt quis numquam qui rerum, voluptatem sed aperiam iure impedit. Cum aliquam libero veniam, dolorum est quod minima eum alias dolores? Nisi in nesciunt consequatur similique asperiores facere autem porro molestias consequuntur aperiam et assumenda, dolore ea mollitia a iste.",
+			"update_success": "Bookmarks orders updated successfully!",
+			"update_error": "Error updating bookmarks! Please try again.",
+			"remove_order_success": "Order removed successfully!",
+			"remove_order_error": "Error removing order! Please try again.",
+			"empty": "There were no saved transactions during this period!"
+		},
+		"table": {
+			"update_success": "Orders updated successfully!",
+			"update_error": "Error updating orders! Please try again.",
+			"save_order_success": "Order saved successfully!",
+			"save_order_error": "Error saving order! Please try again.",
+			"empty": "There were no closed transactions during this period!",
+			"chart_income": "Income",
+			"chart_lession": "Lession",
+			"chart_profit": "Profit: ",
+			"chart_loss": "Loss: "
+		},
+		"diary": {
+			"update_success": "Positions updated successfully!",
+			"update_error": "Error updating positions! Please try again.",
+			"empty": "There were no open transactions now!",
+			"chart_label": "Profit (PNL)"
+		},
+		"wallet": {
+			"update_success": "Wallet updated successfully!",
+			"update_error": "Error updating wallet! Please try again.",
+			"balance": "Wallet Balance",
+			"unrealized": "Unrealised PNL",
+			"total_profit": "Total Profit",
+			"total_loss": "Total Loss",
+			"net_profit": "Net Profit/Loss",
+			"win_trades": "Wining Trades",
+			"los_trades": "Losing Trades",
+			"winrate": "Winrate",
+			"overview": "Overview",
+			"chart_label": "Wallet balance in USDT",
+			"chart_label_trans": "Transactions:",
+			"warning": "You can currently search within the past 180 days."
+		},
+		"wallet_details": {
+			"update_success": "Transactions updated successfully!",
+			"update_error": "Error updating transactions! Please try again.",
+			"empty": "There were no transactions during this period!",
+			"label": {
+				"in": "Transfer In",
+				"out": "Transfer Out",
+				"trade": "Trade",
+				"settlement": "Settlement",
+				"delivery": "Delivery",
+				"liquidation": "Liquidation",
+				"adl": "Auto-Deleveraging",
+				"Airdrop": "Airdrop",
+				"bonus": "Bonus",
+				"recollect": "Bonus Recollect",
+				"fee": "Fee Refund",
+				"interest": "Interest",
+				"buy": "Currency Buy",
+				"sell": "Currency Sell",
+				"deducation": "Auto Deduction"
+			}
+		},
+		"position": {
+			"direction": "Direction",
+			"leverage": "Leverage",
+			"qty": "Quality",
+			"margin": "Margin",
+			"pnl": "Pnl",
+			"roe": "Roe",
+			"open_time": "Open time",
+			"closed_time": "Closed Time"
 		}
 	},
 	"popup": {
@@ -180,10 +410,30 @@
 			"forgot": "Forgot your password?"
 		},
 		"forgot": {
-			"title": "Dear friend!",
+			"title": "Dear friend",
 			"subtitle": "To change your password, enter the email address specified when registering your account.<br/><br/> We will send instructions for resetting your password to this address.",
 			"success": "Instruction to reset your password has been sent to your email!",
 			"error": "Error sending email! Please try again."
+		},
+		"avatar_user": {
+			"title": "Upload an image",
+			"subtitle": "Please select and upload an image to be used on your profile."
+		},
+		"remove_user": {
+			"title": "Dear ",
+			"admin_success": "User removed successfully!",
+			"user_success": "Account removed successfully!",
+			"admin_error": "User not removed! Please try again.",
+			"user_error": "Account not removed! Please try again.",
+			"admin_subtitle": "Are you sure you want to delete this user account? Once the account is deleted, there is no going back.",
+			"user_subtitle": "Enter the email to which this account is registered to delete your account! Once the account is deleted, there is no going back.",
+			"admin_description": "Do you really want to delete this user account PERMANENTLY?",
+			"user_description": "Do you really want to delete this account PERMANENTLY?"
+		},
+		"new_battle": {
+			"title": "Create Tournament",
+			"create_success": "Tournament created successfully!",
+			"create_error": "Error creating tournament! Please try again."
 		}
 	}
 }

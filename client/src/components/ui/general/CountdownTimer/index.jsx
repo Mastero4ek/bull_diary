@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
-import moment from 'moment'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+
 import { InnerBlock } from '@/components/ui/general/InnerBlock'
 import { H4 } from '@/components/ui/titles/H4'
+
 import styles from './styles.module.scss'
 
 export const CountdownTimer = React.memo(({ targetDate }) => {
+	const { t } = useTranslation()
 	const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(targetDate))
 
 	useEffect(() => {
@@ -49,7 +53,7 @@ export const CountdownTimer = React.memo(({ targetDate }) => {
 					</>
 				) : (
 					<H4>
-						<span>Tournament is over!</span>
+						<span>{t('page.battle.is_over')}</span>
 					</H4>
 				)}
 			</div>

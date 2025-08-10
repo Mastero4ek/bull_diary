@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 
 import moment from 'moment'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
@@ -14,6 +15,7 @@ import { Info } from './Info'
 import { LineChart } from './LineChart'
 
 export const WalletPage = React.memo(() => {
+	const { t } = useTranslation()
 	const { exchange, date } = useSelector(state => state.filters)
 	const dispatch = useDispatch()
 	const { serverStatus } = useSelector(state => state.wallet)
@@ -32,12 +34,12 @@ export const WalletPage = React.memo(() => {
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
-				showSuccess('Wallet updated successfully!')
+				showSuccess(t('page.wallet.update_success'))
 			} else {
-				showError('Error updating wallet! Please try again.')
+				showError(t('page.wallet.update_error'))
 			}
 		} catch (e) {
-			showError('Error updating wallet! Please try again.')
+			showError(t('page.wallet.update_error'))
 			console.log(e)
 		}
 	}

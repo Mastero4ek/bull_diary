@@ -1,48 +1,35 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import { useForm } from 'react-hook-form';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
+import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { ErrorForm } from '@/components/ui/general/ErrorForm'
+import { Icon } from '@/components/ui/general/Icon'
+import { Loader } from '@/components/ui/general/Loader'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
+	removeUser as removeUserCandidate,
+	setChangeUser as setChangeUserCandidate,
+} from '@/redux/slices/candidateSlice'
 import {
-  PopupDescLayout,
-} from '@/components/layouts/PopupLayout/PopupDescLayout';
-import {
-  PopupFormLayout,
-} from '@/components/layouts/PopupLayout/PopupFormLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { ErrorForm } from '@/components/ui/general/ErrorForm';
-import { Icon } from '@/components/ui/general/Icon';
-import { Loader } from '@/components/ui/general/Loader';
-import {
-  removeUser as removeUserCandidate,
-  setChangeUser as setChangeUserCandidate,
-} from '@/redux/slices/candidateSlice';
-import {
-  getUsers,
-  removeUser as removeUserUsers,
-  setChangeUser as setChangeUserUsers,
-} from '@/redux/slices/usersSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	getUsers,
+	removeUser as removeUserUsers,
+	setChangeUser as setChangeUserUsers,
+} from '@/redux/slices/usersSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const RemoveUserPopup = React.memo(({ item }) => {
+	const { t } = useTranslation()
 	const { closePopup } = usePopup()
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -103,8 +90,8 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 			) {
 				showSuccess(
 					isAdminContext
-						? 'User removed successfully!'
-						: 'Account removed successfully!'
+						? t('popup.remove_user.admin_success')
+						: t('popup.remove_user.user_success')
 				)
 				reset()
 				closePopup()
@@ -115,15 +102,15 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 			} else {
 				showError(
 					isAdminContext
-						? 'User not removed! Please try again.'
-						: 'Account not removed! Please try again.'
+						? t('popup.remove_user.admin_error')
+						: t('popup.remove_user.user_error')
 				)
 			}
 		} catch (rejectedValueOrSerializedError) {
 			showError(
 				isAdminContext
-					? 'Error removing user! Please try again.'
-					: 'Error removing account! Please try again.'
+					? t('popup.remove_user.admin_error')
+					: t('popup.remove_user.user_error')
 			)
 		}
 	}
@@ -150,17 +137,23 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 	return (
 		<>
 			<PopupDescLayout
-				title={`Dear ${
-					isAdminContext ? currentUser?.name : item?.name || 'User'
+				title={`${t('popup.remove_user.title')} ${
+					isAdminContext ? currentUser?.name : item?.name
 				}!`}
 				text={
-					<>
-						{isAdminContext
-							? 'Are you sure you want to delete this user account?'
-							: 'Enter the email to which this account is registered to delete your account!'}
-						<br />
-						Once the account is deleted, there is no going back.
-					</>
+					isAdminContext ? (
+						<span
+							dangerouslySetInnerHTML={{
+								__html: t('popup.remove_user.admin_subtitle'),
+							}}
+						></span>
+					) : (
+						<span
+							dangerouslySetInnerHTML={{
+								__html: t('popup.remove_user.user_subtitle'),
+							}}
+						></span>
+					)
 				}
 			/>
 
@@ -177,7 +170,11 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 					>
 						<div className={styles.remove_form_control}>
 							<RootDesc>
-								<span>{isAdminContext ? 'User Email' : 'Account Email'}</span>
+								<span>
+									{isAdminContext
+										? t('form.label.user_email')
+										: t('form.label.account_email')}
+								</span>
 							</RootDesc>
 
 							{errors.email && (
@@ -185,7 +182,7 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 									<Icon id={'error-icon'} />
 
 									<SmallDesc>
-										<p>Incorrect email.</p>
+										<p>{t('form.error.email')}</p>
 									</SmallDesc>
 								</>
 							)}
@@ -194,7 +191,6 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 						<input
 							value={isAdminContext ? item?.email || '' : ''}
 							readOnly={isAdminContext}
-							placeholder={isAdminContext ? '' : 'Enter your email'}
 							{...register('email', {
 								required: true,
 								pattern:
@@ -206,15 +202,18 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 					<RootDesc>
 						<span>
 							{isAdminContext
-								? 'Do you really want to delete this user account PERMANENTLY?'
-								: 'Do you really want to delete this account PERMANENTLY?'}
+								? t('popup.remove_user.admin_description')
+								: t('popup.remove_user.user_description')}
 						</span>
 					</RootDesc>
 
 					<RootButton
 						type={'submit'}
-						onClickBtn={() => {}}
-						text={isAdminContext ? 'Yes, DELETE USER!' : 'Yes, REMOVE!'}
+						text={
+							isAdminContext
+								? t('button.admin_yes_remove')
+								: t('button.user_yes_remove')
+						}
 						disabled={serverStatus === 'loading' ? true : false}
 					/>
 

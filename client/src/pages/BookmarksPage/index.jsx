@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 
 import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -25,6 +26,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 import styles from './styles.module.scss'
 
 export const BookmarksPage = React.memo(() => {
+	const { t } = useTranslation()
 	const location = useLocation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -43,9 +45,9 @@ export const BookmarksPage = React.memo(() => {
 	} = useSelector(state => state.bookmarks)
 
 	const columns = [
-		{ Header: 'Symbol', accessor: 'symbol' },
+		{ Header: t('table.symbol'), accessor: 'symbol' },
 		{
-			Header: 'Date',
+			Header: t('table.closed_time'),
 			accessor: 'closed_time',
 			Cell: ({ cell: { value } }) => (
 				<span>{moment(value).format('DD/MM/YYYY')}</span>
@@ -53,7 +55,7 @@ export const BookmarksPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Direction',
+			Header: t('table.direction'),
 			accessor: 'direction',
 			Cell: ({ cell: { value } }) => (
 				<div style={{ display: 'flex', alignItems: 'center' }}>
@@ -65,19 +67,19 @@ export const BookmarksPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Qty',
+			Header: t('table.qty'),
 			accessor: 'quality',
 			Cell: ({ cell: { value } }) => <>{amount ? '****' : value}</>,
 			width: '100%',
 		},
 		{
-			Header: 'Margin',
+			Header: t('table.margin'),
 			accessor: 'margin',
 			Cell: ({ cell: { value } }) => <>{amount ? '****' : value}</>,
 			width: '100%',
 		},
 		{
-			Header: 'Pnl',
+			Header: t('table.pnl'),
 			accessor: 'pnl',
 			Cell: ({ cell: { value } }) => (
 				<span
@@ -91,7 +93,7 @@ export const BookmarksPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Roe%',
+			Header: t('table.roe'),
 			accessor: 'roe',
 			Cell: ({ cell: { value } }) => (
 				<span
@@ -105,7 +107,7 @@ export const BookmarksPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Actions',
+			Header: t('table.actions'),
 			accessor: 'actions',
 			Cell: ({ row }) => (
 				<div
@@ -167,12 +169,12 @@ export const BookmarksPage = React.memo(() => {
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
-				showSuccess('Bookmarks orders updated successfully!')
+				showSuccess(t('page.bookmarks.update_success'))
 			} else {
-				showError('Error updating bookmarks! Please try again.')
+				showError(t('page.bookmarks.update_error'))
 			}
 		} catch (e) {
-			showError('Error updating bookmarks orders! Please try again.')
+			showError(t('page.bookmarks.update_error'))
 			console.log(e)
 		}
 	}
@@ -213,12 +215,12 @@ export const BookmarksPage = React.memo(() => {
 				const originalPromiseResult2 = unwrapResult(resultAction2)
 
 				if (originalPromiseResult1 && originalPromiseResult2) {
-					showSuccess('Order removed successfully!')
+					showSuccess(t('page.bookmarks.remove_order_success'))
 				} else {
-					showError('Error removing order! Please try again.')
+					showError(t('page.bookmarks.remove_order_error'))
 				}
 			} catch (e) {
-				showError('Error removing order! Please try again.')
+				showError(t('page.bookmarks.remove_order_error'))
 				console.log(e)
 			}
 		},
@@ -304,10 +306,7 @@ export const BookmarksPage = React.memo(() => {
 					page={page}
 					toPage={goToPage}
 					sortBy={sortBy}
-					emptyWarn={
-						errorMessage ||
-						'There were no saved transactions during this period!'
-					}
+					emptyWarn={errorMessage || t('page.bookmarks.empty')}
 				/>
 			</div>
 
@@ -315,20 +314,14 @@ export const BookmarksPage = React.memo(() => {
 				<DescLayout
 					icon={'mark'}
 					title={
-						<>
-							Save and analyze <br /> transactions
-						</>
+						<span
+							dangerouslySetInnerHTML={{ __html: t('page.bookmarks.title') }}
+						></span>
 					}
 					description={
-						<>
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse,
-							maxime porro harum quidem obcaecati nisi rem in voluptas corrupti
-							alias sunt quis numquam qui rerum, voluptatem sed aperiam iure
-							impedit. Cum aliquam libero veniam, dolorum est quod minima eum
-							alias dolores? Nisi in nesciunt consequatur similique asperiores
-							facere autem porro molestias consequuntur aperiam et assumenda,
-							dolore ea mollitia a iste.
-						</>
+						<span
+							dangerouslySetInnerHTML={{ __html: t('page.bookmarks.subtitle') }}
+						></span>
 					}
 				/>
 			</OuterBlock>

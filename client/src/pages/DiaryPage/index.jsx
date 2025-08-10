@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -24,6 +25,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 import { BarChart } from './BarChart'
 
 export const DiaryPage = React.memo(() => {
+	const { t } = useTranslation()
 	const location = useLocation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -41,9 +43,9 @@ export const DiaryPage = React.memo(() => {
 	} = useSelector(state => state.positions)
 
 	const columns = [
-		{ Header: 'Symbol', accessor: 'symbol', width: '100%' },
+		{ Header: t('table.symbol'), accessor: 'symbol', width: '100%' },
 		{
-			Header: 'Direction',
+			Header: t('table.direction'),
 			accessor: 'direction',
 			Cell: ({ cell: { value } }) => (
 				<div style={{ display: 'flex', alignItems: 'center' }}>
@@ -54,9 +56,9 @@ export const DiaryPage = React.memo(() => {
 			),
 			width: '100%',
 		},
-		{ Header: 'Leverage', accessor: 'leverage', width: '100%' },
+		{ Header: t('table.leverage'), accessor: 'leverage', width: '100%' },
 		{
-			Header: 'Profit',
+			Header: t('table.profit'),
 			accessor: 'profit',
 			Cell: ({ cell: { value } }) => (
 				<span
@@ -72,7 +74,7 @@ export const DiaryPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Actions',
+			Header: t('table.actions'),
 			accessor: 'actions',
 			Cell: ({ row }) => (
 				<div
@@ -129,12 +131,12 @@ export const DiaryPage = React.memo(() => {
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
-				showSuccess('Positions updated successfully!')
+				showSuccess(t('page.diary.update_success'))
 			} else {
-				showError('Error updating positions! Please try again.')
+				showError(t('page.diary.update_error'))
 			}
 		} catch (e) {
-			showError('Error updating positions! Please try again.')
+			showError(t('page.diary.update_error'))
 			console.log(e)
 		}
 	}
@@ -204,7 +206,7 @@ export const DiaryPage = React.memo(() => {
 					page={page}
 					toPage={goToPage}
 					sortBy={sortBy}
-					emptyWarn={errorMessage || 'There were no open transactions now!'}
+					emptyWarn={errorMessage || t('page.diary.empty')}
 				/>
 			</div>
 

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 
-import moment from 'moment'
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
@@ -16,6 +17,7 @@ import { SharedPositionPopup } from '@/popups/SharedPositionPopup'
 import styles from './styles.module.scss'
 
 export const PositionLayout = React.memo(() => {
+	const { t } = useTranslation()
 	const { amount, color, mark } = useSelector(state => state.settings)
 	const position = useLocation()?.state?.item
 
@@ -23,46 +25,46 @@ export const PositionLayout = React.memo(() => {
 		() => [
 			{
 				id: 0,
-				name: 'Direction',
+				name: t('page.position.direction'),
 				value: position?.direction,
 			},
 			{
 				id: 1,
-				name: 'Leverage',
+				name: t('page.position.leverage'),
 				value: position?.leverage,
 			},
 			{
 				id: 2,
-				name: 'Quality',
+				name: t('page.position.qty'),
 				value: position?.quality,
 			},
 			{
 				id: 3,
-				name: 'Margin',
+				name: t('page.position.margin'),
 				value: position?.margin,
 			},
 			{
 				id: 4,
-				name: 'Pnl',
+				name: t('page.position.pnl'),
 				value: position?.pnl,
 			},
 			{
 				id: 5,
-				name: 'Roe',
+				name: t('page.position.roe'),
 				value: position?.roe,
 			},
 			{
 				id: 6,
-				name: 'Open Time',
+				name: t('page.position.open_time'),
 				value: position?.open_time,
 			},
 			{
 				id: 7,
-				name: 'Closed Time',
+				name: t('page.position.closed_time'),
 				value: position?.closed_time,
 			},
 		],
-		[]
+		[t]
 	)
 
 	return (
@@ -91,7 +93,7 @@ export const PositionLayout = React.memo(() => {
 									</RootDesc>
 
 									<RootDesc>
-										{field?.name === 'Direction' ? (
+										{field?.name === t('page.position.direction') ? (
 											<>
 												{mark && (
 													<Mark
@@ -101,7 +103,8 @@ export const PositionLayout = React.memo(() => {
 
 												<span>{capitalize(field?.value)}</span>
 											</>
-										) : field?.name === 'Pnl' || field?.name === 'Roe' ? (
+										) : field?.name === t('page.position.pnl') ||
+										  field?.name === t('page.position.roe') ? (
 											<>
 												<span
 													style={
@@ -116,15 +119,23 @@ export const PositionLayout = React.memo(() => {
 												>
 													{amount ? '****' : field?.value}
 												</span>{' '}
-												<span>{field?.name === 'Pnl' ? 'USDT' : '%'}</span>
+												<span>
+													{field?.name === t('page.position.pnl')
+														? 'USDT'
+														: '%'}
+												</span>
 											</>
-										) : field?.name === 'Quality' ||
-										  field?.name === 'Margin' ? (
+										) : field?.name === t('page.position.qty') ? (
 											<span>{amount ? '****' : field?.value}</span>
-										) : field?.name.includes('Time') ? (
+										) : field?.name === t('page.position.margin') ? (
+											<span>{amount ? '****' : field?.value} USDT</span>
+										) : field?.name === t('page.position.open_time') ||
+										  field?.name === t('page.position.closed_time') ? (
 											<span>
 												{moment(field?.value).format('DD MMMM YYYY - HH:mm:ss')}
 											</span>
+										) : field?.name === t('page.position.leverage') ? (
+											<span>{field?.value}X</span>
 										) : (
 											<span>{field?.value}</span>
 										)}

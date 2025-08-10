@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 
 import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
@@ -12,6 +13,7 @@ import styles from './styles.module.scss'
 ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
 export const DoughnutChart = () => {
+	const { t } = useTranslation()
 	const { theme, width, isMobile, mark } = useSelector(state => state.settings)
 	const { totalLoss, totalProfit } = useSelector(state => state.orders)
 	const { fakeOrders } = useSelector(state => state.orders)
@@ -30,7 +32,7 @@ export const DoughnutChart = () => {
 
 	const data = useMemo(
 		() => ({
-			labels: ['Income', 'Lession'],
+			labels: [t('page.table.chart_income'), t('page.table.chart_lession')],
 			datasets: [
 				{
 					data: fakeOrders ? [650, -350] : [totalProfit, totalLoss],
@@ -131,7 +133,7 @@ export const DoughnutChart = () => {
 					{mark && <Mark color={'green'} />}
 
 					<RootDesc>
-						<span>Profit: </span>
+						<span>{t('page.table.chart_profit')}</span>
 						<strong>{fakeOrders ? 650 : totalProfit} %</strong>
 					</RootDesc>
 				</div>
@@ -140,7 +142,7 @@ export const DoughnutChart = () => {
 					{mark && <Mark color={'red'} />}
 
 					<RootDesc>
-						<span>Loss: </span>
+						<span>{t('page.table.chart_loss')}</span>
 						<strong>{fakeOrders ? -350 : totalLoss} %</strong>
 					</RootDesc>
 				</div>

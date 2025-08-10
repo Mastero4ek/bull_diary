@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import bear from '@/assets/images/levels/bear.png'
@@ -20,6 +21,7 @@ import styles from './styles.module.scss'
 const levelImages = { hamster, bear, bull, shark, whale }
 
 export const Info = React.memo(() => {
+	const { t } = useTranslation()
 	const { user } = useSelector(state => state.candidate)
 	const { color, amount } = useSelector(state => state.settings)
 	const { wallet, fakeWallet, serverStatus, errorMessage } = useSelector(
@@ -33,49 +35,49 @@ export const Info = React.memo(() => {
 	const statsList = [
 		{
 			id: 0,
-			name: 'Wallet Balance',
+			name: t('page.wallet.balance'),
 			type: 'balance',
 			value: fakeWallet?.total_balance || wallet?.total_balance,
 		},
 		{
 			id: 1,
-			name: 'Unrealised PNL',
+			name: t('page.wallet.unrealized'),
 			type: 'pnl',
 			value: fakeWallet?.unrealised_pnl || wallet?.unrealised_pnl,
 		},
 		{
 			id: 2,
-			name: 'Total Profit',
+			name: t('page.wallet.total_profit'),
 			type: 'profit',
 			value: fakeWallet?.total_profit || wallet?.total_profit,
 		},
 		{
 			id: 3,
-			name: 'Total Loss',
+			name: t('page.wallet.total_loss'),
 			type: 'loss',
 			value: fakeWallet?.total_loss || wallet?.total_loss,
 		},
 		{
 			id: 4,
-			name: 'Net Profit/Loss',
+			name: t('page.wallet.net_profit'),
 			type: 'net',
 			value: fakeWallet?.net_profit || wallet?.net_profit,
 		},
 		{
 			id: 5,
-			name: 'Wining Trades',
+			name: t('page.wallet.win_trades'),
 			type: 'win_trades',
 			value: fakeWallet?.wining_trades || wallet?.wining_trades,
 		},
 		{
 			id: 6,
-			name: 'Losing Trades',
+			name: t('page.wallet.los_trades'),
 			type: 'los_trades',
 			value: fakeWallet?.losing_trades || wallet?.losing_trades,
 		},
 		{
 			id: 7,
-			name: 'Winrate',
+			name: t('page.wallet.winrate'),
 			type: 'winrate',
 			value: fakeWallet?.winrate || wallet?.winrate,
 		},
@@ -101,7 +103,7 @@ export const Info = React.memo(() => {
 					<div className={styles.info_stats}>
 						<div className={styles.info_stats_head}>
 							<H2>
-								<span>Overview</span>
+								<span>{t('page.wallet.overview')}</span>
 							</H2>
 
 							<SharedButton

@@ -1,28 +1,25 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from 'react'
 
-import { useForm } from 'react-hook-form';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { ClosedContent } from '@/components/ui/general/ClosedContent';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { updateKeys } from '@/redux/slices/candidateSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { ClosedContent } from '@/components/ui/general/ClosedContent'
+import { Icon } from '@/components/ui/general/Icon'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { updateKeys } from '@/redux/slices/candidateSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const KeysForm = ({ exchange }) => {
 	const { user } = useSelector(state => state.candidate)
 	const dispatch = useDispatch()
 	const { showSuccess, showError } = useNotification()
+	const { t } = useTranslation()
 
 	const {
 		reset,
@@ -46,12 +43,12 @@ export const KeysForm = ({ exchange }) => {
 				const originalPromiseResult = unwrapResult(resultAction)
 
 				if (originalPromiseResult) {
-					showSuccess('Key removed successfully!')
+					showSuccess(t('page.settings.keys_removed_successfully'))
 				} else {
-					showError('Error removing key! Please try again.')
+					showError(t('page.settings.keys_error_removing'))
 				}
 			} catch (e) {
-				showError('Error removing key! Please try again.')
+				showError(t('page.settings.keys_error_removing'))
 				console.log(e)
 			}
 		},
@@ -75,12 +72,12 @@ export const KeysForm = ({ exchange }) => {
 				const originalPromiseResult = unwrapResult(resultAction)
 
 				if (originalPromiseResult) {
-					showSuccess('Keys updated successfully!')
+					showSuccess(t('page.settings.keys_updated_successfully'))
 				} else {
-					showError('Error updating keys! Please try again.')
+					showError(t('page.settings.keys_error_updating'))
 				}
 			} catch (e) {
-				showError('Error updating keys! Please try again.')
+				showError(t('page.settings.keys_error_updating'))
 				console.log(e)
 			}
 
@@ -123,7 +120,7 @@ export const KeysForm = ({ exchange }) => {
 								? undefined
 								: handleSubmit(submit)
 						}
-						text={'Save'}
+						text={t('button.save')}
 						icon='update'
 						disabled={apiValue === '' || secretValue === ''}
 					/>
@@ -146,14 +143,16 @@ export const KeysForm = ({ exchange }) => {
 							<Icon id={'error-icon'} />
 
 							<SmallDesc>
-								<p>Api-key is required.</p>
+								<p>{t('form.error.api_key')}</p>
 							</SmallDesc>
 						</div>
 					)}
 
 					<input
 						disabled={exchange.name === 'mexc' || exchange.name === 'okx'}
-						placeholder={exchange.api === '' ? 'Your api key' : exchange.api}
+						placeholder={
+							exchange.api === '' ? t('form.placeholder.api_key') : exchange.api
+						}
 						{...register(`${currentExchangeName}_api`, { required: true })}
 					/>
 				</label>
@@ -169,7 +168,7 @@ export const KeysForm = ({ exchange }) => {
 							<Icon id={'error-icon'} />
 
 							<SmallDesc>
-								<p>Secret-key is required.</p>
+								<p>{t('form.error.secret_key')}</p>
 							</SmallDesc>
 						</div>
 					)}
@@ -177,7 +176,9 @@ export const KeysForm = ({ exchange }) => {
 					<input
 						disabled={exchange.name === 'mexc' || exchange.name === 'okx'}
 						placeholder={
-							exchange.secret === '' ? 'Your secret key' : exchange.secret
+							exchange.secret === ''
+								? t('form.placeholder.secret_key')
+								: exchange.secret
 						}
 						{...register(`${currentExchangeName}_secret`, {
 							required: true,

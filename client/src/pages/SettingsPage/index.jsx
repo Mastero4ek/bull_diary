@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
-import { Keys } from './Keys'
-import { Tuning } from './Tuning'
-import { Loader } from '@/components/ui/general/Loader'
+import { useTranslation } from 'react-i18next'
 
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+
+import { Keys } from './Keys'
 import styles from './styles.module.scss'
+import { Tuning } from './Tuning'
 
 export const SettingsPage = React.memo(() => {
 	const [changeDesc, setChangeDesc] = useState(false)
+	const { t } = useTranslation()
 
 	return (
 		<PageLayout chartWidth={600} filter={false}>
@@ -27,46 +29,25 @@ export const SettingsPage = React.memo(() => {
 				{!changeDesc ? (
 					<DescLayout
 						icon={'settings'}
-						title={
-							<>
-								Customize the application <br /> to suit your taste
-							</>
-						}
+						title={t('page.settings.tuning_title')}
 						description={
-							<>
-								Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque
-								illo consequatur magni eos odit perferendis, cumque minus
-								obcaecati reiciendis sed. Id in eaque asperiores. Enim autem
-								aperiam cumque adipisci tenetur.
-							</>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.settings.tuning_description'),
+								}}
+							/>
 						}
 					/>
 				) : (
 					<DescLayout
 						icon={'keys'}
-						title={
-							<>
-								Connect your exchange <br /> using API keys
-							</>
-						}
+						title={t('page.settings.keys_title')}
 						description={
-							<>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
-								dolorum necessitatibus reiciendis atque corrupti ex, pariatur et
-								eum eligendi nihil unde, dolorem eos quasi accusamus cumque enim
-								assumenda! Ex, temporibus! Aliquid odit laborum sed molestiae
-								quia commodi a neque quas nihil esse recusandae, obcaecati, est
-								numquam eligendi voluptas qui quisquam perspiciatis eius nobis
-								earum voluptatibus? Dolorem minima laborum architecto fuga?
-								Dolorem, itaque eaque? Corrupti, non aperiam eos, doloribus
-								saepe praesentium earum sint voluptates dolorum, error ullam
-								omnis ipsum ducimus ut! Nihil nesciunt in eius! Quidem, dolorum
-								perspiciatis? Nostrum, non beatae? Labore quis eligendi
-								voluptatem unde nisi ipsam distinctio hic, odio reprehenderit
-								eum iusto optio! Reiciendis architecto ipsa omnis error
-								similique ad atque, ea facere fuga nulla, iure, fugiat magni
-								explicabo.
-							</>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.settings.keys_description'),
+								}}
+							/>
 						}
 					/>
 				)}

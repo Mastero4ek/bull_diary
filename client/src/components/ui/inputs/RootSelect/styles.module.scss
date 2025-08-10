@@ -48,24 +48,25 @@
 	width: fit-content;
 	position: absolute;
 	z-index: 500;
-	left: 0;
+	left: 50%;
 	top: 70rem;
-	display: flex;
-	flex-direction: column;
-	padding: 20rem 10rem;
-	border-radius: 20rem;
-	transition: all 0.15s ease-in-out;
-	height: 0;
-	overflow: hidden;
-	transform-origin: 0 0;
-	transform: rotateX(-90deg);
-	visibility: hidden;
-	opacity: 0;
+	display: flex !important;
+	flex-direction: column !important;
+	padding: 20rem 10rem !important;
+	border-radius: 20rem !important;
+	transition: all 0.15s ease-in-out !important;
+	height: 0 !important;
+	overflow: hidden !important;
+	transform-origin: 0 0 !important;
+	transform: translateX(-50%) rotateX(-90deg) !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
 
 	background: var(--bgLight);
 	box-shadow: var(--shadowOuter);
 
 	li {
+		width: 100%;
 		padding: 10rem 15rem;
 		display: flex;
 		align-items: center;
@@ -83,7 +84,7 @@
 
 		div {
 			width: 100%;
-			text-align: center;
+			text-align: left;
 		}
 
 		span {
@@ -94,9 +95,9 @@
 }
 
 .select_list_active {
-	height: auto;
-	transition: all 0.15s ease-in-out;
-	opacity: 1;
-	visibility: visible;
-	transform: rotateX(0deg);
+	height: auto !important;
+	transition: all 0.15s ease-in-out !important;
+	opacity: 1 !important;
+	visibility: visible !important;
+	transform: translateX(-50%) rotateX(0deg) !important;
 }

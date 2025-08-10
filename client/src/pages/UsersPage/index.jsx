@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 
 import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -27,6 +28,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 import styles from './styles.module.scss'
 
 export const UsersPage = () => {
+	const { t } = useTranslation()
 	const location = useLocation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -47,7 +49,7 @@ export const UsersPage = () => {
 
 	const columns = [
 		{
-			Header: 'Avatar',
+			Header: t('table.avatar'),
 			accessor: 'cover',
 			Cell: ({ cell: { value } }) => (
 				<img
@@ -64,7 +66,7 @@ export const UsersPage = () => {
 			width: 100,
 		},
 		{
-			Header: 'Name',
+			Header: t('table.name'),
 			accessor: 'name',
 			width: '100%',
 			Cell: ({ cell: { value }, row }) => (
@@ -74,24 +76,24 @@ export const UsersPage = () => {
 			),
 		},
 		{
-			Header: 'Email',
+			Header: t('table.email'),
 			accessor: 'email',
 			width: '100%',
 		},
 		{
-			Header: 'Created at',
+			Header: t('table.created_at'),
 			accessor: 'created_at',
 			Cell: ({ cell: { value } }) => <>{moment(value).format('DD/MM/YYYY')}</>,
 			width: '100%',
 		},
 		{
-			Header: 'Updated at',
+			Header: t('table.updated_at'),
 			accessor: 'updated_at',
 			Cell: ({ cell: { value } }) => <>{moment(value).format('DD/MM/YYYY')}</>,
 			width: '100%',
 		},
 		{
-			Header: 'Actions',
+			Header: t('table.actions'),
 			accessor: 'actions',
 			Cell: ({ row }) => (
 				<div
@@ -160,12 +162,12 @@ export const UsersPage = () => {
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
-				showSuccess('Users updated successfully!')
+				showSuccess(t('page.users.success_update'))
 			} else {
-				showError('Error updating users! Please try again.')
+				showError(t('page.users.error_update'))
 			}
 		} catch (e) {
-			showError('Error updating users! Please try again.')
+			showError(t('page.users.error_update'))
 			console.log(e)
 		}
 	}
@@ -243,22 +245,20 @@ export const UsersPage = () => {
 					page={page}
 					toPage={goToPage}
 					sortBy={sortBy}
-					emptyWarn={errorMessage || 'No users found in this period!'}
+					emptyWarn={errorMessage || t('page.users.empty_error')}
 				/>
 			</div>
 
 			<OuterBlock>
 				<DescLayout
 					icon={'all-users'}
-					title={'Platform users'}
-					description={
-						'Registered users of the platform. You can view their profiles and their statistics.'
-					}
+					title={t('page.users.title')}
+					description={t('page.users.subtitle')}
 				>
 					{user && user?.role === 'admin' && (
 						<RootButton
 							icon={'sign-up'}
-							text={'Create user'}
+							text={t('button.create_user')}
 							onClickBtn={() => handleClickAddUser()}
 						/>
 					)}

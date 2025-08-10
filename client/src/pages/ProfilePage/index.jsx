@@ -3,6 +3,7 @@ import './phone_input.scss'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import PhoneInput from 'react-phone-input-2'
 import ru from 'react-phone-input-2/lang/ru.json'
 import { useDispatch, useSelector } from 'react-redux'
@@ -41,6 +42,7 @@ import { Level } from './Level'
 import styles from './styles.module.scss'
 
 export const ProfilePage = React.memo(() => {
+	const { t } = useTranslation()
 	const [popup, setPopup] = useState(false)
 	const [password, setPassword] = useState('')
 	const [photoFile, setPhotoFile] = useState(null)
@@ -97,7 +99,7 @@ export const ProfilePage = React.memo(() => {
 		async data => {
 			try {
 				if (!editUser) {
-					showError('Edit user action not available! Please try again.')
+					showError(t('page.profile.edit_user_action_not_available'))
 					return
 				}
 
@@ -118,7 +120,7 @@ export const ProfilePage = React.memo(() => {
 				const originalPromiseResult = unwrapResult(resultAction)
 
 				if (originalPromiseResult) {
-					showSuccess('Profile updated successfully!')
+					showSuccess(t('page.profile.updated_successfully'))
 					setPassword('')
 					setPhotoFile(null)
 
@@ -128,10 +130,10 @@ export const ProfilePage = React.memo(() => {
 						dispatch(getUser(user.id))
 					}
 				} else {
-					showError('Error updating profile! Please try again.')
+					showError(t('page.profile.error_updating'))
 				}
 			} catch (e) {
-				showError('Error updating profile! Please try again.')
+				showError(t('page.profile.error_updating'))
 			}
 		},
 		[
@@ -144,6 +146,7 @@ export const ProfilePage = React.memo(() => {
 			params.id,
 			user?.id,
 			getUser,
+			t,
 		]
 	)
 
@@ -169,7 +172,7 @@ export const ProfilePage = React.memo(() => {
 			if (photoFile) {
 				setValue('cover', null)
 				setPhotoFile(null)
-				showSuccess('Cover removed successfully!')
+				showSuccess(t('page.profile.cover_removed_successfully'))
 			} else if (changeUser?.cover && removeCover) {
 				const lastSlashIndex = changeUser.cover.lastIndexOf('/')
 				const filename = changeUser.cover.substring(lastSlashIndex + 1)
@@ -182,7 +185,7 @@ export const ProfilePage = React.memo(() => {
 				const originalPromiseResult = unwrapResult(resultAction)
 
 				if (originalPromiseResult) {
-					showSuccess('Cover removed successfully!')
+					showSuccess(t('page.profile.cover_removed_successfully'))
 					setValue('cover', null)
 
 					if (isAdminContext && params.id && getUser) {
@@ -191,11 +194,11 @@ export const ProfilePage = React.memo(() => {
 						dispatch(getUser(user.id))
 					}
 				} else {
-					showError('Error removing cover! Please try again.')
+					showError(t('page.profile.error_removing_cover'))
 				}
 			}
 		} catch (e) {
-			showError('Error removing cover! Please try again.')
+			showError(t('page.profile.error_removing_cover'))
 		}
 	}, [
 		dispatch,
@@ -209,6 +212,7 @@ export const ProfilePage = React.memo(() => {
 		params.id,
 		user?.id,
 		getUser,
+		t,
 	])
 
 	useEffect(() => {
@@ -294,7 +298,7 @@ export const ProfilePage = React.memo(() => {
 									<RootButton
 										type={'submit'}
 										onClickBtn={handleSubmit(data => submit(data))}
-										text={'Save'}
+										text={t('button.save')}
 										icon='save-changes'
 										disabled={
 											serverStatus === 'loading' ||
@@ -326,14 +330,14 @@ export const ProfilePage = React.memo(() => {
 												<Icon id={'error-icon'} />
 
 												<SmallDesc>
-													<p>Name is required.</p>
+													<p>{t('form.error.name')}</p>
 												</SmallDesc>
 											</>
 										)}
 									</div>
 
 									<input
-										placeholder='Your Name'
+										placeholder={t('form.placeholder.name')}
 										{...register('name', {
 											required: true,
 											value: changeUser?.name || '',
@@ -349,7 +353,7 @@ export const ProfilePage = React.memo(() => {
 									}`}
 								>
 									<input
-										placeholder='Your Last Name'
+										placeholder={t('form.placeholder.last_name')}
 										{...register('last_name', {
 											value: changeUser?.last_name || '',
 											onChange: e => handleChangeField(e, 'last_name'),
@@ -395,7 +399,7 @@ export const ProfilePage = React.memo(() => {
 												<Icon id={'error-icon'} />
 
 												<SmallDesc>
-													<p>Incorrect password.</p>
+													<p>{t('form.error.password')}</p>
 												</SmallDesc>
 											</>
 										)}
@@ -407,8 +411,8 @@ export const ProfilePage = React.memo(() => {
 												<SmallDesc>
 													<p>
 														{isAdminContext
-															? 'Create password for user!'
-															: 'Create your password, please!'}
+															? t('form.warning.create_user_password')
+															: t('form.warning.create_password')}
 													</p>
 												</SmallDesc>
 											</>
@@ -416,7 +420,7 @@ export const ProfilePage = React.memo(() => {
 									</div>
 
 									<input
-										placeholder='New Password'
+										placeholder={t('form.placeholder.password')}
 										{...register('password', {
 											value: password || '',
 											onChange: e => setPassword(e.target.value),
@@ -438,14 +442,14 @@ export const ProfilePage = React.memo(() => {
 													<Icon id={'error-icon'} />
 
 													<SmallDesc>
-														<p>Incorrect email.</p>
+														<p>{t('form.error.email')}</p>
 													</SmallDesc>
 												</>
 											)}
 										</div>
 
 										<input
-											placeholder='Email'
+											placeholder={t('form.placeholder.email')}
 											{...register('email', {
 												required: true,
 												pattern:
@@ -485,23 +489,24 @@ export const ProfilePage = React.memo(() => {
 				<DescLayout
 					icon={'profile'}
 					title={
-						<>
-							Edit account <br /> or delete it permanently
-						</>
+						<span
+							dangerouslySetInnerHTML={{
+								__html: t('page.profile.title'),
+							}}
+						></span>
 					}
 					description={
-						<>
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque
-							illo consequatur magni eos odit perferendis, cumque minus
-							obcaecati reiciendis sed. Id in eaque asperiores. Enim autem
-							aperiam cumque adipisci tenetur.
-						</>
+						<span
+							dangerouslySetInnerHTML={{
+								__html: t('page.profile.subtitle'),
+							}}
+						></span>
 					}
 				>
 					<div className={styles.removeBtn}>
 						<RootButton
 							onClickBtn={handleClickRemove}
-							text={'Remove'}
+							text={t('button.remove')}
 							icon={'remove'}
 						/>
 					</div>

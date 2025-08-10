@@ -305,13 +305,6 @@ export const fakeWalletTransactions = [
 	},
 ]
 
-export const PERIODS = [
-	{ name: 'Week', id: 0 },
-	{ name: 'Month', id: 1 },
-	{ name: 'Quarter', id: 2 },
-	{ name: 'Year', id: 3 },
-]
-
 export const EXCHANGES = [
 	{ checked_id: 0, name: 'Bybit' },
 	{ checked_id: 1, name: 'Mexc' },

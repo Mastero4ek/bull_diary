@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -20,9 +21,6 @@ import {
 import { unwrapResult } from '@reduxjs/toolkit'
 
 import styles from './styles.module.scss'
-
-const themeItem = { name: 'Dark mode', icon: 'theme' }
-const logoutItem = { name: 'Logout', icon: 'logout' }
 
 const SideBarItem = React.memo(({ item }) => {
 	const dispatch = useDispatch()
@@ -106,32 +104,46 @@ const SideBarItem = React.memo(({ item }) => {
 })
 
 export const SideBarLayout = React.memo(() => {
+	const { t } = useTranslation()
 	const dispatch = useDispatch()
 	const location = useLocation()
 	const navigate = useNavigate()
 	const { user } = useSelector(state => state.candidate)
-	const { sideBar } = useSelector(state => state.settings)
+	const { sideBar, language } = useSelector(state => state.settings)
+
+	const themeItem = { name: t('sidebar.theme'), icon: 'theme' }
+	const logoutItem = { name: t('sidebar.logout'), icon: 'logout' }
 
 	const sideBarItems = [
-		{ id: 0, name: 'Wallet', link: '/wallet', icon: 'wallet' },
-		{ id: 1, name: 'Diary', link: '/diary/positions', icon: 'diary' },
-		{ id: 2, name: 'Table', link: '/table/positions', icon: 'table' },
+		{ id: 0, name: t('sidebar.wallet'), link: '/wallet', icon: 'wallet' },
+		{
+			id: 1,
+			name: t('sidebar.diary'),
+			link: '/diary/positions',
+			icon: 'diary',
+		},
+		{
+			id: 2,
+			name: t('sidebar.table'),
+			link: '/table/positions',
+			icon: 'table',
+		},
 		{
 			id: 3,
-			name: 'Bookmarks',
+			name: t('sidebar.bookmarks'),
 			link: '/bookmarks/positions',
 			icon: 'bookmarks',
 		},
-		{ id: 4, name: 'Battle', link: '/battle/users', icon: 'battle' },
+		{ id: 4, name: t('sidebar.battle'), link: '/battle/users', icon: 'battle' },
 		user?.role === 'admin' && {
 			id: 5,
-			name: 'Users',
+			name: t('sidebar.users'),
 			link: '/all-users',
 			icon: 'all-users',
 		},
-		{ id: 6, name: 'Profile', link: '/profile', icon: 'profile' },
-		{ id: 7, name: 'Settings', link: '/settings', icon: 'settings' },
-		{ id: 8, name: 'Contacts', link: '/contacts', icon: 'contacts' },
+		{ id: 6, name: t('sidebar.profile'), link: '/profile', icon: 'profile' },
+		{ id: 7, name: t('sidebar.settings'), link: '/settings', icon: 'settings' },
+		{ id: 8, name: t('sidebar.contacts'), link: '/contacts', icon: 'contacts' },
 	]
 
 	const handleBackClick = useCallback(() => {
@@ -183,7 +195,9 @@ export const SideBarLayout = React.memo(() => {
 									<div className={styles.sidebar_back_button}>
 										<RootButton
 											onClickBtn={handleBackClick}
-											text={`Back to ${item.name.toLowerCase()}`}
+											text={`${t('sidebar.back_to')} ${
+												language === 'en' ? item.name.toLowerCase() : ''
+											}`}
 											icon='back-arrow'
 										/>
 									</div>

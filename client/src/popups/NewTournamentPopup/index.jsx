@@ -1,40 +1,30 @@
-import './calendar.scss';
+import './calendar.scss'
 
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import moment from 'moment';
-import DatePicker from 'react-date-picker';
-import {
-  Controller,
-  useForm,
-} from 'react-hook-form';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import moment from 'moment'
+import DatePicker from 'react-date-picker'
+import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
-import coverDefault from '@/assets/images/general/default_tournament.png';
-import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import {
-  PopupDescLayout,
-} from '@/components/layouts/PopupLayout/PopupDescLayout';
-import {
-  PopupFormLayout,
-} from '@/components/layouts/PopupLayout/PopupFormLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { RootSelect } from '@/components/ui/inputs/RootSelect';
-import { createTournament } from '@/redux/slices/tournamentSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+import coverDefault from '@/assets/images/general/default_tournament.png'
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
+import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { RootSelect } from '@/components/ui/inputs/RootSelect'
+import { createTournament } from '@/redux/slices/tournamentSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const NewTournamentPopup = () => {
+	const { t } = useTranslation()
 	const {
 		register,
 		handleSubmit,
@@ -95,16 +85,16 @@ export const NewTournamentPopup = () => {
 				setRegistrationDate(initialStartDate)
 
 				closePopup()
-				showSuccess('Tournament created successfully!')
+				showSuccess(t('popup.new_battle.create_success'))
 			} else {
-				showError('Error creating tournament! Please try again.')
+				showError(t('popup.new_battle.create_error'))
 			}
 		} catch (e) {
-			console.log('Tournament creation error:', e)
+			console.log(e)
 			if (e?.payload?.message) {
 				showError(e.payload.message)
 			} else {
-				showError('Error creating tournament! Please try again.')
+				showError(t('popup.new_battle.create_error'))
 			}
 		}
 	}
@@ -138,11 +128,11 @@ export const NewTournamentPopup = () => {
 
 	return (
 		<>
-			<PopupDescLayout title={'New Tournament'}>
+			<PopupDescLayout title={t('popup.new_battle.title')}>
 				<label htmlFor='exchange' className={styles.tournament_form_label}>
 					<div className={styles.tournament_form_control}>
 						<RootDesc>
-							<span>Exchange</span>
+							<span>{t('form.label.exchange')}</span>
 						</RootDesc>
 
 						<Controller
@@ -170,7 +160,7 @@ export const NewTournamentPopup = () => {
 				<label htmlFor='cover' className={`${styles.tournament_form_label}`}>
 					<div className={styles.tournament_form_control}>
 						<RootDesc>
-							<span>Cover</span>
+							<span>{t('form.label.cover')}</span>
 						</RootDesc>
 
 						<div className={styles.tournament_photo}>
@@ -196,7 +186,7 @@ export const NewTournamentPopup = () => {
 								disabled={!cover}
 								onClickBtn={handleRemoveCover}
 								icon='cancel'
-								text='Remove cover'
+								text={t('button.remove_cover')}
 							/>
 						</div>
 					</div>
@@ -215,7 +205,7 @@ export const NewTournamentPopup = () => {
 							}`}
 						>
 							<RootDesc>
-								<span>Name</span>
+								<span>{t('form.label.battle_name')}</span>
 							</RootDesc>
 
 							{errors.name && <Icon id={'error-icon'} />}
@@ -230,7 +220,7 @@ export const NewTournamentPopup = () => {
 					>
 						<div className={styles.tournament_form_control}>
 							<RootDesc>
-								<span>Description</span>
+								<span>{t('form.label.description')}</span>
 							</RootDesc>
 
 							<input type='text' {...register('description')} />
@@ -243,7 +233,7 @@ export const NewTournamentPopup = () => {
 					>
 						<div className={styles.tournament_form_control}>
 							<RootDesc>
-								<span>Registration Date</span>
+								<span>{t('form.label.registr_date')}</span>
 							</RootDesc>
 
 							<div className={styles.calendar_wrapper}>
@@ -263,7 +253,7 @@ export const NewTournamentPopup = () => {
 					<label htmlFor='startDate' className={styles.tournament_form_label}>
 						<div className={styles.tournament_form_control}>
 							<RootDesc>
-								<span>Start Date</span>
+								<span>{t('form.label.start_date')}</span>
 							</RootDesc>
 
 							<div className={styles.calendar_wrapper}>
@@ -283,7 +273,7 @@ export const NewTournamentPopup = () => {
 					<label htmlFor='endDate' className={styles.tournament_form_label}>
 						<div className={styles.tournament_form_control}>
 							<RootDesc>
-								<span>End Date</span>
+								<span>{t('form.label.start_date')}</span>
 							</RootDesc>
 
 							<div className={styles.calendar_wrapper}>
@@ -300,7 +290,11 @@ export const NewTournamentPopup = () => {
 						</div>
 					</label>
 
-					<RootButton type='submit' text='Create Tournament' icon='join' />
+					<RootButton
+						type='submit'
+						text={t('button.create_battle')}
+						icon='join'
+					/>
 				</form>
 			</PopupFormLayout>
 		</>

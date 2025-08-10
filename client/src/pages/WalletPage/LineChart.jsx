@@ -13,6 +13,7 @@ import {
 import _ from 'lodash'
 import moment from 'moment/min/moment-with-locales'
 import { Line } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -33,6 +34,7 @@ ChartJS.register(
 )
 
 export const LineChart = React.memo(() => {
+	const { t } = useTranslation()
 	const { theme, width, isMobile } = useSelector(state => state.settings)
 	const { walletChangesByDay, fakeWalletChangesByDay, fakeWallet, wallet } =
 		useSelector(state => state.wallet)
@@ -208,7 +210,7 @@ export const LineChart = React.memo(() => {
 
 	const getTransactionCount = useCallback(
 		context => {
-			const period = filter?.name?.toLowerCase()
+			const period = filter?.value?.toLowerCase()
 			const idx = context.dataIndex
 			const dataSource = walletChangesByDay || fakeWalletChangesByDay
 			const normalizedDataSource = dataSource.map(item => ({
@@ -268,13 +270,15 @@ export const LineChart = React.memo(() => {
 				typeof balance === 'number' ? balance.toFixed(2) : balance
 			const count = getTransactionCount(context)
 
-			return `USDT: ${balanceRounded}, Transactions: ${count || 0}`
+			return `USDT: ${balanceRounded}, ${t('page.wallet.chart_label_trans')} ${
+				count || 0
+			}`
 		},
 		[getTransactionCount, hasTransactionData]
 	)
 
 	const { labels, chartData } = useMemo(() => {
-		const period = filter?.name?.toLowerCase() || 'week'
+		const period = filter?.value?.toLowerCase() || 'week'
 		const result = processPeriodData(period)
 
 		return result
@@ -292,7 +296,7 @@ export const LineChart = React.memo(() => {
 			labels,
 			datasets: [
 				{
-					label: 'Wallet balance in USDT',
+					label: t('page.wallet.chart_label'),
 					data: chartData,
 					borderColor: theme ? '#24eaa4' : '#c270f8',
 					pointBackgroundColor: theme ? '#24eaa4' : '#c270f8',
@@ -301,7 +305,7 @@ export const LineChart = React.memo(() => {
 				},
 			],
 		}),
-		[labels, chartData, theme, chartStyles]
+		[labels, chartData, theme, chartStyles, t]
 	)
 
 	const options = useMemo(
@@ -410,7 +414,7 @@ export const LineChart = React.memo(() => {
 							<Icon id='warning-icon' />
 
 							<span style={{ color: 'var(--orange)' }}>
-								You can currently search within the past 180 days.
+								{t('page.wallet.warning')}
 							</span>
 						</SmallDesc>
 					</div>
@@ -418,7 +422,7 @@ export const LineChart = React.memo(() => {
 
 				<RootButton
 					icon={'details'}
-					text='Details'
+					text={t('button.details')}
 					onClickBtn={() => {
 						navigate('/wallet/details')
 					}}

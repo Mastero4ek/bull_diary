@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 
 import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -28,6 +29,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 import { DoughnutChart } from './DougnutChart'
 
 export const TablePage = () => {
+	const { t } = useTranslation()
 	const location = useLocation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -52,9 +54,9 @@ export const TablePage = () => {
 	} = useSelector(state => state.bookmarks)
 
 	const columns = [
-		{ Header: 'Symbol', accessor: 'symbol', width: '100%' },
+		{ Header: t('table.symbol'), accessor: 'symbol', width: '100%' },
 		{
-			Header: 'Date',
+			Header: t('table.closed_time'),
 			accessor: 'closed_time',
 			Cell: ({ cell: { value } }) => (
 				<span>{moment(value).format('DD/MM/YYYY')}</span>
@@ -62,7 +64,7 @@ export const TablePage = () => {
 			width: '100%',
 		},
 		{
-			Header: 'Direction',
+			Header: t('table.direction'),
 			accessor: 'direction',
 			Cell: ({ cell: { value } }) => (
 				<div style={{ display: 'flex', alignItems: 'center' }}>
@@ -74,19 +76,19 @@ export const TablePage = () => {
 			width: '100%',
 		},
 		{
-			Header: 'Qty',
+			Header: t('table.qty'),
 			accessor: 'quality',
 			Cell: ({ cell: { value } }) => <>{amount ? '****' : value}</>,
 			width: '100%',
 		},
 		{
-			Header: 'Margin',
+			Header: t('table.margin'),
 			accessor: 'margin',
 			Cell: ({ cell: { value } }) => <>{amount ? '****' : value}</>,
 			width: '100%',
 		},
 		{
-			Header: 'Pnl',
+			Header: t('table.pnl'),
 			accessor: 'pnl',
 			Cell: ({ cell: { value } }) => (
 				<span
@@ -100,7 +102,7 @@ export const TablePage = () => {
 			width: '100%',
 		},
 		{
-			Header: 'Roe%',
+			Header: t('table.roe'),
 			accessor: 'roe',
 			Cell: ({ cell: { value } }) => (
 				<span
@@ -114,7 +116,7 @@ export const TablePage = () => {
 			width: '100%',
 		},
 		{
-			Header: 'Actions',
+			Header: t('table.actions'),
 			accessor: 'actions',
 			Cell: ({ row }) => {
 				const isBookmarked =
@@ -195,12 +197,12 @@ export const TablePage = () => {
 			const originalPromiseResult2 = unwrapResult(resultAction2)
 
 			if (originalPromiseResult1 && originalPromiseResult2) {
-				showSuccess('Orders updated successfully!')
+				showSuccess(t('page.table.update_success'))
 			} else {
-				showError('Error updating orders! Please try again.')
+				showError(t('page.table.update_error'))
 			}
 		} catch (e) {
-			showError('Error updating orders! Please try again.')
+			showError(t('page.table.update_error'))
 			console.log(e)
 		}
 	}
@@ -237,12 +239,12 @@ export const TablePage = () => {
 				const originalPromiseResult2 = unwrapResult(resultAction2)
 
 				if (originalPromiseResult1 && originalPromiseResult2) {
-					showSuccess('Order saved successfully!')
+					showSuccess(t('page.table.save_order_success'))
 				} else {
-					showError('Error saving order! Please try again.')
+					showError(t('page.table.save_order_error'))
 				}
 			} catch (e) {
-				showError('Error saving order! Please try again.')
+				showError(t('page.table.save_order_error'))
 				console.log(e)
 			}
 		},
@@ -352,9 +354,7 @@ export const TablePage = () => {
 					toPage={goToPage}
 					sortBy={sortBy}
 					emptyWarn={
-						errorMessage ||
-						bookmarksErrorMessage ||
-						'There were no closed transactions during this period!'
+						errorMessage || bookmarksErrorMessage || t('page.table.empty')
 					}
 				/>
 			</div>

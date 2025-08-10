@@ -1,109 +1,99 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useMemo } from 'react'
 
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch'
+import { RootSelect } from '@/components/ui/inputs/RootSelect'
+import { H2 } from '@/components/ui/titles/H2'
+import i18n from '@/i18n'
 import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+	setAmount,
+	setColor,
+	setIsLoadingLanguage,
+	setIsLoadingTheme,
+	setLanguage,
+	setMark,
+	setSideBar,
+	setTheme,
+} from '@/redux/slices/settingsSlice'
 
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
-import { H2 } from '@/components/ui/titles/H2';
-import i18n from '@/i18n';
-import {
-  setAmount,
-  setColor,
-  setIsLoadingLanguage,
-  setIsLoadingTheme,
-  setLanguage,
-  setMark,
-  setSideBar,
-  setTheme,
-} from '@/redux/slices/settingsSlice';
-
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Tuning = React.memo(({ handleClickRadio }) => {
 	const dispatch = useDispatch()
-	const sidebarItemRef = useRef()
-	const [open, setOpen] = useState(false)
 	const { language, theme, mark, amount, color, sideBar } = useSelector(
 		state => state.settings
 	)
-
-	const ItemBlock = open ? InnerBlock : OuterBlock
+	const { t } = useTranslation()
 	const languageList = ['ru', 'en']
 
 	const sideBarOptions = useMemo(
 		() => [
 			{
 				id: 0,
-				name: 'open',
+				name: t('page.settings.tuning_sidebar_open'),
 				value: 'open',
 			},
 			{
 				id: 1,
-				name: 'close',
+				name: t('page.settings.tuning_sidebar_close'),
 				value: 'close',
 			},
 			{
 				id: 2,
-				name: 'unblock',
+				name: t('page.settings.tuning_sidebar_unblock'),
 				value: 'unblock',
 			},
 		],
-		[]
+		[t]
 	)
 
 	const tuningList = useMemo(
 		() => [
 			{
 				id: 0,
-				title: 'Language',
+				title: t('page.settings.tuning_language'),
 				value: 'language',
 				checked: language,
 			},
 			{
 				id: 1,
-				title: 'Dark mode',
+				title: t('page.settings.tuning_theme'),
 				value: 'dark_theme',
 				checked: theme,
 			},
 			{
 				id: 2,
-				title: 'Show shootouts',
+				title: t('page.settings.tuning_shootouts'),
 				value: 'mark',
 				checked: mark,
 			},
 			{
 				id: 3,
-				title: 'Hide amounts',
+				title: t('page.settings.tuning_amounts'),
 				value: 'amount',
 				checked: amount,
 			},
 			{
 				id: 4,
-				title: 'Highlight text',
+				title: t('page.settings.tuning_color'),
 				value: 'color',
 				checked: color,
 			},
 			{
 				id: 5,
-				title: 'Side bar',
+				title: t('page.settings.tuning_sidebar'),
 				value: 'sidebar',
 				checked: sideBar.open,
 			},
 		],
-		[language, theme, mark, amount, color, sideBar]
+		[language, theme, mark, amount, color, sideBar, t]
 	)
 
 	const switchCheckbox = useCallback(
@@ -161,37 +151,20 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 		[dispatch, language]
 	)
 
-	const toggleSidebar = () => setOpen(prev => !prev)
-
 	const handleListItemClick = useCallback(
 		item => {
-			Cookies.set('sidebar', item.value)
+			Cookies.set('sidebar', item)
 
 			dispatch(
 				setSideBar({
 					...sideBar,
 					blocked_name: item.name,
-					blocked_value: item.value,
+					blocked_value: item,
 				})
 			)
-			setOpen(false)
 		},
 		[dispatch, sideBar]
 	)
-
-	const handleClickOutside = useCallback(e => {
-		const path = e.composedPath ? e.composedPath() : e.path
-
-		if (!path.includes(sidebarItemRef.current)) {
-			setOpen(false)
-		}
-	}, [])
-
-	useEffect(() => {
-		document.body.addEventListener('click', handleClickOutside)
-
-		return () => document.body.removeEventListener('click', handleClickOutside)
-	}, [handleClickOutside])
 
 	return (
 		<OuterBlock>
@@ -207,10 +180,10 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 
 				<label htmlFor='tuning_accordion' className={styles.tuning_header}>
 					<H2>
-						<span>Your settings</span>
+						<span>{t('page.settings.tuning_accordion_title')}</span>
 					</H2>
 
-					<ControlButton text={<i></i>} onClickBtn={() => console.log('')} />
+					<ControlButton text={<i></i>} />
 				</label>
 
 				<ul className={styles.tuning_list}>
@@ -254,36 +227,16 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 											})}
 									</ul>
 								) : item?.value === 'sidebar' ? (
-									<div ref={sidebarItemRef} className={styles.tuning_sidebar}>
-										<ItemBlock>
-											<div
-												onClick={toggleSidebar}
-												className={styles.tuning_sidebar_head}
-											>
-												<RootDesc>
-													<span>{sideBar.blocked_name}</span>
-												</RootDesc>
-											</div>
-										</ItemBlock>
-
-										<div
-											className={`${styles.tuning_sidebar_list} ${
-												open ? styles.tuning_sidebar_list_active : ''
-											}`}
-										>
-											{sideBarOptions.map(item => (
-												<div
-													className={styles.tuning_sidebar_item}
-													onClick={() => handleListItemClick(item)}
-													key={item.id}
-												>
-													<RootDesc>
-														<span>{item.name}</span>
-													</RootDesc>
-												</div>
-											))}
-										</div>
-									</div>
+									<RootSelect
+										className={styles.tuning_sidebar}
+										options={sideBarOptions}
+										value={sideBar.blocked_value}
+										onChange={val => {
+											handleListItemClick(val)
+										}}
+										getLabel={item => item.name}
+										getValue={item => item.value}
+									/>
 								) : (
 									<CheckboxSwitch
 										name={item?.value}

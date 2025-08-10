@@ -1,16 +1,19 @@
+import React from 'react'
+
+import { useTranslation } from 'react-i18next'
+
 import { PageLayout } from '@/components/layouts/PageLayout'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
 import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
 import { ContactForm } from '@/components/ui/general/ContactForm'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
 import { Socials } from '@/components/ui/general/Socials'
-import { Loader } from '@/components/ui/general/Loader'
-
-import React from 'react'
 
 import styles from './styles.module.scss'
 
 export const ContactsPage = React.memo(() => {
+	const { t } = useTranslation()
+
 	return (
 		<PageLayout chartWidth={600} filter={false}>
 			<div className={styles.contacts_wrapper}>
@@ -26,18 +29,13 @@ export const ContactsPage = React.memo(() => {
 			<OuterBlock>
 				<DescLayout
 					icon={'contacts'}
-					title={<>Still have questions?</>}
+					title={t('page.contacts.title')}
 					description={
-						<>
-							Have a question or require specialist assistance? <br /> Contact
-							our dedicated customer service team <br /> who are available 24/7
-							to assist you!
-							<br />
-							<br />
-							Please fill out the form, we will be glad to hear your opinion
-							<br />
-							or write to us on social networks and email!
-						</>
+						<span
+							dangerouslySetInnerHTML={{
+								__html: t('page.contacts.description'),
+							}}
+						/>
 					}
 				>
 					<div className={styles.contacts_desc_bottom}>

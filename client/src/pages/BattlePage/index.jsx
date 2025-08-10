@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 
 import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
@@ -33,6 +34,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 import styles from './styles.module.scss'
 
 export const BattlePage = () => {
+	const { t } = useTranslation()
 	const { openPopup } = usePopup()
 	const location = useLocation()
 	const dispatch = useDispatch()
@@ -55,7 +57,7 @@ export const BattlePage = () => {
 
 	const columns = [
 		{
-			Header: 'Avatar',
+			Header: t('table.avatar'),
 			accessor: 'cover',
 			Cell: ({ cell: { value } }) => (
 				<img
@@ -72,7 +74,7 @@ export const BattlePage = () => {
 			width: 100,
 		},
 		{
-			Header: 'Name',
+			Header: t('table.name'),
 			accessor: row => `${row.name} ${row.last_name}`,
 			width: '100%',
 			Cell: ({ cell: { value }, row }) => (
@@ -82,19 +84,19 @@ export const BattlePage = () => {
 			),
 		},
 		{
-			Header: 'Level',
+			Header: t('table.level'),
 			accessor: 'level',
 			Cell: ({ cell: { value } }) => <>{capitalize(value.name)}</>,
 			width: '100%',
 		},
 		{
-			Header: 'Score',
+			Header: t('table.score'),
 			accessor: 'level.value',
 			Cell: ({ cell: { value } }) => <>{value}</>,
 			width: '100%',
 		},
 		{
-			Header: 'Roe%',
+			Header: t('table.roe'),
 			accessor: 'roe',
 			Cell: ({ cell: { value = '0.0000' } }) => (
 				<span
@@ -108,7 +110,7 @@ export const BattlePage = () => {
 			width: '100%',
 		},
 		{
-			Header: 'Actions',
+			Header: t('table.actions'),
 			accessor: 'actions',
 			Cell: ({ row }) => (
 				<div
@@ -178,16 +180,16 @@ export const BattlePage = () => {
 				const originalPromiseResult2 = unwrapResult(resultAction2)
 
 				if (originalPromiseResult1 && originalPromiseResult2) {
-					showSuccess('User removed from tournament!')
+					showSuccess(t('page.battle.remove_user_success'))
 				} else {
-					showError('Error removing user from tournament! Please try again.')
+					showError(t('page.battle.remove_user_error'))
 				}
 			} catch (e) {
-				console.log('Remove tournament user error:', e)
+				console.log(e)
 				if (e?.payload?.message) {
 					showError(e.payload.message)
 				} else {
-					showError('Error removing user from tournament! Please try again.')
+					showError(t('page.battle.remove_user_error'))
 				}
 			}
 		},
@@ -216,12 +218,12 @@ export const BattlePage = () => {
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
-				showSuccess('Tournament updated successfully!')
+				showSuccess(t('page.battle.update_success'))
 			} else {
-				showError('Error updating tournament! Please try again.')
+				showError(t('page.battle.update_error'))
 			}
 		} catch (e) {
-			showError('Error updating tournament! Please try again.')
+			showError(t('page.battle.update_error'))
 			console.log(e)
 		}
 	}
@@ -234,7 +236,7 @@ export const BattlePage = () => {
 		try {
 			const resultAction = await dispatch(
 				addTournamentUser({
-					exchange: capitalize(exchange.name),
+					exchange: exchange.name,
 					email: user.email,
 					id: user?.id,
 				})
@@ -242,12 +244,12 @@ export const BattlePage = () => {
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
-				showSuccess('You have joined the tournament!')
+				showSuccess(t('page.battle.join_user_success'))
 			} else {
-				showError('Error joining tournament! Please try again.')
+				showError(t('page.battle.join_user_error'))
 			}
 		} catch (e) {
-			showError('Error joining tournament! Please try again.')
+			showError(t('page.battle.join_user_error'))
 			console.log(e)
 		}
 	}, [dispatch, exchange.name, user.email, showSuccess, showError])
@@ -264,12 +266,12 @@ export const BattlePage = () => {
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
-				showSuccess('Tournament deleted successfully!')
+				showSuccess(t('page.battle.remove_battle_success'))
 			} else {
-				showError('Error deleting tournament! Please try again.')
+				showError(t('page.battle.remove_battle_error'))
 			}
 		} catch (e) {
-			showError('Error deleting tournament! Please try again.')
+			showError(t('page.battle.remove_battle_error'))
 			console.log(e)
 		}
 	}, [dispatch, tournament, showSuccess, showError])
@@ -339,10 +341,7 @@ export const BattlePage = () => {
 					page={page}
 					toPage={goToPage}
 					sortBy={sortBy}
-					emptyWarn={
-						errorMessage ||
-						'No tournament participants found for this tournament!'
-					}
+					emptyWarn={errorMessage || t('page.battle.empty_users')}
 				/>
 			</div>
 
@@ -353,22 +352,18 @@ export const BattlePage = () => {
 						tournament?.name ? (
 							tournament?.name || ''
 						) : (
-							<>
-								Take part in the tournament <br /> for the title of the best
-								trader
-							</>
+							<span
+								dangerouslySetInnerHTML={{ __html: t('page.battle.title') }}
+							></span>
 						)
 					}
 					description={
 						tournament?.description ? (
 							tournament?.description || ''
 						) : (
-							<>
-								Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-								Explicabo, provident unde! Quasi repellendus enim minus
-								blanditiis dolore, saepe eligendi suscipit a nostrum sit,
-								deleniti in commodi nemo perferendis, error qui?
-							</>
+							<span
+								dangerouslySetInnerHTML={{ __html: t('page.battle.subtitle') }}
+							></span>
 						)
 					}
 				>
@@ -392,9 +387,8 @@ export const BattlePage = () => {
 						{user?.role === 'admin' && tournament?.name && (
 							<div className={styles.battle_desc_bottom_button_delete}>
 								<RootButton
-									// disabled={fakeUsers}
 									icon={'cross'}
-									text={'Delete tournament'}
+									text={t('button.remove_battle')}
 									onClickBtn={handleClickDeleteTournament}
 								/>
 							</div>
@@ -402,9 +396,8 @@ export const BattlePage = () => {
 
 						{user?.role === 'admin' && !tournament?.name && (
 							<RootButton
-								// disabled={fakeUsers}
 								onClickBtn={handleClickNewTournament}
-								text={'New tournament'}
+								text={t('button.new_battle')}
 								icon={'join'}
 							/>
 						)}
@@ -413,16 +406,16 @@ export const BattlePage = () => {
 							<RootButton
 								disabled={alreadyJoined || registrationClosed}
 								onClickBtn={handleClickJoin}
-								text={'Join'}
+								text={t('button.join')}
 								icon={'join'}
 							>
 								{(alreadyJoined || registrationClosed) && (
 									<ClosedContent
 										title={
 											alreadyJoined
-												? 'You have already joined this tournament!'
+												? t('closed_title.already_joined')
 												: registrationClosed
-												? 'Registration is closed!'
+												? t('closed_title.registr_closed')
 												: ''
 										}
 										width={30}

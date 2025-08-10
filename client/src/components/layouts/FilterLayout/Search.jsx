@@ -1,26 +1,17 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { Input } from '@/components/ui/inputs/Input';
-import {
-  getBybitTickers,
-  setSearch,
-} from '@/redux/slices/filtersSlice';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { Input } from '@/components/ui/inputs/Input'
+import { getBybitTickers, setSearch } from '@/redux/slices/filtersSlice'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Search = React.memo(({ inputSearch, setInputSearch }) => {
+	const { t } = useTranslation()
 	const [open, setOpen] = useState(false)
 	const { tickers } = useSelector(state => state.filters)
 	const { exchange } = useSelector(state => state.filters)
@@ -77,7 +68,7 @@ export const Search = React.memo(({ inputSearch, setInputSearch }) => {
 			<Input
 				type='text'
 				id='search-input'
-				placeholder='All USDT-PERP'
+				placeholder={t('filter.search.placeholder')}
 				value={inputSearch}
 				onChange={filteredTickers.length <= 0 ? undefined : onChangeTicker}
 				disabled={filteredTickers.length <= 0}
@@ -101,7 +92,7 @@ export const Search = React.memo(({ inputSearch, setInputSearch }) => {
 				) : (
 					<li>
 						<RootDesc>
-							<span>{inputSearch ? 'No results found' : 'Error'}</span>
+							<span>{inputSearch ? t('filter.search.empty') : ''}</span>
 						</RootDesc>
 					</li>
 				)}

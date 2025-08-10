@@ -10,6 +10,7 @@ import {
 	Tooltip,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import styles from './styles.module.scss'
@@ -17,6 +18,7 @@ import styles from './styles.module.scss'
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, Title)
 
 export const BarChart = React.memo(() => {
+	const { t } = useTranslation()
 	const { theme, width, isMobile } = useSelector(state => state.settings)
 	const { fakePositions, ordersByDay, serverStatus } = useSelector(
 		state => state.positions
@@ -68,7 +70,7 @@ export const BarChart = React.memo(() => {
 					: ordersByDay.map(order => order.day),
 			datasets: [
 				{
-					label: 'Profit (PNL)',
+					label: t('page.diary.chart_label'),
 					data:
 						serverStatus === 'error'
 							? fakeOrdersByDay.map(order => order.net_profit)
@@ -90,6 +92,7 @@ export const BarChart = React.memo(() => {
 			allNetProfitZero,
 			fakeOrdersByDay,
 			serverStatus,
+			t,
 		]
 	)
 

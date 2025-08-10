@@ -2,25 +2,112 @@
 	"logo": {
 		"analyze_earn": "анализируй и зарабатывай"
 	},
+	"sidebar": {
+		"wallet": "Кошелек",
+		"diary": "Дневник",
+		"table": "Таблица",
+		"bookmarks": "Закладки",
+		"battle": "Турниры",
+		"users": "Пользователи",
+		"settings": "Настройки",
+		"contacts": "Контакты",
+		"profile": "Профиль",
+		"back_to": "Вернуться",
+		"theme": "Темная тема",
+		"logout": "Выйти"
+	},
+	"dropzone": {
+		"title": "Перетащите файл для загрузки",
+		"or": "или",
+		"error": "Размер файла превышает лимит!",
+		"max_size": "Макс. размер файла:",
+		"support": "Поддерживаемые типы файлов:"
+	},
 	"footer": {
 		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo.",
 		"terms": "Условия использования",
 		"privacy": "Политика конфиденциальности",
 		"copyright": "© 2024. Создано с любовью, Mastero4ek."
 	},
+	"table": {
+		"sort_by": "Сортировка по",
+		"avatar": "Аватар",
+		"name": "Имя",
+		"email": "Email",
+		"created_at": "Создано",
+		"updated_at": "Обновлено",
+		"actions": "Действия",
+		"level": "Уровень",
+		"score": "Счет",
+		"roe": "Roe%",
+		"symbol": "Символ",
+		"closed_time": "Дата",
+		"direction": "Направление",
+		"qty": "Qty",
+		"margin": "Маржа",
+		"pnl": "Pnl",
+		"leverage": "Плечо",
+		"profit": "Выгода",
+		"side": "Сторона",
+		"type": "Тип",
+		"funding": "Финансирование",
+		"fee": "Платеж",
+		"balance": "Баланс"
+	},
+	"filter": {
+		"entries": {
+			"placeholder": "Записи",
+			"item": "записей"
+		},
+		"period": {
+			"week": "Неделя",
+			"month": "Месяц",
+			"quarter": "Квартал",
+			"year": "Год"
+		},
+		"search": {
+			"placeholder": "Все USDT-PERP",
+			"empty": "Результаты не найдены"
+		}
+	},
 	"button": {
 		"sign_in": "Войти",
 		"sign_up": "Зарегистрироваться",
-		"submit": "Отправить"
+		"submit": "Отправить",
+		"save": "Сохранить",
+		"remove": "Удалить",
+		"browse_file": "Обзор файла",
+		"admin_yes_remove": "Да, УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ!",
+		"user_yes_remove": "Да, УДАЛИТЬ!",
+		"create_user": "Создать пользователя",
+		"remove_battle": "Удалить турнир",
+		"new_battle": "Новый турнир",
+		"create_battle": "Создать турнир",
+		"join": "Присоединиться",
+		"remove_cover": "Удалить изображение",
+		"details": "Детали"
+	},
+	"closed_title": {
+		"already_joined": "Вы уже присоединились к этому турниру!",
+		"registr_closed": "Регистрация закрыта!"
 	},
 	"form": {
 		"label": {
 			"name": "Ваше имя",
+			"battle_name": "Название турнира",
 			"email": "Ваш email",
 			"subject": "Тема",
 			"message": "Сообщение",
 			"password": "Пароль",
-			"confirm_password": "Повторить пароль"
+			"confirm_password": "Повторить пароль",
+			"user_email": "Email пользователя",
+			"account_email": "Email аккаунта",
+			"exchange": "Биржа",
+			"cover": "Изображение",
+			"description": "Описание",
+			"registr_date": "Дата регистрации",
+			"start_date": "Дата начала",
+			"end_date": "Дата окончания"
 		},
 		"error": {
 			"name": "Имя обязательно!",
@@ -28,7 +115,21 @@
 			"subject": "Тема обязательна!",
 			"message": "Сообщение обязательно!",
 			"password": "Пароль обязателен!",
-			"confirm_password": "Подтверждение обязательно!"
+			"confirm_password": "Подтверждение обязательно!",
+			"api_key": "Api ключ обязателен!",
+			"secret_key": "Secret ключ обязателен!"
+		},
+		"placeholder": {
+			"api_key": "Api ключ",
+			"secret_key": "Secret ключ",
+			"name": "Имя",
+			"last_name": "Фамилия",
+			"email": "Email",
+			"password": "Пароль"
+		},
+		"warning": {
+			"create_password": "Создайте пароль для входа!",
+			"create_user_password": "Создайте пароль для пользователя!"
 		}
 	},
 	"user_default": {
@@ -157,6 +258,135 @@
 				"title": "Есть вопросы?",
 				"subtitle": "Имеете вопрос или нуждаетесь в специализированной помощи? <br /> Свяжитесь с нашей командой поддержки, которая работает 24/7, чтобы помочь вам! <br/><br/>Пожалуйста, заполните форму, мы будем рады услышать ваше мнение или написашите нам на email!"
 			}
+		},
+		"contacts": {
+			"title": "Остались вопросы?",
+			"description": "Имеете вопрос или нуждаетесь в специализированной помощи? <br /> Свяжитесь с нашей командой поддержки, которая работает 24/7, чтобы помочь вам! <br/><br/>Пожалуйста, заполните форму, мы будем рады услышать ваше мнение или написашите нам на email!"
+		},
+		"settings": {
+			"tuning_title": "Настройки приложения",
+			"tuning_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
+			"keys_title": "Подключение биржи",
+			"keys_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
+			"keys_api_title": "Api ключи",
+			"keys_removed_successfully": "Api ключ успешно удален!",
+			"keys_error_removing": "Ошибка удаления Api ключа! Попробуйте ещё раз.",
+			"keys_updated_successfully": "Api ключ успешно обновлен!",
+			"keys_error_updating": "Ошибка обновления Api ключа! Попробуйте ещё раз.",
+			"tuning_language": "Язык",
+			"tuning_theme": "Темная тема",
+			"tuning_shootouts": "Показывать буллиты",
+			"tuning_amounts": "Скрывать суммы",
+			"tuning_color": "Подсветка текста",
+			"tuning_sidebar": "Боковая панель",
+			"tuning_accordion_title": "Настройки",
+			"tuning_sidebar_open": "Открыть",
+			"tuning_sidebar_close": "Закрыть",
+			"tuning_sidebar_unblock": "Разблокировать"
+		},
+		"profile": {
+			"title": "Изменить аккаунт <br /> или удалить его навсегда",
+			"subtitle": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
+			"edit_user_action_not_available": "Изменение пользователя не доступно!",
+			"updated_successfully": "Аккаунт успешно обновлен!",
+			"error_updating": "Ошибка обновления аккаунта! Попробуйте ещё раз.",
+			"cover_removed_successfully": "Фото успешно удалено!",
+			"error_removing_cover": "Ошибка удаления фото! Попробуйте ещё раз."
+		},
+		"users": {
+			"title": "Пользователи платформы",
+			"subtitle": "Зарегистрированные пользователи платформы. Вы можете просматривать их профили и статистику.",
+			"empty_error": "За этот период пользователи не найдены!",
+			"success_update": "Пользователи успешно обновлены!",
+			"error_update": "Ошибка обновления пользователей! Попробуйте ещё раз."
+		},
+		"battle": {
+			"title": "Примите участие в турнире<br />за звание лучшего трейдера",
+			"subtitle": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo, provident unde! Quasi repellendus enim minus blanditiis dolore, saepe eligendi suscipit a nostrum sit, deleniti in commodi nemo perferendis, error qui?",
+			"remove_user_success": "Пользователь удален из турнира!",
+			"remove_user_error": "Ошибка удаления пользователя из турнира! Попробуйте ещё раз.",
+			"update_success": "Турнир успешно обновлен!",
+			"update_error": "Ошибка обновления турнира! Попробуйте ещё раз.",
+			"join_user_success": "Вы присоединились к турниру!",
+			"join_user_error": "Ошибка присоединения к турниру! Попробуйте ещё раз.",
+			"remove_battle_success": "Турнир успешно удалён!",
+			"remove_battle_error": "Ошибка удаления турнира! Попробуйте ещё раз.",
+			"empty_users": "Для этого турнира участники не найдены!",
+			"is_over": "Турнир окончен!"
+		},
+		"bookmarks": {
+			"title": "Сохраняйте и анализируйте <br /> транзакции",
+			"subtitle": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse, maxime porro harum quidem obcaecati nisi rem in voluptas corrupti alias sunt quis numquam qui rerum, voluptatem sed aperiam iure impedit. Cum aliquam libero veniam, dolorum est quod minima eum alias dolores? Nisi in nesciunt consequatur similique asperiores facere autem porro molestias consequuntur aperiam et assumenda, dolore ea mollitia a iste.",
+			"update_success": "Закладки ордеров успешно обновлены!",
+			"update_error": "Ошибка обновления закладок! Попробуйте ещё раз.",
+			"remove_order_success": "Ордер успешно удален!",
+			"remove_order_error": "Ошибка при удалении ордера! Попробуйте ещё раз.",
+			"empty": "За этот период не было сохраненных ордеров!"
+		},
+		"table": {
+			"update_success": "Ордера успешно обновлены!",
+			"update_error": "Ошибка обновления ордеров! Попробуйте ещё раз.",
+			"save_order_success": "Ордер успешно сохранен!",
+			"save_order_error": "Ошибка сохранения ордера! Попробуйте ещё раз.",
+			"empty": "За этот период не было закрытых ордеров!",
+			"chart_income": "Доход",
+			"chart_lession": "Убыток",
+			"chart_profit": "Выгода: ",
+			"chart_loss": "Потеря: "
+		},
+		"diary": {
+			"update_success": "Открытые позиции успешно обновлены!",
+			"update_error": "Ошибка обновления открытых позиций! Попробуйте ещё раз.",
+			"empty": "Открытых позиций на данный момент нет!",
+			"chart_label": "Прибыль (PNL)"
+		},
+		"wallet": {
+			"update_success": "Кошелек успешно обновлен!",
+			"update_error": "Ошибка обновления кошелька! Попробуйте ещё раз.",
+			"balance": "Баланс Кошелька",
+			"unrealized": "Нереализованный PNL",
+			"total_profit": "Общая прибыль",
+			"total_loss": "Общий убыток",
+			"net_profit": "Чистая прибыль/убыток",
+			"win_trades": "Выигрышные сделки",
+			"los_trades": "Убыточные сделки",
+			"winrate": "Винрейт",
+			"overview": "Обзор",
+			"chart_label": "Баланс кошелька в USDT",
+			"chart_label_trans": "Транзакции:",
+			"warning": "Вы можете просматривать записи за последние 180 дней."
+		},
+		"wallet_details": {
+			"update_success": "Транзакции успешно обновлены!",
+			"update_error": "Ошибка обновления транзакций! Попробуйте ещё раз.",
+			"empty": "За этот период транзакций не было!",
+			"label": {
+				"in": "Перевод в кошелек",
+				"out": "Перевод из кошелька",
+				"trade": "Торговая операция",
+				"settlement": "Расчет по финансированию",
+				"delivery": "Поставка",
+				"liquidation": "Ликвидация",
+				"adl": "Автоматическое снижение плеча",
+				"Airdrop": "Аирдроп",
+				"bonus": "Полученный бонус",
+				"recollect": "Истекший бонус",
+				"fee": "Возврат комиссии",
+				"interest": "Проценты по займу",
+				"buy": "Покупка валюты",
+				"sell": "Продажа валюты",
+				"deducation": "Автоматическое списание"
+			}
+		},
+		"position": {
+			"direction": "Направление",
+			"leverage": "Плечо",
+			"qty": "Колличество",
+			"margin": "Маржа",
+			"pnl": "Pnl",
+			"roe": "Roe",
+			"open_time": "Время открытия",
+			"closed_time": "Время закрытия"
 		}
 	},
 	"popup": {
@@ -180,10 +410,30 @@
 			"forgot": "Забыли свой пароль?"
 		},
 		"forgot": {
-			"title": "Дорогой друг!",
+			"title": "Дорогой друг",
 			"subtitle": "Чтобы изменить пароль, введите email адрес,<br/> указанный при регистрации вашей учётной записи.<br/><br/> На этот адрес будут отправлены инструкции по восстановлению пароля.",
 			"success": "Инструкция по восстановлению пароля отправлена на вашу электронную почту!",
 			"error": "Ошибка отправки письма! Попробуйте ещё раз."
+		},
+		"avatar_user": {
+			"title": "Загрузите<br/>изображение",
+			"subtitle": "Выберите и загрузите изображение,<br/>которое будет использоваться в вашем профиле."
+		},
+		"remove_user": {
+			"title": "Дорогой ",
+			"admin_success": "Пользователь успешно удален!",
+			"user_success": "Аккаунт успешно удален!",
+			"admin_error": "Пользователь не удалён! Попробуйте ещё раз.",
+			"user_error": "Аккаунт не удалён! Попробуйте ещё раз.",
+			"admin_subtitle": "Вы уверены, что хотите удалить эту учётную запись?<br/>После удаления учётной записи пути назад уже не будет.",
+			"user_subtitle": "Введите адрес электронной почты,<br/>на который зарегистрирована эта учётная запись, чтобы удалить её!<br/>После удаления учётной записи пути назад уже не будет.",
+			"admin_description": "Вы действительно хотите удалить эту учетную запись пользователя НАВСЕГДА?",
+			"user_description": "Вы действительно хотите удалить эту учетную запись НАВСЕГДА?"
+		},
+		"new_battle": {
+			"title": "Создать турнир",
+			"create_success": "Турнир успешно создан!",
+			"create_error": "Ошибка создания турнира! Попробуйте ещё раз."
 		}
 	}
 }

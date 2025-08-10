@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 
 import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
@@ -17,6 +18,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 
 export const WalletDetailsPage = React.memo(() => {
 	const dispatch = useDispatch()
+	const { t } = useTranslation()
 
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const {
@@ -33,21 +35,21 @@ export const WalletDetailsPage = React.memo(() => {
 
 	const getTransactionTypeLabel = type => {
 		const typeLabels = {
-			TRANSFER_IN: 'Transfer In', // Перевод в кошелек
-			TRANSFER_OUT: 'Transfer Out', // Перевод из кошелька
-			TRADE: 'Trade', // Торговая операция
-			SETTLEMENT: 'Settlement', // Расчет по финансированию
-			DELIVERY: 'Delivery', // Поставка
-			LIQUIDATION: 'Liquidation', // Ликвидация
-			ADL: 'Auto-Deleveraging', // Автоматическое снижение плеча
-			AIRDROP: 'Airdrop', // Аирдроп
-			BONUS: 'Bonus', // Полученный бонус
-			BONUS_RECOLLECT: 'Bonus Recollect', // Истекший бонус
-			FEE_REFUND: 'Fee Refund', // Возврат комиссии
-			INTEREST: 'Interest', // Проценты по займу
-			CURRENCY_BUY: 'Currency Buy', // Покупка валюты
-			CURRENCY_SELL: 'Currency Sell', // Продажа валюты
-			AUTO_DEDUCTION: 'Auto Deduction', // Автоматическое списание
+			TRANSFER_IN: t('page.wallet_details.label.in'),
+			TRANSFER_OUT: t('page.wallet_details.label.out'),
+			TRADE: t('page.wallet_details.label.trade'),
+			SETTLEMENT: t('page.wallet_details.label.settlement'),
+			DELIVERY: t('page.wallet_details.label.delivery'),
+			LIQUIDATION: t('page.wallet_details.label.liquidation'),
+			ADL: t('page.wallet_details.label.adl'),
+			AIRDROP: t('page.wallet_details.label.airdrop'),
+			BONUS: t('page.wallet_details.label.bonus'),
+			BONUS_RECOLLECT: t('page.wallet_details.label.recollect'),
+			FEE_REFUND: t('page.wallet_details.label.fee'),
+			INTEREST: t('page.wallet_details.label.interest'),
+			CURRENCY_BUY: t('page.wallet_details.label.buy'),
+			CURRENCY_SELL: t('page.wallet_details.label.sell'),
+			AUTO_DEDUCTION: t('page.wallet_details.label.deducation'),
 		}
 
 		return typeLabels[type] || type || ''
@@ -55,7 +57,7 @@ export const WalletDetailsPage = React.memo(() => {
 
 	const columns = [
 		{
-			Header: 'Date',
+			Header: t('table.closed_time'),
 			accessor: 'transactionTime',
 			Cell: ({ cell: { value }, row: { original } }) => (
 				<span>
@@ -65,13 +67,13 @@ export const WalletDetailsPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Symbol',
+			Header: t('table.symbol'),
 			accessor: 'symbol',
 			Cell: ({ cell: { value } }) => <span>{value || '-'}</span>,
 			width: '100%',
 		},
 		{
-			Header: 'Side',
+			Header: t('table.side'),
 			accessor: 'side',
 			Cell: ({ cell: { value } }) => (
 				<div style={{ display: 'flex', alignItems: 'center' }}>
@@ -88,7 +90,7 @@ export const WalletDetailsPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Type',
+			Header: t('table.type'),
 			accessor: 'type',
 			Cell: ({ cell: { value } }) => (
 				<span>{getTransactionTypeLabel(value)}</span>
@@ -96,7 +98,7 @@ export const WalletDetailsPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Funding',
+			Header: t('table.funding'),
 			accessor: 'funding',
 			Cell: ({ cell: { value } }) => (
 				<span
@@ -110,7 +112,7 @@ export const WalletDetailsPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Fee',
+			Header: t('table.fee'),
 			accessor: 'fee',
 			Cell: ({ cell: { value } }) => (
 				<span
@@ -124,7 +126,7 @@ export const WalletDetailsPage = React.memo(() => {
 			width: '100%',
 		},
 		{
-			Header: 'Balance',
+			Header: t('table.balance'),
 			accessor: 'cashBalance',
 			Cell: ({ cell: { value } }) => (
 				<span style={{ textAlign: 'right' }}>{amount ? '****' : value}</span>
@@ -154,12 +156,12 @@ export const WalletDetailsPage = React.memo(() => {
 			const originalPromiseResult = unwrapResult(resultAction)
 
 			if (originalPromiseResult) {
-				showSuccess('Transactions updated successfully!')
+				showSuccess(t('page.wallet_details.update_success'))
 			} else {
-				showError('Error updating transactions! Please try again.')
+				showError(t('page.wallet_details.update_error'))
 			}
 		} catch (e) {
-			showError('Error updating transactions! Please try again.')
+			showError(t('page.wallet_details.update_error'))
 			console.log(e)
 		}
 	}
@@ -231,10 +233,7 @@ export const WalletDetailsPage = React.memo(() => {
 					columns={columns}
 					data={transactions}
 					fakeData={fakeTransactions}
-					emptyWarn={
-						transactionsErrorMessage ||
-						'There were no transactions during this period!'
-					}
+					emptyWarn={transactionsErrorMessage || t('page.wallet_details.empty')}
 					sortBy={sortBy}
 				/>
 			</div>

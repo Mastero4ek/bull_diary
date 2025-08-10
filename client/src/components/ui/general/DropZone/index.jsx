@@ -1,20 +1,19 @@
-import React, {
-  useCallback,
-  useState,
-} from 'react';
+import React, { useCallback, useState } from 'react'
 
-import Dropzone from 'react-dropzone';
+import Dropzone from 'react-dropzone'
+import { useTranslation } from 'react-i18next'
 
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const DropZone = React.memo(props => {
 	const { maxFiles, accept, onUpload, size, type } = props
+	const { t } = useTranslation()
 
 	const [fileInfo, setFileInfo] = useState({
 		files: [],
@@ -73,23 +72,23 @@ export const DropZone = React.memo(props => {
 							>
 								<div className={styles.dropzone_head}>
 									<RootDesc>
-										<b>Drag file to upload</b>
+										<b>{t('dropzone.title')}</b>
 									</RootDesc>
 
 									<Icon id={'upload'} />
 
 									<RootDesc>
-										<span>or</span>
+										<span>{t('dropzone.or')}</span>
 									</RootDesc>
 								</div>
 
-								<RootButton onClickBtn={() => {}} text={'Browse Files'} />
+								<RootButton text={t('button.browse_file')} />
 
 								<SmallDesc>
 									<span>
-										Max. file size: <b>5MB</b>
+										{t('dropzone.max_size')} <b>5MB</b>
 										<br />
-										Supported file types: <b>{type}</b>
+										{t('dropzone.support')} <b>{type}</b>
 									</span>
 								</SmallDesc>
 							</div>
@@ -98,7 +97,7 @@ export const DropZone = React.memo(props => {
 						{fileInfo.error && (
 							<SmallDesc>
 								<span style={{ color: 'var(--red)' }}>
-									File size exceeds the limit!
+									{t('dropzone.error')}
 								</span>
 							</SmallDesc>
 						)}

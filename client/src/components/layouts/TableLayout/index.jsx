@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useTranslation } from 'react-i18next'
 import { useTable } from 'react-table'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -11,6 +12,7 @@ import { Paginate } from './Paginate'
 import styles from './styles.module.scss'
 
 export const TableLayout = props => {
+	const { t } = useTranslation()
 	const {
 		columns,
 		fakeData,
@@ -55,7 +57,9 @@ export const TableLayout = props => {
 									<th
 										{...column.getHeaderProps()}
 										key={column.id}
-										title={`Sort by ${column.render('Header').toLowerCase()}`}
+										title={`${t('table.sort_by')} ${column
+											.render('Header')
+											.toLowerCase()}`}
 										onClick={() => (fakeData ? undefined : sortBy(column))}
 										style={
 											column.id === 'cover' ||

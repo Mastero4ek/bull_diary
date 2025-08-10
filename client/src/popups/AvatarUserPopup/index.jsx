@@ -1,13 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from 'react'
 
-import {
-  PopupDescLayout,
-} from '@/components/layouts/PopupLayout/PopupDescLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { DropZone } from '@/components/ui/general/DropZone';
+import { useTranslation } from 'react-i18next'
+
+import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { DropZone } from '@/components/ui/general/DropZone'
 
 export const AvatarUserPopup = React.memo(({ setPhotoFile }) => {
 	const { closePopup } = usePopup()
+	const { t } = useTranslation()
 
 	const uploadFile = useCallback(
 		file => {
@@ -22,8 +23,19 @@ export const AvatarUserPopup = React.memo(({ setPhotoFile }) => {
 	return (
 		<>
 			<PopupDescLayout
-				title={'Upload an image!'}
-				text={'Please select and upload an image to be used on your profile.'}
+				title={
+					<span
+						style={{ display: 'block', textAlign: 'center' }}
+						dangerouslySetInnerHTML={{ __html: t('popup.avatar_user.title') }}
+					></span>
+				}
+				text={
+					<span
+						dangerouslySetInnerHTML={{
+							__html: t('popup.avatar_user.subtitle'),
+						}}
+					></span>
+				}
 			/>
 
 			<DropZone
