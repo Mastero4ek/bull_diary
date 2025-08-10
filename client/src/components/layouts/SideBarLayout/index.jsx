@@ -195,9 +195,13 @@ export const SideBarLayout = React.memo(() => {
 									<div className={styles.sidebar_back_button}>
 										<RootButton
 											onClickBtn={handleBackClick}
-											text={`${t('sidebar.back_to')} ${
-												language === 'en' ? item.name.toLowerCase() : ''
-											}`}
+											text={
+												sideBar.open || sideBar.blocked_value === 'open'
+													? `${t('sidebar.back_to')} ${
+															language === 'en' ? item.name.toLowerCase() : ''
+													  }`
+													: ''
+											}
 											icon='back-arrow'
 										/>
 									</div>

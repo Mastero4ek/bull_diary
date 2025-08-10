@@ -45,9 +45,15 @@
 	width: 100%;
 
 	button {
+		padding: 8rem 15rem;
 		width: 100%;
 		margin: 0;
 		flex-direction: row-reverse;
+
+		svg {
+			width: 30rem;
+			height: 30rem;
+		}
 	}
 }
 
@@ -97,7 +103,7 @@
 		left: -100rem;
 		opacity: 0;
 	}
-	35% {
+	40% {
 		opacity: 0;
 	}
 	100% {
