@@ -121,7 +121,10 @@
 			"password": "Password is required!",
 			"confirm_password": "Confirm password is required!",
 			"api_key": "Api key is required!",
-			"secret_key": "Secret key is required!"
+			"secret_key": "Secret key is required!",
+			"role": "Role is required!",
+			"exchange": "Exchange is required!",
+			"battle_name": "Battle name is required!"
 		},
 		"placeholder": {
 			"api_key": "Your api key",

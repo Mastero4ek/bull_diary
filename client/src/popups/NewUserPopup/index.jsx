@@ -15,6 +15,7 @@ import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayou
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
 import { Icon } from '@/components/ui/general/Icon'
 import { InnerBlock } from '@/components/ui/general/InnerBlock'
 import { RootInput } from '@/components/ui/inputs/RootInput'
@@ -225,7 +226,7 @@ export const NewUserPopup = () => {
 							rules={{ required: true }}
 							render={({ field, fieldState }) => (
 								<RootSelect
-									arrow={true}
+									arrow={!fieldState.error}
 									className={`${styles.user_form_select} ${
 										fieldState.error ? styles.error : ''
 									}`}
@@ -236,7 +237,13 @@ export const NewUserPopup = () => {
 									getValue={item => item.value}
 								>
 									{(errors.role || findErrorField('role')) && (
-										<Icon id={'error-icon'} />
+										<>
+											<SmallDesc>
+												<p>{t('form.error.role')}</p>
+											</SmallDesc>
+
+											<Icon id={'error-icon'} />
+										</>
 									)}
 								</RootSelect>
 							)}

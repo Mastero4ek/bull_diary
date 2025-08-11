@@ -22,6 +22,10 @@
 			color: var(--primaryHov);
 		}
 	}
+
+	textarea {
+		height: 200rem;
+	}
 }
 
 .tournament_form_label {
@@ -237,6 +241,12 @@
 
 .error {
 	position: relative;
+
+	p {
+		right: 0;
+		top: -27rem;
+		position: absolute;
+	}
 
 	input {
 		border: 1rem solid var(--red);

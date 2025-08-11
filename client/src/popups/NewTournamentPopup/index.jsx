@@ -15,8 +15,10 @@ import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayou
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
 import { Icon } from '@/components/ui/general/Icon'
 import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import { RootSelect } from '@/components/ui/inputs/RootSelect'
 import { createTournament } from '@/redux/slices/tournamentSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
@@ -141,7 +143,7 @@ export const NewTournamentPopup = () => {
 							rules={{ required: true }}
 							render={({ field, fieldState }) => (
 								<RootSelect
-									arrow={true}
+									arrow={!fieldState.error}
 									className={`${styles.tournament_form_select} ${
 										fieldState.error ? styles.error : ''
 									}`}
@@ -151,7 +153,15 @@ export const NewTournamentPopup = () => {
 									getLabel={item => item.name}
 									getValue={item => item.value}
 								>
-									{fieldState.error && <Icon id='error-icon' />}
+									{fieldState.error && (
+										<>
+											<SmallDesc>
+												<p>{t('form.error.exchange')}</p>
+											</SmallDesc>
+
+											<Icon id='error-icon' />
+										</>
+									)}
 								</RootSelect>
 							)}
 						/>
@@ -199,34 +209,21 @@ export const NewTournamentPopup = () => {
 					className={styles.tournament_form_wrapper}
 					onSubmit={handleSubmit(data => submit(data))}
 				>
-					<label htmlFor='name' className={styles.tournament_form_label}>
-						<div
-							className={`${styles.tournament_form_control} ${
-								errors.name ? styles.error : ''
-							}`}
-						>
-							<RootDesc>
-								<span>{t('form.label.battle_name')}</span>
-							</RootDesc>
+					<RootInput
+						name='name'
+						label={t('form.label.battle_name')}
+						errorMessage={t('form.error.battle_name')}
+						errors={errors}
+						type='text'
+						register={register('name', { required: true })}
+					/>
 
-							{errors.name && <Icon id={'error-icon'} />}
-
-							<input type='text' {...register('name', { required: true })} />
-						</div>
-					</label>
-
-					<label
-						htmlFor='description'
-						className={`${styles.tournament_form_label}`}
-					>
-						<div className={styles.tournament_form_control}>
-							<RootDesc>
-								<span>{t('form.label.description')}</span>
-							</RootDesc>
-
-							<input type='text' {...register('description')} />
-						</div>
-					</label>
+					<RootInput
+						name='description'
+						label={t('form.label.description')}
+						type='textarea'
+						register={register('description')}
+					/>
 
 					<label
 						htmlFor='registrationDate'

@@ -63,24 +63,6 @@
 		}
 	}
 
-	input[type='checkbox'] {
-		display: none;
-
-		&:checked {
-			~ div {
-				i {
-					background: var(--bgDark);
-					box-shadow: var(--shadowInner);
-
-					svg {
-						stroke: var(--primaryHov);
-						opacity: 1;
-					}
-				}
-			}
-		}
-	}
-
 	p {
 		color: var(--red);
 	}
@@ -104,6 +86,12 @@
 	input,
 	article {
 		border: 1rem solid var(--red) !important;
+	}
+
+	p {
+		right: 0;
+		top: -27rem;
+		position: absolute;
 	}
 
 	svg {
