@@ -293,7 +293,7 @@
 			"tuning_sidebar_unblock": "Разблокировать"
 		},
 		"profile": {
-			"title": "Изменить аккаунт <br /> или удалить его навсегда",
+			"title": "Редактируйте аккаунт <br /> или удалите его навсегда",
 			"subtitle": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
 			"edit_user_action_not_available": "Изменение пользователя не доступно!",
 			"updated_successfully": "Аккаунт успешно обновлен!",

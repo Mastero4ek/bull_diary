@@ -38,7 +38,6 @@
 		padding: 25rem;
 
 		svg {
-			pointer-events: all;
 			width: 60rem;
 			height: 60rem;
 			fill: var(--text);
@@ -47,20 +46,24 @@
 			left: 50%;
 			transform: translate(-50%, -50%);
 			cursor: pointer;
+			pointer-events: none;
 			transition: all 0.15s ease-in-out;
-
-			&:hover {
-				fill: var(--primaryHov);
-			}
 		}
 	}
 
 	img {
+		cursor: pointer;
 		border-radius: 50%;
 		width: 230rem;
 		height: 230rem;
 		object-fit: cover;
 		opacity: 0.75;
+
+		&:hover {
+			& ~ svg {
+				fill: var(--primaryHov);
+			}
+		}
 	}
 }
 
@@ -135,6 +138,10 @@
 	p {
 		color: var(--red);
 	}
+
+	span {
+		opacity: 0.5;
+	}
 }
 
 .profile_form_fake_input {
@@ -164,11 +171,11 @@
 	top: -23rem;
 }
 
-.profile_info {
+.profile_info_form {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	gap: 30rem;
+	gap: 20rem;
 }
 
 .level_wrapper {

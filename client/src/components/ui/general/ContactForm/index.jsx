@@ -1,13 +1,13 @@
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootInput } from '@/components/ui/inputs/RootInput'
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootInput } from '@/components/ui/inputs/RootInput';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const ContactForm = React.memo(() => {
 	const { isAuth, user } = useSelector(state => state.candidate)
@@ -73,12 +73,7 @@ export const ContactForm = React.memo(() => {
 					register={register('message', { required: true })}
 				/>
 
-				<RootButton
-					type={'submit'}
-					onClickBtn={() => console.log('')}
-					text={t('button.submit')}
-					icon='submit'
-				/>
+				<RootButton type={'submit'} text={t('button.submit')} icon='submit' />
 			</form>
 		</div>
 	)

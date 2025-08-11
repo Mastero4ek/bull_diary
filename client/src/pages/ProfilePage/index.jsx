@@ -1,45 +1,55 @@
-import './phone_input.scss'
+import './phone_input.scss';
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import PhoneInput from 'react-phone-input-2'
-import ru from 'react-phone-input-2/lang/ru.json'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useParams } from 'react-router-dom'
-
-import avatarDefault from '@/assets/images/general/default_avatar.png'
-import { useNotification } from '@/components/layouts/NotificationLayout'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { AvatarUserPopup } from '@/popups/AvatarUserPopup'
-import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import PhoneInput from 'react-phone-input-2';
+import ru from 'react-phone-input-2/lang/ru.json';
 import {
-	editUser as editUserCandidate,
-	getUser as getUserCandidate,
-	removeCover as removeCoverCandidate,
-	setChangeUser as setChangeUserCandidate,
-	setPhone as setPhoneCandidate,
-} from '@/redux/slices/candidateSlice'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 import {
-	editUser as editUserUsers,
-	getUser as getUserUsers,
-	removeCover as removeCoverUsers,
-	setChangeUser as setChangeUserUsers,
-	setPhone as setPhoneUsers,
-} from '@/redux/slices/usersSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 
-import { Level } from './Level'
-import styles from './styles.module.scss'
+import avatarDefault from '@/assets/images/general/default_avatar.png';
+import { useNotification } from '@/components/layouts/NotificationLayout';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { AvatarUserPopup } from '@/popups/AvatarUserPopup';
+import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
+import {
+  editUser as editUserCandidate,
+  getUser as getUserCandidate,
+  removeCover as removeCoverCandidate,
+  setChangeUser as setChangeUserCandidate,
+  setPhone as setPhoneCandidate,
+} from '@/redux/slices/candidateSlice';
+import {
+  editUser as editUserUsers,
+  getUser as getUserUsers,
+  removeCover as removeCoverUsers,
+  setChangeUser as setChangeUserUsers,
+  setPhone as setPhoneUsers,
+} from '@/redux/slices/usersSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import { Level } from './Level';
+import styles from './styles.module.scss';
 
 export const ProfilePage = React.memo(() => {
 	const { t } = useTranslation()
@@ -261,7 +271,7 @@ export const ProfilePage = React.memo(() => {
 	return (
 		<PageLayout
 			chartWidth={600}
-			filter={isAdminContext ? true : false}
+			filter={false}
 			entries={true}
 			periods={true}
 			disabled={true}
@@ -273,6 +283,7 @@ export const ProfilePage = React.memo(() => {
 							<div className={styles.profile_photo}>
 								<InnerBlock>
 									<img
+										onClick={handleClickChangePhoto}
 										style={{
 											opacity: changeUser?.cover || photoFile ? 1 : 0.75,
 										}}
@@ -280,9 +291,9 @@ export const ProfilePage = React.memo(() => {
 										alt='avatar'
 									/>
 
-									<div onClick={handleClickChangePhoto}>
+									{!changeUser?.cover && !photoFile && (
 										<Icon id={'change-photo'} />
-									</div>
+									)}
 								</InnerBlock>
 
 								<div className={styles.profile_photo_buttons}>
@@ -310,13 +321,13 @@ export const ProfilePage = React.memo(() => {
 								</div>
 							</div>
 
-							<form className={styles.profile_info}>
+							<form className={styles.profile_info_form}>
 								<RootInput
 									name='name'
+									label={t('form.label.name')}
 									errorMessage={t('form.error.name')}
 									errors={errors}
 									type='text'
-									placeholder={t('form.placeholder.name')}
 									register={register('name', {
 										required: true,
 										value: changeUser?.name || '',
@@ -327,7 +338,7 @@ export const ProfilePage = React.memo(() => {
 								<RootInput
 									name='last_name'
 									type='text'
-									placeholder={t('form.placeholder.last_name')}
+									label={t('form.label.last_name')}
 									register={register('last_name', {
 										value: changeUser?.last_name || '',
 										onChange: e => handleChangeField(e, 'last_name'),
@@ -335,6 +346,10 @@ export const ProfilePage = React.memo(() => {
 								/>
 
 								<label htmlFor='phone' className={styles.profile_form_label}>
+									<RootDesc>
+										<span>{t('form.label.phone')}</span>
+									</RootDesc>
+
 									<PhoneInput
 										localization={ru}
 										disableSearchIcon={true}
@@ -360,6 +375,8 @@ export const ProfilePage = React.memo(() => {
 
 								<RootInput
 									name='password'
+									label={t('form.label.password')}
+									errorMessage={t('form.error.password')}
 									warningMessage={
 										changeUser && !changeUser?.change_password
 											? t('form.warning.create_user_password')
@@ -370,13 +387,9 @@ export const ProfilePage = React.memo(() => {
 											? '********'
 											: undefined
 									}
-									errorMessage={t('form.error.password')}
-									errors={errors}
 									type='text'
 									register={{
-										...register('password', {
-											required: true,
-										}),
+										...register('password', {}),
 									}}
 								/>
 
@@ -387,7 +400,7 @@ export const ProfilePage = React.memo(() => {
 										errorMessage={t('form.error.email')}
 										errors={errors}
 										type='email'
-										placeholder={t('form.placeholder.email')}
+										label={t('form.label.email')}
 										register={register('email', {
 											required: true,
 											pattern:
@@ -399,6 +412,10 @@ export const ProfilePage = React.memo(() => {
 								) : (
 									<>
 										<label className={styles.profile_form_label}>
+											<RootDesc>
+												<span>{t('form.label.email')}</span>
+											</RootDesc>
+
 											<div className={styles.profile_form_fake_input}>
 												<RootDesc>
 													<span>{changeUser?.email || ''}</span>
