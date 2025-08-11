@@ -1,0 +1,16 @@
+.order_desc {
+	display: flex;
+	flex-direction: column;
+	gap: 20rem;
+
+	textarea {
+		height: 400rem;
+		border-radius: 20rem;
+		padding: 20rem;
+	}
+
+	button {
+		margin-right: 0;
+		margin-left: auto;
+	}
+}

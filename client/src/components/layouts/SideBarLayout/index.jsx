@@ -1,26 +1,34 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
-
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { ClosedContent } from '@/components/ui/general/ClosedContent'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { Logo } from '@/components/ui/general/logo'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch'
-import { logout } from '@/redux/slices/candidateSlice'
+import { useTranslation } from 'react-i18next';
 import {
-	setIsLoadingTheme,
-	setSideBar,
-	setTheme,
-} from '@/redux/slices/settingsSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import styles from './styles.module.scss'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { ClosedContent } from '@/components/ui/general/ClosedContent';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { Logo } from '@/components/ui/general/logo';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
+import { logout } from '@/redux/slices/candidateSlice';
+import {
+  setIsLoadingTheme,
+  setSideBar,
+  setTheme,
+} from '@/redux/slices/settingsSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import styles from './styles.module.scss';
 
 const SideBarItem = React.memo(({ item }) => {
 	const dispatch = useDispatch()
@@ -31,7 +39,9 @@ const SideBarItem = React.memo(({ item }) => {
 	const { user } = useSelector(state => state.candidate)
 
 	const handleClickItem = useCallback(async () => {
-		if (item?.link) {
+		if (item.link && item?.link === 'back') {
+			navigate(-1)
+		} else if (item?.link) {
 			navigate(item.link)
 		}
 
@@ -77,7 +87,9 @@ const SideBarItem = React.memo(({ item }) => {
 				}
 				className={`${item?.icon === 'theme' ? styles.item_theme : ''} ${
 					styles.sidebar_body_item
-				} ${isActive ? styles.active : ''}`}
+				} ${isActive ? styles.active : ''} ${
+					item?.link === 'back' ? styles.sidebar_back_button : ''
+				}`}
 			>
 				<Icon id={item?.icon} />
 
@@ -107,7 +119,6 @@ export const SideBarLayout = React.memo(() => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 	const location = useLocation()
-	const navigate = useNavigate()
 	const { user } = useSelector(state => state.candidate)
 	const { sideBar, language } = useSelector(state => state.settings)
 
@@ -145,10 +156,6 @@ export const SideBarLayout = React.memo(() => {
 		{ id: 7, name: t('sidebar.settings'), link: '/settings', icon: 'settings' },
 		{ id: 8, name: t('sidebar.contacts'), link: '/contacts', icon: 'contacts' },
 	]
-
-	const handleBackClick = useCallback(() => {
-		navigate(-1)
-	}, [navigate])
 
 	useEffect(() => {
 		if (sideBar.blocked_value === 'unblock') {
@@ -192,19 +199,19 @@ export const SideBarLayout = React.memo(() => {
 						item && (
 							<li key={item.id}>
 								{shouldShowBackButton(item) ? (
-									<div className={styles.sidebar_back_button}>
-										<RootButton
-											onClickBtn={handleBackClick}
-											text={
+									<SideBarItem
+										item={{
+											id: 0,
+											link: 'back',
+											icon: 'back-arrow',
+											name:
 												sideBar.open || sideBar.blocked_value === 'open'
 													? `${t('sidebar.back_to')} ${
 															language === 'en' ? item.name.toLowerCase() : ''
 													  }`
-													: ''
-											}
-											icon='back-arrow'
-										/>
-									</div>
+													: '',
+										}}
+									/>
 								) : (
 									<SideBarItem item={item} />
 								)}

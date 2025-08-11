@@ -1,3 +1,4 @@
+const { logger } = require('../config/logger')
 const Helpers = require('../helpers/helpers')
 const OrdersService = require('../services/orders-service')
 
@@ -116,6 +117,42 @@ class OrdersController {
 				total_profit: +total.profit,
 				total_loss: +total.loss,
 			})
+		} catch (e) {
+			next(e)
+		}
+	}
+
+	async getOrderDescription(req, res, next) {
+		try {
+			const orderId = req.params.id
+			const userId = req.user.id
+
+			const description = await OrdersService.getOrderDescription(
+				req.lng,
+				userId,
+				orderId
+			)
+
+			return res.json(description)
+		} catch (e) {
+			next(e)
+		}
+	}
+
+	async updateOrderDescription(req, res, next) {
+		try {
+			const orderId = req.params.id
+			const userId = req.user.id
+			const text = req.body.text
+
+			const description = await OrdersService.updateOrderDescription(
+				req.lng,
+				userId,
+				orderId,
+				text
+			)
+
+			return res.json(description)
 		} catch (e) {
 			next(e)
 		}

@@ -64,35 +64,35 @@ export const RootInput = ({
 				errors && (errors[name] || findErrorField(name)) && styles.label_error
 			}`}
 		>
-			<div className={styles.label_control}>
-				{label && (
+			{label && (
+				<div className={styles.label_control}>
 					<RootDesc>
 						<span>{label}</span>
 					</RootDesc>
-				)}
 
-				{errors && (errors[name] || findErrorField(name)) && (
-					<>
-						<Icon id={'error-icon'} />
+					{errors && (errors[name] || findErrorField(name)) && (
+						<>
+							<Icon id={'error-icon'} />
 
-						{errorMessage && (
+							{errorMessage && (
+								<SmallDesc>
+									<p>{errorMessage}</p>
+								</SmallDesc>
+							)}
+						</>
+					)}
+
+					{warningMessage && (
+						<>
+							<Icon id={'warning-icon'} />
+
 							<SmallDesc>
-								<p>{errorMessage}</p>
+								<p>{warningMessage}</p>
 							</SmallDesc>
-						)}
-					</>
-				)}
-
-				{warningMessage && (
-					<>
-						<Icon id={'warning-icon'} />
-
-						<SmallDesc>
-							<p>{warningMessage}</p>
-						</SmallDesc>
-					</>
-				)}
-			</div>
+						</>
+					)}
+				</div>
+			)}
 
 			{type === 'textarea' ? (
 				<textarea

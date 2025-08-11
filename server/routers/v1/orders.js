@@ -19,4 +19,16 @@ router.delete(
 	ordersController.removedOrder
 )
 
+router.get(
+	'/order/description/:id',
+	authMiddleware,
+	ordersController.getOrderDescription
+)
+
+router.patch(
+	'/order/description/:id',
+	authMiddleware,
+	ordersController.updateOrderDescription
+)
+
 module.exports = router

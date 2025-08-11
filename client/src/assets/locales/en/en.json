@@ -132,7 +132,8 @@
 			"name": "Your name",
 			"last_name": "Your last name",
 			"email": "Your email",
-			"password": "Your password"
+			"password": "Your password",
+			"order_description": "Your description..."
 		},
 		"warning": {
 			"create_password": "Create password for enter!",
@@ -318,7 +319,7 @@
 			"join_user_error": "Error joining tournament! Please try again.",
 			"remove_battle_success": "Tournament deleted successfully!",
 			"remove_battle_error": "Error deleting tournament! Please try again.",
-			"empty_users": "No tournament participants found for this tournament!",
+			"empty_users": "Tournament not found!",
 			"is_over": "Tournament is over!"
 		},
 		"bookmarks": {
@@ -393,7 +394,9 @@
 			"pnl": "Pnl",
 			"roe": "Roe",
 			"open_time": "Open time",
-			"closed_time": "Closed Time"
+			"closed_time": "Closed Time",
+			"update_desc_success": "Order description updated successfully!",
+			"update_desc_error": "Error updating order description! Please try again."
 		}
 	},
 	"popup": {

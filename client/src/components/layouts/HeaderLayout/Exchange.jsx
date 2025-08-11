@@ -40,7 +40,11 @@ export const Exchange = React.memo(() => {
 						EXCHANGES.map(tab => (
 							<React.Fragment key={tab.checked_id}>
 								<input
-									onChange={handleChangeTab}
+									onChange={
+										tab.name === 'Mexc' || tab.name === 'Okx'
+											? undefined
+											: handleChangeTab
+									}
 									type='radio'
 									name='tabs'
 									value={tab.name}

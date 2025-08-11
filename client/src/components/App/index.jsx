@@ -15,11 +15,11 @@ import { ContactsPage } from '@/pages/ContactsPage'
 import { DiaryPage } from '@/pages/DiaryPage'
 import { HomePage } from '@/pages/HomePage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
+import { PositionPage } from '@/pages/PositionPage'
 import { PrivacyPage } from '@/pages/PrivacyPage'
 import { ProfilePage } from '@/pages/ProfilePage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { TablePage } from '@/pages/TablePage'
-import { TablePositionPage } from '@/pages/TablePositionPage'
 import { TermsPage } from '@/pages/TermsPage'
 import { UsersPage } from '@/pages/UsersPage'
 import { WalletDetailsPage } from '@/pages/WalletDetailsPage'
@@ -117,13 +117,10 @@ export const App = () => {
 						<Route path='/diary/positions' element={<DiaryPage />} />
 						{/* <Route path='/diary/position/:id' element={<DiaryPositionPage />} /> */}
 						<Route path='/table/positions' element={<TablePage />} />
-						<Route path='/table/position/:id' element={<TablePositionPage />} />
+						<Route path='/table/position/:id' element={<PositionPage />} />
 						<Route path='/battle/users' element={<BattlePage />} />
 						<Route path='/bookmarks/positions' element={<BookmarksPage />} />
-						<Route
-							path='/bookmarks/position/:id'
-							element={<TablePositionPage />}
-						/>
+						<Route path='/bookmarks/position/:id' element={<PositionPage />} />
 						<Route path='/all-users' element={<UsersPage />} />
 						<Route path='/all-users/:id' element={<ProfilePage />} />
 						<Route path='/profile' element={<ProfilePage />} />

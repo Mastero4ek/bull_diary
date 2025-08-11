@@ -1,8 +1,10 @@
 const OrderDto = require('../dtos/order-dto')
 const OrderModel = require('../models/order-model')
+const DescriptionModel = require('../models/description-model')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
 const Helpers = require('../helpers/helpers')
+const { logger } = require('../config/logger')
 
 class OrdersService {
 	async savedOrder(lng = 'en', userId, order, exchange) {
@@ -176,6 +178,73 @@ class OrdersService {
 				lng,
 				'getBybitSavedOrders',
 				'errors.orders_fetch_failed'
+			)
+		}
+	}
+
+	async getOrderDescription(lng = 'en', userId, orderId) {
+		try {
+			const description = await DescriptionModel.findOne({
+				user: userId,
+				orderId,
+			})
+
+			if (!description) {
+				return { description: '' }
+			}
+
+			return { description: description.text }
+		} catch (error) {
+			Helpers.handleDatabaseError(
+				error,
+				lng,
+				'getOrderDescription',
+				'errors.order_get_description_failed'
+			)
+		}
+	}
+
+	async updateOrderDescription(lng = 'en', userId, orderId, text) {
+		try {
+			const exist_description = await DescriptionModel.findOne({
+				user: userId,
+				orderId,
+			})
+
+			let description = null
+
+			if (!exist_description && text !== '') {
+				description = await DescriptionModel.create({
+					user: userId,
+					orderId,
+					text,
+				})
+			} else if (exist_description && text !== '') {
+				description = await DescriptionModel.findOneAndUpdate(
+					{ user: userId, orderId },
+					{
+						$set: {
+							text: text,
+						},
+					},
+					{ returnDocument: 'after' }
+				)
+			} else if (exist_description && text === '') {
+				description = await DescriptionModel.findOneAndDelete({
+					user: userId,
+					orderId,
+				})
+
+				return { description: '' }
+			}
+
+			return { description: description?.text }
+		} catch (error) {
+			Helpers.handleDatabaseError(
+				error,
+				lng,
+				'getOrderDescription',
+				'errors.order_update_description_failed'
 			)
 		}
 	}

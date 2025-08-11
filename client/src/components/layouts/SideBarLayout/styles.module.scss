@@ -42,17 +42,24 @@
 }
 
 .sidebar_back_button {
-	width: 100%;
+	background-color: var(--primaryDef);
+	border-radius: inherit;
 
-	button {
-		padding: 8rem 15rem;
-		width: 100%;
-		margin: 0;
-		flex-direction: row-reverse;
+	svg {
+		fill: var(--white) !important;
+	}
 
+	span {
+		color: var(--white) !important;
+	}
+
+	&:hover {
 		svg {
-			width: 30rem;
-			height: 30rem;
+			fill: var(--white) !important;
+		}
+
+		span {
+			color: var(--white) !important;
 		}
 	}
 }
@@ -82,7 +89,7 @@
 		}
 
 		span {
-			letter-spacing: 2rem;
+			letter-spacing: 1rem;
 			color: var(--primaryHov);
 		}
 	}
@@ -92,7 +99,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-
 	gap: 20rem;
 	position: relative;
 	animation: visible 0.4s ease-in-out forwards;

@@ -132,7 +132,8 @@
 			"name": "Имя",
 			"last_name": "Фамилия",
 			"email": "Email",
-			"password": "Пароль"
+			"password": "Пароль",
+			"order_description": "Ваше описание..."
 		},
 		"warning": {
 			"create_password": "Создайте пароль для входа!",
@@ -393,7 +394,9 @@
 			"pnl": "Pnl",
 			"roe": "Roe",
 			"open_time": "Время открытия",
-			"closed_time": "Время закрытия"
+			"closed_time": "Время закрытия",
+			"update_desc_success": "Описание ордера успешно обновлено!",
+			"update_desc_error": "Ошибка обновления описания ордера! Попробуйте ещё раз."
 		}
 	},
 	"popup": {

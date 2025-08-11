@@ -286,9 +286,13 @@ class TournamentService {
 			const tournament = await TournamentModel.findOne({ exchange })
 
 			if (!tournament) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.tournament_not_found', { lng, exchange })
-				)
+				return {
+					tournament: {},
+					users: [],
+					hasMore: false,
+					nextCursor: null,
+					message: i18next.t('errors.tournament_not_found', { lng }),
+				}
 			}
 
 			const skip = (parseInt(page) - 1) * parseInt(size)

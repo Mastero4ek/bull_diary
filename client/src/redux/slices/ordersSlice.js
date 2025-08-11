@@ -27,8 +27,35 @@ export const getBybitOrdersPnl = createAsyncThunk(
 	}
 )
 
+export const getOrderDescription = createAsyncThunk(
+	'get-order-description',
+	async ({ id }, { rejectWithValue }) => {
+		try {
+			const response = await OrdersService.getOrderDescription(id)
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
+export const updateOrderDescription = createAsyncThunk(
+	'update-order-description',
+	async ({ id, text }, { rejectWithValue }) => {
+		try {
+			const response = await OrdersService.updateOrderDescription(id, text)
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
 const initialState = {
 	order: null,
+	description: '',
 	fakeOrders: null,
 	orders: [],
 	page: 1,
@@ -58,6 +85,12 @@ const ordersSlice = createSlice({
 		},
 		setTotalPages(state, action) {
 			state.totalPages = action.payload
+		},
+		setDescription(state, action) {
+			state.description = action.payload
+		},
+		clearDescription(state) {
+			state.description = ''
 		},
 		clearOrders(state) {
 			state.order = null
@@ -99,6 +132,38 @@ const ordersSlice = createSlice({
 				state.totalProfit = 0
 				state.totalLoss = 0
 			})
+
+			//get-order-description
+			.addCase(getOrderDescription.pending, state => {
+				state.serverStatus = 'loading'
+				state.errorMessage = null
+			})
+			.addCase(getOrderDescription.fulfilled, (state, action) => {
+				state.serverStatus = 'success'
+				state.errorMessage = action.payload.message || null
+				state.description = action.payload.description
+			})
+			.addCase(getOrderDescription.rejected, (state, action) => {
+				state.errorMessage = action?.payload?.message
+				state.serverStatus = 'error'
+				state.description = ''
+			})
+
+			//update-order-description
+			.addCase(updateOrderDescription.pending, state => {
+				state.serverStatus = 'loading'
+				state.errorMessage = null
+			})
+			.addCase(updateOrderDescription.fulfilled, (state, action) => {
+				state.serverStatus = 'success'
+				state.errorMessage = action.payload.message || null
+				state.description = action.payload.description
+			})
+			.addCase(updateOrderDescription.rejected, (state, action) => {
+				state.errorMessage = action?.payload?.message
+				state.serverStatus = 'error'
+				state.description = ''
+			})
 	},
 })
 
@@ -109,6 +174,8 @@ export const {
 	setSort,
 	setTotalPages,
 	clearOrders,
+	clearDescription,
+	setDescription,
 } = ordersSlice.actions
 
 export default ordersSlice.reducer

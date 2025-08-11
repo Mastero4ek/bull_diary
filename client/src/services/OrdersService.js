@@ -54,6 +54,14 @@ export default class OrdersService {
 		})
 	}
 
+	static async getOrderDescription(id) {
+		return $api.get(`/v1/order/description/${id}`)
+	}
+
+	static async updateOrderDescription(id, text) {
+		return $api.patch(`/v1/order/description/${id}`, { text })
+	}
+
 	static async savedOrder(order, exchange) {
 		return $api.post(`/v1/order/${order.id}`, { order, exchange })
 	}
