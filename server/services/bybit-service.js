@@ -5,6 +5,7 @@ const BybitTransactionDto = require('../dtos/bybit-transaction-dto')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
 const Helpers = require('../helpers/helpers')
+const { logger } = require('../config/logger')
 
 class BybitService {
 	async getBybitOrdersPnl(
@@ -213,6 +214,7 @@ class BybitService {
 			await Helpers.setToCache(
 				cacheKey,
 				{
+					allOrders: orders,
 					orders: paginatedResult.items,
 					total: paginatedResult.total,
 					totalPages: paginatedResult.totalPages,
@@ -222,6 +224,7 @@ class BybitService {
 			)
 
 			return {
+				allOrders: orders,
 				orders: paginatedResult.items,
 				total: paginatedResult.total,
 				totalPages: paginatedResult.totalPages,

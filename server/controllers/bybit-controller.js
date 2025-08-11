@@ -53,7 +53,7 @@ class BybitController {
 				parsedLimit
 			)
 
-			const total = await Helpers.calculateTotalPnl(result.orders)
+			const total = await Helpers.calculateTotalPnl(result.allOrders)
 
 			const bookmarksResult = await OrdersService.getBybitSavedOrders(
 				req.lng,
