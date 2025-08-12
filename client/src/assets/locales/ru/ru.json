@@ -85,7 +85,8 @@
 		"create_battle": "Создать турнир",
 		"join": "Присоединиться",
 		"remove_cover": "Удалить изображение",
-		"details": "Детали"
+		"details": "Детали",
+		"confirm": "Подтвердить"
 	},
 	"closed_title": {
 		"already_joined": "Вы уже присоединились к этому турниру!",
@@ -277,10 +278,10 @@
 			"keys_title": "Подключение биржи",
 			"keys_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
 			"keys_api_title": "Api ключи",
-			"keys_removed_successfully": "Api ключ успешно удален!",
-			"keys_error_removing": "Ошибка удаления Api ключа! Попробуйте ещё раз.",
-			"keys_updated_successfully": "Api ключ успешно обновлен!",
-			"keys_error_updating": "Ошибка обновления Api ключа! Попробуйте ещё раз.",
+			"keys_removed_successfully": "API ключи успешно удалены!",
+			"keys_error_removing": "Ошибка удаления API ключей! Попробуйте ещё раз.",
+			"keys_updated_successfully": "Api ключи успешно обновлены!",
+			"keys_error_updating": "Ошибка обновления Api ключей! Попробуйте ещё раз.",
 			"tuning_language": "Язык",
 			"tuning_theme": "Темная тема",
 			"tuning_shootouts": "Показывать буллиты",
@@ -327,8 +328,8 @@
 			"subtitle": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse, maxime porro harum quidem obcaecati nisi rem in voluptas corrupti alias sunt quis numquam qui rerum, voluptatem sed aperiam iure impedit. Cum aliquam libero veniam, dolorum est quod minima eum alias dolores? Nisi in nesciunt consequatur similique asperiores facere autem porro molestias consequuntur aperiam et assumenda, dolore ea mollitia a iste.",
 			"update_success": "Закладки ордеров успешно обновлены!",
 			"update_error": "Ошибка обновления закладок! Попробуйте ещё раз.",
-			"remove_order_success": "Ордер успешно удален!",
-			"remove_order_error": "Ошибка при удалении ордера! Попробуйте ещё раз.",
+			"remove_order_success": "Ордер успешно удален из закладок!",
+			"remove_order_error": "Ошибка удаления ордера из закладок! Попробуйте ещё раз.",
 			"empty": "За этот период не было сохраненных ордеров!"
 		},
 		"table": {
@@ -453,6 +454,13 @@
 			"title": "Новый пользователь",
 			"create_success": "Пользователь успешно создан!",
 			"create_error": "Ошибка создания пользователя! Попробуйте ещё раз."
+		},
+		"confirm": {
+			"title": "Внимание",
+			"keys_remove_subtitle": "Вы действительно хотите полностью удалить API ключи выбранной биржи?<br/>После удаления у вас не будет доступа к ордерам, закладкам и кошельку.",
+			"bookmark_remove_subtitle": "Вы действительно хотите удалить сохраненный ордер?<br/>После удаление связанные данные (описание ордера и прочее) так же будут удалены!",
+			"tournament_user_remove_subtitle": "Вы уверены, что хотите удалить пользователя из этого турнире?<br/>Весь достигнутый прогресс пользователя будет сброшен!",
+			"tournament_remove_subtitle": "Вы уверены, что хотите удалить выбранный турнир?<br/>Все данные о турнире будут удалены<br/>и весь достигнутый прогресс пользователей будет сброшен!"
 		}
 	}
 }

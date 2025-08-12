@@ -85,7 +85,8 @@
 		"create_battle": "Create tournament",
 		"join": "Join",
 		"remove_cover": "Remove cover",
-		"details": "Details"
+		"details": "Details",
+		"confirm": "Confirm"
 	},
 	"closed_title": {
 		"already_joined": "You have already joined this tournament!",
@@ -277,8 +278,8 @@
 			"keys_title": "Connecting the exchange",
 			"keys_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
 			"keys_api_title": "Api keys",
-			"keys_removed_successfully": "Api key removed successfully!",
-			"keys_error_removing": "Error removing Api key! Please try again.",
+			"keys_removed_successfully": "Deleting API keys successfully!",
+			"keys_error_removing": "Error deleting API keys! Please try again.",
 			"keys_updated_successfully": "Api key updated successfully!",
 			"keys_error_updating": "Error updating Api key! Please try again.",
 			"tuning_language": "Language",
@@ -327,8 +328,8 @@
 			"subtitle": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse, maxime porro harum quidem obcaecati nisi rem in voluptas corrupti alias sunt quis numquam qui rerum, voluptatem sed aperiam iure impedit. Cum aliquam libero veniam, dolorum est quod minima eum alias dolores? Nisi in nesciunt consequatur similique asperiores facere autem porro molestias consequuntur aperiam et assumenda, dolore ea mollitia a iste.",
 			"update_success": "Bookmarks orders updated successfully!",
 			"update_error": "Error updating bookmarks! Please try again.",
-			"remove_order_success": "Order removed successfully!",
-			"remove_order_error": "Error removing order! Please try again.",
+			"remove_order_success": "Order successfully removed from bookmarks!",
+			"remove_order_error": "Error deleting order from bookmarks! Please try again.",
 			"empty": "There were no saved transactions during this period!"
 		},
 		"table": {
@@ -453,6 +454,13 @@
 			"title": "New User",
 			"create_success": "User created successfully!",
 			"create_error": "Error creating user! Please try again."
+		},
+		"confirm": {
+			"title": "Attention",
+			"keys_remove_subtitle": "Are you sure you want to completely delete the API keys of the selected exchange?<br/>After deletion, you will not have access to orders, bookmarks and wallet!",
+			"bookmark_remove_subtitle": "Do you really want to delete the saved order?<br/>After deleting, the associated data (order description, etc.) will also be deleted!",
+			"tournament_user_remove_subtitle": "Are you sure you want to remove the user from this tournament?<br/>All the user's progress will be reset!",
+			"tournament_remove_subtitle": "Are you sure you want to delete the selected tournament?<br/>All tournament data will be deleted and all user progress will be reset!"
 		}
 	}
 }

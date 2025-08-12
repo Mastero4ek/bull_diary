@@ -1,0 +1,9 @@
+.confirm_btn {
+	button {
+		background: var(--red);
+
+		&:hover {
+			background: var(--red);
+		}
+	}
+}

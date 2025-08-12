@@ -1,20 +1,29 @@
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { ClosedContent } from '@/components/ui/general/ClosedContent'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { updateKeys } from '@/redux/slices/candidateSlice'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { ClosedContent } from '@/components/ui/general/ClosedContent';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { ConfirmPopup } from '@/popups/ConfirmPopup';
+import { updateKeys } from '@/redux/slices/candidateSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const KeysForm = ({ exchange }) => {
+	const { openPopup } = usePopup()
 	const { user } = useSelector(state => state.candidate)
 	const dispatch = useDispatch()
 	const { showSuccess, showError } = useNotification()
@@ -28,7 +37,7 @@ export const KeysForm = ({ exchange }) => {
 		formState: { errors },
 	} = useForm()
 
-	const handleClickRemove = useCallback(
+	const removeKeys = useCallback(
 		async exchange => {
 			try {
 				const resultAction = await dispatch(
@@ -53,6 +62,16 @@ export const KeysForm = ({ exchange }) => {
 		},
 		[dispatch, showError, showSuccess]
 	)
+
+	const handleClickRemove = exchange => {
+		openPopup(
+			<ConfirmPopup
+				subtitle={t('popup.confirm.keys_remove_subtitle')}
+				onClickConfirm={() => removeKeys(exchange)}
+			/>,
+			{ shared: true }
+		)
+	}
 
 	const submit = useCallback(
 		async data => {
@@ -82,7 +101,7 @@ export const KeysForm = ({ exchange }) => {
 
 			reset()
 		},
-		[dispatch, showError, showSuccess, reset, exchange.name]
+		[dispatch, showError, showSuccess, reset, exchange.name, t]
 	)
 
 	const currentExchangeName = exchange.name.toLowerCase()
