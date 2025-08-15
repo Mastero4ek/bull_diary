@@ -18,7 +18,7 @@ export const Intro = () => {
 	}
 
 	return (
-		<section className={styles.intro}>
+		<section id='intro' className={styles.intro}>
 			<div className={styles.container_wrapper}>
 				<div className={styles.intro_wrap}>
 					<div className={styles.intro_content}>

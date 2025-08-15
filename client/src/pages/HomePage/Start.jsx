@@ -41,7 +41,7 @@ export const Start = () => {
 	]
 
 	return (
-		<section className={styles.start}>
+		<section id='start' className={styles.start}>
 			<div className={styles.container_wrapper}>
 				<div className={styles.start_wrapper}>
 					<div className={styles.start_content}>

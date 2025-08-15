@@ -249,6 +249,7 @@
 		transform: rotateX(-90deg);
 		visibility: hidden;
 		opacity: 0;
+		gap: 0 !important;
 
 		background: var(--bgLight);
 		box-shadow: var(--shadowOuter);

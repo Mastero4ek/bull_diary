@@ -1,0 +1,166 @@
+import React, { useCallback } from 'react';
+
+import Cookies from 'js-cookie';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { ClosedContent } from '@/components/ui/general/ClosedContent';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
+import i18n from '@/i18n';
+import { logout } from '@/redux/slices/candidateSlice';
+import {
+  setIsLoadingLanguage,
+  setIsLoadingTheme,
+  setLanguage,
+  setTheme,
+} from '@/redux/slices/settingsSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import styles from './styles.module.scss';
+
+export const SideBarItem = React.memo(({ item }) => {
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
+	const location = useLocation()
+
+	const { language, theme, sideBar } = useSelector(state => state.settings)
+	const { user } = useSelector(state => state.candidate)
+
+	const languageList = ['ru', 'en']
+
+	const handleClickItem = useCallback(async () => {
+		if (item.link && item?.link === 'back') {
+			navigate(-1)
+		} else if (item?.link) {
+			navigate(item.link)
+		}
+
+		if (item?.icon === 'logout') {
+			try {
+				const resultAction = await dispatch(logout())
+				const originalPromiseResult = unwrapResult(resultAction)
+
+				if (!originalPromiseResult) return
+
+				navigate('/login')
+			} catch (rejectedValueOrSerializedError) {
+				console.log(rejectedValueOrSerializedError)
+			}
+		}
+	}, [dispatch, location])
+
+	const changeTheme = useCallback(() => {
+		const currentTheme = theme === true ? false : true
+
+		dispatch(setIsLoadingTheme(true))
+		dispatch(setTheme(currentTheme))
+
+		setTimeout(() => {
+			dispatch(setIsLoadingTheme(false))
+		}, 2000)
+	}, [theme])
+
+	const changeLanguage = useCallback(
+		value => {
+			dispatch(setIsLoadingLanguage(true))
+
+			document.documentElement.setAttribute('lang', value)
+			Cookies.set('language', value)
+			i18n.changeLanguage(value)
+
+			dispatch(setLanguage(value))
+
+			setTimeout(() => {
+				dispatch(setIsLoadingLanguage(false))
+			}, 2000)
+		},
+		[dispatch, language]
+	)
+
+	const isActive = location.pathname.includes(item?.icon)
+	const ItemBlock = isActive ? InnerBlock : OuterBlock
+
+	return (
+		<ItemBlock>
+			{item?.link &&
+				item?.link.includes('battle') &&
+				user?.role !== 'admin' && <ClosedContent width={20} />}
+
+			<div
+				onClick={
+					item?.link && item?.link.includes('battle') && user?.role !== 'admin'
+						? undefined
+						: handleClickItem
+				}
+				className={`${item?.icon === 'theme' ? styles.item_theme : ''} ${
+					styles.sidebar_body_item
+				} ${isActive ? styles.active : ''} ${
+					item?.link === 'back' ? styles.sidebar_back_button : ''
+				}`}
+			>
+				<Icon id={item?.icon} />
+
+				{(sideBar.open || sideBar.blocked_value === 'open') && (
+					<div className={styles.sidebar_item_desc}>
+						<RootDesc>
+							<span>{item?.name}</span>
+						</RootDesc>
+
+						{item?.icon === 'theme' && (
+							<div style={{ marginLeft: 'auto' }}>
+								<CheckboxSwitch
+									name={'theme'}
+									onSwitch={changeTheme}
+									checked={theme}
+								/>
+							</div>
+						)}
+
+						{item?.icon === 'language' && (
+							<ul className={styles.item_language}>
+								{languageList &&
+									languageList.length > 0 &&
+									languageList.map(lang => {
+										const ItemBlock =
+											language === lang ? InnerBlock : OuterBlock
+
+										return (
+											<li key={lang}>
+												<RootDesc>
+													<ItemBlock>
+														<b
+															onClick={() => changeLanguage(lang)}
+															style={
+																language === lang
+																	? {
+																			color: 'var(--primaryDef)',
+																			pointerEvents: 'none',
+																	  }
+																	: {}
+															}
+														>
+															{lang}
+														</b>
+													</ItemBlock>
+												</RootDesc>
+											</li>
+										)
+									})}
+							</ul>
+						)}
+					</div>
+				)}
+			</div>
+		</ItemBlock>
+	)
+})

@@ -1,119 +1,17 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import {
   useDispatch,
   useSelector,
 } from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { ClosedContent } from '@/components/ui/general/ClosedContent';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
 import { Logo } from '@/components/ui/general/logo';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
-import { logout } from '@/redux/slices/candidateSlice';
-import {
-  setIsLoadingTheme,
-  setSideBar,
-  setTheme,
-} from '@/redux/slices/settingsSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { SideBarItem } from '@/components/ui/general/SideBarItem';
+import { setSideBar } from '@/redux/slices/settingsSlice';
 
 import styles from './styles.module.scss';
-
-const SideBarItem = React.memo(({ item }) => {
-	const dispatch = useDispatch()
-	const navigate = useNavigate()
-	const location = useLocation()
-
-	const { theme, sideBar } = useSelector(state => state.settings)
-	const { user } = useSelector(state => state.candidate)
-
-	const handleClickItem = useCallback(async () => {
-		if (item.link && item?.link === 'back') {
-			navigate(-1)
-		} else if (item?.link) {
-			navigate(item.link)
-		}
-
-		if (item?.icon === 'logout') {
-			try {
-				const resultAction = await dispatch(logout())
-				const originalPromiseResult = unwrapResult(resultAction)
-
-				if (!originalPromiseResult) return
-
-				navigate('/login')
-			} catch (rejectedValueOrSerializedError) {
-				console.log(rejectedValueOrSerializedError)
-			}
-		}
-	}, [dispatch, location])
-
-	const changeTheme = useCallback(() => {
-		const currentTheme = theme === true ? false : true
-
-		dispatch(setIsLoadingTheme(true))
-		dispatch(setTheme(currentTheme))
-
-		setTimeout(() => {
-			dispatch(setIsLoadingTheme(false))
-		}, 2000)
-	}, [theme])
-
-	const isActive = location.pathname.includes(item?.icon)
-	const ItemBlock = isActive ? InnerBlock : OuterBlock
-
-	return (
-		<ItemBlock>
-			{item?.link &&
-				item?.link.includes('battle') &&
-				user?.role !== 'admin' && <ClosedContent width={20} />}
-
-			<div
-				onClick={
-					item?.link && item?.link.includes('battle') && user?.role !== 'admin'
-						? undefined
-						: handleClickItem
-				}
-				className={`${item?.icon === 'theme' ? styles.item_theme : ''} ${
-					styles.sidebar_body_item
-				} ${isActive ? styles.active : ''} ${
-					item?.link === 'back' ? styles.sidebar_back_button : ''
-				}`}
-			>
-				<Icon id={item?.icon} />
-
-				{(sideBar.open || sideBar.blocked_value === 'open') && (
-					<div className={styles.sidebar_item_desc}>
-						<RootDesc>
-							<span>{item?.name}</span>
-						</RootDesc>
-
-						{item?.icon === 'theme' && (
-							<div style={{ marginLeft: 'auto' }}>
-								<CheckboxSwitch
-									name={'theme'}
-									onSwitch={changeTheme}
-									checked={theme}
-								/>
-							</div>
-						)}
-					</div>
-				)}
-			</div>
-		</ItemBlock>
-	)
-})
 
 export const SideBarLayout = React.memo(() => {
 	const { t } = useTranslation()

@@ -31,7 +31,7 @@ class OrdersService {
 				quality: order.quality,
 				margin: order.margin,
 				pnl: order.pnl,
-				roe: order.roe,
+				roi: order.roi,
 			})
 
 			const order_dto = new OrderDto(new_order)

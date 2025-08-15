@@ -1,32 +1,46 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import moment from 'moment/min/moment-with-locales'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
-
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { TableLayout } from '@/components/layouts/TableLayout'
-import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { Loader } from '@/components/ui/general/Loader'
-import { Mark } from '@/components/ui/general/Mark'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { capitalize } from '@/helpers/functions'
+import moment from 'moment/min/moment-with-locales';
+import { useTranslation } from 'react-i18next';
 import {
-	clearOrders as clearBookmarksOrders,
-	getBybitSavedOrders,
-	savedOrder,
-} from '@/redux/slices/bookmarksOrdersSlice'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 import {
-	clearOrders,
-	getBybitOrdersPnl,
-	setPage,
-	setSort,
-} from '@/redux/slices/ordersSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import { DoughnutChart } from './DougnutChart'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { TableLayout } from '@/components/layouts/TableLayout';
+import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { Loader } from '@/components/ui/general/Loader';
+import { Mark } from '@/components/ui/general/Mark';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import {
+  capitalize,
+  colorizedNum,
+} from '@/helpers/functions';
+import {
+  clearOrders as clearBookmarksOrders,
+  getBybitSavedOrders,
+  savedOrder,
+} from '@/redux/slices/bookmarksOrdersSlice';
+import {
+  clearOrders,
+  getBybitOrdersPnl,
+  setPage,
+  setSort,
+} from '@/redux/slices/ordersSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import { DoughnutChart } from './DougnutChart';
 
 export const TablePage = () => {
 	const { t } = useTranslation()
@@ -66,11 +80,15 @@ export const TablePage = () => {
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
-			Cell: ({ cell: { value } }) => (
+			Cell: ({ cell: { value }, row: { original } }) => (
 				<div style={{ display: 'flex', alignItems: 'center' }}>
 					{mark && <Mark color={value === 'long' ? 'green' : 'red'} />}
 
-					{capitalize(value)}
+					{capitalize(value === 'long' ? t('table.buy') : t('table.sell'))}
+
+					{/* <span style={{ display: 'block', marginLeft: '6rem' }}>
+						{original.leverage}X
+					</span> */}
 				</div>
 			),
 			width: '100%',
@@ -92,25 +110,37 @@ export const TablePage = () => {
 			accessor: 'pnl',
 			Cell: ({ cell: { value } }) => (
 				<span
-					style={
-						color ? { color: `var(--${value < 0 ? 'red' : 'green'})` } : {}
-					}
+					style={{
+						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+					}}
 				>
-					{amount ? '****' : value}
+					{amount
+						? '****'
+						: value === 0
+						? '0.0000'
+						: value > 0
+						? `+${value}`
+						: value}
 				</span>
 			),
 			width: '100%',
 		},
 		{
-			Header: t('table.roe'),
-			accessor: 'roe',
+			Header: t('table.roi'),
+			accessor: 'roi',
 			Cell: ({ cell: { value } }) => (
 				<span
-					style={
-						color ? { color: `var(--${value < 0 ? 'red' : 'green'})` } : {}
-					}
+					style={{
+						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+					}}
 				>
-					{amount ? '****' : value}
+					{amount
+						? '****'
+						: value === 0
+						? '0.0000'
+						: value > 0
+						? `+${value}`
+						: value}
 				</span>
 			),
 			width: '100%',

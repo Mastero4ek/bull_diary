@@ -25,7 +25,10 @@ import { ControlButton } from '@/components/ui/buttons/ControlButton';
 import { Loader } from '@/components/ui/general/Loader';
 import { Mark } from '@/components/ui/general/Mark';
 import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { capitalize } from '@/helpers/functions';
+import {
+  capitalize,
+  colorizedNum,
+} from '@/helpers/functions';
 import { ConfirmPopup } from '@/popups/ConfirmPopup';
 import {
   clearOrders,
@@ -75,7 +78,7 @@ export const BookmarksPage = React.memo(() => {
 				<div style={{ display: 'flex', alignItems: 'center' }}>
 					{mark && <Mark color={value === 'long' ? 'green' : 'red'} />}
 
-					{capitalize(value)}
+					{capitalize(value === 'long' ? t('table.buy') : t('table.sell'))}
 				</div>
 			),
 			width: '100%',
@@ -97,25 +100,37 @@ export const BookmarksPage = React.memo(() => {
 			accessor: 'pnl',
 			Cell: ({ cell: { value } }) => (
 				<span
-					style={
-						color ? { color: `var(--${value < 0 ? 'red' : 'green'})` } : {}
-					}
+					style={{
+						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+					}}
 				>
-					{amount ? '****' : value}
+					{amount
+						? '****'
+						: value === 0
+						? '0.0000'
+						: value > 0
+						? `+${value}`
+						: value}
 				</span>
 			),
 			width: '100%',
 		},
 		{
-			Header: t('table.roe'),
-			accessor: 'roe',
+			Header: t('table.roi'),
+			accessor: 'roi',
 			Cell: ({ cell: { value } }) => (
 				<span
-					style={
-						color ? { color: `var(--${value < 0 ? 'red' : 'green'})` } : {}
-					}
+					style={{
+						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+					}}
 				>
-					{amount ? '****' : value}
+					{amount
+						? '****'
+						: value === 0
+						? '0.0000'
+						: value > 0
+						? `+${value}`
+						: value}
 				</span>
 			),
 			width: '100%',

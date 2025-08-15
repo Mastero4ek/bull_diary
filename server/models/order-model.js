@@ -12,7 +12,7 @@ const OrderSchema = new Schema({
 	quality: { type: Number, required: true },
 	margin: { type: Number, required: true },
 	pnl: { type: Number, required: true },
-	roe: { type: Number, required: true },
+	roi: { type: Number, required: true },
 })
 
 module.exports = model('Order', OrderSchema)

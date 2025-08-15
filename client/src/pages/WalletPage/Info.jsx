@@ -1,26 +1,30 @@
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import bear from '@/assets/images/levels/bear.png'
-import bull from '@/assets/images/levels/bull.png'
-import hamster from '@/assets/images/levels/hamster.png'
-import shark from '@/assets/images/levels/shark.png'
-import whale from '@/assets/images/levels/whale.png'
-import { SharedButton } from '@/components/ui/buttons/SharedButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { ErrorTable } from '@/components/ui/general/ErrorTable'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { H2 } from '@/components/ui/titles/H2'
-import { SharedWalletPopup } from '@/popups/SharedWalletPopup'
+import bear from '@/assets/images/levels/bear.png';
+import bull from '@/assets/images/levels/bull.png';
+import hamster from '@/assets/images/levels/hamster.png';
+import shark from '@/assets/images/levels/shark.png';
+import whale from '@/assets/images/levels/whale.png';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { SharedButton } from '@/components/ui/buttons/SharedButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { ErrorTable } from '@/components/ui/general/ErrorTable';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { H2 } from '@/components/ui/titles/H2';
+import { SharedWalletPopup } from '@/popups/SharedWalletPopup';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 const levelImages = { hamster, bear, bull, shark, whale }
 
 export const Info = React.memo(() => {
+	const navigate = useNavigate()
+
 	const { t } = useTranslation()
 	const { user } = useSelector(state => state.candidate)
 	const { color, amount } = useSelector(state => state.settings)
@@ -98,6 +102,14 @@ export const Info = React.memo(() => {
 						<InnerBlock>
 							<img src={currentLevel()} alt='level-image' />
 						</InnerBlock>
+
+						<RootButton
+							icon={'details'}
+							text={t('button.details')}
+							onClickBtn={() => {
+								navigate('/wallet/details')
+							}}
+						/>
 					</div>
 
 					<div className={styles.info_stats}>
@@ -122,7 +134,7 @@ export const Info = React.memo(() => {
 										</RootDesc>
 
 										<RootDesc>
-											{stat?.type === 'balance' && stat?.type === 'pnl' ? (
+											{stat?.type === 'balance' || stat?.type === 'pnl' ? (
 												<>
 													<b
 														style={
@@ -137,7 +149,8 @@ export const Info = React.memo(() => {
 													>
 														{amount ? '******' : stat?.value}{' '}
 													</b>
-													<b>USDT</b>
+
+													<b>{stat?.type === 'balance' ? 'USD' : 'USDT'}</b>
 												</>
 											) : stat?.type === 'win_trades' ||
 											  stat?.type === 'los_trades' ? (
@@ -166,6 +179,7 @@ export const Info = React.memo(() => {
 													>
 														{amount ? '******' : stat?.value}{' '}
 													</span>
+
 													<span>USDT</span>
 												</>
 											)}

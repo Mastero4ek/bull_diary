@@ -1,11 +1,14 @@
 import {
-	fakeWallet,
-	fakeWalletChangesByDay,
-	fakeWalletTransactions,
-} from '@/helpers/constants'
-import { resError } from '@/helpers/functions'
-import WalletService from '@/services/WalletService'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+  fakeWallet,
+  fakeWalletChangesByDay,
+  fakeWalletTransactions,
+} from '@/helpers/constants';
+import { resError } from '@/helpers/functions';
+import WalletService from '@/services/WalletService';
+import {
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 export const getBybitWalletAndChanges = createAsyncThunk(
 	'wallet/get-wallet-and-changes',
@@ -84,7 +87,7 @@ const initialState = {
 	transactionsStatus: '',
 	transactionsErrorMessage: null,
 	page: 1,
-	sort: { type: 'closed_time', value: 'asc' },
+	sort: { type: 'transactionTime', value: 'asc' },
 }
 
 const walletSlice = createSlice({

@@ -426,10 +426,10 @@ class Helpers {
 		let totalProfit = 0
 
 		array.forEach(order => {
-			if (order.roe < 0) {
-				totalLoss += order.roe
+			if (order.roi < 0) {
+				totalLoss += order.roi
 			} else {
-				totalProfit += order.roe
+				totalProfit += order.roi
 			}
 		})
 
@@ -451,7 +451,7 @@ class Helpers {
 		let profitCount = 0
 
 		array.forEach(order => {
-			if (order.roe < 0) {
+			if (order.roi < 0) {
 				totalLoss += order.pnl
 				lossCount++
 			} else {

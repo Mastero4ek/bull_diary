@@ -16,6 +16,26 @@
 	}
 }
 
+.header_nav {
+	margin: 0 auto;
+
+	ul {
+		display: flex;
+		align-items: center;
+		gap: 80rem;
+
+		li {
+			a {
+				text-decoration: none;
+
+				&:hover {
+					color: var(--primaryHov);
+				}
+			}
+		}
+	}
+}
+
 .header_user_wrapper {
 	height: 70rem;
 	display: flex;
@@ -61,24 +81,113 @@
 	margin-left: auto;
 }
 
-.header_language {
-	display: flex;
-	align-items: center;
-	gap: 8rem;
+.header_settings_wrap {
+	position: relative;
+}
 
-	li {
-		b {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			width: 42rem;
-			height: 42rem;
-			cursor: pointer;
-			text-transform: uppercase;
+.header_settings_head {
+	overflow: hidden;
+	cursor: pointer;
+	transition: all 0.15s ease-in-out;
 
-			&:hover {
-				color: var(--primaryHov);
-			}
+	svg {
+		pointer-events: none;
+		cursor: pointer;
+		width: 24rem;
+		height: 24rem;
+		transition: all 0.15s ease-in-out;
+		fill: var(--text);
+	}
+
+	&:hover {
+		svg {
+			fill: var(--primaryHov);
 		}
 	}
+}
+
+.header_settings_head_active {
+	svg {
+		fill: var(--primaryHov);
+	}
+}
+
+.header_settings_list {
+	width: max-content;
+	position: absolute;
+	z-index: 500;
+	right: -174rem;
+	top: 57rem;
+	display: flex;
+	gap: 15rem;
+	flex-direction: column;
+	padding: 20rem 10rem;
+	border-radius: 20rem;
+	transition: all 0.15s ease-in-out;
+	height: 0;
+	overflow: hidden;
+	transform-origin: 0 0;
+	transform: rotateX(-90deg);
+	visibility: hidden;
+	opacity: 0;
+	background: var(--bgLight);
+	box-shadow: var(--shadowOuter);
+
+	li {
+		width: 100%;
+		transition: all 0.15s ease-in-out;
+		cursor: default !important;
+
+		article {
+			background: var(--bgDark);
+			box-shadow: var(--shadowInner);
+			cursor: default !important;
+
+			div {
+				cursor: default !important;
+
+				div {
+					width: 100%;
+
+					div {
+						box-shadow: none;
+						background: transparent;
+						overflow: visible;
+
+						&:nth-child(1) {
+							width: 100%;
+						}
+
+						&:nth-child(2) {
+							width: auto;
+						}
+
+						article {
+							background: var(--bgLight);
+							box-shadow: var(--shadowOuter);
+						}
+					}
+				}
+			}
+		}
+
+		svg {
+			stroke-width: 1.5rem;
+			stroke: var(--text);
+			transform: scale(1) !important;
+		}
+
+		span {
+			letter-spacing: 0 !important;
+			color: var(--text) !important;
+		}
+	}
+}
+
+.header_settings_list_active {
+	height: auto;
+	transition: all 0.15s ease-in-out;
+	opacity: 1;
+	visibility: visible;
+	transform: rotateX(0deg);
 }

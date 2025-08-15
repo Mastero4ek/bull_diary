@@ -14,6 +14,7 @@
 		"profile": "Профиль",
 		"back_to": "Вернуться",
 		"theme": "Темная тема",
+		"language": "Язык",
 		"logout": "Выйти"
 	},
 	"dropzone": {
@@ -23,10 +24,18 @@
 		"max_size": "Макс. размер файла:",
 		"support": "Поддерживаемые типы файлов:"
 	},
-	"footer": {
-		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo.",
+	"nav": {
+		"home": "Главная",
+		"manual": "Руководство",
+		"advantages": "Преимущества",
+		"platform": "Платформа",
+		"tournament": "Турнир",
+		"contacts": "Контакты",
 		"terms": "Условия использования",
-		"privacy": "Политика конфиденциальности",
+		"privacy": "Политика конфиденциальности"
+	},
+	"footer": {
+		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo.",
 		"copyright": "© 2024. Создано с любовью, Mastero4ek."
 	},
 	"table": {
@@ -39,20 +48,24 @@
 		"actions": "Действия",
 		"level": "Уровень",
 		"score": "Счет",
-		"roe": "Roe%",
+		"roi": "ROI%",
 		"symbol": "Символ",
 		"closed_time": "Дата",
 		"direction": "Направление",
-		"qty": "Qty",
+		"qty": "Кол-во",
 		"margin": "Маржа",
-		"pnl": "Pnl",
+		"pnl": "P&L",
 		"leverage": "Плечо",
 		"profit": "Выгода",
 		"side": "Сторона",
 		"type": "Тип",
 		"funding": "Финансирование",
 		"fee": "Платеж",
-		"balance": "Баланс"
+		"balance": "Баланс",
+		"change": "Изменение",
+		"buy": "Покупка",
+		"sell": "Продажа",
+		"none": "Движение"
 	},
 	"filter": {
 		"entries": {
@@ -347,13 +360,13 @@
 			"update_success": "Открытые позиции успешно обновлены!",
 			"update_error": "Ошибка обновления открытых позиций! Попробуйте ещё раз.",
 			"empty": "Открытых позиций на данный момент нет!",
-			"chart_label": "Прибыль (PNL)"
+			"chart_label": "Прибыль (P&L)"
 		},
 		"wallet": {
 			"update_success": "Кошелек успешно обновлен!",
 			"update_error": "Ошибка обновления кошелька! Попробуйте ещё раз.",
 			"balance": "Баланс",
-			"unrealized": "Нереал. PNL",
+			"unrealized": "Нереал. P&L",
 			"total_profit": "Общая прибыль",
 			"total_loss": "Общий убыток",
 			"net_profit": "Чистая приб./уб.",
@@ -392,10 +405,13 @@
 			"leverage": "Плечо",
 			"qty": "Колличество",
 			"margin": "Маржа",
-			"pnl": "Pnl",
-			"roe": "Roe",
+			"pnl": "P&L",
+			"roi": "ROI",
+			"duration_time": "Длительность",
 			"open_time": "Время открытия",
 			"closed_time": "Время закрытия",
+			"open_fee": "Комиссия за открытие",
+			"closed_fee": "Комиссия за закрытие",
 			"update_desc_success": "Описание ордера успешно обновлено!",
 			"update_desc_error": "Ошибка обновления описания ордера! Попробуйте ещё раз."
 		}

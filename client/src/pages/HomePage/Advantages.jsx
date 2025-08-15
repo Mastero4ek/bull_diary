@@ -47,7 +47,7 @@ export const Advantages = () => {
 	]
 
 	return (
-		<section id='why' className={styles.advantages}>
+		<section id='advantages' className={styles.advantages}>
 			<div className={styles.container_wrapper}>
 				<div className={styles.advantages_wrap}>
 					<div className={styles.advantages_image}>

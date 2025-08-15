@@ -135,6 +135,8 @@ class BybitService {
 				} while (nextCursor)
 			}
 
+			logger.info(allOrders, 'ORDERS')
+
 			const orders = allOrders.map(item => new BybitOrderDto(item))
 
 			if (page === null && limit === null) {
@@ -303,13 +305,13 @@ class BybitService {
 			return cachedData
 		}
 
-		const client = new RestClientV5({
-			testnet: false,
-			key: keys.api,
-			secret: keys.secret,
-		})
-
 		try {
+			const client = new RestClientV5({
+				testnet: false,
+				key: keys.api,
+				secret: keys.secret,
+			})
+
 			const response = await client.getWalletBalance({
 				accountType: 'UNIFIED',
 			})
@@ -790,6 +792,9 @@ class BybitService {
 				} while (nextCursor)
 			}
 
+			logger.info(allTransactions, 'allTransactions')
+			// cashBalance - отображает остаток по монете
+
 			const transactions = allTransactions.map(
 				item => new BybitTransactionDto(item)
 			)
@@ -809,6 +814,7 @@ class BybitService {
 				cashFlow: parseFloat(Number(item.cashFlow || 0).toFixed(4)),
 				cashBalance: parseFloat(Number(item.cashBalance || 0).toFixed(4)),
 				symbol: item.symbol || '',
+				currency: item.currency || '',
 				category: item.category || '',
 				side: item.side || '',
 				type: item.type || '',

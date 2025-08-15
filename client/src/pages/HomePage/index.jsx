@@ -1,14 +1,17 @@
-import { Intro } from './Intro'
-import { Manual } from './Manual'
-import { Start } from './Start'
-import { Advantages } from './Advantages'
-import { Platform } from './Platform'
-import { Precedence } from './Precedence'
-import { Question } from './Question'
-import { useEffect } from 'react'
-import { SuccessSignUpPopup } from '@/popups/SuccessSignUpPopup'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react';
+
+import { useSelector } from 'react-redux';
+
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { SuccessSignUpPopup } from '@/popups/SuccessSignUpPopup';
+
+import { Advantages } from './Advantages';
+import { Intro } from './Intro';
+import { Manual } from './Manual';
+import { Platform } from './Platform';
+import { Precedence } from './Precedence';
+import { Question } from './Question';
+import { Start } from './Start';
 
 export const HomePage = () => {
 	const { user } = useSelector(state => state.candidate)

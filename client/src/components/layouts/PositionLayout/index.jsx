@@ -45,21 +45,36 @@ export const PositionLayout = React.memo(() => {
 			},
 			{
 				id: 4,
+				name: t('page.position.open_fee'),
+				value: position?.open_fee,
+			},
+			{
+				id: 5,
+				name: t('page.position.closed_fee'),
+				value: position?.closed_fee,
+			},
+			{
+				id: 6,
 				name: t('page.position.pnl'),
 				value: position?.pnl,
 			},
 			{
-				id: 5,
-				name: t('page.position.roe'),
-				value: position?.roe,
+				id: 7,
+				name: t('page.position.roi'),
+				value: position?.roi,
 			},
 			{
-				id: 6,
+				id: 8,
+				name: t('page.position.duration_time'),
+				value: position?.closed_time - position?.open_time, // TODO: сделать правильный расчет
+			},
+			{
+				id: 9,
 				name: t('page.position.open_time'),
 				value: position?.open_time,
 			},
 			{
-				id: 7,
+				id: 10,
 				name: t('page.position.closed_time'),
 				value: position?.closed_time,
 			},
@@ -104,7 +119,7 @@ export const PositionLayout = React.memo(() => {
 												<span>{capitalize(field?.value)}</span>
 											</>
 										) : field?.name === t('page.position.pnl') ||
-										  field?.name === t('page.position.roe') ? (
+										  field?.name === t('page.position.roi') ? (
 											<>
 												<span
 													style={
@@ -134,6 +149,8 @@ export const PositionLayout = React.memo(() => {
 											<span>
 												{moment(field?.value).format('DD MMMM YYYY - HH:mm:ss')}
 											</span>
+										) : field?.name === t('page.position.duration_time') ? (
+											<span>{moment(field?.value).format('HH:mm:ss')}</span> //  TODO: 3D 5H 32M 12S
 										) : field?.name === t('page.position.leverage') ? (
 											<span>{field?.value}X</span>
 										) : (

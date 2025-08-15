@@ -1,28 +1,39 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
-
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { TableLayout } from '@/components/layouts/TableLayout'
-import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { SharedButton } from '@/components/ui/buttons/SharedButton'
-import { Loader } from '@/components/ui/general/Loader'
-import { Mark } from '@/components/ui/general/Mark'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { capitalize } from '@/helpers/functions'
-import { SharedPositionPopup } from '@/popups/SharedPositionPopup'
+import { useTranslation } from 'react-i18next';
 import {
-	clearPositions,
-	getBybitPositions,
-	setPage,
-	setSort,
-} from '@/redux/slices/positionsSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import { BarChart } from './BarChart'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { TableLayout } from '@/components/layouts/TableLayout';
+import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { SharedButton } from '@/components/ui/buttons/SharedButton';
+import { Loader } from '@/components/ui/general/Loader';
+import { Mark } from '@/components/ui/general/Mark';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { colorizedNum } from '@/helpers/functions';
+import { SharedPositionPopup } from '@/popups/SharedPositionPopup';
+import {
+  clearPositions,
+  getBybitPositions,
+  setPage,
+  setSort,
+} from '@/redux/slices/positionsSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import { BarChart } from './BarChart';
 
 export const DiaryPage = React.memo(() => {
 	const { t } = useTranslation()
@@ -51,24 +62,33 @@ export const DiaryPage = React.memo(() => {
 				<div style={{ display: 'flex', alignItems: 'center' }}>
 					{mark && <Mark color={value === 'long' ? 'green' : 'red'} />}
 
-					{capitalize(value)}
+					{value === 'long' ? t('table.buy') : t('table.sell')}
 				</div>
 			),
 			width: '100%',
 		},
-		{ Header: t('table.leverage'), accessor: 'leverage', width: '100%' },
+		{
+			Header: t('table.leverage'),
+			accessor: 'leverage',
+			Cell: ({ cell: { value } }) => <span>{value}X</span>,
+			width: '100%',
+		},
 		{
 			Header: t('table.profit'),
 			accessor: 'profit',
 			Cell: ({ cell: { value } }) => (
 				<span
-					style={
-						color
-							? { color: `var(--${value.includes < 0 ? 'red' : 'green'})` }
-							: {}
-					}
+					style={{
+						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+					}}
 				>
-					{amount ? '****' : value}
+					{amount
+						? '****'
+						: value === 0
+						? '0.0000'
+						: value > 0
+						? `+${value}`
+						: value}
 				</span>
 			),
 			width: '100%',

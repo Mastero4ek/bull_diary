@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+
 import { useSelector } from 'react-redux'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
+
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+
 import styles from './styles.module.scss'
 
 // import io from 'socket.io-client'
@@ -35,7 +38,7 @@ export const Total = React.memo(() => {
 				<div className={styles.total}>
 					<div className={styles.unrealized}>
 						<RootDesc>
-							<b>UPnl :</b>
+							<b>UP&L :</b>
 						</RootDesc>
 
 						<RootDesc>
@@ -59,7 +62,7 @@ export const Total = React.memo(() => {
 
 					<div className={styles.realized}>
 						<RootDesc>
-							<b>RPnl :</b>
+							<b>RP&L :</b>
 						</RootDesc>
 
 						<RootDesc>

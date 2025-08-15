@@ -4,7 +4,9 @@
 
 set -e
 
-echo "🐳 Starting full stack in containers for development"
+echo ""
+echo "🐳 Starting full stack in containers for development 🐳"
+echo ""
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -13,19 +15,19 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 print_status() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo "ℹ️ ${BLUE}[INFO]${NC} $1"
 }
 
 print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    echo "✅ ${GREEN}[SUCCESS]${NC} $1"
 }
 
 print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo "⚠️ ${YELLOW}[WARNING]${NC} $1"
 }
 
 print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    echo "❌ ${RED}[ERROR]${NC} $1"
 }
 
 if ! command -v docker &> /dev/null; then
@@ -87,23 +89,23 @@ fi
 print_success "Full stack started"
 
 echo ""
-echo "🐳 All services started in containers for development"
+echo "🐳 All services started in containers for development 🐳"
 echo ""
 echo "🌐 Available addresses for development:"
-echo "   # Frontend: ${BLUE}http://localhost:5173${NC}"
-echo "   # Backend: ${BLUE}http://localhost:5001${NC}"
-echo "   # Health Check: ${BLUE}http://localhost:5001/health${NC}"
-echo "   # MongoDB: ${BLUE}localhost:27019${NC}"
-echo "   # Redis: ${BLUE}localhost:6380${NC}"
+echo "   - Frontend: ${BLUE}http://localhost:5173${NC}"
+echo "   - Backend: ${BLUE}http://localhost:5001${NC}"
+echo "   - Health Check: ${BLUE}http://localhost:5001/health${NC}"
+echo "   - MongoDB: ${BLUE}localhost:27019${NC}"
+echo "   - Redis: ${BLUE}localhost:6380${NC}"
 echo ""
 echo "📝 Useful commands for development:"
-echo "   # View logs of all services: ${BLUE}docker-compose -f docker-compose.yml logs -f${NC}"
-echo "   # View logs of a specific service: ${BLUE}docker-compose -f docker-compose.yml logs -f server${NC}"
-echo "   # View logs of a specific service: ${BLUE}docker-compose -f docker-compose.yml logs -f client${NC}"
-echo "   # Stop all containers: ${BLUE}docker-compose -f docker-compose.yml down${NC}"
-echo "   # Restart a specific service: ${BLUE}docker-compose -f docker-compose.yml restart server${NC}"
-echo "   # Start admin seeder: ${BLUE}docker exec -it diary-server-dev node scripts/admin-seeder.js${NC}"
-echo "   # Start users seeder: ${BLUE}docker exec -it diary-server-dev node scripts/users-seeder.js${NC}"
-echo "   # Clean database: ${BLUE}docker exec -it diary-server-dev node scripts/clean-database.js${NC}"
-echo "   # Clean uploads: ${BLUE}docker exec -it diary-server-dev node scripts/clean-uploads.js${NC}"
+echo "   - View logs of all services: ${GREEN}docker-compose -f docker-compose.yml logs -f${NC}"
+echo "   - View logs of a specific service: ${GREEN}docker-compose -f docker-compose.yml logs -f server${NC}"
+echo "   - View logs of a specific service: ${GREEN}docker-compose -f docker-compose.yml logs -f client${NC}"
+echo "   - Stop all containers: ${GREEN}docker-compose -f docker-compose.yml down${NC}"
+echo "   - Restart a specific service: ${GREEN}docker-compose -f docker-compose.yml restart server${NC}"
+echo "   - Start admin seeder: ${GREEN}docker exec -it diary-server-dev node scripts/admin-seeder.js${NC}"
+echo "   - Start users seeder: ${GREEN}docker exec -it diary-server-dev node scripts/users-seeder.js${NC}"
+echo "   - Clean database: ${GREEN}docker exec -it diary-server-dev node scripts/clean-database.js${NC}"
+echo "   - Clean uploads: ${GREEN}docker exec -it diary-server-dev node scripts/clean-uploads.js${NC}"
 echo ""

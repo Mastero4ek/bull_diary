@@ -21,7 +21,7 @@ export const UserLayout = React.memo(() => {
 		photo: '',
 		level: 'bear',
 		score: '98',
-		roe: '-1.78',
+		roi: '-1.78',
 	}
 
 	const userFields = useMemo(
@@ -38,8 +38,8 @@ export const UserLayout = React.memo(() => {
 			},
 			{
 				id: 2,
-				name: 'Roe',
-				value: user?.roe,
+				name: 'Roi',
+				value: user?.roi,
 			},
 		],
 		[]
@@ -80,7 +80,7 @@ export const UserLayout = React.memo(() => {
 											<>
 												<span>{capitalize(field?.value)}</span>
 											</>
-										) : field?.name === 'Roe' ? (
+										) : field?.name === 'Roi' ? (
 											<>
 												<span
 													style={

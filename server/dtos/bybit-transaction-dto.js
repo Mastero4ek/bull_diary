@@ -4,6 +4,7 @@ module.exports = class BybitTransactionDto {
 	cashFlow
 	cashBalance
 	symbol
+	currency
 	category
 	side
 	type
@@ -16,6 +17,7 @@ module.exports = class BybitTransactionDto {
 		this.cashFlow = parseFloat(Number(model.cashFlow || 0).toFixed(4))
 		this.cashBalance = parseFloat(Number(model.cashBalance || 0).toFixed(4))
 		this.symbol = model.symbol || ''
+		this.currency = model.currency || ''
 		this.category = model.category || ''
 		this.side = model.side || ''
 		this.type = model.type || ''

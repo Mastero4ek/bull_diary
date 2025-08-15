@@ -14,6 +14,7 @@
 		"profile": "Profile",
 		"back_to": "Back to",
 		"theme": "Dark mode",
+		"language": "Language",
 		"logout": "Logout"
 	},
 	"dropzone": {
@@ -23,10 +24,18 @@
 		"max_size": "Max. file size:",
 		"support": "Supported file types:"
 	},
-	"footer": {
-		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo.",
+	"nav": {
+		"home": "Home",
+		"manual": "Manual",
+		"advantages": "Advantages",
+		"platform": "Platform",
+		"tournament": "Tournament",
+		"contacts": "Contacts",
 		"terms": "Terms",
-		"privacy": "Privacy",
+		"privacy": "Privacy"
+	},
+	"footer": {
+		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo.",
 		"copyright": "© 2024. Created with love, Mastero4ek."
 	},
 	"table": {
@@ -39,20 +48,24 @@
 		"actions": "Actions",
 		"level": "Level",
 		"score": "Score",
-		"roe": "Roe%",
+		"roi": "ROI%",
 		"symbol": "Symbol",
 		"closed_time": "Closed time",
 		"direction": "Direction",
 		"qty": "Qty",
 		"margin": "Margin",
-		"pnl": "Pnl",
+		"pnl": "P&L",
 		"leverage": "Leverage",
 		"profit": "Profit",
 		"side": "Side",
 		"type": "Type",
 		"funding": "Funding",
 		"fee": "Fee",
-		"balance": "Balance"
+		"balance": "Balance",
+		"change": "Change",
+		"buy": "Buy",
+		"sell": "Sell",
+		"none": "Transfer"
 	},
 	"filter": {
 		"entries": {
@@ -347,13 +360,13 @@
 			"update_success": "Positions updated successfully!",
 			"update_error": "Error updating positions! Please try again.",
 			"empty": "There were no open transactions now!",
-			"chart_label": "Profit (PNL)"
+			"chart_label": "Profit (P&L)"
 		},
 		"wallet": {
 			"update_success": "Wallet updated successfully!",
 			"update_error": "Error updating wallet! Please try again.",
 			"balance": "Wallet Balance",
-			"unrealized": "Unrealised PNL",
+			"unrealized": "Unrealised P&L",
 			"total_profit": "Total Profit",
 			"total_loss": "Total Loss",
 			"net_profit": "Net Profit/Loss",
@@ -392,10 +405,13 @@
 			"leverage": "Leverage",
 			"qty": "Quality",
 			"margin": "Margin",
-			"pnl": "Pnl",
-			"roe": "Roe",
+			"pnl": "P&L",
+			"roi": "ROI",
+			"duration_time": "Duration time",
 			"open_time": "Open time",
 			"closed_time": "Closed Time",
+			"open_fee": "Open Fee",
+			"closed_fee": "Close Fee",
 			"update_desc_success": "Order description updated successfully!",
 			"update_desc_error": "Error updating order description! Please try again."
 		}

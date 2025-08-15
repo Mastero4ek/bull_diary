@@ -8,7 +8,7 @@ module.exports = class OrderDto {
 	quality
 	margin
 	pnl
-	roe
+	roi
 
 	constructor(model) {
 		this.id = model.id
@@ -20,6 +20,6 @@ module.exports = class OrderDto {
 		this.quality = +model.quality
 		this.margin = +model.margin
 		this.pnl = +model.pnl
-		this.roe = +model.roe
+		this.roi = +model.roi
 	}
 }

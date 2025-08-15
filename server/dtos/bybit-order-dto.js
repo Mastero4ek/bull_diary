@@ -7,28 +7,39 @@ module.exports = class BybitOrderDto {
 	leverage
 	quality
 	margin
+	open_fee
+	closed_fee
 	pnl
-	roe
+	roi
 
 	constructor(model) {
 		this.id = model.orderId
 		this.symbol = model.symbol
-		this.closed_time = +model.updatedTime // reverted: Bybit API returns updatedTime, not closedTime
+		this.closed_time = +model.updatedTime
 		this.open_time = +model.createdTime
 		this.direction = model.side === 'Buy' ? 'short' : 'long'
 		this.leverage = +model.leverage
-		this.quality = parseFloat(Number(model.qty).toFixed(4))
-		this.margin = parseFloat(Number(model.cumEntryValue).toFixed(2))
-		this.pnl = parseFloat(Number(model.closedPnl).toFixed(3))
-		this.roe = parseFloat(this.calculateRoe(model).toFixed(2))
+		this.quality = parseFloat(model.qty).toFixed(4)
+		this.margin = parseFloat(model.cumEntryValue).toFixed(2)
+		this.open_fee = parseFloat(model.openFee).toFixed(4)
+		this.closed_fee = parseFloat(model.closeFee).toFixed(4)
+		this.pnl = parseFloat(model.closedPnl).toFixed(4)
+		this.roi = parseFloat(this.calculateRoi(model).toFixed(2))
 	}
 
-	calculateRoe = model => {
-		const margin = (model.closedSize * model.avgEntryPrice) / model.leverage
-		const roe = (model.closedPnl * 100) / (margin || 1) // Avoid division by 0
+	calculateRoi = model => {
+		const qty = parseFloat(model.qty) || 0
+		const leverage = parseFloat(model.leverage) || 1
+		const avgEntryPrice = parseFloat(model.avgEntryPrice) || 0
+		const closedPnl = parseFloat(model.closedPnl) || 0
 
-		return roe
+		if (qty <= 0 || leverage <= 0 || avgEntryPrice <= 0) {
+			return 0
+		}
+
+		const initialMargin = (qty * avgEntryPrice) / leverage
+		const roi = initialMargin > 0 ? (closedPnl / initialMargin) * 100 : 0
+
+		return roi
 	}
 }
-
-// TODO: Incorrect roe calculation

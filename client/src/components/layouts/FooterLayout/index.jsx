@@ -1,23 +1,24 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+} from 'react-router-dom';
+import { Link as LinkScroll } from 'react-scroll';
 
 import { RootDesc } from '@/components/ui/descriptions/RootDesc';
 import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
 import { Logo } from '@/components/ui/general/Logo';
 import { Socials } from '@/components/ui/general/Socials';
+import { useNavList } from '@/hooks/Navigation';
 
 import styles from './styles.module.scss';
 
-const FooterLink = React.memo(({ to, children }) => (
-	<RootDesc>
-		<Link to={to}>{children}</Link>
-	</RootDesc>
-))
-
 export const FooterLayout = React.memo(() => {
 	const { t } = useTranslation()
+	const location = useLocation()
+	const { NAVLIST } = useNavList()
 
 	return (
 		<footer className={styles.footer_wrapper}>
@@ -31,9 +32,47 @@ export const FooterLayout = React.memo(() => {
 				</RootDesc>
 
 				<div className={styles.footer_links}>
-					<FooterLink to={'/privacy'}>{t('footer.privacy')}</FooterLink>
+					<ul>
+						{!location.pathname.includes('privacy') &&
+							!location.pathname.includes('terms') &&
+							NAVLIST &&
+							NAVLIST.length > 0 &&
+							NAVLIST.map(nav => (
+								<li key={nav?.id}>
+									<RootDesc>
+										<LinkScroll
+											to={nav?.anchor}
+											spy={true}
+											smooth={true}
+											duration={500}
+										>
+											<span>{nav?.name}</span>
+										</LinkScroll>
+									</RootDesc>
+								</li>
+							))}
 
-					<FooterLink to={'/terms'}>{t('footer.terms')}</FooterLink>
+						{(location.pathname.includes('privacy') ||
+							location.pathname.includes('terms')) && (
+							<li>
+								<RootDesc>
+									<Link to={'/home'}>{t('nav.home')}</Link>
+								</RootDesc>
+							</li>
+						)}
+
+						<li>
+							<RootDesc>
+								<Link to={'/privacy'}>{t('nav.privacy')}</Link>
+							</RootDesc>
+						</li>
+
+						<li>
+							<RootDesc>
+								<Link to={'/terms'}>{t('nav.terms')}</Link>
+							</RootDesc>
+						</li>
+					</ul>
 				</div>
 			</div>
 

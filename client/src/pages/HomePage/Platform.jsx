@@ -63,7 +63,7 @@ export const Platform = () => {
 	}
 
 	return (
-		<section id='benefits' className={styles.benefits}>
+		<section id='platform' className={styles.benefits}>
 			<div className={styles.container_wrapper}>
 				<div className={styles.benefits_wrapper}>
 					<div className={styles.benefits_content}>

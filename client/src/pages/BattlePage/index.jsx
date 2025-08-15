@@ -25,7 +25,10 @@ import { ClosedContent } from '@/components/ui/general/ClosedContent';
 import { CountdownTimer } from '@/components/ui/general/CountdownTimer';
 import { InnerBlock } from '@/components/ui/general/InnerBlock';
 import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { capitalize } from '@/helpers/functions';
+import {
+  capitalize,
+  colorizedNum,
+} from '@/helpers/functions';
 import { ConfirmPopup } from '@/popups/ConfirmPopup';
 import { NewTournamentPopup } from '@/popups/NewTournamentPopup';
 import { getUser } from '@/redux/slices/candidateSlice';
@@ -106,15 +109,21 @@ export const BattlePage = () => {
 			width: '100%',
 		},
 		{
-			Header: t('table.roe'),
-			accessor: 'roe',
+			Header: t('table.roi'),
+			accessor: 'roi',
 			Cell: ({ cell: { value = '0.0000' } }) => (
 				<span
-					style={
-						color ? { color: `var(--${value < 0 ? 'red' : 'green'})` } : {}
-					}
+					style={{
+						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+					}}
 				>
-					{amount ? '****' : value}
+					{amount
+						? '****'
+						: value === 0
+						? '0.0000'
+						: value > 0
+						? `+${value}`
+						: value}
 				</span>
 			),
 			width: '100%',

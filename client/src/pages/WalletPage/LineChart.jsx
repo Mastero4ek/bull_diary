@@ -1,27 +1,29 @@
-import React, { useCallback, useMemo } from 'react'
+import React, {
+  useCallback,
+  useMemo,
+} from 'react';
 
 import {
-	CategoryScale,
-	Chart as ChartJS,
-	Filler,
-	Legend,
-	LinearScale,
-	LineElement,
-	PointElement,
-	Tooltip,
-} from 'chart.js'
-import _ from 'lodash'
-import moment from 'moment/min/moment-with-locales'
-import { Line } from 'react-chartjs-2'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Tooltip,
+} from 'chart.js';
+import _ from 'lodash';
+import moment from 'moment/min/moment-with-locales';
+import { Line } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Icon } from '@/components/ui/general/Icon'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+import { Icon } from '@/components/ui/general/Icon';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 ChartJS.register(
 	LineElement,
@@ -177,8 +179,10 @@ export const LineChart = React.memo(() => {
 				const key = config.getGroupKey({ date: label.format('YYYY-MM-DD') })
 				const data = groupedData[key] || []
 
+				// console.log(data)
+
 				if (config.getFutureCheck(label, index)) {
-					return 0
+					return null // Future dates should be null or 0 for visual purposes
 				}
 
 				if (data.length > 0) {
@@ -420,13 +424,13 @@ export const LineChart = React.memo(() => {
 					</div>
 				)}
 
-				<RootButton
+				{/* <RootButton
 					icon={'details'}
 					text={t('button.details')}
 					onClickBtn={() => {
 						navigate('/wallet/details')
 					}}
-				/>
+				/> */}
 			</div>
 		</div>
 	)

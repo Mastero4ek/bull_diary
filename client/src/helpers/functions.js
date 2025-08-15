@@ -4,6 +4,16 @@ export const capitalize = str => {
 	return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+export const colorizedNum = (text, positive) => {
+	if (!text || text === 0) return 'disabled'
+
+	if (positive === true) {
+		return text < 0 ? 'red' : 'green'
+	} else if (positive === false) {
+		return text < 0 ? 'green' : 'red'
+	}
+}
+
 export const resError = error => {
 	const currentErrors =
 		error?.response?.data?.errors?.map(item => {
@@ -12,7 +22,7 @@ export const resError = error => {
 
 	// Определяем тип ошибки
 	let message = 'An unknown error occurred'
-	
+
 	if (error?.response?.data?.message) {
 		message = error.response.data.message
 	} else if (error?.code === 'NETWORK_ERROR') {

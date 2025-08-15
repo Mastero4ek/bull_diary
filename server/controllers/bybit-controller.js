@@ -500,6 +500,7 @@ class BybitController {
 				date: moment(transaction.transactionTime).format('YYYY-MM-DD'),
 				time: moment(transaction.transactionTime).format('HH:mm:ss'),
 				symbol: transaction.symbol,
+				currency: transaction.currency,
 				category: transaction.category,
 				side: transaction.side,
 				type: transaction.type,

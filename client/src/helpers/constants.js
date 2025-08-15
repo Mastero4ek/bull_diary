@@ -9,7 +9,7 @@ export const fakePnlOrders = [
 		quality: 51,
 		margin: 21.39,
 		pnl: -0.494,
-		roe: -46.15,
+		roi: -46.15,
 	},
 	{
 		id: 'd8e59dfd-f8c9-41a2-bb51-84a52f6357d5',
@@ -21,7 +21,7 @@ export const fakePnlOrders = [
 		quality: 0.002,
 		margin: 191.32,
 		pnl: -1.24,
-		roe: -64.8,
+		roi: -64.8,
 	},
 	{
 		id: '1d5c68f0-71a9-4b36-890a-aec494dd51c5',
@@ -33,7 +33,7 @@ export const fakePnlOrders = [
 		quality: 0.001,
 		margin: 95.94,
 		pnl: -0.487,
-		roe: -50.73,
+		roi: -50.73,
 	},
 	{
 		id: '9750d0d1-d382-48c9-a17c-ddf9c9aaa47c',
@@ -45,7 +45,7 @@ export const fakePnlOrders = [
 		quality: 0.4,
 		margin: 51.9,
 		pnl: 0.092,
-		roe: 4.45,
+		roi: 4.45,
 	},
 	{
 		id: '2effad37-4819-44cf-aaba-7adf9264ab66',
@@ -57,7 +57,7 @@ export const fakePnlOrders = [
 		quality: 0.001,
 		margin: 97.21,
 		pnl: 0.206,
-		roe: 10.62,
+		roi: 10.62,
 	},
 ]
 
@@ -192,7 +192,7 @@ export const fakeUsers = [
 			value: 127,
 		},
 		score: 100,
-		roe: 57,
+		roi: 57,
 	},
 	{
 		id: 1,
@@ -206,7 +206,7 @@ export const fakeUsers = [
 			value: 150,
 		},
 		score: 120,
-		roe: 60,
+		roi: 60,
 	},
 	{
 		id: 2,
@@ -220,7 +220,7 @@ export const fakeUsers = [
 			value: 90,
 		},
 		score: 80,
-		roe: 50,
+		roi: 50,
 	},
 	{
 		id: 3,
@@ -234,7 +234,7 @@ export const fakeUsers = [
 			value: 200,
 		},
 		score: 150,
-		roe: 70,
+		roi: 70,
 	},
 	{
 		id: 4,
@@ -248,7 +248,7 @@ export const fakeUsers = [
 			value: 300,
 		},
 		score: 200,
-		roe: 80,
+		roi: 80,
 	},
 ]
 

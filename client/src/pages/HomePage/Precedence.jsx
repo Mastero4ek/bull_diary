@@ -32,7 +32,7 @@ export const Precedence = () => {
 		},
 	]
 	return (
-		<section id='battle' className={styles.precedence}>
+		<section id='tournament' className={styles.precedence}>
 			<div className={styles.container_wrapper}>
 				<div className={styles.precedence_wrap}>
 					<div className={styles.precedence_image}>
