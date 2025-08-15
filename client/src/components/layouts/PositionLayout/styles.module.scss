@@ -36,6 +36,19 @@
 			display: flex;
 			align-items: center;
 			gap: 30rem;
+			transition: all 0.15s linear;
+			transform: scale(1);
+			opacity: 1;
+
+			// &:hover {
+			// 	transform: scale(1.02);
+			// 	opacity: 1;
+			// }
+
+			// &:not(:hover) {
+			// 	opacity: 0.5;
+			// 	transform: scale(0.99);
+			// }
 
 			&:not(:last-child) {
 				&::after {

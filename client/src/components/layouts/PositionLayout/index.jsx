@@ -1,20 +1,23 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 
-import moment from 'moment/min/moment-with-locales'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import moment from 'moment/min/moment-with-locales';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import { SharedButton } from '@/components/ui/buttons/SharedButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { Mark } from '@/components/ui/general/Mark'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { H2 } from '@/components/ui/titles/H2'
-import { capitalize } from '@/helpers/functions'
-import { SharedPositionPopup } from '@/popups/SharedPositionPopup'
+import { SharedButton } from '@/components/ui/buttons/SharedButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { Mark } from '@/components/ui/general/Mark';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { H2 } from '@/components/ui/titles/H2';
+import {
+  capitalize,
+  colorizedNum,
+} from '@/helpers/functions';
+import { SharedPositionPopup } from '@/popups/SharedPositionPopup';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const PositionLayout = React.memo(() => {
 	const { t } = useTranslation()
@@ -116,23 +119,31 @@ export const PositionLayout = React.memo(() => {
 													/>
 												)}
 
-												<span>{capitalize(field?.value)}</span>
+												<span>
+													{capitalize(
+														field?.value === 'long'
+															? t('table.buy')
+															: t('table.sell')
+													)}
+												</span>
 											</>
 										) : field?.name === t('page.position.pnl') ||
 										  field?.name === t('page.position.roi') ? (
 											<>
 												<span
-													style={
-														color
-															? {
-																	color: `var(--${
-																		field?.value < 0 ? 'red' : 'green'
-																	})`,
-															  }
-															: {}
-													}
+													style={{
+														color: `var(--${
+															color ? colorizedNum(field?.value, true) : 'text'
+														})`,
+													}}
 												>
-													{amount ? '****' : field?.value}
+													{amount
+														? '****'
+														: field?.value === 0
+														? '0.0000'
+														: field?.value > 0
+														? `+${field?.value}`
+														: field?.value}
 												</span>{' '}
 												<span>
 													{field?.name === t('page.position.pnl')
