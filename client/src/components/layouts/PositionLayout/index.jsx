@@ -15,6 +15,7 @@ import {
   capitalize,
   colorizedNum,
 } from '@/helpers/functions';
+import { useFormatDuration } from '@/hooks/FormatDuration';
 import { SharedPositionPopup } from '@/popups/SharedPositionPopup';
 
 import styles from './styles.module.scss';
@@ -23,6 +24,7 @@ export const PositionLayout = React.memo(() => {
 	const { t } = useTranslation()
 	const { amount, color, mark } = useSelector(state => state.settings)
 	const position = useLocation()?.state?.item
+	const formatDuration = useFormatDuration()
 
 	const positionFields = useMemo(
 		() => [
@@ -69,7 +71,7 @@ export const PositionLayout = React.memo(() => {
 			{
 				id: 8,
 				name: t('page.position.duration_time'),
-				value: position?.closed_time - position?.open_time, // TODO: сделать правильный расчет
+				value: formatDuration(position?.open_time, position?.closed_time),
 			},
 			{
 				id: 9,
@@ -82,7 +84,7 @@ export const PositionLayout = React.memo(() => {
 				value: position?.closed_time,
 			},
 		],
-		[t]
+		[t, position, formatDuration]
 	)
 
 	return (
@@ -161,7 +163,7 @@ export const PositionLayout = React.memo(() => {
 												{moment(field?.value).format('DD MMMM YYYY - HH:mm:ss')}
 											</span>
 										) : field?.name === t('page.position.duration_time') ? (
-											<span>{moment(field?.value).format('HH:mm:ss')}</span> //  TODO: 3D 5H 32M 12S
+											<span>{field?.value}</span>
 										) : field?.name === t('page.position.leverage') ? (
 											<span>{field?.value}X</span>
 										) : (

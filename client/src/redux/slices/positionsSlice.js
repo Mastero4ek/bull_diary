@@ -1,7 +1,10 @@
-import { fakePositions } from '@/helpers/constants'
-import { resError } from '@/helpers/functions'
-import PositionsService from '@/services/PositionsService'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { fakePositions } from '@/helpers/constants';
+import { resError } from '@/helpers/functions';
+import PositionsService from '@/services/PositionsService';
+import {
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 export const getBybitPositions = createAsyncThunk(
 	'get-positions',

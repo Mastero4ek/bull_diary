@@ -1,7 +1,10 @@
-import { fakePnlOrders } from '@/helpers/constants'
-import { resError } from '@/helpers/functions'
-import OrdersService from '@/services/OrdersService'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { fakePnlOrders } from '@/helpers/constants';
+import { resError } from '@/helpers/functions';
+import OrdersService from '@/services/OrdersService';
+import {
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 export const getBybitOrdersPnl = createAsyncThunk(
 	'get-order-pnl',

@@ -413,7 +413,11 @@
 			"open_fee": "Open Fee",
 			"closed_fee": "Close Fee",
 			"update_desc_success": "Order description updated successfully!",
-			"update_desc_error": "Error updating order description! Please try again."
+			"update_desc_error": "Error updating order description! Please try again.",
+			"duration_time_days": "D",
+			"duration_time_hours": "H",
+			"duration_time_minutes": "M",
+			"duration_time_seconds": "S"
 		}
 	},
 	"popup": {
@@ -478,5 +482,15 @@
 			"tournament_user_remove_subtitle": "Are you sure you want to remove the user from this tournament?<br/>All the user's progress will be reset!",
 			"tournament_remove_subtitle": "Are you sure you want to delete the selected tournament?<br/>All tournament data will be deleted and all user progress will be reset!"
 		}
+	},
+	"error": {
+		"unknown": "An unknown error occurred",
+		"network": "Network error. Please check your internet connection.",
+		"timeout": "Request timeout. Please try again.",
+		"too_many_requests": "Too many requests. Please try again later.",
+		"authentication_required": "Authentication required. Please log in again.",
+		"access_denied": "Access denied. You do not have permission for this action.",
+		"resource_not_found": "Resource not found.",
+		"server_error": "Server error. Please try again later."
 	}
 }

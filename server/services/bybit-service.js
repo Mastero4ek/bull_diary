@@ -30,9 +30,9 @@ class BybitService {
 		)
 
 		const cachedData = await Helpers.getFromCache(cacheKey, 'getBybitOrdersPnl')
-		if (cachedData) {
-			return cachedData
-		}
+		// if (cachedData) {
+		// 	return cachedData
+		// }
 
 		const client = new RestClientV5({
 			testnet: false,
