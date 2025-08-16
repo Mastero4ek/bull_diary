@@ -4,6 +4,10 @@ const router = new Router()
 const { checkSchema } = require('express-validator')
 const ValidationSchema = require('../../validation/validation-schema')
 
+router.get('/csrf-token', (req, res) => {
+	res.json({ csrfToken: req.csrfToken() })
+})
+
 router.post(
 	'/sign-up',
 	checkSchema(ValidationSchema.signUp),

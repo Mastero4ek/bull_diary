@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie';
-
 import { resError } from '@/helpers/functions';
 import AuthService from '@/services/AuthService';
 import KeysService from '@/services/KeysService';
@@ -103,34 +101,12 @@ export const checkAuth = createAsyncThunk(
 				throw new Error('No user data in response')
 			}
 
-			// Set cookies for tokens if they exist in the response
-			if (processedData.tokens?.access_token) {
-				Cookies.set('access_token', processedData.tokens.access_token, {
-					expires: 1 / 48, // 30 minutes
-					secure: true,
-					sameSite: 'Lax',
-					path: '/',
-				})
-			}
-
-			if (processedData.tokens?.refresh_token) {
-				Cookies.set('refresh_token', processedData.tokens.refresh_token, {
-					expires: 30,
-					secure: true,
-					sameSite: 'Lax',
-					path: '/',
-				})
-			}
-
 			return processedData
 		} catch (e) {
 			if (e?.response?.status === 401 || e?.message === 'UNAUTHORIZED') {
-				// Clear tokens on unauthorized
-				Cookies.remove('access_token')
-				Cookies.remove('refresh_token')
-
 				return null
 			}
+
 			return rejectWithValue(resError(e))
 		}
 	}
@@ -158,6 +134,9 @@ export const signUp = createAsyncThunk(
 
 			return result
 		} catch (e) {
+			if (process.env.NODE_ENV === 'dev') {
+				console.log(e)
+			}
 			return rejectWithValue(resError(e))
 		}
 	}
@@ -176,6 +155,9 @@ export const signIn = createAsyncThunk(
 
 			return result
 		} catch (e) {
+			if (process.env.NODE_ENV === 'dev') {
+				console.log(e)
+			}
 			return rejectWithValue(resError(e))
 		}
 	}
@@ -186,16 +168,12 @@ export const logout = createAsyncThunk(
 	async (_, { rejectWithValue }) => {
 		try {
 			await AuthService.logout()
-			// Clear cookies
-			Cookies.remove('access_token')
-			Cookies.remove('refresh_token')
 			return null
 		} catch (e) {
-			console.error('Logout error:', e)
-			// Still clear cookies even if the server request fails
-			Cookies.remove('access_token')
-			Cookies.remove('refresh_token')
-			return rejectWithValue(resError(e))
+			if (process.env.NODE_ENV === 'dev') {
+				console.error('Logout error:', e)
+			}
+			return null
 		}
 	}
 )
@@ -405,37 +383,12 @@ const candidateSlice = createSlice({
 
 					if (action.payload.tokens) {
 						state.tokens = action.payload.tokens
-
-						if (action.payload.tokens.access_token) {
-							Cookies.set('access_token', action.payload.tokens.access_token, {
-								expires: 1 / 48, // 30 minutes
-								secure: true,
-								sameSite: 'Lax',
-								path: '/',
-							})
-						}
-
-						if (action.payload.tokens.refresh_token) {
-							Cookies.set(
-								'refresh_token',
-								action.payload.tokens.refresh_token,
-								{
-									expires: 30,
-									secure: true,
-									sameSite: 'Lax',
-									path: '/',
-								}
-							)
-						}
 					}
 				} else {
 					state.isAuth = false
 					state.user = userDefault
 					state.changeUser = userDefault
 					state.tokens = null
-
-					Cookies.remove('access_token')
-					Cookies.remove('refresh_token')
 				}
 
 				state.serverStatus = 'success'
@@ -448,8 +401,6 @@ const candidateSlice = createSlice({
 				state.user = userDefault
 				state.changeUser = userDefault
 				state.tokens = null
-				Cookies.remove('access_token')
-				Cookies.remove('refresh_token')
 			})
 
 			// logout

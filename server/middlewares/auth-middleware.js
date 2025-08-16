@@ -18,6 +18,20 @@ module.exports = function (req, res, next) {
 				req.user = userData
 
 				return next()
+			} else {
+				// Clear expired refresh token
+				res.clearCookie('refresh_token', {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'prod',
+					sameSite: 'strict',
+					path: '/',
+				})
+				res.clearCookie('access_token', {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'prod',
+					sameSite: 'strict',
+					path: '/',
+				})
 			}
 		}
 

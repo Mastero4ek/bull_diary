@@ -31,14 +31,14 @@ router.get(
 				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
 				secure: process.env.NODE_ENV === 'prod',
-				sameSite: 'lax',
+				sameSite: 'strict',
 			})
 
 			res.cookie('access_token', tokens.access_token, {
 				maxAge: parseInt(process.env.ACCESS_TOKEN_MAX_AGE),
 				httpOnly: true,
 				secure: process.env.NODE_ENV === 'prod',
-				sameSite: 'lax',
+				sameSite: 'strict',
 			})
 
 			res.redirect(`${process.env.CLIENT_URL}/auth/success`)

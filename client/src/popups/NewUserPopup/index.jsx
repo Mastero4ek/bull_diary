@@ -1,29 +1,44 @@
-import './phone_input.scss'
+import './phone_input.scss';
 
-import React, { useCallback, useState } from 'react'
+import React, {
+  useCallback,
+  useState,
+} from 'react';
 
-import { Controller, useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import PhoneInput from 'react-phone-input-2'
-import ru from 'react-phone-input-2/lang/ru.json'
-import { useDispatch, useSelector } from 'react-redux'
+import {
+  Controller,
+  useForm,
+} from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import PhoneInput from 'react-phone-input-2';
+import ru from 'react-phone-input-2/lang/ru.json';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import coverDefault from '@/assets/images/general/default_tournament.png'
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { RootSelect } from '@/components/ui/inputs/RootSelect'
-import { createUser } from '@/redux/slices/candidateSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import coverDefault from '@/assets/images/general/default_tournament.png';
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import {
+  PopupDescLayout,
+} from '@/components/layouts/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { RootSelect } from '@/components/ui/inputs/RootSelect';
+import { createUser } from '@/redux/slices/candidateSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const NewUserPopup = () => {
 	const { t } = useTranslation()
@@ -86,7 +101,9 @@ export const NewUserPopup = () => {
 				showError(t('popup.new_user.create_error'))
 			}
 		} catch (e) {
-			console.log(e)
+			if (process.env.NODE_ENV === 'dev') {
+				console.log(e)
+			}
 
 			if (e?.payload?.message) {
 				showError(e.payload.message)
@@ -167,8 +184,10 @@ export const NewUserPopup = () => {
 						register={{
 							...register('email', {
 								required: true,
-								pattern:
-									/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+								pattern: {
+									value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+									message: t('form.error.email'),
+								},
 							}),
 						}}
 					/>
@@ -179,7 +198,7 @@ export const NewUserPopup = () => {
 						errorMessage={t('form.error.password')}
 						errorArray={errorArray}
 						errors={errors}
-						type='text'
+						type='password'
 						register={{
 							...register('password', {
 								required: true,

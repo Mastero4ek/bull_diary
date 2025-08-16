@@ -6,6 +6,7 @@ const cors = require('cors')
 const session = require('express-session')
 const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
+const csrf = require('csurf')
 const path = require('path')
 const fs = require('fs')
 const { requestLogger } = require('./logger')
@@ -78,7 +79,22 @@ const apiLimiter = rateLimit({
 	},
 })
 
+// Rate limiting для auth endpoints
+const authLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 минут
+	max: 5, // максимум 5 попыток
+	handler: (req, res) => {
+		res.status(429).json({
+			message:
+				'Too many authentication attempts, please try again after 15 minutes',
+			code: 429,
+		})
+	},
+})
+
 app.use('/api/', apiLimiter)
+app.use('/api/v1/sign-in', authLimiter)
+app.use('/api/v1/sign-up', authLimiter)
 app.use(requestLogger)
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
@@ -110,11 +126,35 @@ app.use(
 		saveUninitialized: false,
 		cookie: {
 			secure: process.env.NODE_ENV === 'prod',
-			sameSite: 'lax',
+			sameSite: 'strict',
 			maxAge: parseInt(process.env.SESSION_MAX_AGE) || 24 * 60 * 60 * 1000,
 		},
 		store: new session.MemoryStore(),
 	})
 )
+
+// CSRF protection for all POST/PUT/DELETE requests (except logout)
+app.use((req, res, next) => {
+	if (req.path === '/api/v1/logout' && req.method === 'POST') {
+		return next()
+	}
+
+	csrf({
+		cookie: true,
+		ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
+		ignorePaths: ['/api/v1/logout'],
+	})(req, res, next)
+})
+
+// CSRF error handler
+app.use((err, req, res, next) => {
+	if (err.code === 'EBADCSRFTOKEN') {
+		return res.status(403).json({
+			message: 'CSRF token validation failed',
+			code: 403,
+		})
+	}
+	next(err)
+})
 
 module.exports = app

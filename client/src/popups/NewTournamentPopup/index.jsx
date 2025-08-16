@@ -1,29 +1,41 @@
-import './calendar.scss'
+import './calendar.scss';
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-import moment from 'moment'
-import DatePicker from 'react-date-picker'
-import { Controller, useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment';
+import DatePicker from 'react-date-picker';
+import {
+  Controller,
+  useForm,
+} from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import coverDefault from '@/assets/images/general/default_tournament.png'
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { RootSelect } from '@/components/ui/inputs/RootSelect'
-import { createTournament } from '@/redux/slices/tournamentSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import coverDefault from '@/assets/images/general/default_tournament.png';
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import {
+  PopupDescLayout,
+} from '@/components/layouts/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { RootSelect } from '@/components/ui/inputs/RootSelect';
+import { createTournament } from '@/redux/slices/tournamentSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const NewTournamentPopup = () => {
 	const { t } = useTranslation()
@@ -92,7 +104,9 @@ export const NewTournamentPopup = () => {
 				showError(t('popup.new_battle.create_error'))
 			}
 		} catch (e) {
-			console.log(e)
+			if (process.env.NODE_ENV === 'dev') {
+				console.log(e)
+			}
 			if (e?.payload?.message) {
 				showError(e.payload.message)
 			} else {

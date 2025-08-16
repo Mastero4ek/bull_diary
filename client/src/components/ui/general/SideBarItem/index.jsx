@@ -54,7 +54,9 @@ export const SideBarItem = React.memo(({ item }) => {
 
 				navigate('/login')
 			} catch (rejectedValueOrSerializedError) {
-				console.log(rejectedValueOrSerializedError)
+				if (process.env.NODE_ENV === 'dev') {
+					console.log(rejectedValueOrSerializedError)
+				}
 			}
 		}
 	}, [dispatch, location])

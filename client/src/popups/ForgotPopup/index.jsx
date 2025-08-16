@@ -1,19 +1,25 @@
-import React from 'react'
+import React from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { setIsAuth } from '@/redux/slices/candidateSlice'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import {
+  PopupDescLayout,
+} from '@/components/layouts/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { setIsAuth } from '@/redux/slices/candidateSlice';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const ForgotPopup = React.memo(() => {
 	const { t } = useTranslation()
@@ -31,7 +37,9 @@ export const ForgotPopup = React.memo(() => {
 
 	const submit = async data => {
 		try {
-			console.log(data)
+			if (process.env.NODE_ENV === 'dev') {
+				console.log(data)
+			}
 			showSuccess(t('popup.forgot.success'))
 
 			reset()
@@ -40,7 +48,9 @@ export const ForgotPopup = React.memo(() => {
 			closePopup()
 		} catch (e) {
 			showError(t('popup.forgot.error'))
-			console.log(e)
+			if (process.env.NODE_ENV === 'dev') {
+				console.log(e)
+			}
 		}
 	}
 

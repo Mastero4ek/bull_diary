@@ -492,5 +492,18 @@
 		"access_denied": "Access denied. You do not have permission for this action.",
 		"resource_not_found": "Resource not found.",
 		"server_error": "Server error. Please try again later."
+	},
+	"success": {
+		"unknown": "An unknown success occurred!",
+		"created": "Successfully created!",
+		"updated": "Successfully updated!",
+		"deleted": "Successfully deleted!"
+	},
+	"auth": {
+		"oauth": {
+			"success": "Successfully authenticated via OAuth!",
+			"error": "OAuth authentication failed! Please try again.",
+			"activation_required": "Account activation required! Please check your email."
+		}
 	}
 }

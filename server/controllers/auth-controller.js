@@ -19,8 +19,8 @@ class AuthController {
 			res.cookie('refresh_token', user_data.refresh_token, {
 				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: false,
-				sameSite: 'lax',
+				secure: process.env.NODE_ENV === 'prod',
+				sameSite: 'strict',
 				path: '/',
 			})
 
@@ -41,8 +41,8 @@ class AuthController {
 			res.cookie('refresh_token', user_data.refresh_token, {
 				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: false,
-				sameSite: 'lax',
+				secure: process.env.NODE_ENV === 'prod',
+				sameSite: 'strict',
 				path: '/',
 			})
 
@@ -65,8 +65,18 @@ class AuthController {
 					return next(err)
 				}
 
-				res.clearCookie('refresh_token')
-				res.clearCookie('access_token')
+				res.clearCookie('refresh_token', {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'prod',
+					sameSite: 'strict',
+					path: '/',
+				})
+				res.clearCookie('access_token', {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'prod',
+					sameSite: 'strict',
+					path: '/',
+				})
 
 				return res.json({ message: 'Logged out successfully' })
 			})
@@ -85,7 +95,24 @@ class AuthController {
 			if (user && (user.source === 'github' || user.source === 'google')) {
 				user_data = await userService.checkSourceAuth(user.email, req.lng)
 			} else if (existing_refresh_token && !user) {
-				user_data = await userService.refresh(existing_refresh_token, req.lng)
+				try {
+					user_data = await userService.refresh(existing_refresh_token, req.lng)
+				} catch (refreshError) {
+					res.clearCookie('refresh_token', {
+						httpOnly: true,
+						secure: process.env.NODE_ENV === 'prod',
+						sameSite: 'strict',
+						path: '/',
+					})
+					res.clearCookie('access_token', {
+						httpOnly: true,
+						secure: process.env.NODE_ENV === 'prod',
+						sameSite: 'strict',
+						path: '/',
+					})
+
+					return res.json({})
+				}
 			} else {
 				return res.json({})
 			}
@@ -93,15 +120,15 @@ class AuthController {
 			res.cookie('refresh_token', user_data.refresh_token, {
 				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: false,
-				sameSite: 'lax',
+				secure: process.env.NODE_ENV === 'prod',
+				sameSite: 'strict',
 				path: '/',
 			})
 			res.cookie('access_token', user_data.access_token, {
 				maxAge: parseInt(process.env.ACCESS_TOKEN_MAX_AGE),
 				httpOnly: true,
-				secure: false,
-				sameSite: 'lax',
+				secure: process.env.NODE_ENV === 'prod',
+				sameSite: 'strict',
 				path: '/',
 			})
 

@@ -6,21 +6,27 @@ module.exports = function (err, req, res, next) {
 	// Generate unique request ID for tracking
 	const requestId = uuidv4()
 
-	// Log error details
-	logError(err, {
+	const logData = {
 		requestId,
 		path: req.path,
 		method: req.method,
-		body: req.body,
-		query: req.query,
 		userId: req.user?.id || 'anonymous',
-		ip: req.ip || req.connection.remoteAddress
-	})
+		ip: req.ip || req.connection.remoteAddress,
+	}
+
+	if (process.env.NODE_ENV === 'dev') {
+		logData.body = req.body
+		logData.query = req.query
+	}
+
+	logError(err, logData)
 
 	// Handle Rate Limiting Errors
 	if (err.status === 429) {
 		return res.status(429).json({
-			message: err.message || 'Too many requests from this IP, please try again after 15 minutes.',
+			message:
+				err.message ||
+				'Too many requests from this IP, please try again after 15 minutes.',
 			errors: null,
 			code: 429,
 			requestId,

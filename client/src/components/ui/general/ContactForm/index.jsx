@@ -49,8 +49,10 @@ export const ContactForm = React.memo(() => {
 					register={{
 						...register('email', {
 							required: true,
-							pattern:
-								/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+							pattern: {
+								value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+								message: t('form.error.email'),
+							},
 						}),
 					}}
 				/>

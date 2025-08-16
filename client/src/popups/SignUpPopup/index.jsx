@@ -1,23 +1,32 @@
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { ErrorForm } from '@/components/ui/general/ErrorForm'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { signUp } from '@/redux/slices/candidateSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import {
+  PopupDescLayout,
+} from '@/components/layouts/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { ErrorForm } from '@/components/ui/general/ErrorForm';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { signUp } from '@/redux/slices/candidateSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import { SignInPopup } from '../SignInPopup'
-import { SuccessSignUpPopup } from '../SuccessSignUpPopup'
-import styles from './styles.module.scss'
+import { SignInPopup } from '../SignInPopup';
+import { SuccessSignUpPopup } from '../SuccessSignUpPopup';
+import styles from './styles.module.scss';
 
 export const SignUpPopup = React.memo(() => {
 	const { t } = useTranslation()
@@ -63,7 +72,9 @@ export const SignUpPopup = React.memo(() => {
 			}
 		} catch (e) {
 			showError(t('popup.signup.error'))
-			console.log(e)
+			if (process.env.NODE_ENV === 'dev') {
+				console.log(e)
+			}
 		}
 	}
 
@@ -98,8 +109,10 @@ export const SignUpPopup = React.memo(() => {
 						register={{
 							...register('email', {
 								required: true,
-								pattern:
-									/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+								pattern: {
+									value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+									message: t('form.error.email'),
+								},
 							}),
 						}}
 					/>
@@ -110,7 +123,7 @@ export const SignUpPopup = React.memo(() => {
 						errorMessage={t('form.error.password')}
 						errorArray={errorArray}
 						errors={errors}
-						type='text'
+						type='password'
 						register={{
 							...register('password', {
 								required: true,
@@ -124,7 +137,7 @@ export const SignUpPopup = React.memo(() => {
 						errorMessage={t('form.error.confirm_password')}
 						errorArray={errorArray}
 						errors={errors}
-						type='text'
+						type='password'
 						register={{
 							...register('confirm_password', {
 								required: true,

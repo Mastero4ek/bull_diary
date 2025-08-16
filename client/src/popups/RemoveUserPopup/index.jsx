@@ -118,6 +118,9 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 				)
 			}
 		} catch (rejectedValueOrSerializedError) {
+			if (process.env.NODE_ENV === 'dev') {
+				console.log(rejectedValueOrSerializedError)
+			}
 			showError(
 				isAdminContext
 					? t('popup.remove_user.admin_error')
