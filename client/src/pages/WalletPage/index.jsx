@@ -1,18 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
-import moment from 'moment'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { Loader } from '@/components/ui/general/Loader'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { getBybitWalletAndChanges } from '@/redux/slices/walletSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { Loader } from '@/components/ui/general/Loader';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { getBybitWalletAndChanges } from '@/redux/slices/walletSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import { Info } from './Info'
-import { LineChart } from './LineChart'
+import { Info } from './Info';
+import { LineChart } from './LineChart';
 
 export const WalletPage = React.memo(() => {
 	const { t } = useTranslation()
@@ -59,7 +64,6 @@ export const WalletPage = React.memo(() => {
 			chartWidth={720}
 			update={handleClickUpdate}
 			periods={true}
-			calendar={true}
 			minDate={moment().subtract(180, 'days').toDate()}
 		>
 			{serverStatus === 'loading' && <Loader />}

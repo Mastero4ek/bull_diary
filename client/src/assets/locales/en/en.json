@@ -353,8 +353,8 @@
 			"empty": "There were no closed transactions during this period!",
 			"chart_income": "Income",
 			"chart_lession": "Lession",
-			"chart_profit": "Profit: ",
-			"chart_loss": "Loss: "
+			"chart_profit": "Profit (ROI%): ",
+			"chart_loss": "Loss (ROI%): "
 		},
 		"diary": {
 			"update_success": "Positions updated successfully!",
@@ -374,8 +374,8 @@
 			"los_trades": "Losing Trades",
 			"winrate": "Winrate",
 			"overview": "Overview",
-			"chart_label": "Wallet balance in USDT",
-			"chart_label_trans": "Transactions:",
+			"chart_label": "Wallet balance",
+			"chart_label_trans": "Transactions",
 			"warning": "You can currently search within the past 180 days."
 		},
 		"wallet_details": {

@@ -30,9 +30,7 @@ export const HeaderLayout = React.memo(() => {
 	const { openPopup } = usePopup()
 	const { NAVLIST } = useNavList()
 	const { isAuth, user } = useSelector(state => state.candidate)
-	const [currentTime, setCurrentTime] = useState(
-		moment().format('DD MMMM YYYY, HH:mm:ss')
-	)
+	const [currentTime, setCurrentTime] = useState(moment())
 
 	const handleSignIn = useCallback(() => {
 		openPopup(<SignInPopup />)
@@ -41,7 +39,20 @@ export const HeaderLayout = React.memo(() => {
 	const renderUserSection = () => (
 		<>
 			<RootDesc>
-				<span>{currentTime}</span>
+				<span style={{ display: 'flex', flexDirection: 'column' }}>
+					<b>{moment(currentTime).format('DD MMMM YYYY')}</b>
+					<br />
+					<span
+						style={{
+							fontWeight: '400',
+							opacity: '0.5',
+							display: 'inline-block',
+							marginLeft: 'auto',
+						}}
+					>
+						{moment(currentTime).format('HH:mm:ss')}
+					</span>
+				</span>
 			</RootDesc>
 
 			<div className={styles.header_user_wrapper}>
@@ -78,12 +89,7 @@ export const HeaderLayout = React.memo(() => {
 		let timeoutId
 
 		const updateTime = () => {
-			setCurrentTime(
-				<>
-					<b>{moment().format('DD MMMM YYYY')}</b>
-					<span>{moment().format(', HH:mm:ss')}</span>
-				</>
-			)
+			setCurrentTime(moment())
 
 			const now = new Date()
 			const msToNextSecond = 1000 - now.getMilliseconds()

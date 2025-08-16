@@ -68,15 +68,22 @@ export const TablePage = () => {
 	} = useSelector(state => state.bookmarks)
 
 	const columns = [
-		{ Header: t('table.symbol'), accessor: 'symbol', width: '100%' },
 		{
 			Header: t('table.closed_time'),
 			accessor: 'closed_time',
 			Cell: ({ cell: { value } }) => (
-				<span>{moment(value).format('DD/MM/YYYY')}</span>
+				<span>
+					{moment(value).format('DD/MM/YYYY')}
+					<br />
+					<span style={{ fontWeight: '400', opacity: '0.5' }}>
+						{moment(value).format('HH:mm:ss')}
+					</span>
+				</span>
 			),
 			width: '100%',
 		},
+		{ Header: t('table.symbol'), accessor: 'symbol', width: '100%' },
+
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
@@ -85,10 +92,6 @@ export const TablePage = () => {
 					{mark && <Mark color={value === 'long' ? 'green' : 'red'} />}
 
 					{capitalize(value === 'long' ? t('table.buy') : t('table.sell'))}
-
-					{/* <span style={{ display: 'block', marginLeft: '6rem' }}>
-						{original.leverage}X
-					</span> */}
 				</div>
 			),
 			width: '100%',

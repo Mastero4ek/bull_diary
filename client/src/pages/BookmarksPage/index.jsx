@@ -62,15 +62,22 @@ export const BookmarksPage = React.memo(() => {
 	} = useSelector(state => state.bookmarks)
 
 	const columns = [
-		{ Header: t('table.symbol'), accessor: 'symbol' },
 		{
 			Header: t('table.closed_time'),
 			accessor: 'closed_time',
 			Cell: ({ cell: { value } }) => (
-				<span>{moment(value).format('DD/MM/YYYY')}</span>
+				<span>
+					{moment(value).format('DD/MM/YYYY')}
+					<br />
+					<span style={{ fontWeight: '400', opacity: '0.5' }}>
+						{moment(value).format('HH:mm:ss')}
+					</span>
+				</span>
 			),
 			width: '100%',
 		},
+		{ Header: t('table.symbol'), accessor: 'symbol' },
+
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',

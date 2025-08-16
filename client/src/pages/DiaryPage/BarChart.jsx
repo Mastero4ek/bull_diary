@@ -1,19 +1,19 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 
 import {
-	BarElement,
-	CategoryScale,
-	Chart as ChartJS,
-	Legend,
-	LinearScale,
-	Title,
-	Tooltip,
-} from 'chart.js'
-import { Bar } from 'react-chartjs-2'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, Title)
 
@@ -24,15 +24,50 @@ export const BarChart = React.memo(() => {
 		state => state.positions
 	)
 
-	let margin = (width * 0.5) / 100
-	let fontSize = (width * 0.9) / 100
-	let font = "'IBM Plex Sans', sans-serif"
-	let colorDark = 'rgba(185, 200, 215, 1)'
-	let colorLight = 'rgba(79, 104, 137, 1)'
-	let backgroundLightRed = 'rgba(255, 51, 100, 1)'
-	let backgroundDarkRed = 'rgba(255, 55, 55, 1)'
-	let backgroundLightGreen = '#28d5ca'
-	let backgroundDarkGreen = '#11958d'
+	const chartStyles = useMemo(
+		() => ({
+			// Base sizes
+			margin: (width * 0.5) / 100,
+			fontSize: (width * 0.9) / 100,
+			font: "'IBM Plex Sans', sans-serif",
+
+			// Text colors
+			colorDark: 'rgba(185, 200, 215, 1)',
+			colorLight: 'rgba(79, 104, 137, 1)',
+
+			// Bar chart colors
+			backgroundLightRed: 'rgba(255, 51, 100, 1)',
+			backgroundDarkRed: 'rgba(255, 55, 55, 1)',
+			backgroundLightGreen: '#28d5ca',
+			backgroundDarkGreen: '#11958d',
+
+			// Tooltip colors
+			tooltipBgDark: 'rgba(38, 46, 54, 0.75)',
+			tooltipBgLight: 'rgba(241, 247, 255, 0.75)',
+
+			// Sizes for large screens
+			largeScreen: width >= 1920 || isMobile,
+
+			// Animation
+			animationDuration: serverStatus === 'error' ? 0 : 1500,
+
+			// Bar chart settings
+			barPercentage: 0.5,
+			barBorderWidth: 0,
+
+			// Tooltip settings
+			tooltipTitleAlign: 'center',
+			tooltipBodyAlign: 'right',
+			usePointStyle: true,
+
+			// Legend settings
+			legendPosition: 'top',
+
+			// Grid settings
+			gridLineWidth: 0,
+		}),
+		[width, isMobile, serverStatus]
+	)
 
 	const fakeOrdersByDay = [
 		{ day: 'Mon', net_profit: 10 },
@@ -44,23 +79,21 @@ export const BarChart = React.memo(() => {
 		{ day: 'Sun', net_profit: 12 },
 	]
 
-	const allNetProfitZero = ordersByDay.every(order => order.net_profit === 0)
+	const backgroundColors = useMemo(() => {
+		const dataSource = fakePositions ? fakeOrdersByDay : ordersByDay
 
-	let backgroundColors = fakePositions
-		? fakeOrdersByDay.map((order, index) => {
-				if (order.net_profit < 0) {
-					return theme ? backgroundDarkRed : backgroundLightRed
-				} else {
-					return theme ? backgroundDarkGreen : backgroundLightGreen
-				}
-		  })
-		: ordersByDay.map((order, index) => {
-				if (order.net_profit < 0) {
-					return theme ? backgroundDarkRed : backgroundLightRed
-				} else {
-					return theme ? backgroundDarkGreen : backgroundLightGreen
-				}
-		  })
+		return dataSource.map((order, index) => {
+			if (order.net_profit < 0) {
+				return theme
+					? chartStyles.backgroundDarkRed
+					: chartStyles.backgroundLightRed
+			} else {
+				return theme
+					? chartStyles.backgroundDarkGreen
+					: chartStyles.backgroundLightGreen
+			}
+		})
+	}, [fakePositions, fakeOrdersByDay, ordersByDay, theme, chartStyles])
 
 	const data = useMemo(
 		() => ({
@@ -76,22 +109,18 @@ export const BarChart = React.memo(() => {
 							? fakeOrdersByDay.map(order => order.net_profit)
 							: ordersByDay.map(order => order.net_profit),
 					backgroundColor: backgroundColors,
-					borderRadius: margin,
-					borderWidth: 0,
-					barPercentage: 0.5,
+					borderRadius: chartStyles.margin,
+					borderWidth: chartStyles.barBorderWidth,
+					barPercentage: chartStyles.barPercentage,
 				},
 			],
 		}),
 		[
-			theme,
-			width,
-			isMobile,
-			font,
-			margin,
+			backgroundColors,
 			ordersByDay,
-			allNetProfitZero,
 			fakeOrdersByDay,
 			serverStatus,
+			chartStyles,
 			t,
 		]
 	)
@@ -100,87 +129,84 @@ export const BarChart = React.memo(() => {
 		() => ({
 			responsive: true,
 			animation: {
-				duration: serverStatus === 'error' ? 0 : 1500,
+				duration: chartStyles.animationDuration,
 			},
 			plugins: {
 				legend: {
-					position: 'top',
+					position: chartStyles.legendPosition,
 					labels: {
-						boxWidth: width >= 1920 || isMobile ? 15 : margin,
-						boxHeight: width >= 1920 || isMobile ? 15 : margin,
-						usePointStyle: true,
-						color: theme ? colorDark : colorLight,
+						boxWidth: chartStyles.largeScreen ? 15 : chartStyles.margin,
+						boxHeight: chartStyles.largeScreen ? 15 : chartStyles.margin,
+						usePointStyle: chartStyles.usePointStyle,
+						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
 						font: {
-							size: width >= 1920 || isMobile ? 14 : fontSize,
-							family: font,
+							size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
+							family: chartStyles.font,
 						},
 					},
 				},
 				tooltip: {
 					backgroundColor: theme
-						? 'rgba(38, 46, 54, 0.75)'
-						: 'rgba(241, 247, 255, 0.75)',
-					titleColor: theme
-						? 'rgba(185, 200, 215, 1)'
-						: 'rgba(79, 104, 137, 1)',
-					bodyColor: theme ? 'rgba(185, 200, 215, 1)' : 'rgba(79, 104, 137, 1)',
-					usePointStyles: true,
-					padding: width >= 1920 || isMobile ? 20 : margin,
-					caretPadding: width >= 1920 || isMobile ? 20 : margin,
-					cornerRadius: width >= 1920 || isMobile ? 20 : margin,
-					boxPadding: width >= 1920 || isMobile ? 20 : margin,
-					usePointStyle: true,
-					titleAlign: 'center',
-					bodyAlign: 'right',
+						? chartStyles.tooltipBgDark
+						: chartStyles.tooltipBgLight,
+					titleColor: theme ? chartStyles.colorDark : chartStyles.colorLight,
+					bodyColor: theme ? chartStyles.colorDark : chartStyles.colorLight,
+					usePointStyles: chartStyles.usePointStyle,
+					padding: chartStyles.largeScreen ? 20 : chartStyles.margin,
+					caretPadding: chartStyles.largeScreen ? 20 : chartStyles.margin,
+					cornerRadius: chartStyles.largeScreen ? 20 : chartStyles.margin,
+					boxPadding: chartStyles.largeScreen ? 20 : chartStyles.margin,
+					usePointStyle: chartStyles.usePointStyle,
+					titleAlign: chartStyles.tooltipTitleAlign,
+					bodyAlign: chartStyles.tooltipBodyAlign,
 					titleFont: {
-						size: width >= 1920 || isMobile ? 16 : fontSize,
-						family: "'IBM Plex Sans', sans-serif",
+						size: chartStyles.largeScreen ? 16 : chartStyles.fontSize,
+						family: chartStyles.font,
 					},
 					bodyFont: {
-						size: width >= 1920 || isMobile ? 14 : fontSize,
-						family: "'IBM Plex Sans', sans-serif",
+						size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
+						family: chartStyles.font,
 					},
 				},
 			},
 			scales: {
 				x: {
 					grid: {
-						lineWidth: 0,
+						lineWidth: chartStyles.gridLineWidth,
 					},
 					ticks: {
-						padding: margin,
-						color: theme ? colorDark : colorLight,
+						padding: chartStyles.margin,
+						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
 						font: {
-							size: fontSize,
-							family: font,
+							size: chartStyles.fontSize,
+							family: chartStyles.font,
 						},
 					},
 				},
 				y: {
+					beginAtZero: true,
 					grid: {
-						lineWidth: 0,
+						lineWidth: chartStyles.gridLineWidth,
 					},
 					ticks: {
-						padding: margin,
-						color: theme ? colorDark : colorLight,
+						padding: chartStyles.margin,
+						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
 						font: {
-							size: fontSize,
-							family: font,
+							size: chartStyles.fontSize,
+							family: chartStyles.font,
 						},
+					},
+					afterDataLimits: scale => {
+						const max = scale.max
+						const padding = max * 0.25
+
+						scale.max = max + padding
+						scale.min = 0
 					},
 				},
 			},
 		}),
-		[
-			theme,
-			width,
-			isMobile,
-			font,
-			margin,
-			fakePositions,
-			ordersByDay,
-			serverStatus,
-		]
+		[theme, chartStyles]
 	)
 
 	return (

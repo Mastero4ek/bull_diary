@@ -16,11 +16,8 @@ export const getBybitWalletAndChanges = createAsyncThunk(
 		try {
 			const [walletRes, changesRes] = await Promise.all([
 				WalletService.getBybitWallet(exchange, start_time, end_time),
-				WalletService.getBybitWalletChangesByDay(
-					exchange,
-					start_time,
-					end_time
-				),
+				// Сервер теперь всегда возвращает данные за 180 дней
+				WalletService.getBybitWalletChangesByDay(exchange),
 			])
 
 			const result = {
@@ -133,6 +130,7 @@ const walletSlice = createSlice({
 				state.wallet.total_loss = wallet.total_loss
 				state.wallet.wining_trades = wallet.wining_trades
 				state.wallet.losing_trades = wallet.losing_trades
+				// total_loss уже отрицательное значение, поэтому просто складываем
 				state.wallet.net_profit = +parseFloat(
 					wallet.total_profit + wallet.total_loss
 				).toFixed(2)

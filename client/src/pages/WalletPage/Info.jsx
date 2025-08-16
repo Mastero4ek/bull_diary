@@ -2,14 +2,12 @@ import React, { useCallback } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import bear from '@/assets/images/levels/bear.png';
 import bull from '@/assets/images/levels/bull.png';
 import hamster from '@/assets/images/levels/hamster.png';
 import shark from '@/assets/images/levels/shark.png';
 import whale from '@/assets/images/levels/whale.png';
-import { RootButton } from '@/components/ui/buttons/RootButton';
 import { SharedButton } from '@/components/ui/buttons/SharedButton';
 import { RootDesc } from '@/components/ui/descriptions/RootDesc';
 import { ErrorTable } from '@/components/ui/general/ErrorTable';
@@ -23,8 +21,6 @@ import styles from './styles.module.scss';
 const levelImages = { hamster, bear, bull, shark, whale }
 
 export const Info = React.memo(() => {
-	const navigate = useNavigate()
-
 	const { t } = useTranslation()
 	const { user } = useSelector(state => state.candidate)
 	const { color, amount } = useSelector(state => state.settings)
@@ -102,14 +98,6 @@ export const Info = React.memo(() => {
 						<InnerBlock>
 							<img src={currentLevel()} alt='level-image' />
 						</InnerBlock>
-
-						<RootButton
-							icon={'details'}
-							text={t('button.details')}
-							onClickBtn={() => {
-								navigate('/wallet/details')
-							}}
-						/>
 					</div>
 
 					<div className={styles.info_stats}>
@@ -136,6 +124,8 @@ export const Info = React.memo(() => {
 										<RootDesc>
 											{stat?.type === 'balance' || stat?.type === 'pnl' ? (
 												<>
+													{stat?.type === 'balance' && <b>~</b>}
+
 													<b
 														style={
 															color

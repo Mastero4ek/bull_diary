@@ -73,7 +73,11 @@ export const WalletDetailsPage = React.memo(() => {
 			accessor: 'transactionTime',
 			Cell: ({ row: { original } }) => (
 				<span>
-					{moment(original.date).format('DD/MM/YYYY')} - {original.time}
+					{moment(original.date).format('DD/MM/YYYY')}
+					<br />
+					<span style={{ fontWeight: '400', opacity: '0.5' }}>
+						{original.time}
+					</span>
 				</span>
 			),
 			width: '100%',

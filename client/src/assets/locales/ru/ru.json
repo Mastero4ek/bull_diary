@@ -60,7 +60,7 @@
 		"side": "Сторона",
 		"type": "Тип",
 		"funding": "Финансирование",
-		"fee": "Платеж",
+		"fee": "Комиссия",
 		"balance": "Баланс",
 		"change": "Изменение",
 		"buy": "Покупка",
@@ -353,8 +353,8 @@
 			"empty": "За этот период не было закрытых ордеров!",
 			"chart_income": "Доход",
 			"chart_lession": "Убыток",
-			"chart_profit": "Выгода: ",
-			"chart_loss": "Потеря: "
+			"chart_profit": "Выгода (ROI%): ",
+			"chart_loss": "Потеря (ROI%): "
 		},
 		"diary": {
 			"update_success": "Открытые позиции успешно обновлены!",
@@ -374,8 +374,8 @@
 			"los_trades": "Убыточные сделки",
 			"winrate": "Винрейт",
 			"overview": "Обзор",
-			"chart_label": "Баланс кошелька в USDT",
-			"chart_label_trans": "Транзакции:",
+			"chart_label": "Баланс кошелька",
+			"chart_label_trans": "Транзакции",
 			"warning": "Вы можете просматривать записи за последние 180 дней."
 		},
 		"wallet_details": {

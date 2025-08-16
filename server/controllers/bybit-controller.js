@@ -287,18 +287,11 @@ class BybitController {
 				)
 			}
 
-			let startDate = moment(start_time).startOf('day').valueOf()
-			let endDate = moment(end_time).startOf('day').valueOf()
-
-			// Check if the period is more than 180 days, limit the last 180 days
-			const daysDiff = moment(endDate).diff(moment(startDate), 'days')
-
-			if (daysDiff > 180) {
-				startDate = moment(endDate)
-					.subtract(180, 'days')
-					.startOf('day')
-					.valueOf()
-			}
+			const endDate = moment().endOf('day').valueOf()
+			const startDate = moment(endDate)
+				.subtract(180, 'days')
+				.startOf('day')
+				.valueOf()
 
 			const transactions = await BybitService.getBybitWalletChanges(
 				req.lng,
@@ -355,6 +348,8 @@ class BybitController {
 			const days = maxDate.diff(minDate, 'days') + 1
 
 			let result = []
+			let lastKnownBalance = null
+
 			for (let i = 0; i < days; i++) {
 				const day = minDate.clone().add(i, 'day').format('YYYY-MM-DD')
 				const transactionsForDay = grouped[day] || []
@@ -366,23 +361,33 @@ class BybitController {
 				const positiveChanges = transactionsForDay.filter(t => t.isPositive())
 				const negativeChanges = transactionsForDay.filter(t => t.isNegative())
 
-				const lastTransaction =
-					transactionsForDay[transactionsForDay.length - 1]
-				const cashBalance = lastTransaction ? lastTransaction.cashBalance : null
+				const lastTransactionWithBalance = transactionsForDay
+					.filter(t => t.cashBalance !== null && t.cashBalance !== 0)
+					.sort((a, b) => a.transactionTime - b.transactionTime)
+					.pop()
+
+				let cashBalance = null
+				if (lastTransactionWithBalance) {
+					cashBalance = lastTransactionWithBalance.cashBalance
+					lastKnownBalance = cashBalance
+				} else if (lastKnownBalance !== null) {
+					cashBalance = lastKnownBalance
+				}
+
+				const positiveSum = positiveChanges.reduce(
+					(sum, t) => sum + t.getNetChange(),
+					0
+				)
+				const negativeSum = negativeChanges.reduce(
+					(sum, t) => sum + t.getNetChange(),
+					0
+				)
 
 				result.push({
 					date: day,
 					change: parseFloat(totalChange.toFixed(2)),
-					positive: parseFloat(
-						positiveChanges
-							.reduce((sum, t) => sum + t.getAbsoluteValue(), 0)
-							.toFixed(2)
-					),
-					negative: parseFloat(
-						negativeChanges
-							.reduce((sum, t) => sum + t.getAbsoluteValue(), 0)
-							.toFixed(2)
-					),
+					positive: parseFloat(positiveSum.toFixed(2)),
+					negative: parseFloat(Math.abs(negativeSum).toFixed(2)),
 					count: transactionsForDay.length,
 					cashBalance:
 						cashBalance !== null ? parseFloat(cashBalance.toFixed(2)) : null,
@@ -390,12 +395,10 @@ class BybitController {
 			}
 
 			const lastTransactionBalance =
-				result.length > 0 ? result[result.length - 1].cashBalance : null
+				lastKnownBalance ||
+				(result.length > 0 ? result[result.length - 1].cashBalance : null)
 
-			if (
-				lastTransactionBalance !== null &&
-				Math.abs(currentBalance - lastTransactionBalance) > 0.001
-			) {
+			if (lastTransactionBalance !== null && currentBalance !== null) {
 				const lastTransactionWithBalance = result
 					.filter(item => item.cashBalance !== null)
 					.sort((a, b) => moment(a.date).diff(moment(b.date)))
@@ -416,7 +419,12 @@ class BybitController {
 						const existingEntry = result.find(item => item.date === dateStr)
 
 						if (existingEntry) {
-							existingEntry.cashBalance = currentBalance
+							if (
+								existingEntry.cashBalance === null ||
+								Math.abs(currentBalance - existingEntry.cashBalance) > 0.001
+							) {
+								existingEntry.cashBalance = currentBalance
+							}
 						} else {
 							result.push({
 								date: dateStr,
@@ -474,7 +482,6 @@ class BybitController {
 			let startDate = moment(start_time).startOf('day').valueOf()
 			let endDate = moment(end_time).endOf('day').valueOf()
 
-			// Check if the period is more than 180 days, limit the last 180 days
 			const daysDiff = moment(endDate).diff(moment(startDate), 'days')
 
 			if (daysDiff > 180) {

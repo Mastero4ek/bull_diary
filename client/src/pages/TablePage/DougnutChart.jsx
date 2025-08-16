@@ -1,34 +1,72 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 
-import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from 'chart.js'
-import { Doughnut } from 'react-chartjs-2'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import {
+  ArcElement,
+  Chart as ChartJS,
+  Legend,
+  Title,
+  Tooltip,
+} from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { Mark } from '@/components/ui/general/Mark'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { colorizedNum } from '@/helpers/functions';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
 export const DoughnutChart = () => {
 	const { t } = useTranslation()
-	const { theme, width, isMobile, mark } = useSelector(state => state.settings)
+	const { theme, width, isMobile, color } = useSelector(state => state.settings)
 	const { totalLoss, totalProfit } = useSelector(state => state.orders)
 	const { fakeOrders } = useSelector(state => state.orders)
 
-	let margin = (width * 0.5) / 100
-	let fontSize = (width * 0.9) / 100
-	let chartOffset = (width * 2.75) / 100
-	let chartCutout = (width * 5.5) / 100
-	let font = "'IBM Plex Sans', sans-serif"
-	let colorDark = 'rgba(185, 200, 215, 1)'
-	let colorLight = 'rgba(79, 104, 137, 1)'
-	let backgroundGreenLight = '#28d5ca'
-	let backgroundGreenDark = '#11958d'
-	let backgroundRedLight = 'rgba(255, 51, 100, 1)'
-	let backgroundRedDark = 'rgba(255, 55, 55, 1)'
+	const chartStyles = useMemo(
+		() => ({
+			// Base sizes
+			margin: (width * 0.5) / 100,
+			fontSize: (width * 0.9) / 100,
+			chartOffset: (width * 2.75) / 100,
+			chartCutout: (width * 5.5) / 100,
+			font: "'IBM Plex Sans', sans-serif",
+
+			// Text colors
+			colorDark: 'rgba(185, 200, 215, 1)',
+			colorLight: 'rgba(79, 104, 137, 1)',
+
+			// Doughnut chart colors
+			backgroundGreenLight: '#28d5ca',
+			backgroundGreenDark: '#11958d',
+			backgroundRedLight: 'rgba(255, 51, 100, 1)',
+			backgroundRedDark: 'rgba(255, 55, 55, 1)',
+
+			// Tooltip colors
+			tooltipBgDark: 'rgba(38, 46, 54, 0.75)',
+			tooltipBgLight: 'rgba(241, 247, 255, 0.75)',
+
+			// Sizes for large screens
+			largeScreen: width >= 1920 || isMobile,
+
+			// Animation
+			animationDuration: fakeOrders ? 0 : 1500,
+
+			// Doughnut chart settings
+			borderWidth: 0,
+			hoverOffset: (width * 0.5) / 100,
+
+			// Tooltip settings
+			tooltipTitleAlign: 'center',
+			tooltipBodyAlign: 'right',
+
+			// Legend settings
+			legendPosition: 'top',
+			usePointStyle: true,
+		}),
+		[width, isMobile, fakeOrders]
+	)
 
 	const data = useMemo(
 		() => ({
@@ -37,85 +75,66 @@ export const DoughnutChart = () => {
 				{
 					data: fakeOrders ? [650, -350] : [totalProfit, totalLoss],
 					backgroundColor: theme
-						? [backgroundGreenDark, backgroundRedDark]
-						: [backgroundGreenLight, backgroundRedLight],
-					borderRadius: margin,
-					borderWidth: 0,
-					hoverOffset: margin,
-					offset: [chartOffset, 0],
+						? [chartStyles.backgroundGreenDark, chartStyles.backgroundRedDark]
+						: [
+								chartStyles.backgroundGreenLight,
+								chartStyles.backgroundRedLight,
+						  ],
+					borderRadius: chartStyles.margin,
+					borderWidth: chartStyles.borderWidth,
+					hoverOffset: chartStyles.hoverOffset,
+					offset: [chartStyles.chartOffset, 0],
 				},
 			],
 		}),
-		[
-			theme,
-			totalProfit,
-			totalLoss,
-			width,
-			isMobile,
-			font,
-			margin,
-			chartCutout,
-			fakeOrders,
-		]
+		[theme, totalProfit, totalLoss, fakeOrders, chartStyles, t]
 	)
 
 	const options = useMemo(
 		() => ({
-			cutout: chartCutout,
+			cutout: chartStyles.chartCutout,
 			responsive: true,
 			animation: {
-				duration: fakeOrders ? 0 : 1500,
+				duration: chartStyles.animationDuration,
 			},
 			plugins: {
 				legend: {
-					position: 'top',
+					position: chartStyles.legendPosition,
 					labels: {
-						boxWidth: width >= 1920 || isMobile ? 15 : margin,
-						boxHeight: width >= 1920 || isMobile ? 15 : margin,
-						usePointStyle: true,
-						color: theme ? colorDark : colorLight,
+						boxWidth: chartStyles.largeScreen ? 15 : chartStyles.margin,
+						boxHeight: chartStyles.largeScreen ? 15 : chartStyles.margin,
+						usePointStyle: chartStyles.usePointStyle,
+						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
 						font: {
-							size: width >= 1920 || isMobile ? 14 : fontSize,
-							family: font,
+							size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
+							family: chartStyles.font,
 						},
 					},
 				},
 				tooltip: {
 					backgroundColor: theme
-						? 'rgba(38, 46, 54, 0.75)'
-						: 'rgba(241, 247, 255, 0.75)',
-					titleColor: theme
-						? 'rgba(185, 200, 215, 1)'
-						: 'rgba(79, 104, 137, 1)',
-					bodyColor: theme ? 'rgba(185, 200, 215, 1)' : 'rgba(79, 104, 137, 1)',
-					padding: width >= 1920 || isMobile ? 20 : margin,
-					caretPadding: width >= 1920 || isMobile ? 20 : margin,
-					cornerRadius: width >= 1920 || isMobile ? 20 : margin,
-					boxPadding: width >= 1920 || isMobile ? 20 : margin,
-					titleAlign: 'center',
-					bodyAlign: 'right',
+						? chartStyles.tooltipBgDark
+						: chartStyles.tooltipBgLight,
+					titleColor: theme ? chartStyles.colorDark : chartStyles.colorLight,
+					bodyColor: theme ? chartStyles.colorDark : chartStyles.colorLight,
+					padding: chartStyles.largeScreen ? 20 : chartStyles.margin,
+					caretPadding: chartStyles.largeScreen ? 20 : chartStyles.margin,
+					cornerRadius: chartStyles.largeScreen ? 20 : chartStyles.margin,
+					boxPadding: chartStyles.largeScreen ? 20 : chartStyles.margin,
+					titleAlign: chartStyles.tooltipTitleAlign,
+					bodyAlign: chartStyles.tooltipBodyAlign,
 					titleFont: {
-						size: width >= 1920 || isMobile ? 16 : fontSize,
-						family: "'IBM Plex Sans', sans-serif",
+						size: chartStyles.largeScreen ? 16 : chartStyles.fontSize,
+						family: chartStyles.font,
 					},
 					bodyFont: {
-						size: width >= 1920 || isMobile ? 14 : fontSize,
-						family: "'IBM Plex Sans', sans-serif",
+						size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
+						family: chartStyles.font,
 					},
 				},
 			},
 		}),
-		[
-			theme,
-			totalProfit,
-			totalLoss,
-			width,
-			isMobile,
-			font,
-			margin,
-			chartCutout,
-			fakeOrders,
-		]
+		[theme, chartStyles]
 	)
 
 	return (
@@ -130,20 +149,36 @@ export const DoughnutChart = () => {
 
 			<div className={styles.doughnut_chart_bottom}>
 				<div className={styles.doughnut_chart_desc}>
-					{mark && <Mark color={'green'} />}
-
 					<RootDesc>
 						<span>{t('page.table.chart_profit')}</span>
-						<strong>{fakeOrders ? 650 : totalProfit} %</strong>
+						<strong
+							style={{
+								color: `var(--${
+									color ? colorizedNum(totalProfit, true) : 'text'
+								})`,
+							}}
+						>
+							{fakeOrders
+								? 650
+								: totalProfit > 0
+								? `+${totalProfit}`
+								: totalProfit}
+						</strong>
 					</RootDesc>
 				</div>
 
 				<div className={styles.doughnut_chart_desc}>
-					{mark && <Mark color={'red'} />}
-
 					<RootDesc>
 						<span>{t('page.table.chart_loss')}</span>
-						<strong>{fakeOrders ? -350 : totalLoss} %</strong>
+						<strong
+							style={{
+								color: `var(--${
+									color ? colorizedNum(totalLoss, true) : 'text'
+								})`,
+							}}
+						>
+							{fakeOrders ? -350 : totalLoss}
+						</strong>
 					</RootDesc>
 				</div>
 			</div>

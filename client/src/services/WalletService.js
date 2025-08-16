@@ -29,12 +29,10 @@ export default class WalletService {
 		})
 	}
 
-	static async getBybitWalletChangesByDay(exchange, start_time, end_time) {
+	static async getBybitWalletChangesByDay(exchange) {
 		return $api.get(`/v1/bybit-wallet-changes-by-day`, {
 			params: {
 				exchange,
-				start_time,
-				end_time,
 			},
 		})
 	}

@@ -1,31 +1,42 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import moment from 'moment/min/moment-with-locales'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
-
-import avatarDefault from '@/assets/images/general/default_avatar.png'
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { TableLayout } from '@/components/layouts/TableLayout'
-import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { NewUserPopup } from '@/popups/NewUserPopup'
-import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
-import { getUser } from '@/redux/slices/candidateSlice'
+import moment from 'moment/min/moment-with-locales';
+import { useTranslation } from 'react-i18next';
 import {
-	clearUsers,
-	getUsers,
-	setPage,
-	setSort,
-} from '@/redux/slices/usersSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import styles from './styles.module.scss'
+import avatarDefault from '@/assets/images/general/default_avatar.png';
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { TableLayout } from '@/components/layouts/TableLayout';
+import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { NewUserPopup } from '@/popups/NewUserPopup';
+import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
+import { getUser } from '@/redux/slices/candidateSlice';
+import {
+  clearUsers,
+  getUsers,
+  setPage,
+  setSort,
+} from '@/redux/slices/usersSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import styles from './styles.module.scss';
 
 export const UsersPage = () => {
 	const { t } = useTranslation()
@@ -83,13 +94,29 @@ export const UsersPage = () => {
 		{
 			Header: t('table.created_at'),
 			accessor: 'created_at',
-			Cell: ({ cell: { value } }) => <>{moment(value).format('DD/MM/YYYY')}</>,
+			Cell: ({ cell: { value } }) => (
+				<b>
+					{moment(value).format('DD/MM/YYYY')}
+					<br />
+					<span style={{ fontWeight: '400', opacity: '0.5' }}>
+						{moment(value).format('HH:mm:ss')}
+					</span>
+				</b>
+			),
 			width: '100%',
 		},
 		{
 			Header: t('table.updated_at'),
 			accessor: 'updated_at',
-			Cell: ({ cell: { value } }) => <>{moment(value).format('DD/MM/YYYY')}</>,
+			Cell: ({ cell: { value } }) => (
+				<b>
+					{moment(value).format('DD/MM/YYYY')}
+					<br />
+					<span style={{ fontWeight: '400', opacity: '0.5' }}>
+						{moment(value).format('HH:mm:ss')}
+					</span>
+				</b>
+			),
 			width: '100%',
 		},
 		{
