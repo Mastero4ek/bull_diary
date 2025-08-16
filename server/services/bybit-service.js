@@ -30,9 +30,9 @@ class BybitService {
 		)
 
 		const cachedData = await Helpers.getFromCache(cacheKey, 'getBybitOrdersPnl')
-		// if (cachedData) {
-		// 	return cachedData
-		// }
+		if (cachedData) {
+			return cachedData
+		}
 
 		const client = new RestClientV5({
 			testnet: false,
@@ -134,8 +134,6 @@ class BybitService {
 					await Helpers.delayApi(100)
 				} while (nextCursor)
 			}
-
-			logger.info(allOrders, 'ORDERS')
 
 			const orders = allOrders.map(item => new BybitOrderDto(item))
 

@@ -156,7 +156,7 @@ export const WalletDetailsPage = React.memo(() => {
 			Cell: ({ cell: { value } }) => (
 				<span
 					style={{
-						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+						color: `var(--${color ? colorizedNum(value, false) : 'text'})`,
 					}}
 				>
 					{amount
@@ -164,7 +164,7 @@ export const WalletDetailsPage = React.memo(() => {
 						: value === 0
 						? '0.0000'
 						: value > 0
-						? `+${value}`
+						? `-${value}`
 						: value}
 				</span>
 			),

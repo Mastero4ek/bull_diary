@@ -30,6 +30,8 @@ class OrdersService {
 				leverage: order.leverage,
 				quality: order.quality,
 				margin: order.margin,
+				open_fee: order.open_fee,
+				closed_fee: order.closed_fee,
 				pnl: order.pnl,
 				roi: order.roi,
 			})

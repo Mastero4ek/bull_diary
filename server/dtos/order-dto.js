@@ -7,6 +7,8 @@ module.exports = class OrderDto {
 	leverage
 	quality
 	margin
+	open_fee
+	closed_fee
 	pnl
 	roi
 
@@ -19,6 +21,8 @@ module.exports = class OrderDto {
 		this.leverage = +model.leverage
 		this.quality = +model.quality
 		this.margin = +model.margin
+		this.open_fee = +model.open_fee
+		this.closed_fee = +model.closed_fee
 		this.pnl = +model.pnl
 		this.roi = +model.roi
 	}

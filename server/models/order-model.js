@@ -11,6 +11,8 @@ const OrderSchema = new Schema({
 	leverage: { type: Number, required: true },
 	quality: { type: Number, required: true },
 	margin: { type: Number, required: true },
+	open_fee: { type: Number, required: true },
+	closed_fee: { type: Number, required: true },
 	pnl: { type: Number, required: true },
 	roi: { type: Number, required: true },
 })

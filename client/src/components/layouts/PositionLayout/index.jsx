@@ -50,22 +50,22 @@ export const PositionLayout = React.memo(() => {
 			},
 			{
 				id: 4,
-				name: t('page.position.open_fee'),
+				name: `${t('page.position.open_fee')} (USDT)`,
 				value: position?.open_fee,
 			},
 			{
 				id: 5,
-				name: t('page.position.closed_fee'),
+				name: `${t('page.position.closed_fee')} (USDT)`,
 				value: position?.closed_fee,
 			},
 			{
 				id: 6,
-				name: t('page.position.pnl'),
+				name: `${t('page.position.pnl')} (USDT)`,
 				value: position?.pnl,
 			},
 			{
 				id: 7,
-				name: t('page.position.roi'),
+				name: `${t('page.position.roi')} (%)`,
 				value: position?.roi,
 			},
 			{
@@ -106,68 +106,80 @@ export const PositionLayout = React.memo(() => {
 					<ul>
 						{positionFields &&
 							positionFields.length > 0 &&
-							positionFields.map(field => (
-								<li key={field?.id}>
+							positionFields.map(item => (
+								<li key={item?.id}>
 									<RootDesc>
-										<span>{field?.name}</span>
+										<span>{item?.name}</span>
 									</RootDesc>
 
 									<RootDesc>
-										{field?.name === t('page.position.direction') ? (
+										{item?.value === position?.direction ? (
 											<>
 												{mark && (
 													<Mark
-														color={field?.value === 'long' ? 'green' : 'red'}
+														color={item?.value === 'long' ? 'green' : 'red'}
 													/>
 												)}
 
 												<span>
 													{capitalize(
-														field?.value === 'long'
+														item?.value === 'long'
 															? t('table.buy')
 															: t('table.sell')
 													)}
 												</span>
 											</>
-										) : field?.name === t('page.position.pnl') ||
-										  field?.name === t('page.position.roi') ? (
+										) : item?.value === position?.pnl ||
+										  item?.value === position?.roi ? (
 											<>
 												<span
 													style={{
 														color: `var(--${
-															color ? colorizedNum(field?.value, true) : 'text'
+															color ? colorizedNum(item?.value, true) : 'text'
 														})`,
 													}}
 												>
 													{amount
 														? '****'
-														: field?.value === 0
+														: item?.value === 0
 														? '0.0000'
-														: field?.value > 0
-														? `+${field?.value}`
-														: field?.value}
-												</span>{' '}
-												<span>
-													{field?.name === t('page.position.pnl')
-														? 'USDT'
-														: '%'}
+														: item?.value > 0
+														? `+${item?.value}`
+														: item?.value}
 												</span>
 											</>
-										) : field?.name === t('page.position.qty') ? (
-											<span>{amount ? '****' : field?.value}</span>
-										) : field?.name === t('page.position.margin') ? (
-											<span>{amount ? '****' : field?.value} USDT</span>
-										) : field?.name === t('page.position.open_time') ||
-										  field?.name === t('page.position.closed_time') ? (
+										) : item?.value === position?.open_fee ||
+										  item?.value === position?.closed_fee ? (
+											<>
+												<span
+													style={{
+														color: `var(--${
+															color ? colorizedNum(item?.value, false) : 'text'
+														})`,
+													}}
+												>
+													{amount
+														? '****'
+														: item?.value > 0
+														? `-${item?.value}`
+														: item?.value}
+												</span>
+											</>
+										) : item?.value === position?.quality ? (
+											<span>{amount ? '****' : item?.value}</span>
+										) : item?.value === position?.margin ? (
+											<span>{amount ? '****' : item?.value}</span>
+										) : item?.value === position?.open_time ||
+										  item?.value === position?.closed_time ? (
 											<span>
-												{moment(field?.value).format('DD MMMM YYYY - HH:mm:ss')}
+												{moment(item?.value).format('DD MMMM YYYY - HH:mm:ss')}
 											</span>
-										) : field?.name === t('page.position.duration_time') ? (
-											<span>{field?.value}</span>
-										) : field?.name === t('page.position.leverage') ? (
-											<span>{field?.value}X</span>
+										) : item?.value === position?.duration_time ? (
+											<span>{item?.value}</span>
+										) : item?.value === position?.leverage ? (
+											<span>{item?.value}X</span>
 										) : (
-											<span>{field?.value}</span>
+											<span>{item?.value}</span>
 										)}
 									</RootDesc>
 								</li>
