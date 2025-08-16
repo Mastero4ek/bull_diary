@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Credentials', true)
 	res.header(
 		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token, x-xsrf-token'
 	)
 	res.header(
 		'Access-Control-Allow-Methods',
@@ -116,14 +116,23 @@ app.use(
 		methods: 'GET,POST,PUT,DELETE,PATCH',
 		credentials: true,
 		origin: [process.env.CLIENT_URL],
+		allowedHeaders: [
+			'Origin',
+			'X-Requested-With',
+			'Content-Type',
+			'Accept',
+			'Authorization',
+			'X-CSRF-Token',
+			'x-xsrf-token',
+		],
 	})
 )
 
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET,
-		resave: false,
-		saveUninitialized: false,
+		resave: true,
+		saveUninitialized: true,
 		cookie: {
 			secure: process.env.NODE_ENV === 'prod',
 			sameSite: 'strict',
@@ -133,17 +142,28 @@ app.use(
 	})
 )
 
+// Create CSRF protection middleware
+const csrfProtection = csrf({
+	cookie: true,
+	ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
+	ignorePaths: ['/api/v1/logout', '/api/v1/csrf-token'],
+})
+
 // CSRF protection for all POST/PUT/DELETE requests (except logout)
 app.use((req, res, next) => {
 	if (req.path === '/api/v1/logout' && req.method === 'POST') {
 		return next()
 	}
 
-	csrf({
-		cookie: true,
-		ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
-		ignorePaths: ['/api/v1/logout'],
-	})(req, res, next)
+	if (req.path === '/api/v1/csrf-token' && req.method === 'GET') {
+		return next()
+	}
+
+	if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
+		csrfProtection(req, res, next)
+	} else {
+		next()
+	}
 })
 
 // CSRF error handler
@@ -154,6 +174,7 @@ app.use((err, req, res, next) => {
 			code: 403,
 		})
 	}
+
 	next(err)
 })
 

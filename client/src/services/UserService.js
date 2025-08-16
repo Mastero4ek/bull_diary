@@ -1,4 +1,4 @@
-import $api from '../http'
+import $api from '../http';
 
 export default class UserService {
 	static async getUsers(sort, search, page, limit, start_time, end_time) {

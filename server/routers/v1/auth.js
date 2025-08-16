@@ -3,9 +3,12 @@ const authController = require('../../controllers/auth-controller')
 const router = new Router()
 const { checkSchema } = require('express-validator')
 const ValidationSchema = require('../../validation/validation-schema')
+const csrf = require('csurf')
 
-router.get('/csrf-token', (req, res) => {
-	res.json({ csrfToken: req.csrfToken() })
+router.get('/csrf-token', csrf({ cookie: true }), (req, res) => {
+	const token = req.csrfToken()
+
+	res.json({ csrfToken: token })
 })
 
 router.post(

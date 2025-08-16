@@ -25,6 +25,7 @@ const processQueue = (error = null) => {
 			prom.resolve()
 		}
 	})
+
 	failedQueue = []
 }
 
@@ -32,29 +33,44 @@ const processQueue = (error = null) => {
 const refreshTokens = async () => {
 	try {
 		const response = await $api.get('/refresh')
+
 		return response.data
 	} catch (error) {
 		throw error
 	}
 }
 
-// Function to get CSRF token from cookies
-const getCSRFToken = () => {
-	return Cookies.get('XSRF-TOKEN') || Cookies.get('_csrf')
-}
+// Flag to prevent recursion when getting CSRF token
+let isGettingCSRFToken = false
 
-// Function to fetch CSRF token from server
-const fetchCSRFToken = async () => {
-	try {
-		const response = await axios.get(`${API_URL}/api/v1/csrf-token`, {
-			withCredentials: true,
-		})
-		return response.data.csrfToken
-	} catch (error) {
-		console.error('Failed to fetch CSRF token:', error)
+// Function to get CSRF token
+const getCSRFToken = async () => {
+	// Protection from recursion
+	if (isGettingCSRFToken) {
 		return null
 	}
+
+	try {
+		isGettingCSRFToken = true
+
+		const response = await $api.get('/v1/csrf-token')
+
+		return response.data.csrfToken
+	} catch (error) {
+		return null
+	} finally {
+		isGettingCSRFToken = false
+	}
 }
+
+// Initialize CSRF token when the application is loaded
+let csrfToken = null
+
+const initializeCSRF = async () => {
+	csrfToken = await getCSRFToken()
+}
+
+initializeCSRF()
 
 // Add request interceptor
 $api.interceptors.request.use(
@@ -73,22 +89,23 @@ $api.interceptors.request.use(
 
 		config.headers['Accept-Language'] = language
 
-		// Add CSRF token for POST/PUT/DELETE requests (except logout)
+		// If CSRF token is not received, try to get it (except for the token request)
+		if (!csrfToken && !config.url?.includes('/csrf-token')) {
+			csrfToken = await getCSRFToken()
+		}
+
+		// Add CSRF token for POST/PUT/DELETE/PATCH requests (except logout)
 		if (
 			['post', 'put', 'delete', 'patch'].includes(
 				config.method?.toLowerCase()
 			) &&
 			!config.url?.includes('/logout')
 		) {
-			let csrfToken = getCSRFToken()
-
-			// If token not found in cookies, get it from server
-			if (!csrfToken) {
-				csrfToken = await fetchCSRFToken()
-			}
-
 			if (csrfToken) {
 				config.headers['X-CSRF-Token'] = csrfToken
+				config.headers['x-xsrf-token'] = csrfToken
+			} else {
+				console.warn('No CSRF token available for request:', config.url)
 			}
 		}
 
@@ -136,6 +153,24 @@ $api.interceptors.response.use(
 				processQueue(e)
 				window.location.href = '/'
 				return Promise.reject(e)
+			}
+		}
+
+		// If we get a CSRF error, try to update the token
+		if (
+			error.response?.status === 403 &&
+			error.response?.data?.message === 'CSRF token validation failed'
+		) {
+			csrfToken = await getCSRFToken()
+
+			if (csrfToken) {
+				// Repeat the original request with a new token
+				const originalRequest = error.config
+
+				originalRequest.headers['X-CSRF-Token'] = csrfToken
+				originalRequest.headers['x-xsrf-token'] = csrfToken
+
+				return $api(originalRequest)
 			}
 		}
 
