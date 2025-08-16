@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 
 import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
 import {
   useDispatch,
   useSelector,
@@ -10,6 +11,9 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
 import { RootDesc } from '@/components/ui/descriptions/RootDesc';
 import { ClosedContent } from '@/components/ui/general/ClosedContent';
 import { Icon } from '@/components/ui/general/Icon';
@@ -32,6 +36,8 @@ export const SideBarItem = React.memo(({ item }) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const location = useLocation()
+	const { t } = useTranslation()
+	const { showSuccess, showError } = useNotification()
 
 	const { language, theme, sideBar } = useSelector(state => state.settings)
 	const { user } = useSelector(state => state.candidate)
@@ -50,16 +56,18 @@ export const SideBarItem = React.memo(({ item }) => {
 				const resultAction = await dispatch(logout())
 				const originalPromiseResult = unwrapResult(resultAction)
 
-				if (!originalPromiseResult) return
-
-				navigate('/login')
-			} catch (rejectedValueOrSerializedError) {
+				// Logout успешен если нет ошибки (результат может быть null)
+				navigate('/home')
+				showSuccess(t('error.logout_success'))
+			} catch (e) {
 				if (process.env.NODE_ENV === 'dev') {
-					console.log(rejectedValueOrSerializedError)
+					console.log(e)
 				}
+
+				showError(t('error.logout_error'))
 			}
 		}
-	}, [dispatch, location])
+	}, [dispatch, location, showSuccess, showError])
 
 	const changeTheme = useCallback(() => {
 		const currentTheme = theme === true ? false : true

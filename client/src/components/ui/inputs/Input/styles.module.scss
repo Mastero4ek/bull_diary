@@ -31,6 +31,24 @@
 			transition: all 0.15s ease-in-out;
 			color: var(--red);
 		}
+
+		// disable autofill
+		input[type='password'] {
+			-webkit-text-fill-color: var(--text) !important;
+			background-color: var(--bgDark) !important;
+			background-image: none !important;
+		}
+
+		// disable autofill in Chrome/Safari/Edge
+		input[type='password']:-webkit-autofill,
+		input[type='password']:-webkit-autofill:hover,
+		input[type='password']:-webkit-autofill:focus,
+		input[type='password']:-webkit-autofill:active {
+			-webkit-text-fill-color: var(--text) !important;
+			background-color: var(--bgDark) !important;
+			background-image: none !important;
+			transition: background-color 5000s ease-in-out 0s !important;
+		}
 	}
 }
 

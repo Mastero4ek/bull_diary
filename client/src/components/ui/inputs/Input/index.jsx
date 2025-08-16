@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const Input = React.memo(props => {
 	const {
@@ -20,7 +20,10 @@ export const Input = React.memo(props => {
 			<label htmlFor={id}>
 				<input
 					className={error ? styles.error + ' ' + styles.input : styles.input}
-					autoComplete='new-password'
+					autoComplete={type === 'password' ? 'off' : 'new-password'}
+					autoCorrect={type === 'password' ? 'off' : undefined}
+					autoCapitalize={type === 'password' ? 'off' : undefined}
+					spellCheck={type === 'password' ? 'false' : undefined}
 					type={type}
 					id={id}
 					name={id}

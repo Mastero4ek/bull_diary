@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Icon } from '@/components/ui/general/Icon'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+import { Icon } from '@/components/ui/general/Icon';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const RootInput = ({
 	name,
@@ -114,6 +114,10 @@ export const RootInput = ({
 					defaultValue={defaultValue}
 					disabled={disabled}
 					readOnly={readOnly}
+					autoComplete={type === 'password' ? 'off' : undefined}
+					autoCorrect={type === 'password' ? 'off' : undefined}
+					autoCapitalize={type === 'password' ? 'off' : undefined}
+					spellCheck={type === 'password' ? 'false' : undefined}
 					{...register}
 				/>
 			)}

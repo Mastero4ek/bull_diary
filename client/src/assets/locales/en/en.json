@@ -491,7 +491,9 @@
 		"authentication_required": "Authentication required. Please log in again.",
 		"access_denied": "Access denied. You do not have permission for this action.",
 		"resource_not_found": "Resource not found.",
-		"server_error": "Server error. Please try again later."
+		"server_error": "Server error. Please try again later.",
+		"logout_error": "Error logging out! Please try again.",
+		"logout_success": "Logged out successfully!"
 	},
 	"success": {
 		"unknown": "An unknown success occurred!",
