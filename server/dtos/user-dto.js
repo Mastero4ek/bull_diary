@@ -5,6 +5,7 @@ module.exports = class UserDto {
 	last_name
 	email
 	is_activated
+	inactive
 	updated_at
 	cover
 	source
@@ -21,6 +22,7 @@ module.exports = class UserDto {
 		this.last_name = model.last_name
 		this.email = model.email
 		this.is_activated = model.is_activated
+		this.inactive = model.inactive
 		this.updated_at = model.updated_at.toISOString()
 		this.cover = model.cover
 		this.source = model.source

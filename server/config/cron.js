@@ -4,7 +4,7 @@ const { rotateLogs, cleanOldLogs, logInfo, logError } = require('./logger')
 
 const initCronJobs = () => {
 	cron.schedule('0 * * * *', () => {
-		userService.deleteInactiveUsers()
+		userService.markInactiveUsers()
 	})
 
 	cron.schedule('0 0 * * *', () => {

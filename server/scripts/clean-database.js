@@ -11,6 +11,7 @@ const File = require('../models/file-model')
 const Token = require('../models/token-model')
 const Tournament = require('../models/tournament-model')
 const TournamentUser = require('../models/tournament_user-model')
+const Description = require('../models/description-model')
 
 const { logInfo, logError } = require('../config/logger')
 
@@ -27,6 +28,7 @@ async function cleanDatabase() {
 			Token.deleteMany({}),
 			Tournament.deleteMany({}),
 			TournamentUser.deleteMany({}),
+			Description.deleteMany({}),
 		])
 		logInfo('All collections have been cleaned!')
 	} catch (err) {

@@ -9,6 +9,7 @@ const UserSchema = new Schema({
 	activation_link: { type: String },
 	source: { type: String, default: 'self' }, // 'self' for local registration, 'google'/'github' for OAuth
 	is_activated: { type: Boolean, default: false },
+	inactive: { type: Boolean, default: false },
 	change_password: { type: Boolean, default: true },
 	phone: { type: Number, default: null },
 	cover: { type: String, default: null },

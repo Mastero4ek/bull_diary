@@ -24,7 +24,10 @@ class UserService {
 	async signUp(name, email, password, lng = 'en', source = 'self') {
 		try {
 			const normalizedEmail = email.toLowerCase()
-			const existingUser = await UserModel.findOne({ email: normalizedEmail })
+			const existingUser = await UserModel.findOne({
+				email: normalizedEmail,
+				inactive: { $ne: true },
+			})
 
 			if (existingUser) {
 				throw ApiError.BadRequest(i18next.t('errors.email_exists', { lng }))
@@ -116,7 +119,7 @@ class UserService {
 			const normalizedEmail = email.toLowerCase()
 			const user = await UserModel.findOne({ email: normalizedEmail })
 
-			if (!user) {
+			if (!user || user.inactive) {
 				throw ApiError.UnauthorizedError(
 					i18next.t('errors.user_not_found', { lng })
 				)
@@ -321,7 +324,7 @@ class UserService {
 		try {
 			const user = await UserModel.findOne({ activation_link })
 
-			if (!user) {
+			if (!user || user.inactive) {
 				throw ApiError.BadRequest(
 					i18next.t('errors.invalid_activation_link', { lng })
 				)
@@ -424,7 +427,7 @@ class UserService {
 				user = await UserModel.findOne({ email })
 			}
 
-			if (!user) {
+			if (!user || user.inactive) {
 				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
 			}
 
@@ -515,11 +518,13 @@ class UserService {
 
 	async removeUser(current_email, refresh_token, lng = 'en') {
 		try {
-			const user = await UserModel.findOneAndDelete({ email: current_email })
+			const user = await UserModel.findOne({ email: current_email })
 
-			if (!user) {
+			if (!user || user.inactive) {
 				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
 			}
+
+			await UserModel.findOneAndDelete({ email: current_email })
 
 			await KeysModel.findOneAndDelete({ user: user._id })
 			await LevelModel.findOneAndDelete({ user: user._id })
@@ -563,32 +568,27 @@ class UserService {
 		}
 	}
 
-	async deleteInactiveUsers() {
+	async markInactiveUsers() {
 		const twenty_four_hours_ago = moment().subtract(24, 'hours').toDate()
 
 		try {
 			const users = await UserModel.find({
 				is_activated: false,
+				inactive: false,
 				created_at: { $lt: twenty_four_hours_ago },
 			})
 
-			let deletedCount = 0
+			let markedCount = 0
 
 			for (const user of users) {
 				try {
-					await Promise.all([
-						FileModel.deleteMany({ user: user._id }),
-						KeysModel.deleteMany({ user: user._id }),
-						LevelModel.deleteMany({ user: user._id }),
-						TokenModel.deleteMany({ user: user._id }),
-						OrderModel.deleteMany({ user: user._id }),
-						user.deleteOne(),
-					])
+					// Mark user as inactive instead of deleting
+					await UserModel.findByIdAndUpdate(user._id, { inactive: true })
 
-					deletedCount++
+					markedCount++
 				} catch (err) {
 					logError(err, {
-						context: 'delete inactive user',
+						context: 'mark inactive user',
 						userEmail: user.email,
 						userId: user._id,
 					})
@@ -599,14 +599,14 @@ class UserService {
 				return moment(date).format('DD.MM.YYYY - HH:mm:ss')
 			}
 
-			logInfo('Inactive users cleanup completed', {
-				deletedCount,
+			logInfo('Inactive users marking completed', {
+				markedCount,
 				timestamp: formatDate(new Date()),
 			})
 
-			return deletedCount
+			return markedCount
 		} catch (err) {
-			logError(err, { context: 'deleteInactiveUsers' })
+			logError(err, { context: 'markInactiveUsers' })
 			throw err
 		}
 	}
@@ -615,7 +615,7 @@ class UserService {
 		try {
 			const user = await UserModel.findById(userId)
 
-			if (!user) {
+			if (!user || user.inactive) {
 				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
 			}
 
@@ -712,7 +712,10 @@ class UserService {
 	) {
 		try {
 			const normalizedEmail = email.toLowerCase()
-			const existingUser = await UserModel.findOne({ email: normalizedEmail })
+			const existingUser = await UserModel.findOne({
+				email: normalizedEmail,
+				inactive: { $ne: true },
+			})
 
 			if (existingUser) {
 				throw ApiError.BadRequest(i18next.t('errors.email_exists', { lng }))
