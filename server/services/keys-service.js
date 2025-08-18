@@ -1,11 +1,10 @@
 const KeysModel = require('../models/keys-model')
 const UserModel = require('../models/user-model')
-const KeysDto = require('../dtos/keys-dto')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
 const Helpers = require('../helpers/helpers')
 const EncryptionService = require('./encryption-service')
-const { logInfo } = require('../config/logger')
+const KeysDto = require('../dtos/keys-dto')
 
 class KeysService {
 	async findKeys(userId, lng = 'en') {
@@ -35,10 +34,9 @@ class KeysService {
 				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
 			}
 
-			// Дешифруем ключи для использования в API
 			const decryptedKeys = {
 				...keys.toObject(),
-				keys: EncryptionService.decryptKeys(keys.keys),
+				keys: await EncryptionService.decryptKeys(keys.keys, userId),
 			}
 
 			return decryptedKeys
@@ -68,34 +66,38 @@ class KeysService {
 				)
 			}
 
-			// Обновляем ключи с шифрованием только если они изменились
-			keys.keys = keys.keys.map(key => {
+			const updatedKeys = []
+
+			for (const key of keys.keys) {
 				if (key.name === exchange) {
-					// Проверяем, изменились ли ключи
-					const currentApi = key.api ? EncryptionService.decrypt(key.api) : ''
+					const currentApi = key.api
+						? await EncryptionService.decrypt(key.api, userId)
+						: ''
 					const currentSecret = key.secret
-						? EncryptionService.decrypt(key.secret)
+						? await EncryptionService.decrypt(key.secret, userId)
 						: ''
 
-					return {
+					updatedKeys.push({
 						...key,
-						api: api !== currentApi ? EncryptionService.encrypt(api) : key.api,
+						api:
+							api !== currentApi
+								? await EncryptionService.encrypt(api, userId)
+								: key.api,
 						secret:
 							secret !== currentSecret
-								? EncryptionService.encrypt(secret)
+								? await EncryptionService.encrypt(secret, userId)
 								: key.secret,
-					}
+					})
+				} else {
+					updatedKeys.push(key)
 				}
+			}
 
-				return key
-			})
+			keys.keys = updatedKeys
 
 			await keys.save()
 
-			// Передаем зашифрованные ключи в DTO, который сам их дешифрует и замаскирует
-			const keys_dto = new KeysDto(keys)
-
-			return keys_dto
+			return await KeysDto.createMaskedKeys(keys, userId)
 		} catch (error) {
 			Helpers.handleDatabaseError(
 				error,

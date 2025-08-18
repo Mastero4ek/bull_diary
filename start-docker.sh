@@ -56,13 +56,17 @@ sleep 10
 if docker ps | grep -q "diary-server-dev" && \
    docker ps | grep -q "diary-client-dev" && \
    docker ps | grep -q "diary-mongo-dev" && \
-   docker ps | grep -q "diary-redis"; then
+   docker ps | grep -q "diary-redis" && \
+   docker ps | grep -q "diary-vault"; then
     print_success "All containers started successfully"
 else
     print_error "Error starting containers"
     docker-compose -f docker-compose.yml logs
     exit 1
 fi
+
+print_status "Checking MongoDB connection"
+sleep 5
 
 if docker exec -it diary-mongo-dev mongosh -u root_dev -p root_dev --authenticationDatabase admin --eval "db.adminCommand('ping')" &> /dev/null; then
     print_success "MongoDB connection verified"
@@ -71,6 +75,9 @@ else
     exit 1
 fi
 
+print_status "Checking Redis connection"
+sleep 5
+
 if docker exec -it diary-redis redis-cli ping | grep -q "PONG"; then
     print_success "Redis connection verified"
 else
@@ -78,7 +85,17 @@ else
     exit 1
 fi
 
-sleep 15
+print_status "Checking Vault connection"
+sleep 5
+
+if curl -f http://localhost:8200/v1/sys/health &> /dev/null; then
+    print_success "Vault connection verified"
+else
+    print_warning "Vault health check failed (maybe still starting)"
+fi
+
+print_status "Checking Server connection"
+sleep 5
 
 if curl -f http://localhost:5001/health &> /dev/null; then
     print_success "Server health check passed"
@@ -95,8 +112,9 @@ echo "🌐 Available addresses for development:"
 echo "   - Frontend: ${BLUE}http://localhost:5173${NC}"
 echo "   - Backend: ${BLUE}http://localhost:5001${NC}"
 echo "   - Health Check: ${BLUE}http://localhost:5001/health${NC}"
-echo "   - MongoDB: ${BLUE}localhost:27019${NC}"
+echo "   - MongoDB: ${BLUE}localhost:27017${NC}"
 echo "   - Redis: ${BLUE}localhost:6380${NC}"
+echo "   - Vault: ${BLUE}http://localhost:8200${NC}"
 echo ""
 echo "📝 Useful commands for development:"
 echo "   - View logs of all services: ${GREEN}docker-compose -f docker-compose.yml logs -f${NC}"

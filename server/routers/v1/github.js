@@ -3,7 +3,6 @@ const router = new Router()
 const passport = require('passport')
 const tokenService = require('../../services/token-service')
 const UserDto = require('../../dtos/user-dto')
-const KeysDto = require('../../dtos/keys-dto')
 const KeysModel = require('../../models/keys-model')
 const LevelModel = require('../../models/level-model')
 const { logError } = require('../../config/logger')
@@ -22,7 +21,11 @@ router.get(
 			const keys = await KeysModel.findOne({ user: user._id })
 			const level = await LevelModel.findOne({ user: user._id })
 			const userDto = new UserDto(user)
-			const keysDto = new KeysDto(keys)
+
+			if (!keys) {
+				throw new Error('User keys not found')
+			}
+
 			const tokens = await tokenService.generateTokens({ ...userDto }, req.lng)
 
 			await tokenService.saveToken(userDto.id, tokens.refresh_token, req.lng)

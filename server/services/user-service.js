@@ -1,6 +1,5 @@
 const UserModel = require('../models/user-model')
 const KeysModel = require('../models/keys-model')
-const FileModel = require('../models/file-model')
 const TokenModel = require('../models/token-model')
 const LevelModel = require('../models/level-model')
 const TournamentUserModel = require('../models/tournament_user-model')
@@ -10,15 +9,12 @@ const tokenService = require('./token-service')
 const mailService = require('./mail-service')
 const UserDto = require('../dtos/user-dto')
 const KeysDto = require('../dtos/keys-dto')
-const { ApiError, localizedError } = require('../exceptions/api-error')
-const moment = require('moment')
+const { ApiError } = require('../exceptions/api-error')
 const OrderModel = require('../models/order-model')
 const i18next = require('i18next')
-const fs = require('fs')
 const path = require('path')
-const redis = require('../config/redis')
 const Helpers = require('../helpers/helpers')
-const { logError, logInfo, logWarn } = require('../config/logger')
+const { logError } = require('../config/logger')
 
 class UserService {
 	async signUp(name, email, password, lng = 'en', source = 'self') {
@@ -81,9 +77,14 @@ class UserService {
 
 			await tokenService.saveToken(user_dto.id, tokens.refresh_token, lng)
 
+			const maskedKeys = await KeysDto.createMaskedKeys(
+				keys,
+				user._id.toString()
+			)
+
 			return {
 				...tokens,
-				user: { ...user_dto, ...new KeysDto(keys), level: level.level },
+				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
 			if (error.message.includes('token') && email) {
@@ -172,9 +173,13 @@ class UserService {
 				lng
 			)
 
+			const maskedKeys = await KeysDto.createMaskedKeys(
+				keys,
+				user._id.toString()
+			)
 			return {
 				...tokens,
-				user: { ...user_dto, ...new KeysDto(keys), level: level.level },
+				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
 			Helpers.handleDatabaseError(error, lng, 'signIn', 'errors.failed_sign_in')
@@ -225,9 +230,13 @@ class UserService {
 				lng
 			)
 
+			const maskedKeys = await KeysDto.createMaskedKeys(
+				keys,
+				user._id.toString()
+			)
 			return {
 				...tokens,
-				user: { ...user_dto, ...new KeysDto(keys), level: level.level },
+				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
 			Helpers.handleDatabaseError(
@@ -273,9 +282,6 @@ class UserService {
 				)
 			}
 
-			user.updated_at = new Date()
-			await user.save()
-
 			const keys = await KeysModel.findOne({ user: user._id })
 			const level = await LevelModel.findOne({ user: user._id })
 
@@ -306,17 +312,16 @@ class UserService {
 				lng
 			)
 
+			const maskedKeys = await KeysDto.createMaskedKeys(
+				keys,
+				user._id.toString()
+			)
 			return {
 				...tokens,
-				user: { ...user_dto, ...new KeysDto(keys), level: level.level },
+				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			Helpers.handleTokenError(
-				error,
-				lng,
-				'refresh',
-				'errors.failed_refresh_token'
-			)
+			Helpers.handleTokenError(error, lng, 'refresh', 'errors.failed_refresh')
 		}
 	}
 
@@ -324,7 +329,7 @@ class UserService {
 		try {
 			const user = await UserModel.findOne({ activation_link })
 
-			if (!user || user.inactive) {
+			if (!user) {
 				throw ApiError.BadRequest(
 					i18next.t('errors.invalid_activation_link', { lng })
 				)
@@ -332,41 +337,18 @@ class UserService {
 
 			if (user.is_activated) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.account_already_activated', { lng })
-				)
-			}
-
-			const activationExpiry = moment(user.created_at).add(24, 'hours')
-
-			if (moment().isAfter(activationExpiry)) {
-				const new_activation_link = uuid.v4()
-
-				user.activation_link = new_activation_link
-
-				await user.save()
-
-				await mailService.sendActivationMail(
-					user.name,
-					user.email,
-					lng,
-					`${process.env.API_URL}/api/activate/${new_activation_link}`
-				)
-
-				throw ApiError.BadRequest(
-					i18next.t('errors.activation_link_expired', { lng })
+					i18next.t('errors.user_already_activated', { lng })
 				)
 			}
 
 			user.is_activated = true
-			user.activation_link = undefined
+			user.activation_link = null
 			user.updated_at = new Date()
 
 			await user.save()
 
-			const [keys, level] = await Promise.all([
-				KeysModel.findOne({ user: user._id }),
-				LevelModel.findOne({ user: user._id }),
-			])
+			const keys = await KeysModel.findOne({ user: user._id })
+			const level = await LevelModel.findOne({ user: user._id })
 
 			if (!keys || !level) {
 				throw ApiError.InternalError(
@@ -395,106 +377,76 @@ class UserService {
 				lng
 			)
 
+			const maskedKeys = await KeysDto.createMaskedKeys(
+				keys,
+				user._id.toString()
+			)
 			return {
 				...tokens,
-				user: { ...user_dto, ...new KeysDto(keys), level: level.level },
+				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
 			Helpers.handleDatabaseError(
 				error,
 				lng,
 				'activate',
-				'errors.failed_activate_account'
+				'errors.failed_activate'
 			)
 		}
 	}
 
 	async editUser(
+		userId,
 		name,
 		last_name,
 		email,
 		password,
 		phone,
-		userId = null,
+		cover = null,
 		lng = 'en'
 	) {
 		try {
-			let user
+			const user = await UserModel.findById(userId)
 
-			if (userId) {
-				user = await UserModel.findById(userId)
-			} else {
-				user = await UserModel.findOne({ email })
-			}
-
-			if (!user || user.inactive) {
+			if (!user) {
 				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
 			}
 
-			const hashPassword =
-				password && password !== ''
-					? await bcrypt.hash(password, 3)
-					: user.password
-
-			if (email && email !== user.email) {
-				const existingUser = await UserModel.findOne({
-					email: email.toLowerCase(),
-				})
-
-				if (
-					existingUser &&
-					existingUser._id.toString() !== user._id.toString()
-				) {
-					throw ApiError.BadRequest(
-						i18next.t('errors.email_already_exists', { lng })
-					)
-				}
-
-				logInfo('User email changed', {
-					userId: user._id,
-					oldEmail: user.email,
-					newEmail: email,
-				})
+			const updateData = {
+				name,
+				last_name,
+				email: email.toLowerCase(),
+				phone,
+				updated_at: new Date(),
 			}
 
-			const new_user = await UserModel.findOneAndUpdate(
-				{ _id: user._id },
-				{
-					$set: {
-						name: name === '' ? user.name : name,
-						last_name: last_name,
-						email: email && email !== '' ? email.toLowerCase() : user.email,
-						password: password === '' ? user.password : hashPassword,
-						change_password: password === '' ? user.change_password : true,
-						phone: phone === 'null' ? user.phone : phone,
-						updated_at: new Date(),
-					},
-				},
+			if (password) {
+				const salt = await bcrypt.genSalt(10)
+				updateData.password = await bcrypt.hash(password, salt)
+			}
+
+			if (cover) {
+				const fileService = require('./file-service')
+				await fileService.uploadCover(cover, userId, lng)
+
+				updateData.cover =
+					process.env.API_URL + '/uploads/' + path.basename(cover.path)
+			}
+
+			const updatedUser = await UserModel.findByIdAndUpdate(
+				userId,
+				updateData,
 				{ returnDocument: 'after' }
 			)
 
-			if (!new_user) {
+			if (!updatedUser) {
 				throw ApiError.InternalError(
-					i18next.t('errors.user_update_failed', { lng })
+					i18next.t('errors.failed_update_user', { lng })
 				)
 			}
 
-			await TournamentUserModel.updateMany(
-				{ id: user._id },
-				{
-					$set: {
-						name: new_user.name,
-						last_name: new_user.last_name,
-						email: new_user.email,
-						phone: new_user.phone,
-						cover: new_user.cover,
-						updated_at: new Date(),
-					},
-				}
-			)
-
-			const keys = await KeysModel.findOne({ user: user._id })
-			const level = await LevelModel.findOne({ user: user._id })
+			const keys = await KeysModel.findOne({ user: userId })
+			const level = await LevelModel.findOne({ user: userId })
 
 			if (!keys || !level) {
 				throw ApiError.InternalError(
@@ -502,112 +454,101 @@ class UserService {
 				)
 			}
 
-			const keys_dto = new KeysDto(keys)
-			const user_dto = new UserDto(new_user)
+			const user_dto = new UserDto(updatedUser)
+			const maskedKeys = await KeysDto.createMaskedKeys(keys, userId)
 
-			return { user: { ...user_dto, ...keys_dto, level: level.level } }
+			return {
+				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
+			}
 		} catch (error) {
 			Helpers.handleDatabaseError(
 				error,
 				lng,
 				'editUser',
-				'errors.user_edit_failed'
+				'errors.failed_update_user'
 			)
 		}
 	}
 
-	async removeUser(current_email, refresh_token, lng = 'en') {
+	async removeCover(userId, filename, lng = 'en') {
 		try {
-			const user = await UserModel.findOne({ email: current_email })
+			const user = await UserModel.findById(userId)
 
-			if (!user || user.inactive) {
+			if (!user) {
 				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
 			}
 
-			await UserModel.findOneAndDelete({ email: current_email })
-
-			await KeysModel.findOneAndDelete({ user: user._id })
-			await LevelModel.findOneAndDelete({ user: user._id })
-
-			if (refresh_token) {
-				await tokenService.removeToken(refresh_token, lng)
-			} else {
-				await TokenModel.deleteMany({ user: user._id })
+			if (!user.cover) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.no_cover_to_remove', { lng })
+				)
 			}
 
-			const files = await FileModel.find({ user: user._id })
+			const fileService = require('./file-service')
+			await fileService.removeCover(filename, lng)
 
-			for (const file of files) {
-				const filePath = path.join(__dirname, '../uploads', file.name)
+			user.cover = null
+			user.updated_at = new Date()
+			await user.save()
 
-				if (fs.existsSync(filePath)) {
-					try {
-						fs.unlinkSync(filePath)
-					} catch (err) {
-						if (err.code !== 'ENOENT') {
-							logError(err, {
-								context: 'file deletion during user removal',
-								userId: user._id,
-								fileName: file.name,
-							})
-						}
-					}
-				}
+			return {
+				message: i18next.t('success.cover_removed', { lng }),
+			}
+		} catch (error) {
+			Helpers.handleDatabaseError(
+				error,
+				lng,
+				'removeCover',
+				'errors.failed_remove_cover'
+			)
+		}
+	}
 
-				await file.deleteOne()
+	async removeUser(current_email, fill_email, lng = 'en') {
+		try {
+			const user = await UserModel.findOne({ email: current_email })
+
+			if (!user) {
+				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
 			}
 
-			return { user }
+			// Update user data to fill email
+			user.email = fill_email
+			user.inactive = true
+			user.updated_at = new Date()
+
+			await user.save()
+
+			// Remove related data
+			await Promise.all([
+				KeysModel.deleteOne({ user: user._id }),
+				LevelModel.deleteOne({ user: user._id }),
+				TokenModel.deleteMany({ user: user._id }),
+				TournamentUserModel.deleteMany({ user: user._id }),
+				OrderModel.deleteMany({ user: user._id }),
+			])
+
+			// Remove user files
+			try {
+				const fileService = require('./file-service')
+				await fileService.removeUserFiles(user._id, lng)
+			} catch (fileError) {
+				logError(fileError, {
+					context: 'removeUser - file cleanup',
+					userId: user._id,
+				})
+			}
+
+			return {
+				message: i18next.t('success.user_removed', { lng }),
+			}
 		} catch (error) {
 			Helpers.handleDatabaseError(
 				error,
 				lng,
 				'removeUser',
-				'errors.user_removal_failed'
+				'errors.failed_remove_user'
 			)
-		}
-	}
-
-	async markInactiveUsers() {
-		const twenty_four_hours_ago = moment().subtract(24, 'hours').toDate()
-
-		try {
-			const users = await UserModel.find({
-				is_activated: false,
-				inactive: false,
-				created_at: { $lt: twenty_four_hours_ago },
-			})
-
-			let markedCount = 0
-
-			for (const user of users) {
-				try {
-					// Mark user as inactive instead of deleting
-					await UserModel.findByIdAndUpdate(user._id, { inactive: true })
-
-					markedCount++
-				} catch (err) {
-					logError(err, {
-						context: 'mark inactive user',
-						userEmail: user.email,
-						userId: user._id,
-					})
-				}
-			}
-
-			const formatDate = date => {
-				return moment(date).format('DD.MM.YYYY - HH:mm:ss')
-			}
-
-			logInfo('Inactive users marking completed', {
-				markedCount,
-				timestamp: formatDate(new Date()),
-			})
-
-			return markedCount
-		} catch (err) {
-			logError(err, { context: 'markInactiveUsers' })
-			throw err
 		}
 	}
 
@@ -615,12 +556,12 @@ class UserService {
 		try {
 			const user = await UserModel.findById(userId)
 
-			if (!user || user.inactive) {
+			if (!user) {
 				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
 			}
 
-			const keys = await KeysModel.findOne({ user: user._id })
-			const level = await LevelModel.findOne({ user: user._id })
+			const keys = await KeysModel.findOne({ user: userId })
+			const level = await LevelModel.findOne({ user: userId })
 
 			if (!keys || !level) {
 				throw ApiError.InternalError(
@@ -629,8 +570,9 @@ class UserService {
 			}
 
 			const user_dto = new UserDto(user)
+			const maskedKeys = await KeysDto.createMaskedKeys(keys, userId)
 
-			return { ...user_dto, ...new KeysDto(keys), level: level.level }
+			return { ...user_dto, keys: maskedKeys.keys, level: level.level }
 		} catch (error) {
 			Helpers.handleDatabaseError(
 				error,
@@ -764,8 +706,14 @@ class UserService {
 			const level = await LevelModel.create({ user: user._id })
 
 			const user_dto = new UserDto(user)
+			const maskedKeys = await KeysDto.createMaskedKeys(
+				keys,
+				user._id.toString()
+			)
 
-			return { user: { ...user_dto, ...new KeysDto(keys), level: level.level } }
+			return {
+				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
+			}
 		} catch (error) {
 			Helpers.handleDatabaseError(
 				error,

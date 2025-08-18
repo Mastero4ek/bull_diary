@@ -11,12 +11,18 @@ services:
     environment:
       - NODE_ENV=
       - MONGO_URI=
+      - SECRETS_PROVIDER=
+      - SECRET_ID=
+      - VAULT_ENDPOINT=
+      - VAULT_TOKEN=
+      - ENCRYPTION_SECRET_KEY=
     volumes:
       - ./server:/app
       - /app/node_modules
     depends_on:
       - mongo_dev
       - redis
+      - vault
     command: npm run dev
     networks:
       - diary-network
@@ -41,6 +47,21 @@ services:
       - diary-network
     restart: unless-stopped
 
+  vault:
+    image: hashicorp/vault:latest
+    container_name: diary-vault
+    ports:
+      - '8200:8200'
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=
+      - VAULT_DEV_LISTEN_ADDRESS=
+    volumes:
+      - vault_data:/vault/data
+    command: vault server -dev
+    networks:
+      - diary-network
+    restart: unless-stopped
+
   mongo_dev:
     image: mongo:latest
     container_name: diary-mongo-dev
@@ -49,9 +70,9 @@ services:
     volumes:
       - mongo_dev_data:/data/db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=
-      - MONGO_INITDB_ROOT_PASSWORD=
-      - MONGO_INITDB_DATABASE=
+      - MONGO_INITDB_ROOT_USERNAME=root_dev
+      - MONGO_INITDB_ROOT_PASSWORD=root_dev
+      - MONGO_INITDB_DATABASE=diary
     networks:
       - diary-network
     restart: unless-stopped
@@ -70,6 +91,7 @@ services:
 volumes:
   mongo_dev_data:
   redis_data:
+  vault_data:
 
 networks:
   diary-network:
