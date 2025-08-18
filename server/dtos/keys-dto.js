@@ -1,3 +1,5 @@
+const EncryptionService = require('../services/encryption-service')
+
 module.exports = class KeysDto {
 	keys
 
@@ -12,8 +14,12 @@ module.exports = class KeysDto {
 
 	maskKey(key) {
 		if (!key) return ''
-		const visible = key.slice(0, 5)
-		const maskedLength = Math.max(0, key.length - 5)
+
+		const decryptedKey = EncryptionService.decrypt(key)
+
+		const visible = decryptedKey.slice(0, 5)
+		const maskedLength = Math.max(0, decryptedKey.length - 5)
+
 		return visible + '*'.repeat(maskedLength)
 	}
 }

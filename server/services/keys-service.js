@@ -4,6 +4,8 @@ const KeysDto = require('../dtos/keys-dto')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
 const Helpers = require('../helpers/helpers')
+const EncryptionService = require('./encryption-service')
+const { logInfo } = require('../config/logger')
 
 class KeysService {
 	async findKeys(userId, lng = 'en') {
@@ -25,6 +27,31 @@ class KeysService {
 		}
 	}
 
+	async findDecryptedKeys(userId, lng = 'en') {
+		try {
+			const keys = await KeysModel.findOne({ user: userId })
+
+			if (!keys) {
+				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
+			}
+
+			// Дешифруем ключи для использования в API
+			const decryptedKeys = {
+				...keys.toObject(),
+				keys: EncryptionService.decryptKeys(keys.keys),
+			}
+
+			return decryptedKeys
+		} catch (error) {
+			Helpers.handleDatabaseError(
+				error,
+				lng,
+				'findDecryptedKeys',
+				'errors.keys_not_found'
+			)
+		}
+	}
+
 	async updateKeys(userId, exchange, api, secret, lng = 'en') {
 		try {
 			const keys = await KeysModel.findOne({ user: userId })
@@ -41,12 +68,22 @@ class KeysService {
 				)
 			}
 
+			// Обновляем ключи с шифрованием только если они изменились
 			keys.keys = keys.keys.map(key => {
 				if (key.name === exchange) {
+					// Проверяем, изменились ли ключи
+					const currentApi = key.api ? EncryptionService.decrypt(key.api) : ''
+					const currentSecret = key.secret
+						? EncryptionService.decrypt(key.secret)
+						: ''
+
 					return {
 						...key,
-						api: api !== key.api ? api : key.api,
-						secret: secret !== key.secret ? secret : key.secret,
+						api: api !== currentApi ? EncryptionService.encrypt(api) : key.api,
+						secret:
+							secret !== currentSecret
+								? EncryptionService.encrypt(secret)
+								: key.secret,
 					}
 				}
 
@@ -55,6 +92,7 @@ class KeysService {
 
 			await keys.save()
 
+			// Передаем зашифрованные ключи в DTO, который сам их дешифрует и замаскирует
 			const keys_dto = new KeysDto(keys)
 
 			return keys_dto

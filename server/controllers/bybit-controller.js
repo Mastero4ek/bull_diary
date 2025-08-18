@@ -17,7 +17,7 @@ class BybitController {
 			const parsedLimit = limit ? parseInt(limit) : undefined
 
 			const user = req.user
-			const keys = await KeysService.findKeys(user.id, req.lng)
+			const keys = await KeysService.findDecryptedKeys(user.id, req.lng)
 
 			if (!keys || keys.message) {
 				throw ApiError.BadRequest(
@@ -86,7 +86,7 @@ class BybitController {
 			const { exchange } = req.query
 
 			const user = req.user
-			const keys = await KeysService.findKeys(user.id, req.lng)
+			const keys = await KeysService.findDecryptedKeys(user.id, req.lng)
 
 			if (!keys || keys.message) {
 				throw ApiError.BadRequest(
@@ -119,7 +119,7 @@ class BybitController {
 
 			const { exchange, start_time, end_time } = req.query
 			const user = req.user
-			const keys = await KeysService.findKeys(user.id, req.lng)
+			const keys = await KeysService.findDecryptedKeys(user.id, req.lng)
 
 			if (!keys || keys.message) {
 				throw ApiError.BadRequest(
@@ -182,7 +182,7 @@ class BybitController {
 			const parsedLimit = limit ? parseInt(limit) : undefined
 
 			const user = req.user
-			const keys = await KeysService.findKeys(user.id, req.lng)
+			const keys = await KeysService.findDecryptedKeys(user.id, req.lng)
 
 			if (!keys || keys.message) {
 				throw ApiError.BadRequest(
@@ -268,7 +268,7 @@ class BybitController {
 			const { exchange, start_time, end_time } = req.query
 
 			const user = req.user
-			const keys = await KeysService.findKeys(user.id, req.lng)
+			const keys = await KeysService.findDecryptedKeys(user.id, req.lng)
 
 			if (!keys || keys.message) {
 				throw ApiError.BadRequest(
@@ -460,7 +460,7 @@ class BybitController {
 			const parsedLimit = limit ? parseInt(limit) : undefined
 
 			const user = req.user
-			const keys = await KeysService.findKeys(user.id, req.lng)
+			const keys = await KeysService.findDecryptedKeys(user.id, req.lng)
 
 			if (!keys || keys.message) {
 				throw ApiError.BadRequest(
