@@ -24,6 +24,7 @@ import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
 import { TableLayout } from '@/components/layouts/TableLayout';
 import { ControlButton } from '@/components/ui/buttons/ControlButton';
 import { RootButton } from '@/components/ui/buttons/RootButton';
+import { Icon } from '@/components/ui/general/Icon';
 import { OuterBlock } from '@/components/ui/general/OuterBlock';
 import { NewUserPopup } from '@/popups/NewUserPopup';
 import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
@@ -105,19 +106,26 @@ export const UsersPage = () => {
 			),
 			width: '100%',
 		},
+		// {
+		// 	Header: t('table.updated_at'),
+		// 	accessor: 'updated_at',
+		// 	Cell: ({ cell: { value } }) => (
+		// 		<b>
+		// 			{moment(value).format('DD/MM/YYYY')}
+		// 			<br />
+		// 			<span style={{ fontWeight: '400', opacity: '0.5' }}>
+		// 				{moment(value).format('HH:mm:ss')}
+		// 			</span>
+		// 		</b>
+		// 	),
+		// 	width: '100%',
+		// },
 		{
-			Header: t('table.updated_at'),
-			accessor: 'updated_at',
-			Cell: ({ cell: { value } }) => (
-				<b>
-					{moment(value).format('DD/MM/YYYY')}
-					<br />
-					<span style={{ fontWeight: '400', opacity: '0.5' }}>
-						{moment(value).format('HH:mm:ss')}
-					</span>
-				</b>
-			),
+			Header: t('table.active'),
+			accessor: 'inactive',
 			width: '100%',
+			Cell: ({ cell: { value } }) =>
+				value ? <Icon id={'user-inactive'} /> : <Icon id={'user-active'} />,
 		},
 		{
 			Header: t('table.actions'),

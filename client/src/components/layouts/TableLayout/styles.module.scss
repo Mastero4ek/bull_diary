@@ -143,6 +143,20 @@
 				}
 			}
 
+			button {
+				svg {
+					width: 18rem;
+					height: 18rem;
+				}
+			}
+
+			svg {
+				fill: var(--text);
+				stroke-width: 1.75;
+				width: 28rem;
+				height: 24rem;
+			}
+
 			div {
 				margin: 0;
 				word-break: break-all;

@@ -65,7 +65,8 @@
 		"change": "Change",
 		"buy": "Buy",
 		"sell": "Sell",
-		"none": "Transfer"
+		"none": "Transfer",
+		"active": "Active"
 	},
 	"filter": {
 		"entries": {
@@ -108,12 +109,12 @@
 	},
 	"form": {
 		"label": {
-			"name": "Your Name",
+			"name": "Name",
 			"last_name": "Last Name",
 			"phone": "Phone",
 			"role": "Role",
 			"battle_name": "Battle Name",
-			"email": "Your email",
+			"email": "Email",
 			"subject": "Subject",
 			"message": "Message",
 			"password": "Password",
@@ -143,11 +144,11 @@
 		"placeholder": {
 			"api_key": "Your api key",
 			"secret_key": "Your secret key",
-			"name": "Your name",
-			"last_name": "Your last name",
-			"email": "Your email",
-			"password": "Your password",
-			"order_description": "Your description..."
+			"name": "Name",
+			"last_name": "Last name",
+			"email": "Email",
+			"password": "Password",
+			"order_description": "Description..."
 		},
 		"warning": {
 			"create_password": "Create password for enter!",
@@ -320,7 +321,9 @@
 			"subtitle": "Registered users of the platform. You can view their profiles and their statistics.",
 			"empty_error": "No users found in this period!",
 			"success_update": "Users updated successfully!",
-			"error_update": "Error updating users! Please try again."
+			"error_update": "Error updating users! Please try again.",
+			"inactive": "Inactive",
+			"active": "Active"
 		},
 		"battle": {
 			"title": "Take part in the tournament<br />for the title of the best trader",
