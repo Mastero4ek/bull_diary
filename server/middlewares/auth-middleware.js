@@ -1,5 +1,7 @@
 const { ApiError } = require('../exceptions/api-error')
 const tokenService = require('../services/token-service')
+const UserModel = require('../models/user-model')
+const { logError } = require('../config/logger')
 
 module.exports = function (req, res, next) {
 	try {
@@ -60,6 +62,22 @@ module.exports = function (req, res, next) {
 		}
 
 		req.user = userData
+
+		// Update user activity asynchronously
+		if (userData && userData.id) {
+			UserModel.findByIdAndUpdate(
+				userData.id,
+				{ updated_at: new Date() },
+				{ new: false }
+			).catch(error => {
+				logError(error, {
+					context: 'auth-middleware - update user activity',
+					userId: userData.id,
+					path: req.path,
+					method: req.method,
+				})
+			})
+		}
 
 		next()
 	} catch (e) {

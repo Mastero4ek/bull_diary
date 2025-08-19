@@ -46,4 +46,26 @@ UserSchema.pre('save', function (next) {
 	next()
 })
 
+// Ensure updated_at is set before saving
+UserSchema.pre('save', function (next) {
+	this.updated_at = new Date()
+	next()
+})
+
+// Ensure updated_at is set before updating
+UserSchema.pre('findOneAndUpdate', function (next) {
+	this.set({ updated_at: new Date() })
+	next()
+})
+
+UserSchema.pre('updateOne', function (next) {
+	this.set({ updated_at: new Date() })
+	next()
+})
+
+UserSchema.pre('updateMany', function (next) {
+	this.set({ updated_at: new Date() })
+	next()
+})
+
 module.exports = model('User', UserSchema)

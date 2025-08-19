@@ -417,7 +417,6 @@ class UserService {
 				last_name,
 				email: email.toLowerCase(),
 				phone,
-				updated_at: new Date(),
 			}
 
 			if (password) {
@@ -488,7 +487,6 @@ class UserService {
 			await fileService.removeCover(filename, lng)
 
 			user.cover = null
-			user.updated_at = new Date()
 			await user.save()
 
 			return {
@@ -515,7 +513,6 @@ class UserService {
 			// Update user data to fill email
 			user.email = fill_email
 			user.inactive = true
-			user.updated_at = new Date()
 
 			await user.save()
 
