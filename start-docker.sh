@@ -40,6 +40,9 @@ if ! command -v docker-compose &> /dev/null; then
     exit 1
 fi
 
+print_status "Loading environment variables"
+export $(cat server/.env | xargs)
+
 print_status "Stopping existing containers"
 docker-compose -f docker-compose.yml down --volumes=false 2>/dev/null || true
 
@@ -47,6 +50,9 @@ print_status "Building containers"
 
 print_status "Building images"
 docker-compose -f docker-compose.yml build
+
+print_status "Loading environment variables"
+export $(cat server/.env | xargs)
 
 print_status "Starting containers"
 docker-compose -f docker-compose.yml up -d

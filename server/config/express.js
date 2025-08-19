@@ -10,6 +10,7 @@ const csrf = require('csurf')
 const path = require('path')
 const fs = require('fs')
 const { requestLogger } = require('./logger')
+const sanitizationMiddleware = require('../middlewares/sanitization-middleware')
 
 const app = express()
 
@@ -35,10 +36,50 @@ app.use(
 					process.env.API_URL,
 					process.env.API_URL + '/uploads/*',
 				],
+				'script-src': ["'self'"],
+				'style-src': ["'self'", "'unsafe-inline'"],
+				'font-src': ["'self'"],
+				'connect-src': ["'self'", process.env.API_URL],
+				'frame-ancestors': ["'none'"],
+				'base-uri': ["'self'"],
+				'form-action': ["'self'"],
+				'upgrade-insecure-requests': [],
 			},
+		},
+		hsts: {
+			maxAge: 31536000,
+			includeSubDomains: true,
+			preload: true,
+		},
+		noSniff: true,
+		referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
+		permittedCrossDomainPolicies: { permittedPolicies: 'none' },
+		expectCt: {
+			enforce: true,
+			maxAge: 30,
+			reportUri: process.env.CT_REPORT_URI || null,
 		},
 	})
 )
+
+app.use((req, res, next) => {
+	res.setHeader('X-Content-Type-Options', 'nosniff')
+	res.setHeader('X-Frame-Options', 'DENY')
+	res.setHeader('X-XSS-Protection', '1; mode=block')
+	res.setHeader('X-Download-Options', 'noopen')
+	res.setHeader('X-Permitted-Cross-Domain-Policies', 'none')
+	res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+	res.setHeader(
+		'Permissions-Policy',
+		'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()'
+	)
+
+	if (req.path === '/api/v1/logout') {
+		res.setHeader('Clear-Site-Data', '"cache", "cookies", "storage"')
+	}
+
+	next()
+})
 
 app.use((req, res, next) => {
 	const allowedOrigins = [process.env.CLIENT_URL]
@@ -79,10 +120,9 @@ const apiLimiter = rateLimit({
 	},
 })
 
-// Rate limiting для auth endpoints
 const authLimiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 минут
-	max: 5, // максимум 5 попыток
+	windowMs: 15 * 60 * 1000,
+	max: 5,
 	handler: (req, res) => {
 		res.status(429).json({
 			message:
@@ -92,7 +132,22 @@ const authLimiter = rateLimit({
 	},
 })
 
-app.use('/api/', apiLimiter)
+// Apply rate limiting with OAuth exclusions
+app.use((req, res, next) => {
+	// Skip rate limiting for OAuth endpoints
+	const oauthPaths = [
+		'/auth/google/callback',
+		'/auth/github/callback',
+		'/auth/vkontakte/callback',
+	]
+	if (oauthPaths.some(path => req.path.includes(path))) {
+		return next()
+	}
+
+	// Apply rate limiting for other endpoints
+	apiLimiter(req, res, next)
+})
+
 app.use('/api/v1/sign-in', authLimiter)
 app.use('/api/v1/sign-up', authLimiter)
 app.use(requestLogger)
@@ -101,12 +156,17 @@ app.use(methodOverride('_method'))
 app.use(express.json())
 app.use(cookieParser())
 
+// Apply sanitization middleware with OAuth exclusions
+app.use(sanitizationMiddleware)
+
 app.use(
 	'/uploads',
 	express.static(path.join(__dirname, '../uploads'), {
 		setHeaders: (res, path) => {
 			res.setHeader('Access-Control-Allow-Origin', '*')
 			res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin')
+			res.setHeader('X-Content-Type-Options', 'nosniff')
+			res.setHeader('Cache-Control', 'public, max-age=31536000')
 		},
 	})
 )
@@ -137,19 +197,26 @@ app.use(
 			secure: process.env.NODE_ENV === 'prod',
 			sameSite: 'strict',
 			maxAge: parseInt(process.env.SESSION_MAX_AGE) || 24 * 60 * 60 * 1000,
+			httpOnly: true,
+			domain: process.env.COOKIE_DOMAIN || undefined,
+			path: '/',
 		},
 		store: new session.MemoryStore(),
 	})
 )
 
-// Create CSRF protection middleware
 const csrfProtection = csrf({
 	cookie: true,
 	ignoreMethods: ['GET', 'HEAD', 'OPTIONS'],
-	ignorePaths: ['/api/v1/logout', '/api/v1/csrf-token'],
+	ignorePaths: [
+		'/api/v1/logout',
+		'/api/v1/csrf-token',
+		'/auth/google/callback',
+		'/auth/github/callback',
+		'/auth/vkontakte/callback',
+	],
 })
 
-// CSRF protection for all POST/PUT/DELETE requests (except logout)
 app.use((req, res, next) => {
 	if (req.path === '/api/v1/logout' && req.method === 'POST') {
 		return next()
@@ -166,7 +233,6 @@ app.use((req, res, next) => {
 	}
 })
 
-// CSRF error handler
 app.use((err, req, res, next) => {
 	if (err.code === 'EBADCSRFTOKEN') {
 		return res.status(403).json({
