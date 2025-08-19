@@ -13,8 +13,9 @@ const { ApiError } = require('../exceptions/api-error')
 const OrderModel = require('../models/order-model')
 const i18next = require('i18next')
 const path = require('path')
+const moment = require('moment')
 const Helpers = require('../helpers/helpers')
-const { logError } = require('../config/logger')
+const { logError, logInfo } = require('../config/logger')
 
 class UserService {
 	async signUp(name, email, password, lng = 'en', source = 'self') {
@@ -718,6 +719,83 @@ class UserService {
 				'createUser',
 				'errors.failed_create_user'
 			)
+		}
+	}
+
+	async checkUserActivity() {
+		try {
+			const inactiveThreshold = moment().subtract(170, 'days').toDate()
+
+			const inactiveUsers = await UserModel.find({
+				updated_at: { $lt: inactiveThreshold },
+				inactive: { $ne: true },
+			}).select('_id name email updated_at created_at')
+
+			if (inactiveUsers.length > 0) {
+				logInfo('Found inactive users (170+ days)', {
+					count: inactiveUsers.length,
+					users: inactiveUsers.map(user => ({
+						id: user._id,
+						name: user.name,
+						email: user.email,
+						lastActivity: user.updated_at,
+						daysInactive: moment().diff(moment(user.updated_at), 'days'),
+					})),
+				})
+			} else {
+				logInfo('No inactive users found (170+ days)', { count: 0 })
+			}
+
+			return inactiveUsers
+		} catch (error) {
+			logError(error, { context: 'checkUserActivity' })
+			throw error
+		}
+	}
+
+	async markInactiveUsers() {
+		try {
+			const inactiveThreshold = moment().subtract(180, 'days').toDate()
+
+			const result = await UserModel.updateMany(
+				{
+					updated_at: { $lt: inactiveThreshold },
+					inactive: { $ne: true },
+				},
+				{
+					$set: { inactive: true },
+				}
+			)
+
+			if (result.modifiedCount > 0) {
+				logInfo('Marked users as inactive (180+ days)', {
+					modifiedCount: result.modifiedCount,
+					threshold: inactiveThreshold,
+				})
+
+				// Get information about marked users for logging
+				const markedUsers = await UserModel.find({
+					updated_at: { $lt: inactiveThreshold },
+					inactive: true,
+				}).select('_id name email updated_at created_at')
+
+				logInfo('Users marked as inactive', {
+					users: markedUsers.map(user => ({
+						id: user._id,
+						name: user.name,
+						email: user.email,
+						lastActivity: user.updated_at,
+						daysInactive: moment().diff(moment(user.updated_at), 'days'),
+					})),
+				})
+			} else {
+				logInfo('No users marked as inactive (180+ days)', { modifiedCount: 0 })
+			}
+
+			return result.modifiedCount
+		} catch (error) {
+			logError(error, { context: 'markInactiveUsers' })
+			throw error
 		}
 	}
 }

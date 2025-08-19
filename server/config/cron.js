@@ -3,8 +3,16 @@ const userService = require('../services/user-service')
 const { rotateLogs, cleanOldLogs, logInfo, logError } = require('./logger')
 
 const initCronJobs = () => {
-	cron.schedule('0 * * * *', () => {
-		userService.markInactiveUsers()
+	// Check user activity every morning at 9:00
+	cron.schedule('0 9 * * *', async () => {
+		try {
+			await userService.checkUserActivity()
+			await userService.markInactiveUsers()
+
+			logInfo('Daily user activity check completed')
+		} catch (error) {
+			logError(error, { context: 'cron-user-activity-check' })
+		}
 	})
 
 	cron.schedule('0 0 * * *', () => {
@@ -18,6 +26,7 @@ const initCronJobs = () => {
 				}
 			}
 		)
+
 		rotateLogs()
 		logInfo('Daily log rotation completed')
 	})
