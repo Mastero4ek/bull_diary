@@ -9,13 +9,16 @@ services:
     env_file:
       - ./server/.env
     environment:
-      - NODE_ENV=
-      - MONGO_URI=
-      - SECRETS_PROVIDER=
-      - SECRET_ID=
-      - VAULT_ENDPOINT=
-      - VAULT_TOKEN=
-      - ENCRYPTION_SECRET_KEY=
+      - NODE_ENV=${NODE_ENV:-dev}
+      - MONGO_URI=${MONGO_URI}
+      - SECRETS_PROVIDER=${SECRETS_PROVIDER:-env}
+      - SECRET_ID=${SECRET_ID}
+      - VAULT_ENDPOINT=${VAULT_ENDPOINT}
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - ENCRYPTION_SECRET_KEY=${ENCRYPTION_SECRET_KEY}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET}
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -36,7 +39,7 @@ services:
     ports:
       - '5173:5173'
     env_file:
-      - ./client/.env
+      - ./server/.env
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -52,9 +55,11 @@ services:
     container_name: diary-vault
     ports:
       - '8200:8200'
+    env_file:
+      - ./server/.env
     environment:
-      - VAULT_DEV_ROOT_TOKEN_ID=
-      - VAULT_DEV_LISTEN_ADDRESS=
+      - VAULT_DEV_ROOT_TOKEN_ID=${VAULT_DEV_ROOT_TOKEN_ID}
+      - VAULT_DEV_LISTEN_ADDRESS=${VAULT_DEV_LISTEN_ADDRESS}
     volumes:
       - vault_data:/vault/data
     command: vault server -dev
@@ -69,10 +74,13 @@ services:
       - '27017:27017'
     volumes:
       - mongo_dev_data:/data/db
+    env_file:
+      - ./server/.env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root_dev
-      - MONGO_INITDB_ROOT_PASSWORD=root_dev
-      - MONGO_INITDB_DATABASE=diary
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
+    command: mongod --auth --bind_ip_all
     networks:
       - diary-network
     restart: unless-stopped
@@ -84,6 +92,9 @@ services:
       - '6380:6379'
     volumes:
       - redis_data:/data
+    env_file:
+      - ./server/.env
+    command: redis-server
     networks:
       - diary-network
     restart: unless-stopped
