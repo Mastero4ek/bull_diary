@@ -1,10 +1,7 @@
-import { fakePositions } from '@/helpers/constants';
-import { resError } from '@/helpers/functions';
-import PositionsService from '@/services/PositionsService';
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { fakePositions } from '@/helpers/constants'
+import { resError } from '@/helpers/functions'
+import PositionsService from '@/services/PositionsService'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const getBybitPositions = createAsyncThunk(
 	'get-positions',
@@ -60,7 +57,7 @@ const positionsSlice = createSlice({
 			state.position = null
 			state.positions = []
 			state.ordersByDay = []
-			state.sort = { type: 'closed_time', value: 'desc' } // descending
+			state.sort = { type: 'closed_time', value: 'desc' }
 			state.totalPages = 0
 			state.serverStatus = ''
 			state.errorMessage = null
@@ -86,10 +83,10 @@ const positionsSlice = createSlice({
 				}
 			})
 			.addCase(getBybitPositions.rejected, (state, action) => {
+				state.positions = []
 				state.errorMessage = action?.payload?.message
 				state.fakePositions = fakePositions
 				state.serverStatus = 'error'
-				state.positions = []
 				state.ordersByDay = []
 				state.totalPages = 0
 			})

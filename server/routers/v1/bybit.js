@@ -34,13 +34,6 @@ router.get(
 )
 
 router.get(
-	'/bybit-wallet-changes-by-day',
-	authMiddleware,
-	checkSchema(ValidationSchema.getBybitWalletChangesByDay, ['query']),
-	bybitController.getBybitWalletChangesByDay
-)
-
-router.get(
 	'/bybit-transactions',
 	authMiddleware,
 	checkSchema(ValidationSchema.getBybitTransactions, ['query']),

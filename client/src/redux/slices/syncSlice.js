@@ -1,9 +1,6 @@
-import { resError } from '@/helpers/functions';
-import OrdersService from '@/services/OrdersService';
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { resError } from '@/helpers/functions'
+import OrdersService from '@/services/OrdersService'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const getSyncProgress = createAsyncThunk(
 	'get-sync-progress',
@@ -53,7 +50,7 @@ const syncSlice = createSlice({
 		builder
 			// get-sync-progress
 			.addCase(getSyncProgress.pending, (state, action) => {
-				// Keep existing progress while fetching new progress
+				//
 			})
 			.addCase(getSyncProgress.fulfilled, (state, action) => {
 				if (action.payload) {
@@ -63,7 +60,7 @@ const syncSlice = createSlice({
 				}
 			})
 			.addCase(getSyncProgress.rejected, (state, action) => {
-				// Keep existing progress on error, don't reset
+				//
 			})
 
 			// sync-data

@@ -1,10 +1,7 @@
-import { fakePnlOrders } from '@/helpers/constants';
-import { resError } from '@/helpers/functions';
-import OrdersService from '@/services/OrdersService';
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { fakePnlOrders } from '@/helpers/constants'
+import { resError } from '@/helpers/functions'
+import OrdersService from '@/services/OrdersService'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const getBybitOrdersPnl = createAsyncThunk(
 	'get-order-pnl',
@@ -154,10 +151,11 @@ const ordersSlice = createSlice({
 				}
 			})
 			.addCase(getBybitOrdersPnl.rejected, (state, action) => {
+				state.order = null
+				state.orders = []
 				state.errorMessage = action?.payload?.message
 				state.fakeOrders = fakePnlOrders
 				state.serverStatus = 'error'
-				state.orders = []
 				state.totalPages = 0
 				state.totalProfit = 0
 				state.totalLoss = 0
@@ -174,6 +172,7 @@ const ordersSlice = createSlice({
 				state.description = action.payload.description
 			})
 			.addCase(getOrderDescription.rejected, (state, action) => {
+				state.order = null
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'error'
 				state.description = ''
@@ -190,6 +189,7 @@ const ordersSlice = createSlice({
 				state.description = action.payload.description
 			})
 			.addCase(updateOrderDescription.rejected, (state, action) => {
+				state.order = null
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'error'
 				state.description = ''
@@ -206,6 +206,7 @@ const ordersSlice = createSlice({
 				state.order = action.payload.order
 			})
 			.addCase(savedOrder.rejected, (state, action) => {
+				state.order = null
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'error'
 			})
@@ -221,6 +222,7 @@ const ordersSlice = createSlice({
 				state.order = action.payload.order
 			})
 			.addCase(removedOrder.rejected, (state, action) => {
+				state.order = null
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'error'
 			})

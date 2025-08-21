@@ -1,44 +1,57 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 
-import moment from 'moment';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import moment from 'moment'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { Loader } from '@/components/ui/general/Loader';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { getBybitWalletAndChanges } from '@/redux/slices/walletSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { Loader } from '@/components/ui/general/Loader'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { getBybitTransactions } from '@/redux/slices/transactionSlice'
+import { getBybitWallet } from '@/redux/slices/walletSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import { Info } from './Info';
-import { LineChart } from './LineChart';
+import { Info } from './Info'
+import { LineChart } from './LineChart'
 
 export const WalletPage = React.memo(() => {
 	const { t } = useTranslation()
 	const { exchange, date } = useSelector(state => state.filters)
 	const dispatch = useDispatch()
 	const { serverStatus } = useSelector(state => state.wallet)
+	const { serverStatus: transactionsStatus } = useSelector(
+		state => state.transactions
+	)
 	const { showSuccess, showError } = useNotification()
 
 	const handleClickUpdate = async () => {
 		try {
-			const resultAction = await dispatch(
-				getBybitWalletAndChanges({
-					exchange: exchange.name,
-					start_time: date.start_date,
-					end_time: date.end_date,
-				})
-			)
+			const [walletResult, transactionsResult] = await Promise.all([
+				dispatch(
+					getBybitWallet({
+						exchange: exchange.name,
+						start_time: date.start_date,
+						end_time: date.end_date,
+					})
+				),
+				dispatch(
+					getBybitTransactions({
+						exchange: exchange.name,
+						start_time: date.start_date,
+						end_time: date.end_date,
+						sort: { type: 'transactionTime', value: 'desc' },
+						search: '',
+						page: 1,
+						limit: 10000,
+					})
+				),
+			])
 
-			const originalPromiseResult = unwrapResult(resultAction)
+			const walletPromiseResult = unwrapResult(walletResult)
+			const transactionsPromiseResult = unwrapResult(transactionsResult)
 
-			if (originalPromiseResult) {
+			if (walletPromiseResult && transactionsPromiseResult) {
 				showSuccess(t('page.wallet.update_success'))
 			} else {
 				showError(t('page.wallet.update_error'))
@@ -51,13 +64,27 @@ export const WalletPage = React.memo(() => {
 
 	useEffect(() => {
 		dispatch(
-			getBybitWalletAndChanges({
+			getBybitWallet({
 				exchange: exchange.name,
 				start_time: date.start_date,
 				end_time: date.end_date,
 			})
 		)
+		dispatch(
+			getBybitTransactions({
+				exchange: exchange.name,
+				start_time: date.start_date,
+				end_time: date.end_date,
+				sort: { type: 'transactionTime', value: 'desc' },
+				search: '',
+				page: 1,
+				limit: 10000,
+			})
+		)
 	}, [exchange, date])
+
+	const isLoading =
+		serverStatus === 'loading' || transactionsStatus === 'loading'
 
 	return (
 		<PageLayout
@@ -66,7 +93,7 @@ export const WalletPage = React.memo(() => {
 			periods={true}
 			minDate={moment().subtract(180, 'days').toDate()}
 		>
-			{serverStatus === 'loading' && <Loader />}
+			{isLoading && <Loader />}
 
 			<Info />
 

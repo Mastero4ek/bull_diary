@@ -1,0 +1,97 @@
+import { fakeWalletTransactions } from '@/helpers/constants'
+import { resError } from '@/helpers/functions'
+import WalletService from '@/services/WalletService'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
+export const getBybitTransactions = createAsyncThunk(
+	'transactions/get-bybit-transactions',
+	async (
+		{ exchange, start_time, end_time, sort, search, page, limit },
+		{ rejectWithValue }
+	) => {
+		try {
+			const response = await WalletService.getBybitTransactions(
+				exchange,
+				start_time,
+				end_time,
+				sort,
+				search,
+				page,
+				limit
+			)
+
+			const result = {
+				transactions: response?.data?.transactions || [],
+				total_pages: response?.data?.total_pages || 0,
+				total: response?.data?.total || 0,
+				message: response?.data?.message || null,
+			}
+			return result
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
+const initialState = {
+	transactions: [],
+	serverStatus: '',
+	errorMessage: null,
+	page: 1,
+	sort: { type: 'transactionTime', value: 'desc' },
+	totalPages: 0,
+	total: 0,
+	fakeTransactions: null,
+}
+
+const transactionSlice = createSlice({
+	name: 'transactions',
+	initialState,
+	reducers: {
+		setTransactions: (state, action) => {
+			state.transactions = action.payload
+		},
+		setPage: (state, action) => {
+			state.page = action.payload
+		},
+		setSort: (state, action) => {
+			state.sort = action.payload
+		},
+		clearTransactions: state => {
+			state.transactions = []
+		},
+	},
+	extraReducers: builder => {
+		builder
+			.addCase(getBybitTransactions.pending, state => {
+				state.serverStatus = 'loading'
+				state.errorMessage = null
+			})
+			.addCase(getBybitTransactions.fulfilled, (state, action) => {
+				const { transactions, total_pages, total, message } = action.payload
+
+				state.transactions = transactions || []
+				state.totalPages = total_pages || 0
+				state.total = total || 0
+				state.fakeTransactions =
+					!transactions || transactions.length === 0
+						? fakeWalletTransactions.slice(0, 5)
+						: null
+				state.serverStatus = 'success'
+				state.errorMessage = message
+			})
+			.addCase(getBybitTransactions.rejected, (state, action) => {
+				state.transactions = []
+				state.fakeTransactions = fakeWalletTransactions.slice(0, 5)
+				state.totalPages = 0
+				state.total = 0
+				state.errorMessage = action?.payload?.message
+				state.serverStatus = 'error'
+			})
+	},
+})
+
+export const { setTransactions, setPage, setSort, clearTransactions } =
+	transactionSlice.actions
+
+export default transactionSlice.reducer

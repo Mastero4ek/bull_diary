@@ -247,24 +247,6 @@ const ValidationSchema = {
 		},
 	},
 
-	getBybitWalletChangesByDay: {
-		exchange: {
-			exists: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.exchange.required', { lng: req.lng }),
-			},
-			isString: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.exchange.string', { lng: req.lng }),
-			},
-			isIn: {
-				options: EXCHANGES,
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.exchange.invalid', { lng: req.lng }),
-			},
-		},
-	},
-
 	getBybitTransactions: {
 		exchange: {
 			exists: {

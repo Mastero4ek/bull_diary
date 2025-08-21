@@ -10,3 +10,32 @@
 	background: var(--bgLight);
 	position: relative;
 }
+
+.info_table_icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	width: 40rem;
+	height: 40rem;
+	background: var(--bgDark);
+	box-shadow: var(--shadowInner);
+
+	svg {
+		stroke-width: 2rem;
+		// width: 40rem !important;
+		// height: 40rem !important;
+	}
+}
+
+.info_table_icon_up {
+	svg {
+		stroke: var(--green);
+	}
+}
+
+.info_table_icon_down {
+	svg {
+		stroke: var(--red);
+	}
+}

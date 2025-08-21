@@ -1,29 +1,24 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { Icon } from '@/components/ui/general/Icon'
+import { Loader } from '@/components/ui/general/Loader'
+import { Mark } from '@/components/ui/general/Mark'
+import { colorizedNum } from '@/helpers/functions'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { Loader } from '@/components/ui/general/Loader';
-import { Mark } from '@/components/ui/general/Mark';
-import { colorizedNum } from '@/helpers/functions';
-import {
-  getBybitTransactions,
-  setPage,
-  setSort,
-} from '@/redux/slices/walletSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	getBybitTransactions,
+	setPage,
+	setSort,
+} from '@/redux/slices/transactionSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
+
+import styles from './styles.module.scss'
 
 export const WalletDetailsPage = React.memo(() => {
 	const dispatch = useDispatch()
@@ -32,13 +27,13 @@ export const WalletDetailsPage = React.memo(() => {
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const {
 		transactions,
-		transactionsStatus,
-		transactionsErrorMessage,
-		transactionsTotalPages,
-		fakeTransactions,
+		serverStatus,
+		errorMessage,
 		page,
 		sort,
-	} = useSelector(state => state.wallet)
+		totalPages,
+		fakeTransactions,
+	} = useSelector(state => state.transactions)
 	const { exchange, date, limit, search } = useSelector(state => state.filters)
 	const { showSuccess, showError } = useNotification()
 
@@ -210,6 +205,26 @@ export const WalletDetailsPage = React.memo(() => {
 			),
 			width: '100%',
 		},
+		{
+			Header: '',
+			accessor: 'actions',
+			Cell: ({ row }) => (
+				<div
+					className={`${styles.info_table_icon} ${
+						row.original.change > 0
+							? styles.info_table_icon_up
+							: styles.info_table_icon_down
+					}`}
+				>
+					{row.original.change > 0 ? (
+						<Icon id={'balance-up'} />
+					) : (
+						<Icon id={'balance-down'} />
+					)}
+				</div>
+			),
+			width: 130,
+		},
 	]
 
 	const goToPage = pageIndex => {
@@ -293,24 +308,23 @@ export const WalletDetailsPage = React.memo(() => {
 	return (
 		<PageLayout
 			update={handleClickUpdate}
-			disabled={transactionsStatus === 'loading'}
 			entries={true}
 			periods={true}
 			search={true}
 		>
-			{transactionsStatus === 'loading' && <Loader />}
+			{serverStatus === 'loading' && <Loader />}
 
 			<div style={{ width: '100%' }}>
 				<TableLayout
-					error={transactionsErrorMessage}
-					serverStatus={transactionsStatus}
+					error={errorMessage}
+					serverStatus={serverStatus}
 					toPage={goToPage}
-					totalPages={transactionsTotalPages}
+					totalPages={totalPages}
 					page={page}
 					columns={columns}
 					data={transactions}
 					fakeData={fakeTransactions}
-					emptyWarn={transactionsErrorMessage || t('page.wallet_details.empty')}
+					emptyWarn={errorMessage || t('page.wallet_details.empty')}
 					sortBy={sortBy}
 				/>
 			</div>

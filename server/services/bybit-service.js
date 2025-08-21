@@ -382,69 +382,6 @@ class BybitService {
 	}
 
 	/**
-	 * Получает изменения кошелька Bybit за период с кешированием
-	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
-	 * @param {Object} keys - API ключи {api, secret}
-	 * @param {Date|string} start_time - Время начала периода
-	 * @param {Date|string} end_time - Время окончания периода
-	 * @returns {Promise<Array>} - Массив изменений кошелька
-	 */
-	async getBybitWalletChanges(lng = 'en', keys, start_time, end_time) {
-		const cacheKey = generateCacheKey(
-			'bybit',
-			'wallet_changes',
-			start_time,
-			end_time
-		)
-
-		const cachedData = await getFromCache(cacheKey, 'getBybitWalletChanges')
-		if (cachedData) {
-			return cachedData.map(item => new BybitTransactionDto(item))
-		}
-
-		const client = ApiClientService.createClient('bybit', keys)
-
-		try {
-			const startTime = moment(start_time)
-			const endTime = moment(end_time)
-
-			const allTransactions = await ApiClientService.fetchDataByTimeChunks({
-				client,
-				startTime,
-				endTime,
-				apiMethod: 'getTransactionLog',
-				apiParams: { accountType: 'UNIFIED' },
-				lng,
-				exchangeName: 'Bybit',
-				maxDays: 7,
-			})
-
-			const transactions = allTransactions.map(
-				item => new BybitTransactionDto(item)
-			)
-
-			const plainObjects = allTransactions.map(item => ({
-				transactionTime: parseInt(item.transactionTime),
-				change: parseFloat(Number(item.change || 0).toFixed(8)),
-				cashFlow: parseFloat(Number(item.cashFlow || 0).toFixed(8)),
-				cashBalance: parseFloat(Number(item.cashBalance || 0).toFixed(8)),
-			}))
-
-			await setToCache(cacheKey, plainObjects, 300, 'getBybitWalletChanges')
-
-			return transactions
-		} catch (error) {
-			handleApiError(
-				error,
-				lng,
-				'getBybitWalletChanges',
-				'errors.fetch_wallet_changes_error',
-				'Bybit'
-			)
-		}
-	}
-
-	/**
 	 * Получает транзакции Bybit с кешированием и инкрементальным обновлением
 	 * @param {string} userId - ID пользователя
 	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
