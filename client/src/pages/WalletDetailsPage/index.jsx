@@ -29,12 +29,15 @@ export const WalletDetailsPage = React.memo(() => {
 		transactions,
 		serverStatus,
 		errorMessage,
+
 		page,
 		sort,
 		totalPages,
 		fakeTransactions,
 	} = useSelector(state => state.transactions)
-	const { exchange, date, limit, search } = useSelector(state => state.filters)
+	const { exchange, date, limit, search, size } = useSelector(
+		state => state.filters
+	)
 	const { showSuccess, showError } = useNotification()
 
 	const getTransactionTypeLabel = useCallback(
@@ -284,10 +287,11 @@ export const WalletDetailsPage = React.memo(() => {
 					search,
 					page: 1,
 					limit,
+					size,
 				})
 			)
 		}
-	}, [limit, dispatch])
+	}, [dispatch])
 
 	useEffect(() => {
 		if (exchange?.name && date?.start_date && date?.end_date) {
@@ -300,10 +304,11 @@ export const WalletDetailsPage = React.memo(() => {
 					search,
 					page,
 					limit,
+					size,
 				})
 			)
 		}
-	}, [dispatch, exchange, date, sort, page, search])
+	}, [dispatch, exchange, date, sort, page, search, size])
 
 	return (
 		<PageLayout

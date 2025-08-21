@@ -1,23 +1,24 @@
 import { fakeWalletTransactions } from '@/helpers/constants'
 import { resError } from '@/helpers/functions'
-import WalletService from '@/services/WalletService'
+import TransactionsService from '@/services/TransactionsService'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const getBybitTransactions = createAsyncThunk(
 	'transactions/get-bybit-transactions',
 	async (
-		{ exchange, start_time, end_time, sort, search, page, limit },
+		{ exchange, start_time, end_time, sort, search, page, limit, size },
 		{ rejectWithValue }
 	) => {
 		try {
-			const response = await WalletService.getBybitTransactions(
+			const response = await TransactionsService.getBybitTransactions(
 				exchange,
 				start_time,
 				end_time,
 				sort,
 				search,
 				page,
-				limit
+				limit,
+				size
 			)
 
 			const result = {
