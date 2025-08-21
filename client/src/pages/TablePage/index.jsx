@@ -28,13 +28,9 @@ import {
   colorizedNum,
 } from '@/helpers/functions';
 import {
-  clearOrders as clearBookmarksOrders,
-  getBybitSavedOrders,
-  savedOrder,
-} from '@/redux/slices/bookmarksOrdersSlice';
-import {
   clearOrders,
   getBybitOrdersPnl,
+  savedOrder,
   setPage,
   setSort,
 } from '@/redux/slices/ordersSlice';
@@ -61,12 +57,6 @@ export const TablePage = () => {
 		serverStatus,
 	} = useSelector(state => state.orders)
 
-	const {
-		bookmarks,
-		serverStatus: bookmarksServerStatus,
-		errorMessage: bookmarksErrorMessage,
-	} = useSelector(state => state.bookmarks)
-
 	const columns = [
 		{
 			Header: t('table.closed_time'),
@@ -83,15 +73,14 @@ export const TablePage = () => {
 			width: '100%',
 		},
 		{ Header: t('table.symbol'), accessor: 'symbol', width: '100%' },
-
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
-			Cell: ({ cell: { value }, row: { original } }) => (
+			Cell: ({ cell: { value } }) => (
 				<div style={{ display: 'flex', alignItems: 'center' }}>
-					{mark && <Mark color={value === 'long' ? 'green' : 'red'} />}
+					{mark && <Mark color={value === 'Sell' ? 'green' : 'red'} />}
 
-					{capitalize(value === 'long' ? t('table.buy') : t('table.sell'))}
+					{capitalize(value === 'Sell' ? t('table.long') : t('table.short'))}
 				</div>
 			),
 			width: '100%',
@@ -152,10 +141,6 @@ export const TablePage = () => {
 			Header: t('table.actions'),
 			accessor: 'actions',
 			Cell: ({ row }) => {
-				const isBookmarked =
-					Array.isArray(bookmarks) &&
-					bookmarks.some(bookmark => bookmark.id === row.original.id)
-
 				return (
 					<div
 						style={{
@@ -172,7 +157,7 @@ export const TablePage = () => {
 
 						<ControlButton
 							icon={'save'}
-							disabled={fakeOrders || isBookmarked}
+							disabled={fakeOrders || row.original.bookmark}
 							onClickBtn={() => handleClickSave(row.original)}
 						/>
 					</div>
@@ -201,7 +186,7 @@ export const TablePage = () => {
 
 	const handleClickUpdate = async () => {
 		try {
-			const resultAction1 = await dispatch(
+			const resultAction = await dispatch(
 				getBybitOrdersPnl({
 					exchange: exchange.name,
 					sort,
@@ -213,23 +198,9 @@ export const TablePage = () => {
 				})
 			)
 
-			const resultAction2 = await dispatch(
-				getBybitSavedOrders({
-					sort: null,
-					search: null,
-					page: null,
-					limit: null,
-					start_time: date.start_date,
-					end_time: date.end_date,
-					exchange: exchange.name,
-					all: true,
-				})
-			)
+			const originalPromiseResult = unwrapResult(resultAction)
 
-			const originalPromiseResult1 = unwrapResult(resultAction1)
-			const originalPromiseResult2 = unwrapResult(resultAction2)
-
-			if (originalPromiseResult1 && originalPromiseResult2) {
+			if (originalPromiseResult) {
 				showSuccess(t('page.table.update_success'))
 			} else {
 				showError(t('page.table.update_error'))
@@ -258,15 +229,14 @@ export const TablePage = () => {
 				const originalPromiseResult1 = unwrapResult(resultAction1)
 
 				const resultAction2 = await dispatch(
-					getBybitSavedOrders({
-						sort: null,
-						search: null,
-						page: null,
-						limit: null,
+					getBybitOrdersPnl({
+						sort,
+						search,
+						page,
+						limit,
 						start_time: date.start_date,
 						end_time: date.end_date,
 						exchange: exchange.name,
-						all: true,
 					})
 				)
 				const originalPromiseResult2 = unwrapResult(resultAction2)
@@ -288,6 +258,10 @@ export const TablePage = () => {
 			date.end_date,
 			showSuccess,
 			showError,
+			sort,
+			search,
+			page,
+			limit,
 		]
 	)
 
@@ -306,19 +280,6 @@ export const TablePage = () => {
 					end_time: date.end_date,
 				})
 			)
-
-			dispatch(
-				getBybitSavedOrders({
-					sort: null,
-					search: null,
-					page: null,
-					limit: null,
-					start_time: date.start_date,
-					end_time: date.end_date,
-					exchange: exchange.name,
-					all: true,
-				})
-			)
 		}
 	}, [limit, dispatch])
 
@@ -335,26 +296,12 @@ export const TablePage = () => {
 					end_time: date.end_date,
 				})
 			)
-
-			dispatch(
-				getBybitSavedOrders({
-					sort: null,
-					search: null,
-					page: null,
-					limit: null,
-					start_time: date.start_date,
-					end_time: date.end_date,
-					exchange: exchange.name,
-					all: true,
-				})
-			)
 		}
 	}, [dispatch, exchange, date, sort, search, page])
 
 	useEffect(() => {
 		return () => {
 			dispatch(clearOrders())
-			dispatch(clearBookmarksOrders())
 		}
 	}, [location])
 
@@ -367,9 +314,7 @@ export const TablePage = () => {
 			search={true}
 			entries={true}
 		>
-			{(serverStatus === 'loading' || bookmarksServerStatus === 'loading') && (
-				<Loader />
-			)}
+			{serverStatus === 'loading' && <Loader />}
 
 			<div style={{ width: '100%' }}>
 				<TableLayout
@@ -377,18 +322,12 @@ export const TablePage = () => {
 					fakeData={fakeOrders}
 					data={orders}
 					totalPages={totalPages}
-					error={errorMessage || bookmarksErrorMessage}
-					serverStatus={
-						serverStatus === 'error' || bookmarksServerStatus === 'error'
-							? 'error'
-							: serverStatus
-					}
+					error={errorMessage}
+					serverStatus={serverStatus}
 					page={page}
 					toPage={goToPage}
 					sortBy={sortBy}
-					emptyWarn={
-						errorMessage || bookmarksErrorMessage || t('page.table.empty')
-					}
+					emptyWarn={errorMessage || t('page.table.empty')}
 				/>
 			</div>
 

@@ -2,7 +2,6 @@ const Router = require('express').Router
 const router = new Router()
 const authMiddleware = require('../../middlewares/auth-middleware')
 const bybitController = require('../../controllers/bybit-controller')
-const ordersController = require('../../controllers/orders-controller')
 const { checkSchema } = require('express-validator')
 const ValidationSchema = require('../../validation/validation-schema')
 
@@ -46,13 +45,6 @@ router.get(
 	authMiddleware,
 	checkSchema(ValidationSchema.getBybitTransactions, ['query']),
 	bybitController.getBybitTransactions
-)
-
-router.get(
-	'/bybit-saved-orders/:all?',
-	authMiddleware,
-	checkSchema(ValidationSchema.getBybitSavedOrders, ['query']),
-	ordersController.getBybitSavedOrders
 )
 
 module.exports = router

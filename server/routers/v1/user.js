@@ -6,9 +6,9 @@ const { checkSchema } = require('express-validator')
 const authMiddleware = require('../../middlewares/auth-middleware')
 const ValidationSchema = require('../../validation/validation-schema')
 const upload = require('../../config/multer')
-const fileValidation = require('../../middlewares/file-validation')
+const fileMiddleware = require('../../middlewares/file-middleware')
 
-const profileImageValidation = fileValidation({
+const profileImageValidation = fileMiddleware({
 	allowedTypes: ['image/jpeg', 'image/png'],
 	maxSize: parseInt(process.env.MAX_FILE_SIZE),
 	minSize: 1024,
@@ -57,6 +57,20 @@ router.post(
 	profileImageValidation,
 	checkSchema(ValidationSchema.createUser),
 	userController.createUser
+)
+
+router.patch(
+	'/user/:id/activate',
+	authMiddleware,
+	checkSchema(ValidationSchema.getUser, ['params']),
+	userController.activeUser
+)
+
+router.patch(
+	'/user/:id/deactivate',
+	authMiddleware,
+	checkSchema(ValidationSchema.getUser, ['params']),
+	userController.inactiveUser
 )
 
 module.exports = router

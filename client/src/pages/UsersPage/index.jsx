@@ -30,8 +30,10 @@ import { NewUserPopup } from '@/popups/NewUserPopup';
 import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
 import { getUser } from '@/redux/slices/candidateSlice';
 import {
+  activeUser,
   clearUsers,
   getUsers,
+  inactiveUser,
   setPage,
   setSort,
 } from '@/redux/slices/usersSlice';
@@ -144,7 +146,25 @@ export const UsersPage = () => {
 						onClickBtn={() => handleClickView(row.original)}
 					/>
 
-					<div className={styles.battle_delete_button}>
+					<div
+						className={
+							row.original.inactive
+								? styles.user_active_button
+								: styles.user_inactive_button
+						}
+					>
+						<ControlButton
+							disabled={fakeUsers}
+							icon={row.original.inactive ? 'active' : 'inactive'}
+							onClickBtn={() =>
+								row.original.inactive
+									? handleClickActive(row.original)
+									: handleClickInactive(row.original)
+							}
+						/>
+					</div>
+
+					<div className={styles.user_delete_button}>
 						<ControlButton
 							disabled={fakeUsers}
 							icon={'cross'}
@@ -179,6 +199,66 @@ export const UsersPage = () => {
 			openPopup(<RemoveUserPopup item={item} />, { shared: true })
 		},
 		[openPopup]
+	)
+
+	const handleClickInactive = useCallback(
+		async item => {
+			try {
+				const resultAction = await dispatch(inactiveUser(item))
+
+				const originalPromiseResult = unwrapResult(resultAction)
+
+				if (originalPromiseResult) {
+					showSuccess(t('page.users.success_inactive'))
+
+					dispatch(
+						getUsers({
+							sort,
+							search,
+							page,
+							limit,
+							start_time: date.start_date,
+							end_time: date.end_date,
+						})
+					)
+				} else {
+					showError(t('page.users.error_inactive'))
+				}
+			} catch (e) {
+				showError(t('page.users.error_inactive'))
+			}
+		},
+		[dispatch, showSuccess, showError, t, date, search, page, limit, sort]
+	)
+
+	const handleClickActive = useCallback(
+		async item => {
+			try {
+				const resultAction = await dispatch(activeUser(item))
+
+				const originalPromiseResult = unwrapResult(resultAction)
+
+				if (originalPromiseResult) {
+					showSuccess(t('page.users.success_active'))
+
+					dispatch(
+						getUsers({
+							sort,
+							search,
+							page,
+							limit,
+							start_time: date.start_date,
+							end_time: date.end_date,
+						})
+					)
+				} else {
+					showError(t('page.users.error_active'))
+				}
+			} catch (e) {
+				showError(t('page.users.error_active'))
+			}
+		},
+		[dispatch, showSuccess, showError, t, date, search, page, limit, sort]
 	)
 
 	const handleClickUpdate = async () => {

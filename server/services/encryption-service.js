@@ -2,12 +2,21 @@ const CryptoJS = require('crypto-js')
 const { logError } = require('../config/logger')
 
 class EncryptionService {
+	/**
+	 * Конструктор сервиса шифрования
+	 * Инициализирует провайдер секретов и ID секрета
+	 */
 	constructor() {
 		this.masterKey = null
 		this.provider = process.env.SECRETS_PROVIDER
 		this.secretId = process.env.SECRET_ID
 	}
 
+	/**
+	 * Инициализирует сервис шифрования
+	 * Загружает мастер-ключ из выбранного провайдера
+	 * @returns {Promise<void>}
+	 */
 	async initialize() {
 		switch (this.provider) {
 			case 'vault':
@@ -29,9 +38,13 @@ class EncryptionService {
 		}
 	}
 
+	/**
+	 * Инициализирует сервис с использованием HashiCorp Vault
+	 * @returns {Promise<void>}
+	 */
 	async initializeVault() {
 		try {
-			const VaultSecretsService = require('./secrets/vault-secrets-service')
+			const VaultSecretsService = require('./vault-secrets-service')
 			const secret = await VaultSecretsService.getSecret(this.secretId)
 
 			this.masterKey = secret.key
@@ -44,14 +57,18 @@ class EncryptionService {
 		}
 	}
 
+	/**
+	 * Инициализирует сервис с использованием переменных окружения
+	 * @returns {Promise<void>}
+	 */
 	async initializeEnv() {
 		this.masterKey = process.env.ENCRYPTION_SECRET_KEY
 	}
 
 	/**
-	 * Generate unique encryption key for user
-	 * @param {string} userId - user ID
-	 * @returns {string} - unique key for user
+	 * Генерирует уникальный ключ шифрования для пользователя
+	 * @param {string} userId - ID пользователя
+	 * @returns {string} - уникальный ключ для пользователя
 	 */
 	generateUserKey(userId) {
 		if (!userId) {
@@ -74,10 +91,10 @@ class EncryptionService {
 	}
 
 	/**
-	 * Encrypt string with user key
-	 * @param {string} text - text to encrypt
-	 * @param {string} userId - user ID
-	 * @returns {string} - encrypted text
+	 * Шифрует строку с ключом пользователя
+	 * @param {string} text - текст для шифрования
+	 * @param {string} userId - ID пользователя
+	 * @returns {string} - зашифрованный текст
 	 */
 	async encrypt(text, userId = null) {
 		if (!text) return text
@@ -99,10 +116,10 @@ class EncryptionService {
 	}
 
 	/**
-	 * Decrypt string with user key
-	 * @param {string} encryptedText - encrypted text
-	 * @param {string} userId - user ID
-	 * @returns {string} - decrypted text
+	 * Расшифровывает строку с ключом пользователя
+	 * @param {string} encryptedText - зашифрованный текст
+	 * @param {string} userId - ID пользователя
+	 * @returns {string} - расшифрованный текст
 	 */
 	async decrypt(encryptedText, userId = null) {
 		if (!encryptedText) return encryptedText
@@ -124,10 +141,10 @@ class EncryptionService {
 	}
 
 	/**
-	 * Encrypt object with keys for specific user
-	 * @param {Object} keys - object with keys
-	 * @param {string} userId - user ID
-	 * @returns {Object} - object with encrypted keys
+	 * Шифрует объект с ключами для конкретного пользователя
+	 * @param {Object} keys - объект с ключами
+	 * @param {string} userId - ID пользователя
+	 * @returns {Object} - объект с зашифрованными ключами
 	 */
 	async encryptKeys(keys, userId = null) {
 		if (!keys || !Array.isArray(keys)) return keys
@@ -146,10 +163,10 @@ class EncryptionService {
 	}
 
 	/**
-	 * Decrypt object with keys for specific user
-	 * @param {Object} keys - object with encrypted keys
-	 * @param {string} userId - user ID
-	 * @returns {Object} - object with decrypted keys
+	 * Расшифровывает объект с ключами для конкретного пользователя
+	 * @param {Object} keys - объект с зашифрованными ключами
+	 * @param {string} userId - ID пользователя
+	 * @returns {Object} - объект с расшифрованными ключами
 	 */
 	async decryptKeys(keys, userId = null) {
 		if (!keys || !Array.isArray(keys)) return keys
@@ -168,10 +185,10 @@ class EncryptionService {
 	}
 
 	/**
-	 * Check if text is encrypted
-	 * @param {string} text - text to check
-	 * @param {string} userId - user ID
-	 * @returns {boolean} - true if text is encrypted
+	 * Проверяет, зашифрован ли текст
+	 * @param {string} text - текст для проверки
+	 * @param {string} userId - ID пользователя
+	 * @returns {boolean} - true, если текст зашифрован
 	 */
 	async isEncrypted(text, userId = null) {
 		if (!text) return false
@@ -193,6 +210,10 @@ class EncryptionService {
 		}
 	}
 
+	/**
+	 * Убеждается, что сервис инициализирован
+	 * @returns {Promise<void>}
+	 */
 	async ensureInitialized() {
 		if (!this.masterKey) {
 			await this.initialize()
@@ -200,8 +221,8 @@ class EncryptionService {
 	}
 
 	/**
-	 * Get information about the current provider
-	 * @returns {Object} - information about the provider
+	 * Получает информацию о текущем провайдере
+	 * @returns {Object} - информация о провайдере
 	 */
 	getProviderInfo() {
 		return {

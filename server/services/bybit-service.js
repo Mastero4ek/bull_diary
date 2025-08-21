@@ -1,14 +1,35 @@
-const { RestClientV5 } = require('bybit-api')
 const moment = require('moment')
-const BybitOrderDto = require('../dtos/bybit-order-dto')
-const BybitTransactionDto = require('../dtos/bybit-transaction-dto')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
-const Helpers = require('../helpers/helpers')
-const { logger } = require('../config/logger')
+const ApiClientService = require('./api-client-service')
+const DataService = require('./data-service')
+const Order = require('../models/order-model')
+const Transaction = require('../models/transaction-model')
+const BybitTransactionDto = require('../dtos/bybit-transaction-dto')
+const {
+	getFromCache,
+	setToCache,
+	generateCacheKey,
+} = require('../helpers/cache-helpers')
+const { handleApiError } = require('../helpers/error-helpers')
 
 class BybitService {
+	/**
+	 * Получает PnL ордеров Bybit с кешированием и инкрементальным обновлением
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {Object} keys - API ключи {api, secret}
+	 * @param {Date|string} start_time - Время начала периода
+	 * @param {Date|string} end_time - Время окончания периода
+	 * @param {Object} sort - Параметры сортировки {type, value}
+	 * @param {string} search - Строка поиска
+	 * @param {number} page - Номер страницы
+	 * @param {number} limit - Количество записей на странице
+	 * @param {boolean} bookmarks - Фильтр по закладкам
+	 * @returns {Promise<Object>} - Объект с ордерами и общим PnL
+	 */
 	async getBybitOrdersPnl(
+		userId,
 		lng = 'en',
 		keys,
 		start_time,
@@ -16,221 +37,165 @@ class BybitService {
 		sort,
 		search,
 		page,
-		limit
+		limit,
+		bookmarks
 	) {
-		const cacheKey = Helpers.generateCacheKey(
+		const cacheKey = generateCacheKey(
 			'bybit',
 			'pnl',
+			userId,
 			start_time,
 			end_time,
 			page,
 			limit,
 			sort,
-			search
+			search,
+			bookmarks
 		)
 
-		const cachedData = await Helpers.getFromCache(cacheKey, 'getBybitOrdersPnl')
+		const cachedData = await getFromCache(cacheKey, 'getBybitOrdersPnl')
+
 		if (cachedData) {
 			return cachedData
 		}
 
-		const client = new RestClientV5({
-			testnet: false,
-			key: keys.api,
-			secret: keys.secret,
-		})
+		const client = ApiClientService.createClient('bybit', keys)
 
 		try {
-			const startTime = moment(start_time)
-			const endTime = moment(end_time)
-			const diffDays = endTime.diff(startTime, 'days')
-			let allOrders = []
+			let existingOrders = await Order.find({
+				user: userId,
+				open_time: { $gte: start_time },
+				closed_time: { $lte: end_time },
+			})
 
-			if (diffDays > 7) {
-				const timeChunks = []
-				let currentStartTime = startTime.clone()
-				const endLimit = endTime.clone()
+			if (existingOrders.length === 0) {
+				const startTime = moment(start_time)
+				const endTime = moment(end_time)
 
-				while (currentStartTime.isBefore(endLimit)) {
-					const currentEndTime = moment.min(
-						currentStartTime.clone().add(7, 'days'),
-						endLimit
-					)
+				const allOrders = await ApiClientService.fetchDataByTimeChunks({
+					client,
+					startTime,
+					endTime,
+					apiMethod: 'getClosedPnL',
+					apiParams: { category: 'linear' },
+					lng,
+					exchangeName: 'Bybit',
+					maxDays: 7,
+				})
 
-					timeChunks.push({
-						start: currentStartTime.unix() * 1000,
-						end: currentEndTime.unix() * 1000,
-					})
-
-					currentStartTime = currentEndTime
-				}
-
-				const chunkResults = await Promise.all(
-					timeChunks.map(async chunk => {
-						let chunkOrders = []
-						let nextCursor = ''
-
-						do {
-							const response = await client.getClosedPnL({
-								category: 'linear',
-								startTime: chunk.start,
-								endTime: chunk.end,
-								cursor: nextCursor || undefined,
-								limit: 50,
-							})
-
-							if (response.retCode !== 0) {
-								throw ApiError.BadRequest(
-									i18next.t('errors.api_error', {
-										lng,
-										exchange: 'Bybit',
-										error: response.retMsg,
-									})
-								)
-							}
-
-							if (response.result.list && response.result.list.length > 0) {
-								chunkOrders = [...chunkOrders, ...response.result.list]
-							}
-
-							nextCursor = response.result.nextPageCursor
-
-							await Helpers.delayApi(100)
-						} while (nextCursor)
-
-						return chunkOrders
-					})
+				const transformedOrders = DataService.transformOrdersToDbFormat(
+					allOrders,
+					userId,
+					'bybit'
 				)
 
-				allOrders = chunkResults.flat()
-			} else {
-				let nextCursor = ''
+				await DataService.saveOrdersToDatabase(
+					transformedOrders,
+					userId,
+					'bybit'
+				)
 
-				do {
-					const response = await client.getClosedPnL({
-						category: 'linear',
-						startTime: new Date(start_time).getTime(),
-						endTime: new Date(end_time).getTime(),
-						cursor: nextCursor || undefined,
-						limit: 50,
+				const result = await DataService.getOrdersFromDb(
+					userId,
+					start_time,
+					end_time,
+					sort,
+					search,
+					page,
+					limit,
+					bookmarks,
+					'bybit',
+					lng
+				)
+
+				const totalPnl = await DataService.calculateTotalPnlFromDb(
+					userId,
+					start_time,
+					end_time,
+					bookmarks,
+					search,
+					'bybit',
+					lng
+				)
+
+				const finalResult = {
+					...result,
+					totalPnl,
+				}
+
+				await setToCache(cacheKey, finalResult, 300, 'getBybitOrdersPnl')
+
+				return finalResult
+			} else {
+				const latestOrder = await Order.findOne({
+					user: userId,
+					open_time: { $gte: start_time },
+					sync_time: { $lte: end_time },
+				}).sort({ open_time: -1 })
+
+				if (latestOrder) {
+					const latestOrderTime = latestOrder.sync_time.getTime()
+
+					const allNewOrders = await ApiClientService.fetchDataByTimeChunks({
+						client,
+						startTime: latestOrderTime,
+						endTime: end_time,
+						apiMethod: 'getClosedPnL',
+						apiParams: { category: 'linear' },
+						lng,
+						exchangeName: 'Bybit',
+						maxDays: 7,
 					})
 
-					if (response.retCode !== 0) {
-						throw ApiError.BadRequest(
-							i18next.t('errors.api_error', {
-								lng,
-								exchange: 'Bybit',
-								error: response.retMsg,
-							})
+					if (allNewOrders.length > 0) {
+						const transformedNewOrders = DataService.transformOrdersToDbFormat(
+							allNewOrders,
+							userId,
+							'bybit'
+						)
+
+						await DataService.saveOrdersToDatabase(
+							transformedNewOrders,
+							userId,
+							'bybit'
 						)
 					}
-
-					if (response.result.list && response.result.list.length > 0) {
-						allOrders = [...allOrders, ...response.result.list]
-					}
-
-					nextCursor = response.result.nextPageCursor
-
-					await Helpers.delayApi(100)
-				} while (nextCursor)
-			}
-
-			const orders = allOrders.map(item => new BybitOrderDto(item))
-
-			if (page === null && limit === null) {
-				let filteredOrders = orders
-
-				if (search) {
-					const searchLower = search.toLowerCase().trim()
-
-					filteredOrders = orders.filter(order => {
-						return ['symbol', 'direction'].some(field => {
-							const value = order[field]
-
-							return (
-								value &&
-								typeof value === 'string' &&
-								value.toLowerCase().includes(searchLower)
-							)
-						})
-					})
 				}
 
-				if (sort && sort.type) {
-					filteredOrders.sort((a, b) => {
-						const aValue = a[sort.type]
-						const bValue = b[sort.type]
-
-						if (sort.type === 'closed_time' || sort.type === 'date') {
-							const aNum =
-								typeof aValue === 'number' ? aValue : new Date(aValue).getTime()
-							const bNum =
-								typeof bValue === 'number' ? bValue : new Date(bValue).getTime()
-
-							return sort.value === 'asc' ? aNum - bNum : bNum - aNum
-						}
-
-						if (typeof aValue === 'number' && typeof bValue === 'number') {
-							return sort.value === 'asc' ? aValue - bValue : bValue - aValue
-						}
-
-						if (typeof aValue === 'string' && typeof bValue === 'string') {
-							return sort.value === 'asc'
-								? aValue.localeCompare(bValue)
-								: bValue.localeCompare(aValue)
-						}
-
-						return 0
-					})
-				}
-
-				await Helpers.setToCache(
-					cacheKey,
-					{
-						orders: filteredOrders,
-						total: filteredOrders.length,
-						totalPages: 1,
-					},
-					300,
-					'getBybitOrdersPnl'
+				const result = await DataService.getOrdersFromDb(
+					userId,
+					start_time,
+					end_time,
+					sort,
+					search,
+					page,
+					limit,
+					bookmarks,
+					'bybit',
+					lng
 				)
 
-				return {
-					orders: filteredOrders,
-					total: filteredOrders.length,
-					totalPages: 1,
+				const totalPnl = await DataService.calculateTotalPnlFromDb(
+					userId,
+					start_time,
+					end_time,
+					bookmarks,
+					search,
+					'bybit',
+					lng
+				)
+
+				const finalResult = {
+					...result,
+					totalPnl,
 				}
-			}
 
-			const paginatedResult = await Helpers.paginate(
-				orders,
-				page,
-				limit,
-				sort,
-				search,
-				['symbol', 'direction']
-			)
+				await setToCache(cacheKey, finalResult, 300, 'getBybitOrdersPnl')
 
-			await Helpers.setToCache(
-				cacheKey,
-				{
-					allOrders: orders,
-					orders: paginatedResult.items,
-					total: paginatedResult.total,
-					totalPages: paginatedResult.totalPages,
-				},
-				300,
-				'getBybitOrdersPnl'
-			)
-
-			return {
-				allOrders: orders,
-				orders: paginatedResult.items,
-				total: paginatedResult.total,
-				totalPages: paginatedResult.totalPages,
+				return finalResult
 			}
 		} catch (error) {
-			Helpers.handleApiError(
+			handleApiError(
 				error,
 				lng,
 				'getBybitOrdersPnl',
@@ -240,48 +205,46 @@ class BybitService {
 		}
 	}
 
+	/**
+	 * Получает тикеры Bybit с кешированием
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {Object} keys - API ключи {api, secret}
+	 * @returns {Promise<Array>} - Массив тикеров
+	 */
 	async getBybitTickers(lng = 'en', keys) {
-		const cacheKey = Helpers.generateCacheKey(
+		const cacheKey = generateCacheKey(
 			'bybit',
 			'tickers',
 			new Date().toISOString().split('T')[0]
 		)
 
-		const cachedData = await Helpers.getFromCache(cacheKey, 'getBybitTickers')
+		const cachedData = await getFromCache(cacheKey, 'getBybitTickers')
 		if (cachedData) {
 			return cachedData
 		}
 
-		const client = new RestClientV5({
-			testnet: false,
-			key: keys.api,
-			secret: keys.secret,
-		})
+		const client = ApiClientService.createClient('bybit', keys)
 
 		try {
-			const response = await client.getTickers({ category: 'linear' })
-
-			if (response.retCode !== 0) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.api_error', {
-						lng,
-						exchange: 'Bybit',
-						error: response.retMsg,
-					})
-				)
-			}
+			const result = await ApiClientService.makeApiRequest({
+				client,
+				apiMethod: 'getTickers',
+				apiParams: { category: 'linear' },
+				lng,
+				exchangeName: 'Bybit',
+			})
 
 			let tickers = []
 
-			if (response.result.list && response.result.list.length > 0) {
-				tickers = [...response.result.list]
+			if (result.list && result.list.length > 0) {
+				tickers = [...result.list]
 			}
 
-			await Helpers.setToCache(cacheKey, tickers, 60, 'getBybitTickers')
+			await setToCache(cacheKey, tickers, 60, 'getBybitTickers')
 
 			return tickers
 		} catch (error) {
-			Helpers.handleApiError(
+			handleApiError(
 				error,
 				lng,
 				'getBybitTickers',
@@ -291,47 +254,43 @@ class BybitService {
 		}
 	}
 
+	/**
+	 * Получает данные кошелька Bybit с кешированием
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {Object} keys - API ключи {api, secret}
+	 * @returns {Promise<Object>} - Объект с данными кошелька
+	 */
 	async getBybitWallet(lng = 'en', keys) {
-		const cacheKey = Helpers.generateCacheKey(
+		const cacheKey = generateCacheKey(
 			'bybit',
 			'wallet',
 			new Date().toISOString().split('T')[0]
 		)
 
-		const cachedData = await Helpers.getFromCache(cacheKey, 'getBybitWallet')
+		const cachedData = await getFromCache(cacheKey, 'getBybitWallet')
 		if (cachedData) {
 			return cachedData
 		}
 
 		try {
-			const client = new RestClientV5({
-				testnet: false,
-				key: keys.api,
-				secret: keys.secret,
-			})
+			const client = ApiClientService.createClient('bybit', keys)
 
-			const response = await client.getWalletBalance({
-				accountType: 'UNIFIED',
+			const result = await ApiClientService.makeApiRequest({
+				client,
+				apiMethod: 'getWalletBalance',
+				apiParams: { accountType: 'UNIFIED' },
+				lng,
+				exchangeName: 'Bybit',
 			})
 
 			let wallet = {}
 
-			if (response.retCode !== 0) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.api_error', {
-						lng,
-						exchange: 'Bybit',
-						error: response.retMsg,
-					})
-				)
-			}
-
-			if (!response.result.list || !response.result.list[0].coin) {
+			if (!result.list || !result.list[0].coin) {
 				throw ApiError.BadRequest(i18next.t('errors.wallet_not_found', { lng }))
 			}
 
-			if (response.result.list && response.result.list[0].coin) {
-				const coins = response.result.list[0].coin
+			if (result.list && result.list[0].coin) {
+				const coins = result.list[0].coin
 				const usdtCoin = coins.find(coin => coin.coin === 'USDT')
 
 				if (!usdtCoin) {
@@ -360,11 +319,11 @@ class BybitService {
 				}))
 			}
 
-			await Helpers.setToCache(cacheKey, wallet, 60, 'getBybitWallet')
+			await setToCache(cacheKey, wallet, 60, 'getBybitWallet')
 
 			return wallet
 		} catch (error) {
-			Helpers.handleApiError(
+			handleApiError(
 				error,
 				lng,
 				'getBybitWallet',
@@ -374,79 +333,45 @@ class BybitService {
 		}
 	}
 
+	/**
+	 * Получает позиции Bybit с кешированием
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {Object} keys - API ключи {api, secret}
+	 * @returns {Promise<Array>} - Массив позиций
+	 */
 	async getBybitPositions(lng = 'en', keys) {
-		const cacheKey = Helpers.generateCacheKey(
+		const cacheKey = generateCacheKey(
 			'bybit',
 			'positions',
 			new Date().toISOString().split('T')[0]
 		)
 
-		const cachedData = await Helpers.getFromCache(cacheKey, 'getBybitPositions')
+		const cachedData = await getFromCache(cacheKey, 'getBybitPositions')
 		if (cachedData) {
 			return cachedData
 		}
 
-		const client = new RestClientV5({
-			testnet: false,
-			key: keys.api,
-			secret: keys.secret,
-		})
+		const client = ApiClientService.createClient('bybit', keys)
 
 		try {
-			let allPositions = []
-
-			const response = await client.getPositionInfo({
-				category: 'linear',
-				settleCoin: 'USDT',
-			})
-
-			if (response.retCode !== 0) {
-				throw ApiError.BadRequest(
-					i18next.t('errors.api_error', {
-						lng,
-						exchange: 'Bybit',
-						error: response.retMsg,
-					})
-				)
-			}
-
-			if (response.result.list && response.result.list.length > 0) {
-				allPositions = [...allPositions, ...response.result.list]
-			}
-
-			while (response.result.nextPageCursor !== '') {
-				const nextResponse = await client.getPositionInfo({
+			const allPositions = await ApiClientService.fetchPaginatedData({
+				client,
+				apiMethod: 'getPositionInfo',
+				apiParams: {
 					category: 'linear',
 					settleCoin: 'USDT',
-					cursor: response.result.nextPageCursor,
-				})
-
-				if (nextResponse.retCode !== 0) {
-					throw ApiError.BadRequest(
-						i18next.t('errors.api_error', {
-							lng,
-							exchange: 'Bybit',
-							error: nextResponse.retMsg,
-						})
-					)
-				}
-
-				if (nextResponse.result.list && nextResponse.result.list.length > 0) {
-					allPositions = [...allPositions, ...nextResponse.result.list]
-				}
-
-				response.result.nextPageCursor = nextResponse.result.nextPageCursor
-
-				await Helpers.delayApi(100)
-			}
+				},
+				lng,
+				exchangeName: 'Bybit',
+			})
 
 			const orders = allPositions.map(item => new BybitOrderDto(item))
 
-			await Helpers.setToCache(cacheKey, orders, 300, 'getBybitPositions')
+			await setToCache(cacheKey, orders, 300, 'getBybitPositions')
 
 			return orders
 		} catch (error) {
-			Helpers.handleApiError(
+			handleApiError(
 				error,
 				lng,
 				'getBybitPositions',
@@ -456,126 +381,43 @@ class BybitService {
 		}
 	}
 
+	/**
+	 * Получает изменения кошелька Bybit за период с кешированием
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {Object} keys - API ключи {api, secret}
+	 * @param {Date|string} start_time - Время начала периода
+	 * @param {Date|string} end_time - Время окончания периода
+	 * @returns {Promise<Array>} - Массив изменений кошелька
+	 */
 	async getBybitWalletChanges(lng = 'en', keys, start_time, end_time) {
-		const cacheKey = Helpers.generateCacheKey(
+		const cacheKey = generateCacheKey(
 			'bybit',
 			'wallet_changes',
 			start_time,
 			end_time
 		)
 
-		const cachedData = await Helpers.getFromCache(
-			cacheKey,
-			'getBybitWalletChanges'
-		)
+		const cachedData = await getFromCache(cacheKey, 'getBybitWalletChanges')
 		if (cachedData) {
 			return cachedData.map(item => new BybitTransactionDto(item))
 		}
 
-		const client = new RestClientV5({
-			testnet: false,
-			key: keys.api,
-			secret: keys.secret,
-		})
+		const client = ApiClientService.createClient('bybit', keys)
 
 		try {
 			const startTime = moment(start_time)
 			const endTime = moment(end_time)
-			const diffDays = endTime.diff(startTime, 'days')
 
-			let allTransactions = []
-
-			if (diffDays > 7) {
-				const timeChunks = []
-				let currentStartTime = startTime.clone()
-				const endLimit = endTime.clone()
-
-				while (currentStartTime.isBefore(endLimit)) {
-					const currentEndTime = moment.min(
-						currentStartTime.clone().add(7, 'days'),
-						endLimit
-					)
-
-					timeChunks.push({
-						start: currentStartTime.valueOf(),
-						end: currentEndTime.valueOf(),
-					})
-
-					currentStartTime = currentEndTime
-				}
-
-				const chunkResults = await Promise.all(
-					timeChunks.map(async (chunk, index) => {
-						let chunkTransactions = []
-						let nextCursor = ''
-
-						do {
-							const response = await client.getTransactionLog({
-								accountType: 'UNIFIED',
-								startTime: chunk.start,
-								endTime: chunk.end,
-								cursor: nextCursor || undefined,
-								limit: 50,
-							})
-
-							if (response.retCode !== 0) {
-								throw ApiError.BadRequest(
-									i18next.t('errors.api_error', {
-										lng,
-										exchange: 'Bybit',
-										error: response.retMsg,
-									})
-								)
-							}
-
-							if (response.result.list && response.result.list.length > 0) {
-								chunkTransactions = [
-									...chunkTransactions,
-									...response.result.list,
-								]
-							}
-
-							nextCursor = response.result.nextPageCursor
-
-							await Helpers.delayApi(100)
-						} while (nextCursor)
-
-						return chunkTransactions
-					})
-				)
-
-				allTransactions = chunkResults.flat()
-			} else {
-				let nextCursor = ''
-
-				do {
-					const response = await client.getTransactionLog({
-						accountType: 'UNIFIED',
-						startTime: startTime.valueOf(),
-						endTime: endTime.valueOf(),
-						cursor: nextCursor || undefined,
-						limit: 50,
-					})
-
-					if (response.retCode !== 0) {
-						throw ApiError.BadRequest(
-							i18next.t('errors.api_error', {
-								lng,
-								exchange: 'Bybit',
-								error: response.retMsg,
-							})
-						)
-					}
-
-					if (response.result.list && response.result.list.length > 0) {
-						allTransactions = [...allTransactions, ...response.result.list]
-					}
-
-					nextCursor = response.result.nextPageCursor
-
-					await Helpers.delayApi(100)
-				} while (nextCursor)
-			}
+			const allTransactions = await ApiClientService.fetchDataByTimeChunks({
+				client,
+				startTime,
+				endTime,
+				apiMethod: 'getTransactionLog',
+				apiParams: { accountType: 'UNIFIED' },
+				lng,
+				exchangeName: 'Bybit',
+				maxDays: 7,
+			})
 
 			const transactions = allTransactions.map(
 				item => new BybitTransactionDto(item)
@@ -588,16 +430,11 @@ class BybitService {
 				cashBalance: parseFloat(Number(item.cashBalance || 0).toFixed(8)),
 			}))
 
-			await Helpers.setToCache(
-				cacheKey,
-				plainObjects,
-				300,
-				'getBybitWalletChanges'
-			)
+			await setToCache(cacheKey, plainObjects, 300, 'getBybitWalletChanges')
 
 			return transactions
 		} catch (error) {
-			Helpers.handleApiError(
+			handleApiError(
 				error,
 				lng,
 				'getBybitWalletChanges',
@@ -607,7 +444,22 @@ class BybitService {
 		}
 	}
 
+	/**
+	 * Получает транзакции Bybit с кешированием и инкрементальным обновлением
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {Object} keys - API ключи {api, secret}
+	 * @param {Date|string} start_time - Время начала периода
+	 * @param {Date|string} end_time - Время окончания периода
+	 * @param {Object} sort - Параметры сортировки {type, value}
+	 * @param {string} search - Строка поиска
+	 * @param {number} page - Номер страницы
+	 * @param {number} limit - Количество записей на странице
+	 * @param {boolean} bookmarks - Фильтр по закладкам
+	 * @returns {Promise<Object>} - Объект с транзакциями
+	 */
 	async getBybitTransactions(
+		userId,
 		lng = 'en',
 		keys,
 		start_time,
@@ -615,225 +467,140 @@ class BybitService {
 		sort,
 		search,
 		page,
-		limit
+		limit,
+		bookmarks
 	) {
-		const cacheKey = Helpers.generateCacheKey(
+		const cacheKey = generateCacheKey(
 			'bybit',
 			'transactions',
+			userId,
 			start_time,
 			end_time,
 			page,
-			limit
+			limit,
+			sort,
+			search
 		)
 
-		const cachedData = await Helpers.getFromCache(
-			cacheKey,
-			'getBybitTransactions'
-		)
+		const cachedData = await getFromCache(cacheKey, 'getBybitTransactions')
+
 		if (cachedData) {
-			const transactions = cachedData.map(item => new BybitTransactionDto(item))
-
-			let filteredTransactions = transactions
-
-			if (search) {
-				const searchLower = search.toLowerCase()
-				filteredTransactions = transactions.filter(
-					transaction =>
-						transaction.symbol?.toLowerCase().includes(searchLower) ||
-						transaction.type?.toLowerCase().includes(searchLower) ||
-						transaction.category?.toLowerCase().includes(searchLower) ||
-						transaction.side?.toLowerCase().includes(searchLower)
-				)
-			}
-
-			if (sort && sort.type) {
-				filteredTransactions.sort((a, b) => {
-					const aValue = a[sort.type]
-					const bValue = b[sort.type]
-
-					if (sort.type === 'transactionTime' || sort.type === 'date') {
-						return sort.value === 'asc' ? aValue - bValue : bValue - aValue
-					}
-
-					if (typeof aValue === 'number' && typeof bValue === 'number') {
-						return sort.value === 'asc' ? aValue - bValue : bValue - aValue
-					}
-
-					if (typeof aValue === 'string' && typeof bValue === 'string') {
-						return sort.value === 'asc'
-							? aValue.localeCompare(bValue)
-							: bValue.localeCompare(aValue)
-					}
-
-					return 0
-				})
-			}
-
-			const pageSize = limit || 50
-			const currentPage = page || 1
-			const startIndex = (currentPage - 1) * pageSize
-			const endIndex = startIndex + pageSize
-			const paginatedTransactions = filteredTransactions.slice(
-				startIndex,
-				endIndex
-			)
-
-			return {
-				transactions: paginatedTransactions,
-				total: filteredTransactions.length,
-				totalPages: Math.ceil(filteredTransactions.length / pageSize),
-			}
+			return cachedData
 		}
 
-		const client = new RestClientV5({
-			testnet: false,
-			key: keys.api,
-			secret: keys.secret,
-		})
+		const client = ApiClientService.createClient('bybit', keys)
 
 		try {
-			const startTime = moment(start_time)
-			const endTime = moment(end_time)
-			const diffDays = endTime.diff(startTime, 'days')
+			let existingTransactions = await Transaction.find({
+				user: userId,
+				transactionTime: {
+					$gte: start_time,
+					$lte: end_time,
+				},
+				...(bookmarks && { bookmark: true }),
+			})
 
-			let allTransactions = []
+			if (existingTransactions.length === 0) {
+				const startTime = moment(start_time)
+				const endTime = moment(end_time)
 
-			if (diffDays > 7) {
-				const timeChunks = []
-				let currentStartTime = startTime.clone()
-				const endLimit = endTime.clone()
+				const allTransactions = await ApiClientService.fetchDataByTimeChunks({
+					client,
+					startTime,
+					endTime,
+					apiMethod: 'getTransactionLog',
+					apiParams: { accountType: 'UNIFIED' },
+					lng,
+					exchangeName: 'Bybit',
+					maxDays: 7,
+				})
 
-				while (currentStartTime.isBefore(endLimit)) {
-					const currentEndTime = moment.min(
-						currentStartTime.clone().add(7, 'days'),
-						endLimit
+				const transformedTransactions =
+					DataService.transformTransactionsToDbFormat(
+						allTransactions,
+						userId,
+						'bybit'
 					)
 
-					timeChunks.push({
-						start: currentStartTime.valueOf(),
-						end: currentEndTime.valueOf(),
-					})
-
-					currentStartTime = currentEndTime
-				}
-
-				const chunkResults = await Promise.all(
-					timeChunks.map(async (chunk, index) => {
-						let chunkTransactions = []
-						let nextCursor = ''
-
-						do {
-							const response = await client.getTransactionLog({
-								accountType: 'UNIFIED',
-								startTime: chunk.start,
-								endTime: chunk.end,
-								cursor: nextCursor || undefined,
-								limit: 50,
-							})
-
-							if (response.retCode !== 0) {
-								throw ApiError.BadRequest(
-									i18next.t('errors.api_error', {
-										lng,
-										exchange: 'Bybit',
-										error: response.retMsg,
-									})
-								)
-							}
-
-							if (response.result.list && response.result.list.length > 0) {
-								chunkTransactions = [
-									...chunkTransactions,
-									...response.result.list,
-								]
-							}
-
-							nextCursor = response.result.nextPageCursor
-
-							await Helpers.delayApi(100)
-						} while (nextCursor)
-
-						return chunkTransactions
-					})
+				await DataService.saveTransactionsToDatabase(
+					transformedTransactions,
+					userId,
+					'bybit'
 				)
 
-				allTransactions = chunkResults.flat()
+				const result = await DataService.getTransactionsFromDb(
+					userId,
+					start_time,
+					end_time,
+					sort,
+					search,
+					page,
+					limit,
+					bookmarks,
+					'bybit',
+					lng
+				)
+
+				await setToCache(cacheKey, result, 300, 'getBybitTransactions')
+
+				return result
 			} else {
-				let nextCursor = ''
+				const latestTransaction = await Transaction.findOne({
+					user: userId,
+					transactionTime: { $gte: start_time },
+					sync_time: { $lte: end_time },
+				}).sort({ transactionTime: -1 })
 
-				do {
-					const response = await client.getTransactionLog({
-						accountType: 'UNIFIED',
-						startTime: startTime.valueOf(),
-						endTime: endTime.valueOf(),
-						cursor: nextCursor || undefined,
-						limit: 50,
-					})
+				if (latestTransaction) {
+					const latestTransactionTime = latestTransaction.sync_time.getTime()
 
-					if (response.retCode !== 0) {
-						throw ApiError.BadRequest(
-							i18next.t('errors.api_error', {
-								lng,
-								exchange: 'Bybit',
-								error: response.retMsg,
-							})
+					const allNewTransactions =
+						await ApiClientService.fetchDataByTimeChunks({
+							client,
+							startTime: latestTransactionTime,
+							endTime: end_time,
+							apiMethod: 'getTransactionLog',
+							apiParams: { accountType: 'UNIFIED' },
+							lng,
+							exchangeName: 'Bybit',
+							maxDays: 7,
+						})
+
+					if (allNewTransactions.length > 0) {
+						const transformedNewTransactions =
+							DataService.transformTransactionsToDbFormat(
+								allNewTransactions,
+								userId,
+								'bybit'
+							)
+
+						await DataService.saveTransactionsToDatabase(
+							transformedNewTransactions,
+							userId,
+							'bybit'
 						)
 					}
+				}
 
-					if (response.result.list && response.result.list.length > 0) {
-						allTransactions = [...allTransactions, ...response.result.list]
-					}
+				const result = await DataService.getTransactionsFromDb(
+					userId,
+					start_time,
+					end_time,
+					sort,
+					search,
+					page,
+					limit,
+					bookmarks,
+					'bybit',
+					lng
+				)
 
-					nextCursor = response.result.nextPageCursor
+				await setToCache(cacheKey, result, 300, 'getBybitTransactions')
 
-					await Helpers.delayApi(100)
-				} while (nextCursor)
-			}
-
-			logger.info(allTransactions, 'allTransactions')
-			// cashBalance - отображает остаток по монете
-
-			const transactions = allTransactions.map(
-				item => new BybitTransactionDto(item)
-			)
-
-			const paginatedResult = await Helpers.paginate(
-				transactions,
-				page || 1,
-				limit || 50,
-				sort,
-				search,
-				['symbol', 'type', 'category', 'side']
-			)
-
-			const plainObjects = allTransactions.map(item => ({
-				transactionTime: parseInt(item.transactionTime),
-				change: parseFloat(Number(item.change || 0).toFixed(4)),
-				cashFlow: parseFloat(Number(item.cashFlow || 0).toFixed(4)),
-				cashBalance: parseFloat(Number(item.cashBalance || 0).toFixed(4)),
-				symbol: item.symbol || '',
-				currency: item.currency || '',
-				category: item.category || '',
-				side: item.side || '',
-				type: item.type || '',
-				funding: parseFloat(Number(item.funding || 0).toFixed(4)),
-				fee: parseFloat(Number(item.fee || 0).toFixed(4)),
-			}))
-
-			await Helpers.setToCache(
-				cacheKey,
-				plainObjects,
-				300,
-				'getBybitTransactions'
-			)
-
-			return {
-				transactions: paginatedResult.items,
-				total: paginatedResult.total,
-				totalPages: paginatedResult.totalPages,
+				return result
 			}
 		} catch (error) {
-			Helpers.handleApiError(
+			handleApiError(
 				error,
 				lng,
 				'getBybitTransactions',

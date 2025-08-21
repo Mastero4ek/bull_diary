@@ -3,8 +3,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Cookies from 'js-cookie';
 import { initReactI18next } from 'react-i18next';
 
-import en from './assets/locales/en/en.json';
-import ru from './assets/locales/ru/ru.json';
+import en from './assets/locales/en/translation.json';
+import ru from './assets/locales/ru/translation.json';
 
 const resources = {
 	en: { translation: en },

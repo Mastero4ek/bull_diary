@@ -1,7 +1,8 @@
 const BybitService = require('../services/bybit-service')
 const KeysService = require('../services/keys-service')
-const Helpers = require('../helpers/helpers')
-const OrdersService = require('../services/orders-service')
+const { validationError } = require('../helpers/validation-helpers')
+const { capitalize, paginate } = require('../helpers/utility-helpers')
+const DataService = require('../services/data-service')
 const { ApiError } = require('../exceptions/api-error')
 const moment = require('moment')
 const i18next = require('i18next')
@@ -9,10 +10,18 @@ const i18next = require('i18next')
 class BybitController {
 	async getBybitOrdersPnl(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
-			const { exchange, sort, search, page, limit, start_time, end_time } =
-				req.query
+			const {
+				exchange,
+				sort,
+				search,
+				page,
+				limit,
+				start_time,
+				end_time,
+				bookmarks,
+			} = req.query
 			const parsedPage = page ? parseInt(page) : undefined
 			const parsedLimit = limit ? parseInt(limit) : undefined
 
@@ -31,7 +40,7 @@ class BybitController {
 				throw ApiError.BadRequest(
 					i18next.t('errors.keys_not_configured', {
 						lng: req.lng,
-						exchange: Helpers.capitalize(exchange),
+						exchange: capitalize(exchange),
 					})
 				)
 			}
@@ -42,7 +51,9 @@ class BybitController {
 					: start_time
 			const endMsPnl =
 				typeof end_time === 'string' ? new Date(end_time).getTime() : end_time
+
 			const result = await BybitService.getBybitOrdersPnl(
+				user.id,
 				req.lng,
 				current_keys,
 				startMsPnl,
@@ -50,29 +61,15 @@ class BybitController {
 				sort,
 				search,
 				parsedPage,
-				parsedLimit
-			)
-
-			const total = await Helpers.calculateTotalPnl(result.allOrders)
-
-			const bookmarksResult = await OrdersService.getBybitSavedOrders(
-				req.lng,
-				user.id,
-				start_time,
-				end_time,
-				exchange,
-				null, // sort
-				null, // search
-				parsedPage, // page
-				parsedLimit // limit
+				parsedLimit,
+				bookmarks
 			)
 
 			return res.json({
-				bookmarks: bookmarksResult.orders,
 				orders: result.orders,
 				total_pages: result.totalPages,
-				total_profit: +total.profit,
-				total_loss: +total.loss,
+				total_profit: +result.totalPnl.profit,
+				total_loss: +result.totalPnl.loss,
 			})
 		} catch (e) {
 			next(e)
@@ -81,7 +78,7 @@ class BybitController {
 
 	async getBybitTickers(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { exchange } = req.query
 
@@ -100,7 +97,7 @@ class BybitController {
 				throw ApiError.BadRequest(
 					i18next.t('errors.keys_not_configured', {
 						lng: req.lng,
-						exchange: Helpers.capitalize(exchange),
+						exchange: capitalize(exchange),
 					})
 				)
 			}
@@ -115,7 +112,7 @@ class BybitController {
 
 	async getBybitWallet(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { exchange, start_time, end_time } = req.query
 			const user = req.user
@@ -133,7 +130,7 @@ class BybitController {
 				throw ApiError.BadRequest(
 					i18next.t('errors.keys_not_configured', {
 						lng: req.lng,
-						exchange: Helpers.capitalize(exchange),
+						exchange: capitalize(exchange),
 					})
 				)
 			}
@@ -147,6 +144,7 @@ class BybitController {
 			const wallet = await BybitService.getBybitWallet(req.lng, current_keys)
 
 			const result = await BybitService.getBybitOrdersPnl(
+				user.id,
 				req.lng,
 				current_keys,
 				startMsWallet,
@@ -154,10 +152,19 @@ class BybitController {
 				null, // sort
 				null, // search
 				null, // page
-				null // limit
+				null, // limit
+				false // bookmarks
 			)
 
-			const total = await Helpers.calculateTotalProfit(result.orders)
+			const total = await DataService.calculateTotalProfitFromDb(
+				user.id,
+				startMsWallet,
+				endMsWallet,
+				false, // bookmarks
+				null, // search
+				'bybit', // exchange
+				req.lng
+			)
 
 			return res.json({
 				total_balance: +wallet.total_balance,
@@ -175,7 +182,7 @@ class BybitController {
 
 	async getBybitPositions(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { exchange, sort, search, page, limit } = req.query
 			const parsedPage = page ? parseInt(page) : undefined
@@ -196,7 +203,7 @@ class BybitController {
 				throw ApiError.BadRequest(
 					i18next.t('errors.keys_not_configured', {
 						lng: req.lng,
-						exchange: Helpers.capitalize(exchange),
+						exchange: capitalize(exchange),
 					})
 				)
 			}
@@ -224,6 +231,7 @@ class BybitController {
 			const ordersByDay = await Promise.all(
 				period.map(async periodItem => {
 					const result = await BybitService.getBybitOrdersPnl(
+						user.id,
 						req.lng,
 						current_keys,
 						periodItem.start,
@@ -231,10 +239,19 @@ class BybitController {
 						null, // sort
 						null, // search
 						null, // page
-						null // limit
+						null, // limit
+						false // bookmarks
 					)
 
-					const total = await Helpers.calculateTotalProfit(result.orders)
+					const total = await DataService.calculateTotalProfitFromDb(
+						user.id,
+						periodItem.start,
+						periodItem.end,
+						false, // bookmarks
+						null, // search
+						'bybit', // exchange
+						req.lng
+					)
 
 					return {
 						day: periodItem.day,
@@ -243,7 +260,7 @@ class BybitController {
 				})
 			)
 
-			const paginated_positions = await Helpers.paginate(
+			const paginated_positions = await paginate(
 				positions,
 				parsedPage,
 				parsedLimit,
@@ -263,7 +280,7 @@ class BybitController {
 
 	async getBybitWalletChangesByDay(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { exchange, start_time, end_time } = req.query
 
@@ -282,7 +299,7 @@ class BybitController {
 				throw ApiError.BadRequest(
 					i18next.t('errors.keys_not_configured', {
 						lng: req.lng,
-						exchange: Helpers.capitalize(exchange),
+						exchange: capitalize(exchange),
 					})
 				)
 			}
@@ -452,12 +469,18 @@ class BybitController {
 
 	async getBybitTransactions(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
-			const { exchange, start_time, end_time, sort, search, page, limit } =
-				req.query
-			const parsedPage = page ? parseInt(page) : undefined
-			const parsedLimit = limit ? parseInt(limit) : undefined
+			const {
+				exchange,
+				start_time,
+				end_time,
+				sort,
+				search,
+				page,
+				limit,
+				bookmarks,
+			} = req.query
 
 			const user = req.user
 			const keys = await KeysService.findDecryptedKeys(user.id, req.lng)
@@ -474,49 +497,48 @@ class BybitController {
 				throw ApiError.BadRequest(
 					i18next.t('errors.keys_not_configured', {
 						lng: req.lng,
-						exchange: Helpers.capitalize(exchange),
+						exchange: capitalize(exchange),
 					})
 				)
 			}
 
-			let startDate = moment(start_time).startOf('day').valueOf()
-			let endDate = moment(end_time).endOf('day').valueOf()
-
-			const daysDiff = moment(endDate).diff(moment(startDate), 'days')
-
-			if (daysDiff > 180) {
-				startDate = moment(endDate)
-					.subtract(180, 'days')
-					.startOf('day')
-					.valueOf()
-			}
+			const startMs =
+				typeof start_time === 'string'
+					? new Date(start_time).getTime()
+					: start_time
+			const endMs =
+				typeof end_time === 'string' ? new Date(end_time).getTime() : end_time
 
 			const result = await BybitService.getBybitTransactions(
+				user.id,
 				req.lng,
 				current_keys,
-				startDate,
-				endDate,
+				startMs,
+				endMs,
 				sort,
 				search,
-				parsedPage,
-				parsedLimit
+				page,
+				limit,
+				bookmarks
 			)
 
-			const formattedTransactions = result.transactions.map(transaction => ({
-				transactionTime: transaction.transactionTime,
-				date: moment(transaction.transactionTime).format('YYYY-MM-DD'),
-				time: moment(transaction.transactionTime).format('HH:mm:ss'),
-				symbol: transaction.symbol,
-				currency: transaction.currency,
-				category: transaction.category,
-				side: transaction.side,
-				type: transaction.type,
-				change: transaction.change,
-				cashFlow: transaction.cashFlow,
-				cashBalance: transaction.cashBalance,
-				funding: transaction.funding,
-				fee: transaction.fee,
-			}))
+			const formattedTransactions = result.transactions.map(transaction => {
+				return {
+					transactionTime: transaction.transactionTime,
+					date: moment(transaction.transactionTime).format('YYYY-MM-DD'),
+					time: moment(transaction.transactionTime).format('HH:mm:ss'),
+					symbol: transaction.symbol,
+					currency: transaction.currency,
+					category: transaction.category,
+					side: transaction.side,
+					type: transaction.type,
+					change: transaction.change,
+					cashFlow: transaction.cashFlow,
+					cashBalance: transaction.cashBalance,
+					funding: transaction.funding,
+					fee: transaction.fee,
+				}
+			})
 
 			return res.json({
 				transactions: formattedTransactions,

@@ -114,6 +114,32 @@ export const removeCover = createAsyncThunk(
 	}
 )
 
+export const activeUser = createAsyncThunk(
+	'users/active-user',
+	async (user, { rejectWithValue }) => {
+		try {
+			const response = await UserService.activeUser(user._id)
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
+export const inactiveUser = createAsyncThunk(
+	'users/inactive-user',
+	async (user, { rejectWithValue }) => {
+		try {
+			const response = await UserService.inactiveUser(user._id)
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
 const initialState = {
 	user: userDefault,
 	changeUser: userDefault,
@@ -266,6 +292,34 @@ const usersSlice = createSlice({
 				state.changeUser.cover = null
 			})
 			.addCase(removeCover.rejected, (state, action) => {
+				state.errorMessage = action?.payload?.message
+				state.serverStatus = 'error'
+			})
+
+			// active user
+			.addCase(activeUser.pending, state => {
+				state.serverStatus = 'loading'
+				state.errorMessage = null
+			})
+			.addCase(activeUser.fulfilled, (state, action) => {
+				state.errorMessage = null
+				state.serverStatus = 'success'
+			})
+			.addCase(activeUser.rejected, (state, action) => {
+				state.errorMessage = action?.payload?.message
+				state.serverStatus = 'error'
+			})
+
+			// inactive user
+			.addCase(inactiveUser.pending, state => {
+				state.serverStatus = 'loading'
+				state.errorMessage = null
+			})
+			.addCase(inactiveUser.fulfilled, (state, action) => {
+				state.errorMessage = null
+				state.serverStatus = 'success'
+			})
+			.addCase(inactiveUser.rejected, (state, action) => {
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'error'
 			})

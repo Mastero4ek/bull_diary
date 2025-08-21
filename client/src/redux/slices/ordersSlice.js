@@ -9,7 +9,7 @@ import {
 export const getBybitOrdersPnl = createAsyncThunk(
 	'get-order-pnl',
 	async (
-		{ exchange, sort, search, page, limit, start_time, end_time },
+		{ exchange, sort, search, page, limit, start_time, end_time, bookmarks },
 		{ rejectWithValue }
 	) => {
 		try {
@@ -20,7 +20,8 @@ export const getBybitOrdersPnl = createAsyncThunk(
 				page,
 				limit,
 				start_time,
-				end_time
+				end_time,
+				bookmarks
 			)
 
 			return response?.data
@@ -48,6 +49,32 @@ export const updateOrderDescription = createAsyncThunk(
 	async ({ id, text }, { rejectWithValue }) => {
 		try {
 			const response = await OrdersService.updateOrderDescription(id, text)
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
+export const savedOrder = createAsyncThunk(
+	'saved-order',
+	async ({ order, exchange }, { rejectWithValue }) => {
+		try {
+			const response = await OrdersService.savedOrder(order, exchange)
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
+export const removedOrder = createAsyncThunk(
+	'removed-order',
+	async ({ order, exchange }, { rejectWithValue }) => {
+		try {
+			const response = await OrdersService.removedOrder(order, exchange)
 
 			return response?.data
 		} catch (e) {
@@ -166,6 +193,36 @@ const ordersSlice = createSlice({
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'error'
 				state.description = ''
+			})
+
+			//saved-order
+			.addCase(savedOrder.pending, state => {
+				state.serverStatus = 'loading'
+				state.errorMessage = null
+			})
+			.addCase(savedOrder.fulfilled, (state, action) => {
+				state.errorMessage = action.payload.message || null
+				state.serverStatus = 'success'
+				state.order = action.payload.order
+			})
+			.addCase(savedOrder.rejected, (state, action) => {
+				state.errorMessage = action?.payload?.message
+				state.serverStatus = 'error'
+			})
+
+			//removed-order
+			.addCase(removedOrder.pending, state => {
+				state.serverStatus = 'loading'
+				state.errorMessage = null
+			})
+			.addCase(removedOrder.fulfilled, (state, action) => {
+				state.errorMessage = action.payload.message || null
+				state.serverStatus = 'success'
+				state.order = action.payload.order
+			})
+			.addCase(removedOrder.rejected, (state, action) => {
+				state.errorMessage = action?.payload?.message
+				state.serverStatus = 'error'
 			})
 	},
 })

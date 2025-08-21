@@ -1,9 +1,12 @@
 const { ApiError } = require('../exceptions/api-error')
-const { v4: uuidv4 } = require('uuid')
 const { logError } = require('../config/logger')
+const { v4: uuidv4 } = require('uuid')
 
-module.exports = function (err, req, res, next) {
-	// Generate unique request ID for tracking
+/**
+ * Middleware для обработки ошибок
+ * Логирует ошибки и возвращает соответствующие HTTP ответы
+ */
+const errorMiddleware = (err, req, res, next) => {
 	const requestId = uuidv4()
 
 	const logData = {
@@ -21,7 +24,6 @@ module.exports = function (err, req, res, next) {
 
 	logError(err, logData)
 
-	// Handle Rate Limiting Errors
 	if (err.status === 429) {
 		return res.status(429).json({
 			message:
@@ -33,7 +35,6 @@ module.exports = function (err, req, res, next) {
 		})
 	}
 
-	// Handle API Errors
 	if (err instanceof ApiError) {
 		return res.status(err.status).json({
 			message: err.message,
@@ -43,7 +44,6 @@ module.exports = function (err, req, res, next) {
 		})
 	}
 
-	// Handle Validation Errors
 	if (err.name === 'ValidationError') {
 		return res.status(400).json({
 			message: 'Validation Error',
@@ -53,7 +53,6 @@ module.exports = function (err, req, res, next) {
 		})
 	}
 
-	// Handle MongoDB Errors
 	if (err.name === 'MongoError' || err.name === 'MongoServerError') {
 		return res.status(500).json({
 			message: 'Database Error',
@@ -62,7 +61,6 @@ module.exports = function (err, req, res, next) {
 		})
 	}
 
-	// Handle JWT Errors
 	if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
 		return res.status(401).json({
 			message: 'Authentication Error',
@@ -71,10 +69,11 @@ module.exports = function (err, req, res, next) {
 		})
 	}
 
-	// Default error
 	return res.status(500).json({
 		message: 'Internal Server Error',
 		code: 500,
 		requestId,
 	})
 }
+
+module.exports = errorMiddleware

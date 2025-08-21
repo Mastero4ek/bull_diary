@@ -1,8 +1,6 @@
 const UserModel = require('../models/user-model')
 const KeysModel = require('../models/keys-model')
-const TokenModel = require('../models/token-model')
 const LevelModel = require('../models/level-model')
-const TournamentUserModel = require('../models/tournament_user-model')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const tokenService = require('./token-service')
@@ -10,14 +8,51 @@ const mailService = require('./mail-service')
 const UserDto = require('../dtos/user-dto')
 const KeysDto = require('../dtos/keys-dto')
 const { ApiError } = require('../exceptions/api-error')
-const OrderModel = require('../models/order-model')
 const i18next = require('i18next')
 const path = require('path')
 const moment = require('moment')
-const Helpers = require('../helpers/helpers')
+const {
+	handleDatabaseError,
+	handleTokenError,
+} = require('../helpers/error-helpers')
 const { logError, logInfo } = require('../config/logger')
+const fileService = require('./file-service')
 
 class UserService {
+	/**
+	 * Автоматически создает недостающие keys и level для пользователя
+	 * @param {string} userId - ID пользователя
+	 * @returns {Promise<Object>} - Объект с keys и level
+	 */
+	async ensureUserData(userId) {
+		let keys = await KeysModel.findOne({ user: userId })
+		let level = await LevelModel.findOne({ user: userId })
+
+		if (!keys) {
+			keys = await KeysModel.create({ user: userId })
+			logInfo('Keys created automatically', { userId })
+		}
+
+		if (!level) {
+			level = await LevelModel.create({
+				user: userId,
+				level: { name: 'hamster', value: 0 },
+			})
+			logInfo('Level created automatically', { userId })
+		}
+
+		return { keys, level }
+	}
+
+	/**
+	 * Регистрирует нового пользователя
+	 * @param {string} name - Имя пользователя
+	 * @param {string} email - Email пользователя
+	 * @param {string} password - Пароль пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {string} source - Источник регистрации (по умолчанию 'self')
+	 * @returns {Promise<Object>} - Объект с токенами и данными пользователя
+	 */
 	async signUp(name, email, password, lng = 'en', source = 'self') {
 		try {
 			const normalizedEmail = email.toLowerCase()
@@ -107,15 +142,17 @@ class UserService {
 				}
 			}
 
-			Helpers.handleDatabaseError(
-				error,
-				lng,
-				'signUp',
-				'errors.failed_create_user'
-			)
+			handleDatabaseError(error, lng, 'signUp', 'errors.failed_create_user')
 		}
 	}
 
+	/**
+	 * Авторизует пользователя
+	 * @param {string} email - Email пользователя
+	 * @param {string} password - Пароль пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с токенами и данными пользователя
+	 */
 	async signIn(email, password, lng = 'en') {
 		try {
 			const normalizedEmail = email.toLowerCase()
@@ -144,14 +181,7 @@ class UserService {
 			user.updated_at = new Date()
 			await user.save()
 
-			const keys = await KeysModel.findOne({ user: user._id })
-			const level = await LevelModel.findOne({ user: user._id })
-
-			if (!keys || !level) {
-				throw ApiError.InternalError(
-					i18next.t('errors.user_data_incomplete', { lng })
-				)
-			}
+			const { keys, level } = await this.ensureUserData(user._id)
 
 			const user_dto = new UserDto(user)
 			const tokens = await tokenService.generateTokens(
@@ -183,10 +213,16 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(error, lng, 'signIn', 'errors.failed_sign_in')
+			handleDatabaseError(error, lng, 'signIn', 'errors.failed_sign_in')
 		}
 	}
 
+	/**
+	 * Проверяет авторизацию пользователя из внешнего источника
+	 * @param {string} email - Email пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с токенами и данными пользователя
+	 */
 	async checkSourceAuth(email, lng = 'en') {
 		try {
 			const normalizedEmail = email.toLowerCase()
@@ -201,14 +237,7 @@ class UserService {
 			user.updated_at = new Date()
 			await user.save()
 
-			const keys = await KeysModel.findOne({ user: user._id })
-			const level = await LevelModel.findOne({ user: user._id })
-
-			if (!keys || !level) {
-				throw ApiError.InternalError(
-					i18next.t('errors.user_data_incomplete', { lng })
-				)
-			}
+			const { keys, level } = await this.ensureUserData(user._id)
 
 			const user_dto = new UserDto(user)
 			const tokens = await tokenService.generateTokens(
@@ -240,7 +269,7 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'checkSourceAuth',
@@ -249,14 +278,26 @@ class UserService {
 		}
 	}
 
+	/**
+	 * Выход пользователя из системы
+	 * @param {string} refresh_token - Refresh токен для удаления
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Результат выхода
+	 */
 	async logout(refresh_token, lng = 'en') {
 		try {
 			return await tokenService.removeToken(refresh_token, lng)
 		} catch (error) {
-			Helpers.handleTokenError(error, lng, 'logout', 'errors.failed_logout')
+			handleTokenError(error, lng, 'logout', 'errors.failed_logout')
 		}
 	}
 
+	/**
+	 * Обновляет токены пользователя
+	 * @param {string} refresh_token - Refresh токен для обновления
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Новые токены
+	 */
 	async refresh(refresh_token, lng = 'en') {
 		try {
 			const user_data = tokenService.validateRefreshToken(refresh_token, lng)
@@ -283,14 +324,7 @@ class UserService {
 				)
 			}
 
-			const keys = await KeysModel.findOne({ user: user._id })
-			const level = await LevelModel.findOne({ user: user._id })
-
-			if (!keys || !level) {
-				throw ApiError.InternalError(
-					i18next.t('errors.user_data_incomplete', { lng })
-				)
-			}
+			const { keys, level } = await this.ensureUserData(user._id)
 
 			const user_dto = new UserDto(user)
 			const tokens = await tokenService.generateTokens(
@@ -322,10 +356,16 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			Helpers.handleTokenError(error, lng, 'refresh', 'errors.failed_refresh')
+			handleTokenError(error, lng, 'refresh', 'errors.failed_refresh')
 		}
 	}
 
+	/**
+	 * Активирует аккаунт пользователя по ссылке
+	 * @param {string} activation_link - Ссылка активации
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с токенами и данными пользователя
+	 */
 	async activate(activation_link, lng = 'en') {
 		try {
 			const user = await UserModel.findOne({ activation_link })
@@ -348,14 +388,7 @@ class UserService {
 
 			await user.save()
 
-			const keys = await KeysModel.findOne({ user: user._id })
-			const level = await LevelModel.findOne({ user: user._id })
-
-			if (!keys || !level) {
-				throw ApiError.InternalError(
-					i18next.t('errors.user_data_incomplete', { lng })
-				)
-			}
+			const { keys, level } = await this.ensureUserData(user._id)
 
 			const user_dto = new UserDto(user)
 			const tokens = await tokenService.generateTokens(
@@ -387,15 +420,22 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
-				error,
-				lng,
-				'activate',
-				'errors.failed_activate'
-			)
+			handleDatabaseError(error, lng, 'activate', 'errors.failed_activate')
 		}
 	}
 
+	/**
+	 * Редактирует данные пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {string} name - Имя пользователя
+	 * @param {string} last_name - Фамилия пользователя
+	 * @param {string} email - Email пользователя
+	 * @param {string} password - Новый пароль (опционально)
+	 * @param {string} phone - Телефон пользователя
+	 * @param {Object} cover - Файл обложки (опционально)
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Обновленные данные пользователя
+	 */
 	async editUser(
 		userId,
 		name,
@@ -426,7 +466,6 @@ class UserService {
 			}
 
 			if (cover) {
-				const fileService = require('./file-service')
 				await fileService.uploadCover(cover, userId, lng)
 
 				updateData.cover =
@@ -448,28 +487,38 @@ class UserService {
 			const keys = await KeysModel.findOne({ user: userId })
 			const level = await LevelModel.findOne({ user: userId })
 
-			if (!keys || !level) {
-				throw ApiError.InternalError(
-					i18next.t('errors.user_data_incomplete', { lng })
-				)
+			const user_dto = new UserDto(updatedUser)
+
+			const result = { ...user_dto }
+
+			if (keys) {
+				const maskedKeys = await KeysDto.createMaskedKeys(keys, userId)
+				result.keys = maskedKeys.keys
+			} else {
+				result.keys = null
 			}
 
-			const user_dto = new UserDto(updatedUser)
-			const maskedKeys = await KeysDto.createMaskedKeys(keys, userId)
+			if (level) {
+				result.level = level.level
+			} else {
+				result.level = null
+			}
 
 			return {
-				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
+				user: result,
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
-				error,
-				lng,
-				'editUser',
-				'errors.failed_update_user'
-			)
+			handleDatabaseError(error, lng, 'editUser', 'errors.failed_update_user')
 		}
 	}
 
+	/**
+	 * Удаляет обложку пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {string} filename - Имя файла для удаления
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Сообщение об успешном удалении
+	 */
 	async removeCover(userId, filename, lng = 'en') {
 		try {
 			const user = await UserModel.findById(userId)
@@ -484,7 +533,6 @@ class UserService {
 				)
 			}
 
-			const fileService = require('./file-service')
 			await fileService.removeCover(filename, lng)
 
 			user.cover = null
@@ -494,7 +542,7 @@ class UserService {
 				message: i18next.t('success.cover_removed', { lng }),
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'removeCover',
@@ -503,7 +551,14 @@ class UserService {
 		}
 	}
 
-	async removeUser(current_email, fill_email, lng = 'en') {
+	/**
+	 * Полностью удаляет пользователя из системы
+	 * @param {string} current_email - Текущий email пользователя
+	 * @param {string} refresh_token - Refresh токен пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Сообщение об успешном удалении
+	 */
+	async removeUser(current_email, refresh_token, lng = 'en') {
 		try {
 			const user = await UserModel.findOne({ email: current_email })
 
@@ -511,24 +566,7 @@ class UserService {
 				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
 			}
 
-			// Update user data to fill email
-			user.email = fill_email
-			user.inactive = true
-
-			await user.save()
-
-			// Remove related data
-			await Promise.all([
-				KeysModel.deleteOne({ user: user._id }),
-				LevelModel.deleteOne({ user: user._id }),
-				TokenModel.deleteMany({ user: user._id }),
-				TournamentUserModel.deleteMany({ user: user._id }),
-				OrderModel.deleteMany({ user: user._id }),
-			])
-
-			// Remove user files
 			try {
-				const fileService = require('./file-service')
 				await fileService.removeUserFiles(user._id, lng)
 			} catch (fileError) {
 				logError(fileError, {
@@ -537,19 +575,84 @@ class UserService {
 				})
 			}
 
+			await UserModel.findByIdAndDelete(user._id)
+
 			return {
 				message: i18next.t('success.user_removed', { lng }),
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(error, lng, 'removeUser', 'errors.failed_remove_user')
+		}
+	}
+
+	/**
+	 * Активирует пользователя (убирает флаг inactive)
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Сообщение об успешной активации
+	 */
+	async activeUser(userId, lng = 'en') {
+		try {
+			const user = await UserModel.findByIdAndUpdate(
+				userId,
+				{ inactive: false, updated_at: new Date() },
+				{ new: true }
+			)
+
+			if (!user) {
+				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
+			}
+
+			return {
+				message: i18next.t('success.user_activated', { lng }),
+			}
+		} catch (error) {
+			handleDatabaseError(
 				error,
 				lng,
-				'removeUser',
-				'errors.failed_remove_user'
+				'activeUser',
+				'errors.failed_activate_user'
 			)
 		}
 	}
 
+	/**
+	 * Деактивирует пользователя (устанавливает флаг inactive)
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Сообщение об успешной деактивации
+	 */
+	async inactiveUser(userId, lng = 'en') {
+		try {
+			const user = await UserModel.findByIdAndUpdate(
+				userId,
+				{ inactive: true, updated_at: new Date() },
+				{ new: true }
+			)
+
+			if (!user) {
+				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
+			}
+
+			return {
+				message: i18next.t('success.user_deactivated', { lng }),
+			}
+		} catch (error) {
+			handleDatabaseError(
+				error,
+				lng,
+				'inactiveUser',
+				'errors.failed_deactivate_user'
+			)
+		}
+	}
+
+	/**
+	 * Получает данные пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Данные пользователя с ключами и уровнем
+	 */
 	async getUser(userId, lng = 'en') {
 		try {
 			const user = await UserModel.findById(userId)
@@ -561,26 +664,40 @@ class UserService {
 			const keys = await KeysModel.findOne({ user: userId })
 			const level = await LevelModel.findOne({ user: userId })
 
-			if (!keys || !level) {
-				throw ApiError.InternalError(
-					i18next.t('errors.user_data_incomplete', { lng })
-				)
+			const user_dto = new UserDto(user)
+
+			const result = { ...user_dto }
+
+			if (keys) {
+				const maskedKeys = await KeysDto.createMaskedKeys(keys, userId)
+				result.keys = maskedKeys.keys
+			} else {
+				result.keys = null
 			}
 
-			const user_dto = new UserDto(user)
-			const maskedKeys = await KeysDto.createMaskedKeys(keys, userId)
+			if (level) {
+				result.level = level.level
+			} else {
+				result.level = null
+			}
 
-			return { ...user_dto, keys: maskedKeys.keys, level: level.level }
+			return result
 		} catch (error) {
-			Helpers.handleDatabaseError(
-				error,
-				lng,
-				'getUser',
-				'errors.failed_get_user_data'
-			)
+			handleDatabaseError(error, lng, 'getUser', 'errors.failed_get_user_data')
 		}
 	}
 
+	/**
+	 * Получает список пользователей с фильтрацией и пагинацией
+	 * @param {Object} sort - Параметры сортировки
+	 * @param {string} search - Поисковый запрос
+	 * @param {number} page - Номер страницы (по умолчанию 1)
+	 * @param {number} limit - Количество записей на странице (по умолчанию 5)
+	 * @param {string} start_time - Начальное время фильтра
+	 * @param {string} end_time - Конечное время фильтра
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Список пользователей с метаданными
+	 */
 	async getUsers(
 		sort,
 		search,
@@ -631,15 +748,22 @@ class UserService {
 
 			return result
 		} catch (error) {
-			Helpers.handleDatabaseError(
-				error,
-				lng,
-				'getUsers',
-				'errors.failed_get_users'
-			)
+			handleDatabaseError(error, lng, 'getUsers', 'errors.failed_get_users')
 		}
 	}
 
+	/**
+	 * Создает нового пользователя администратором
+	 * @param {string} name - Имя пользователя
+	 * @param {string} last_name - Фамилия пользователя
+	 * @param {string} email - Email пользователя
+	 * @param {string} password - Пароль пользователя
+	 * @param {string} phone - Телефон пользователя
+	 * @param {string} role - Роль пользователя
+	 * @param {Object} cover - Файл обложки (опционально)
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Созданный пользователь
+	 */
 	async createUser(
 		name,
 		last_name,
@@ -678,12 +802,9 @@ class UserService {
 
 			const user = await UserModel.create(userData)
 
-			// Handle cover upload if provided
 			if (cover) {
-				const fileService = require('./file-service')
 				await fileService.uploadCover(cover, user._id, lng)
 
-				// Update user with cover path
 				const updatedUser = await UserModel.findByIdAndUpdate(
 					user._id,
 					{
@@ -713,15 +834,14 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
-				error,
-				lng,
-				'createUser',
-				'errors.failed_create_user'
-			)
+			handleDatabaseError(error, lng, 'createUser', 'errors.failed_create_user')
 		}
 	}
 
+	/**
+	 * Проверяет активность пользователей
+	 * @returns {Promise<Array>} - Список неактивных пользователей
+	 */
 	async checkUserActivity() {
 		try {
 			const inactiveThreshold = moment().subtract(170, 'days').toDate()
@@ -753,6 +873,10 @@ class UserService {
 		}
 	}
 
+	/**
+	 * Помечает неактивных пользователей как неактивных
+	 * @returns {Promise<number>} - Количество помеченных пользователей
+	 */
 	async markInactiveUsers() {
 		try {
 			const inactiveThreshold = moment().subtract(180, 'days').toDate()
@@ -773,7 +897,6 @@ class UserService {
 					threshold: inactiveThreshold,
 				})
 
-				// Get information about marked users for logging
 				const markedUsers = await UserModel.find({
 					updated_at: { $lt: inactiveThreshold },
 					inactive: true,

@@ -1,5 +1,5 @@
 const vault = require('node-vault')
-const { logError } = require('../../config/logger')
+const { logError } = require('../config/logger')
 
 class VaultSecretsService {
 	constructor() {
@@ -11,9 +11,9 @@ class VaultSecretsService {
 	}
 
 	/**
-	 * Get secret from Vault
-	 * @param {string} secretPath - path to secret
-	 * @returns {Promise<Object>} - object with secret
+	 * Получает секрет из Vault
+	 * @param {string} secretPath - путь к секрету
+	 * @returns {Promise<Object>} - объект с секретом
 	 */
 	async getSecret(secretPath) {
 		try {
@@ -30,10 +30,10 @@ class VaultSecretsService {
 	}
 
 	/**
-	 * Create new secret in Vault
-	 * @param {string} secretPath - path to secret
-	 * @param {Object} secretValue - secret value
-	 * @returns {Promise<Object>} - result of creation
+	 * Создает новый секрет в Vault
+	 * @param {string} secretPath - путь к секрету
+	 * @param {Object} secretValue - значение секрета
+	 * @returns {Promise<Object>} - результат создания
 	 */
 	async createSecret(secretPath, secretValue) {
 		try {
@@ -52,10 +52,10 @@ class VaultSecretsService {
 	}
 
 	/**
-	 * Update existing secret
-	 * @param {string} secretPath - path to secret
-	 * @param {Object} secretValue - new secret value
-	 * @returns {Promise<Object>} - result of update
+	 * Обновляет существующий секрет
+	 * @param {string} secretPath - путь к секрету
+	 * @param {Object} secretValue - новое значение секрета
+	 * @returns {Promise<Object>} - результат обновления
 	 */
 	async updateSecret(secretPath, secretValue) {
 		try {
@@ -73,9 +73,9 @@ class VaultSecretsService {
 	}
 
 	/**
-	 * Delete secret
-	 * @param {string} secretPath - path to secret
-	 * @returns {Promise<Object>} - result of deletion
+	 * Удаляет секрет
+	 * @param {string} secretPath - путь к секрету
+	 * @returns {Promise<Object>} - результат удаления
 	 */
 	async deleteSecret(secretPath) {
 		try {
@@ -92,9 +92,9 @@ class VaultSecretsService {
 	}
 
 	/**
-	 * Get list of secrets
-	 * @param {string} path - path to search
-	 * @returns {Promise<Array>} - list of secrets
+	 * Получает список секретов
+	 * @param {string} path - путь для поиска
+	 * @returns {Promise<Array>} - список секретов
 	 */
 	async listSecrets(path = 'secret/metadata') {
 		try {

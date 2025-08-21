@@ -1,11 +1,16 @@
 const jwt = require('jsonwebtoken')
 const TokenModel = require('../models/token-model')
-const { ApiError } = require('../exceptions/api-error')
+const { handleTokenError } = require('../helpers/error-helpers')
 const i18next = require('i18next')
-const Helpers = require('../helpers/helpers')
 const { logError } = require('../config/logger')
 
 class TokenService {
+	/**
+	 * Генерирует access и refresh токены для пользователя
+	 * @param {Object} payload - Данные для включения в токен
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с access и refresh токенами
+	 */
 	async generateTokens(payload, lng = 'en') {
 		try {
 			const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
@@ -24,7 +29,7 @@ class TokenService {
 				refresh_token,
 			}
 		} catch (error) {
-			Helpers.handleTokenError(
+			handleTokenError(
 				error,
 				lng,
 				'generateTokens',
@@ -33,6 +38,13 @@ class TokenService {
 		}
 	}
 
+	/**
+	 * Сохраняет refresh токен в базу данных
+	 * @param {string} userId - ID пользователя
+	 * @param {string} refresh_token - Refresh токен
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Сохраненный токен
+	 */
 	async saveToken(userId, refresh_token, lng = 'en') {
 		try {
 			const tokenData = await TokenModel.findOne({ user: userId })
@@ -50,45 +62,47 @@ class TokenService {
 
 			return token
 		} catch (error) {
-			Helpers.handleTokenError(
-				error,
-				lng,
-				'saveToken',
-				'errors.token_save_failed'
-			)
+			handleTokenError(error, lng, 'saveToken', 'errors.token_save_failed')
 		}
 	}
 
+	/**
+	 * Удаляет refresh токен из базы данных
+	 * @param {string} refresh_token - Refresh токен для удаления
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Результат удаления
+	 */
 	async removeToken(refresh_token, lng = 'en') {
 		try {
 			const tokenData = await TokenModel.deleteOne({ refresh_token })
 
 			return tokenData
 		} catch (error) {
-			Helpers.handleTokenError(
-				error,
-				lng,
-				'removeToken',
-				'errors.token_removal_failed'
-			)
+			handleTokenError(error, lng, 'removeToken', 'errors.token_removal_failed')
 		}
 	}
 
+	/**
+	 * Находит refresh токен в базе данных
+	 * @param {string} refresh_token - Refresh токен для поиска
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Найденный токен
+	 */
 	async findToken(refresh_token, lng = 'en') {
 		try {
 			const tokenData = await TokenModel.findOne({ refresh_token })
 
 			return tokenData
 		} catch (error) {
-			Helpers.handleTokenError(
-				error,
-				lng,
-				'findToken',
-				'errors.token_find_failed'
-			)
+			handleTokenError(error, lng, 'findToken', 'errors.token_find_failed')
 		}
 	}
 
+	/**
+	 * Валидирует access токен
+	 * @param {string} token - Access токен для валидации
+	 * @returns {Object|null} - Данные пользователя или null при ошибке
+	 */
 	validateAccessToken(token) {
 		try {
 			const userData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
@@ -101,6 +115,11 @@ class TokenService {
 		}
 	}
 
+	/**
+	 * Валидирует refresh токен
+	 * @param {string} token - Refresh токен для валидации
+	 * @returns {Object|null} - Данные пользователя или null при ошибке
+	 */
 	validateRefreshToken(token) {
 		try {
 			const userData = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET)

@@ -1,5 +1,5 @@
 const userService = require('../services/user-service')
-const Helpers = require('../helpers/helpers')
+const { validationError } = require('../helpers/validation-helpers')
 const { ApiError } = require('../exceptions/api-error')
 const UserModel = require('../models/user-model')
 const TokenModel = require('../models/token-model')
@@ -10,7 +10,7 @@ const i18next = require('i18next')
 class UserController {
 	async createUser(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { name, last_name, email, password, phone, role } = req.body
 			const cover = req.file
@@ -33,7 +33,7 @@ class UserController {
 
 	async editUser(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { name, last_name, email, password, phone } = req.body
 			const cover = req.file
@@ -72,12 +72,13 @@ class UserController {
 			}
 
 			const user_data = await userService.editUser(
+				targetUser._id,
 				name || '',
 				last_name || '',
 				email || targetUser.email,
 				password || '',
 				phone || null,
-				targetUser._id,
+				null,
 				req.lng
 			)
 
@@ -89,7 +90,7 @@ class UserController {
 
 	async removeUser(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { current_email, fill_email } = req.body
 			const current_user = await UserModel.findOne({ email: current_email })
@@ -116,13 +117,6 @@ class UserController {
 			const cookieToken = req.cookies.refresh_token
 			const isCurrentSession = refresh_token && cookieToken === cookieToken
 
-			if (current_user.cover) {
-				const last_slash_index = current_user.cover.lastIndexOf('/')
-				const file_name = current_user.cover.substring(last_slash_index + 1)
-
-				await fileService.removeCover(file_name, current_user._id, req.lng)
-			}
-
 			await keysService.removeKeys(current_email, req.lng)
 			await userService.removeUser(current_email, refresh_token, req.lng)
 
@@ -143,9 +137,35 @@ class UserController {
 		}
 	}
 
+	async activeUser(req, res, next) {
+		try {
+			validationError(req, next)
+
+			const { id } = req.params
+			const result = await userService.activeUser(id, req.lng)
+
+			return res.json(result)
+		} catch (e) {
+			next(e)
+		}
+	}
+
+	async inactiveUser(req, res, next) {
+		try {
+			validationError(req, next)
+
+			const { id } = req.params
+			const result = await userService.inactiveUser(id, req.lng)
+
+			return res.json(result)
+		} catch (e) {
+			next(e)
+		}
+	}
+
 	async getUser(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { id } = req.params
 			const user = await userService.getUser(id, req.lng)
@@ -158,7 +178,7 @@ class UserController {
 
 	async getUsers(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { sort, search, page, limit, start_time, end_time } = req.query
 

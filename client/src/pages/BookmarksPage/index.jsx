@@ -32,11 +32,11 @@ import {
 import { ConfirmPopup } from '@/popups/ConfirmPopup';
 import {
   clearOrders,
-  getBybitSavedOrders,
+  getBybitOrdersPnl,
   removedOrder,
   setPage,
   setSort,
-} from '@/redux/slices/bookmarksOrdersSlice';
+} from '@/redux/slices/ordersSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 import styles from './styles.module.scss';
@@ -52,14 +52,14 @@ export const BookmarksPage = React.memo(() => {
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const { date, limit, search, exchange } = useSelector(state => state.filters)
 	const {
-		bookmarks,
+		orders,
 		fakeOrders,
 		totalPages,
 		sort,
 		page,
 		errorMessage,
 		serverStatus,
-	} = useSelector(state => state.bookmarks)
+	} = useSelector(state => state.orders)
 
 	const columns = [
 		{
@@ -77,7 +77,6 @@ export const BookmarksPage = React.memo(() => {
 			width: '100%',
 		},
 		{ Header: t('table.symbol'), accessor: 'symbol' },
-
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
@@ -192,7 +191,7 @@ export const BookmarksPage = React.memo(() => {
 	const handleClickUpdate = async () => {
 		try {
 			const resultAction = await dispatch(
-				getBybitSavedOrders({
+				getBybitOrdersPnl({
 					sort,
 					search,
 					page,
@@ -200,6 +199,7 @@ export const BookmarksPage = React.memo(() => {
 					start_time: date.start_date,
 					end_time: date.end_date,
 					exchange: exchange.name,
+					bookmarks: true,
 				})
 			)
 			const originalPromiseResult = unwrapResult(resultAction)
@@ -231,14 +231,12 @@ export const BookmarksPage = React.memo(() => {
 					removedOrder({
 						order: item,
 						exchange: exchange.name,
-						start_time: date.start_date,
-						end_time: date.end_date,
 					})
 				)
 				const originalPromiseResult1 = unwrapResult(resultAction1)
 
 				const resultAction2 = await dispatch(
-					getBybitSavedOrders({
+					getBybitOrdersPnl({
 						sort,
 						search,
 						page,
@@ -246,6 +244,7 @@ export const BookmarksPage = React.memo(() => {
 						start_time: date.start_date,
 						end_time: date.end_date,
 						exchange: exchange.name,
+						bookmarks: true,
 					})
 				)
 				const originalPromiseResult2 = unwrapResult(resultAction2)
@@ -263,10 +262,10 @@ export const BookmarksPage = React.memo(() => {
 		[
 			dispatch,
 			exchange.name,
-			date.start_date,
-			date.end_date,
 			sort,
 			search,
+			date.start_date,
+			date.end_date,
 			page,
 			limit,
 			showSuccess,
@@ -289,7 +288,7 @@ export const BookmarksPage = React.memo(() => {
 			dispatch(setPage(1))
 
 			dispatch(
-				getBybitSavedOrders({
+				getBybitOrdersPnl({
 					sort,
 					search,
 					page: 1,
@@ -297,6 +296,7 @@ export const BookmarksPage = React.memo(() => {
 					start_time: date.start_date,
 					end_time: date.end_date,
 					exchange: exchange.name,
+					bookmarks: true,
 				})
 			)
 		}
@@ -305,7 +305,7 @@ export const BookmarksPage = React.memo(() => {
 	useEffect(() => {
 		if (exchange?.name && date?.start_date && date?.end_date) {
 			dispatch(
-				getBybitSavedOrders({
+				getBybitOrdersPnl({
 					sort,
 					search,
 					page,
@@ -313,16 +313,17 @@ export const BookmarksPage = React.memo(() => {
 					start_time: date.start_date,
 					end_time: date.end_date,
 					exchange: exchange.name,
+					bookmarks: true,
 				})
 			)
 		}
 	}, [dispatch, exchange, date, sort, page, search])
 
 	useEffect(() => {
-		if (bookmarks.length === 0 && serverStatus === 'success') {
+		if (orders.length === 0 && serverStatus === 'success') {
 			dispatch(setPage(1))
 		}
-	}, [bookmarks])
+	}, [orders])
 
 	useEffect(() => {
 		return () => {
@@ -345,7 +346,7 @@ export const BookmarksPage = React.memo(() => {
 				<TableLayout
 					columns={columns}
 					fakeData={fakeOrders}
-					data={bookmarks}
+					data={orders}
 					totalPages={totalPages}
 					error={errorMessage}
 					serverStatus={serverStatus}

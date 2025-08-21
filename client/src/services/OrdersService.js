@@ -1,4 +1,4 @@
-import $api from '../http'
+import $api from '../http';
 
 export default class OrdersService {
 	static async getBybitOrdersPnl(
@@ -8,7 +8,8 @@ export default class OrdersService {
 		page,
 		limit,
 		start_time,
-		end_time
+		end_time,
+		bookmarks
 	) {
 		return $api.get(`/v1/bybit-orders-pnl`, {
 			params: {
@@ -19,31 +20,7 @@ export default class OrdersService {
 				limit,
 				start_time,
 				end_time,
-			},
-		})
-	}
-
-	static async getBybitSavedOrders(
-		sort,
-		search,
-		page,
-		limit,
-		start_time,
-		end_time,
-		exchange,
-		all = false
-	) {
-		const url = all ? `/v1/bybit-saved-orders/all` : `/v1/bybit-saved-orders`
-
-		return $api.get(url, {
-			params: {
-				sort,
-				search,
-				page,
-				limit,
-				start_time,
-				end_time,
-				exchange,
+				bookmarks,
 			},
 		})
 	}
@@ -66,14 +43,24 @@ export default class OrdersService {
 		return $api.post(`/v1/order/${order.id}`, { order, exchange })
 	}
 
-	static async removedOrder(order, exchange, start_time, end_time) {
+	static async removedOrder(order, exchange) {
 		return $api.delete(`/v1/order/${order.id}`, {
 			data: {
 				order,
 				exchange,
-				start_time,
-				end_time,
 			},
+		})
+	}
+
+	static async getSyncProgress() {
+		return $api.get(`/v1/sync-progress`)
+	}
+
+	static async syncData(exchange, start_time, end_time) {
+		return $api.post(`/v1/sync-data`, {
+			exchange,
+			start_time,
+			end_time,
 		})
 	}
 }

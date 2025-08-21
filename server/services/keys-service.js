@@ -2,11 +2,17 @@ const KeysModel = require('../models/keys-model')
 const UserModel = require('../models/user-model')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
-const Helpers = require('../helpers/helpers')
+const { handleDatabaseError } = require('../helpers/error-helpers')
 const EncryptionService = require('./encryption-service')
 const KeysDto = require('../dtos/keys-dto')
 
 class KeysService {
+	/**
+	 * Находит зашифрованные ключи пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с зашифрованными ключами
+	 */
 	async findKeys(userId, lng = 'en') {
 		try {
 			const keys = await KeysModel.findOne({ user: userId })
@@ -17,15 +23,16 @@ class KeysService {
 
 			return keys
 		} catch (error) {
-			Helpers.handleDatabaseError(
-				error,
-				lng,
-				'findKeys',
-				'errors.keys_not_found'
-			)
+			handleDatabaseError(error, lng, 'findKeys', 'errors.keys_not_found')
 		}
 	}
 
+	/**
+	 * Находит расшифрованные ключи пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с расшифрованными ключами
+	 */
 	async findDecryptedKeys(userId, lng = 'en') {
 		try {
 			const keys = await KeysModel.findOne({ user: userId })
@@ -41,7 +48,7 @@ class KeysService {
 
 			return decryptedKeys
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'findDecryptedKeys',
@@ -50,6 +57,15 @@ class KeysService {
 		}
 	}
 
+	/**
+	 * Обновляет ключи пользователя для конкретной биржи
+	 * @param {string} userId - ID пользователя
+	 * @param {string} exchange - Название биржи
+	 * @param {string} api - API ключ
+	 * @param {string} secret - Секретный ключ
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с замаскированными ключами
+	 */
 	async updateKeys(userId, exchange, api, secret, lng = 'en') {
 		try {
 			const keys = await KeysModel.findOne({ user: userId })
@@ -99,15 +115,16 @@ class KeysService {
 
 			return await KeysDto.createMaskedKeys(keys, userId)
 		} catch (error) {
-			Helpers.handleDatabaseError(
-				error,
-				lng,
-				'updateKeys',
-				'errors.keys_update_failed'
-			)
+			handleDatabaseError(error, lng, 'updateKeys', 'errors.keys_update_failed')
 		}
 	}
 
+	/**
+	 * Удаляет ключи пользователя по email
+	 * @param {string} email - Email пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с сообщением об успехе
+	 */
 	async removeKeys(email, lng = 'en') {
 		try {
 			const user = await UserModel.findOne({ email })
@@ -118,15 +135,13 @@ class KeysService {
 
 			const keys = await KeysModel.findOneAndDelete({ user: user._id })
 
-			if (!keys) {
-				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
-			}
-
 			return {
-				message: i18next.t('success.keys_deleted', { lng }),
+				message: keys
+					? i18next.t('success.keys_deleted', { lng })
+					: i18next.t('success.keys_already_deleted', { lng }),
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'removeKeys',

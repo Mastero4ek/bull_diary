@@ -1,6 +1,12 @@
 const { ApiError } = require('../exceptions/api-error')
 
-const fileValidation = (options = {}) => {
+/**
+ * Middleware для валидации загружаемых файлов
+ * Проверяет тип, размер и другие параметры файлов
+ * @param {Object} options - Опции валидации
+ * @returns {Function} - Middleware функция
+ */
+const fileMiddleware = (options = {}) => {
 	return (req, res, next) => {
 		if (!req.file) return next()
 
@@ -18,7 +24,6 @@ const fileValidation = (options = {}) => {
 			)
 		}
 
-		// Check file size
 		if (req.file.size > maxSize) {
 			return next(
 				ApiError.BadRequest(
@@ -35,9 +40,8 @@ const fileValidation = (options = {}) => {
 			)
 		}
 
-		// File is valid
 		next()
 	}
 }
 
-module.exports = fileValidation
+module.exports = fileMiddleware

@@ -72,7 +72,7 @@
 		"order_required": "Ордер обязателен!",
 		"order_id_required": "ID ордера обязателен!",
 		"order_exists": "Ордер уже существует!",
-		"order_not_found_or_deleted": "Ордер не найден или уже удален!",
+		"order_not_exists": "Ордер не найден!",
 		"order_save_failed": "Не удалось сохранить ордер!",
 		"order_removal_failed": "Не удалось удалить ордер!",
 		"orders_fetch_failed": "Не удалось получить ордера!",
@@ -120,6 +120,8 @@
 		"refresh_token_not_found": "Refresh token не найден!",
 		"failed_refresh_token": "Не удалось обновить токен!",
 		"failed_to_get_user_data_after_activation": "Не удалось получить данные пользователя после активации!",
+		"failed_activate_user": "Не удалось активировать пользователя!",
+		"failed_deactivate_user": "Не удалось деактивировать пользователя!",
 		"order_required": "Ордер обязателен!",
 		"tournament_creation_failed": "Не удалось создать турнир!"
 	},
@@ -127,7 +129,24 @@
 		"file_saved": "Файл успешно сохранен!",
 		"file_deleted": "Файл успешно удален!",
 		"keys_deleted": "Ключи успешно удалены!",
-		"user_removed_from_tournament": "Пользователь успешно удален из турнира!"
+		"user_removed_from_tournament": "Пользователь успешно удален из турнира!",
+		"user_activated": "Пользователь успешно активирован!",
+		"user_deactivated": "Пользователь успешно деактивирован!"
+	},
+	"sync": {
+		"initializing": "Начало синхронизации {{dataType}} с биржей {{exchange}}",
+		"removing_old_data": "Удаление старых {{dataType}}",
+		"fetching_data": "Получение {{dataType}} из API",
+		"data_fetched": "{{dataType}} успешно получены",
+		"processing_chunk": "Обработка блока {{dataType}} {{current}}/{{total}}",
+		"transforming_data": "Трансформация {{dataType}}",
+		"saving_database": "Сохранение {{dataType}} в базу данных",
+		"finalizing": "Завершение синхронизации {{dataType}}",
+		"completed": "Синхронизация {{dataType}} завершена",
+		"failed": "Синхронизация {{dataType}} не удалась",
+		"starting_sync": "Начало синхронизации данных",
+		"preparing_transactions": "Подготовка к синхронизации транзакций",
+		"all_completed": "Синхронизация всех данных завершена"
 	},
 	"validation": {
 		"name": {

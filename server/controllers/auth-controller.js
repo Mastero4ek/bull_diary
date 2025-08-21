@@ -1,14 +1,14 @@
-const userService = require('../services/user-service')
-const Helpers = require('../helpers/helpers')
+const UserService = require('../services/user-service')
+const { validationError } = require('../helpers/validation-helpers')
 
 class AuthController {
 	async signUp(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { name, email, password, source } = req.body
 
-			const user_data = await userService.signUp(
+			const user_data = await UserService.signUp(
 				name,
 				email,
 				password,
@@ -32,11 +32,11 @@ class AuthController {
 
 	async signIn(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { email, password } = req.body
 
-			const user_data = await userService.signIn(email, password, req.lng)
+			const user_data = await UserService.signIn(email, password, req.lng)
 
 			res.cookie('refresh_token', user_data.refresh_token, {
 				maxAge: parseInt(process.env.REFRESH_TOKEN_MAX_AGE),
@@ -54,11 +54,11 @@ class AuthController {
 
 	async logout(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { refresh_token } = req.cookies
 
-			await userService.logout(refresh_token, req.lng)
+			await UserService.logout(refresh_token, req.lng)
 
 			req.session.destroy(err => {
 				if (err) {
@@ -93,10 +93,10 @@ class AuthController {
 			let user_data = {}
 
 			if (user && (user.source === 'github' || user.source === 'google')) {
-				user_data = await userService.checkSourceAuth(user.email, req.lng)
+				user_data = await UserService.checkSourceAuth(user.email, req.lng)
 			} else if (existing_refresh_token && !user) {
 				try {
-					user_data = await userService.refresh(existing_refresh_token, req.lng)
+					user_data = await UserService.refresh(existing_refresh_token, req.lng)
 				} catch (refreshError) {
 					res.clearCookie('refresh_token', {
 						httpOnly: true,

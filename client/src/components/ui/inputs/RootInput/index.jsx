@@ -28,7 +28,15 @@ export const RootInput = ({
 	}, [])
 
 	return type === 'checkbox' ? (
-		<label htmlFor={name} className={styles.label}>
+		<label
+			htmlFor={name}
+			className={styles.label}
+			style={{
+				opacity: disabled ? '0.5' : '1',
+				cursor: disabled ? 'not-allowed' : 'pointer',
+				pointerEvents: disabled ? 'none' : 'auto',
+			}}
+		>
 			<input
 				id={name}
 				type={type}
@@ -59,6 +67,11 @@ export const RootInput = ({
 		</label>
 	) : (
 		<label
+			style={{
+				opacity: disabled ? '0.5' : '1',
+				cursor: disabled ? 'not-allowed' : 'pointer',
+				pointerEvents: disabled ? 'none' : 'auto',
+			}}
 			htmlFor={name}
 			className={`${styles.label} ${warningMessage && styles.label_warning} ${
 				errors && (errors[name] || findErrorField(name)) && styles.label_error

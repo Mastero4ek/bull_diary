@@ -1,14 +1,14 @@
-const tournamentService = require('../services/tournament-service')
-const Helpers = require('../helpers/helpers')
+const TournamentService = require('../services/tournament-service')
+const { validationError } = require('../helpers/validation-helpers')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
 
 class TournamentController {
 	async createTournament(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
-			const tournament = await tournamentService.createTournament(
+			const tournament = await TournamentService.createTournament(
 				req.body,
 				req.file,
 				req.lng
@@ -22,10 +22,10 @@ class TournamentController {
 
 	async removeTournament(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { id } = req.params
-			const deleted = await tournamentService.removeTournament(id, req.lng)
+			const deleted = await TournamentService.removeTournament(id, req.lng)
 
 			if (!deleted) {
 				throw ApiError.NotFound(
@@ -41,12 +41,12 @@ class TournamentController {
 
 	async getTournaments(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { exchange } = req.query
 			const { page, size } = req.query
 
-			const tournament = await tournamentService.getTournaments(
+			const tournament = await TournamentService.getTournaments(
 				exchange,
 				req.lng,
 				page,
@@ -61,12 +61,12 @@ class TournamentController {
 
 	async addTournamentUser(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { exchange } = req.body
 			const { id } = req.params
 
-			const bid_user = await tournamentService.addTournamentUser(
+			const bid_user = await TournamentService.addTournamentUser(
 				exchange,
 				id,
 				req.lng
@@ -80,12 +80,12 @@ class TournamentController {
 
 	async removeTournamentUser(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { userId } = req.body
 			const { id: tournamentId } = req.params
 
-			const result = await tournamentService.removeTournamentUser(
+			const result = await TournamentService.removeTournamentUser(
 				tournamentId,
 				userId,
 				req.lng

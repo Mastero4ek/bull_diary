@@ -72,7 +72,7 @@
 		"order_required": "Order is required!",
 		"order_id_required": "Order ID is required!",
 		"order_exists": "Order already exists!",
-		"order_not_found_or_deleted": "Order not found or already deleted!",
+		"order_not_exists": "Order not found!",
 		"order_save_failed": "Failed to save order!",
 		"order_removal_failed": "Failed to remove order!",
 		"orders_fetch_failed": "Failed to fetch orders!",
@@ -120,6 +120,8 @@
 		"refresh_token_not_found": "Refresh token not found!",
 		"failed_refresh_token": "Failed to refresh token!",
 		"failed_to_get_user_data_after_activation": "Failed to get user data after activation!",
+		"failed_activate_user": "Failed to activate user!",
+		"failed_deactivate_user": "Failed to deactivate user!",
 		"order_required": "Order is required!",
 		"tournament_creation_failed": "Failed to create tournament!"
 	},
@@ -127,7 +129,24 @@
 		"file_saved": "File saved successfully!",
 		"file_deleted": "The file was successfully deleted!",
 		"keys_deleted": "The keys were successfully deleted!",
-		"user_removed_from_tournament": "User removed from tournament successfully!"
+		"user_removed_from_tournament": "User removed from tournament successfully!",
+		"user_activated": "User activated successfully!",
+		"user_deactivated": "User deactivated successfully!"
+	},
+	"sync": {
+		"initializing": "Starting {{dataType}} synchronization with {{exchange}}",
+		"removing_old_data": "Removing old {{dataType}}",
+		"fetching_data": "Fetching {{dataType}} from API",
+		"data_fetched": "{{dataType}} fetched successfully",
+		"processing_chunk": "Processing {{dataType}} chunk {{current}}/{{total}}",
+		"transforming_data": "Transforming {{dataType}}",
+		"saving_database": "Saving {{dataType}} to database",
+		"finalizing": "Finalizing {{dataType}} synchronization",
+		"completed": "{{dataType}} synchronization completed",
+		"failed": "{{dataType}} synchronization failed",
+		"starting_sync": "Starting data synchronization",
+		"preparing_transactions": "Preparing to sync transactions",
+		"all_completed": "All data synchronization completed"
 	},
 	"validation": {
 		"name": {

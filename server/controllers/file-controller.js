@@ -1,10 +1,10 @@
 const fileService = require('../services/file-service')
-const Helpers = require('../helpers/helpers')
+const { validationError } = require('../helpers/validation-helpers')
 
 class FileController {
 	async removeCover(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const file_name = req.params.filename
 			const user = req.user

@@ -11,7 +11,8 @@
 		"clean:uploads": "node scripts/clean-uploads.js",
 		"clean:db:uploads": "node scripts/clean-database.js --clean-uploads",
 		"backup:db": "node scripts/backup-mongodb.js",
-		"restore:db": "node scripts/restore-mongodb.js"
+		"restore:db": "node scripts/restore-mongodb.js",
+		"create:indexes": "node scripts/create-indexes.js"
 	},
 	"keywords": [],
 	"author": "",

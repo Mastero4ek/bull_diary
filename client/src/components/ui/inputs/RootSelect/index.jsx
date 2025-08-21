@@ -1,11 +1,16 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const RootSelect = React.memo(
 	({
@@ -54,7 +59,15 @@ export const RootSelect = React.memo(
 		const selectedOption = options.find(opt => getValue(opt) === value)
 
 		return (
-			<div ref={selectRef} className={`${styles.select} ${className}`.trim()}>
+			<div
+				ref={selectRef}
+				className={`${styles.select} ${className}`.trim()}
+				style={{
+					opacity: disabled ? '0.5' : '1',
+					cursor: disabled ? 'not-allowed' : 'pointer',
+					pointerEvents: disabled ? 'none' : 'auto',
+				}}
+			>
 				<ItemBlock>
 					<div
 						onClick={toggleOpen}

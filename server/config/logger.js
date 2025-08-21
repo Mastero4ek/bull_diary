@@ -11,13 +11,18 @@ if (!fs.existsSync(logsDir)) {
 const isDevelopment = process.env.NODE_ENV !== 'prod'
 const logLevel = process.env.LOG_LEVEL || 'info'
 
-// Логируем информацию о среде при инициализации
 console.log(
 	`[Logger] Environment: ${
 		process.env.NODE_ENV || 'undefined'
 	}, isDevelopment: ${isDevelopment}, logLevel: ${logLevel}`
 )
 
+/**
+ * Записывает лог в файл
+ * @param {string} level - Уровень логирования
+ * @param {string} message - Сообщение для записи
+ * @param {Object} data - Дополнительные данные
+ */
 const writeToFile = (level, message, data = {}) => {
 	const timestamp = new Date().toISOString()
 	const hostname = require('os').hostname()
@@ -88,6 +93,12 @@ logger.debug = (data, message) => {
 	originalDebug(data, message)
 }
 
+/**
+ * Middleware для логирования HTTP запросов
+ * @param {Object} req - Объект запроса
+ * @param {Object} res - Объект ответа
+ * @param {Function} next - Функция next
+ */
 const requestLogger = (req, res, next) => {
 	if (req.method === 'OPTIONS' || req.method === 'HEAD') {
 		return next()

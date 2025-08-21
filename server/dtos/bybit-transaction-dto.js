@@ -12,16 +12,24 @@ module.exports = class BybitTransactionDto {
 	fee
 
 	constructor(model) {
-		this.transactionTime = parseInt(model.transactionTime)
-		this.change = parseFloat(Number(model.change || 0).toFixed(4))
-		this.cashFlow = parseFloat(Number(model.cashFlow || 0).toFixed(4))
+		if (model.transactionTime instanceof Date) {
+			this.transactionTime = model.transactionTime
+		} else if (typeof model.transactionTime === 'string') {
+			this.transactionTime = new Date(model.transactionTime)
+		} else if (typeof model.transactionTime === 'number') {
+			this.transactionTime = new Date(model.transactionTime)
+		} else {
+			this.transactionTime = new Date()
+		}
+		this.change = Number(parseFloat(model.change || 0).toFixed(4))
+		this.cashFlow = Number(parseFloat(model.cashFlow || 0).toFixed(4))
 
 		if (
 			model.cashBalance !== null &&
 			model.cashBalance !== undefined &&
 			model.cashBalance !== ''
 		) {
-			this.cashBalance = parseFloat(Number(model.cashBalance).toFixed(4))
+			this.cashBalance = Number(parseFloat(model.cashBalance).toFixed(4))
 		} else {
 			this.cashBalance = null
 		}
@@ -31,8 +39,8 @@ module.exports = class BybitTransactionDto {
 		this.category = model.category || ''
 		this.side = model.side || ''
 		this.type = model.type || ''
-		this.funding = parseFloat(Number(model.funding || 0).toFixed(4))
-		this.fee = parseFloat(Number(model.fee || 0).toFixed(4))
+		this.funding = Number(parseFloat(model.funding || 0).toFixed(4))
+		this.fee = Number(parseFloat(model.fee || 0).toFixed(4))
 	}
 
 	isPositive() {

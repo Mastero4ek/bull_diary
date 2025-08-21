@@ -4,10 +4,20 @@ const UserModel = require('../models/user-model')
 passport.initialize()
 passport.session()
 
+/**
+ * Сериализация пользователя для сессии
+ * @param {Object} user - Объект пользователя
+ * @param {Function} done - Callback функция
+ */
 passport.serializeUser((user, done) => {
 	done(null, user)
 })
 
+/**
+ * Десериализация пользователя из сессии
+ * @param {Object} user - Объект пользователя из сессии
+ * @param {Function} done - Callback функция
+ */
 passport.deserializeUser(async (user, done) => {
 	try {
 		let currentUser = {}

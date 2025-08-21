@@ -23,6 +23,7 @@ if (!fs.existsSync(uploadsPath)) {
 	})
 }
 
+// Настройка безопасности с помощью Helmet
 app.use(
 	helmet({
 		crossOriginResourcePolicy: { policy: 'cross-origin' },
@@ -62,6 +63,7 @@ app.use(
 	})
 )
 
+// Дополнительные заголовки безопасности
 app.use((req, res, next) => {
 	res.setHeader('X-Content-Type-Options', 'nosniff')
 	res.setHeader('X-Frame-Options', 'DENY')
@@ -81,6 +83,7 @@ app.use((req, res, next) => {
 	next()
 })
 
+// Настройка CORS для разрешенных доменов
 app.use((req, res, next) => {
 	const allowedOrigins = [process.env.CLIENT_URL]
 
@@ -132,9 +135,8 @@ const authLimiter = rateLimit({
 	},
 })
 
-// Apply rate limiting with OAuth exclusions
+// Rate limiting для API запросов (исключая OAuth callback)
 app.use((req, res, next) => {
-	// Skip rate limiting for OAuth endpoints
 	const oauthPaths = [
 		'/auth/google/callback',
 		'/auth/github/callback',
@@ -144,21 +146,26 @@ app.use((req, res, next) => {
 		return next()
 	}
 
-	// Apply rate limiting for other endpoints
 	apiLimiter(req, res, next)
 })
 
+// Rate limiting для аутентификации
 app.use('/api/v1/sign-in', authLimiter)
 app.use('/api/v1/sign-up', authLimiter)
+// Логирование HTTP запросов
 app.use(requestLogger)
+// Парсинг JSON тела запроса
 app.use(bodyParser.json())
+// Поддержка HTTP методов (PUT, DELETE через POST)
 app.use(methodOverride('_method'))
+// Парсинг JSON (дублирующий bodyParser)
 app.use(express.json())
+// Парсинг cookies
 app.use(cookieParser())
-
-// Apply sanitization middleware with OAuth exclusions
+// Санитизация входящих данных
 app.use(sanitizationMiddleware)
 
+// Статические файлы для загрузок с настройками безопасности
 app.use(
 	'/uploads',
 	express.static(path.join(__dirname, '../uploads'), {
@@ -171,6 +178,7 @@ app.use(
 	})
 )
 
+// Настройка CORS для API
 app.use(
 	cors({
 		methods: 'GET,POST,PUT,DELETE,PATCH',
@@ -188,6 +196,7 @@ app.use(
 	})
 )
 
+// Настройка сессий
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET,
@@ -217,6 +226,7 @@ const csrfProtection = csrf({
 	],
 })
 
+// CSRF защита для изменяющих методов (исключая logout и csrf-token)
 app.use((req, res, next) => {
 	if (req.path === '/api/v1/logout' && req.method === 'POST') {
 		return next()
@@ -233,6 +243,7 @@ app.use((req, res, next) => {
 	}
 })
 
+// Обработка ошибок CSRF
 app.use((err, req, res, next) => {
 	if (err.code === 'EBADCSRFTOKEN') {
 		return res.status(403).json({

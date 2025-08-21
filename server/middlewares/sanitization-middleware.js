@@ -1,12 +1,12 @@
-const SanitizationHelper = require('../helpers/sanitization')
+const sanitizationHelper = require('../helpers/sanitization-helpers')
 const { logWarn } = require('../config/logger')
 
 /**
- * Middleware for sanitizing request data
+ * Middleware для санитизации входящих данных
+ * Очищает и валидирует тело запроса, параметры и файлы
  */
 const sanitizationMiddleware = (req, res, next) => {
 	try {
-		// Skip sanitization for OAuth callback endpoints
 		const oauthPaths = [
 			'/auth/google/callback',
 			'/auth/github/callback',
@@ -17,22 +17,19 @@ const sanitizationMiddleware = (req, res, next) => {
 			return next()
 		}
 
-		// Sanitize request body
 		if (req.body && Object.keys(req.body).length > 0) {
-			req.body = SanitizationHelper.sanitizeRequestBody(req.body)
+			req.body = sanitizationHelper.sanitizeRequestBody(req.body)
 		}
 
-		// Sanitize query parameters (but preserve OAuth codes)
 		if (req.query && Object.keys(req.query).length > 0) {
-			// Don't sanitize OAuth-related query parameters
 			const oauthParams = ['code', 'state', 'scope', 'authuser', 'prompt']
 			const sanitizedQuery = {}
 
 			for (const [key, value] of Object.entries(req.query)) {
 				if (oauthParams.includes(key)) {
-					sanitizedQuery[key] = value // Preserve OAuth parameters
+					sanitizedQuery[key] = value
 				} else {
-					sanitizedQuery[key] = SanitizationHelper.sanitizeString(value, {
+					sanitizedQuery[key] = sanitizationHelper.sanitizeString(value, {
 						maxLength: 200,
 						trim: true,
 					})
@@ -42,11 +39,10 @@ const sanitizationMiddleware = (req, res, next) => {
 			req.query = sanitizedQuery
 		}
 
-		// Sanitize URL parameters
 		if (req.params && Object.keys(req.params).length > 0) {
 			for (const [key, value] of Object.entries(req.params)) {
 				if (typeof value === 'string') {
-					req.params[key] = SanitizationHelper.sanitizeString(value, {
+					req.params[key] = sanitizationHelper.sanitizeString(value, {
 						maxLength: 100,
 						trim: true,
 					})
@@ -54,14 +50,13 @@ const sanitizationMiddleware = (req, res, next) => {
 			}
 		}
 
-		// Check for suspicious patterns in all input
 		const allInput = JSON.stringify({
 			body: req.body,
 			query: req.query,
 			params: req.params,
 		})
 
-		if (SanitizationHelper.hasSuspiciousPatterns(allInput)) {
+		if (sanitizationHelper.hasSuspiciousPatterns(allInput)) {
 			logWarn('Suspicious input detected', {
 				ip: req.ip,
 				userAgent: req.get('User-Agent'),
@@ -69,13 +64,10 @@ const sanitizationMiddleware = (req, res, next) => {
 				method: req.method,
 				userId: req.user?.id,
 			})
-
-			// Don't block the request, but log it for monitoring
 		}
 
-		// Sanitize file uploads if present
 		if (req.file) {
-			const sanitizedFile = SanitizationHelper.sanitizeFileUpload(req.file)
+			const sanitizedFile = sanitizationHelper.sanitizeFileUpload(req.file)
 			if (!sanitizedFile) {
 				return res.status(400).json({
 					message: 'Invalid file type detected',
@@ -85,10 +77,9 @@ const sanitizationMiddleware = (req, res, next) => {
 			req.file = sanitizedFile
 		}
 
-		// Sanitize multiple files if present
 		if (req.files && Array.isArray(req.files)) {
 			req.files = req.files.map(file => {
-				const sanitizedFile = SanitizationHelper.sanitizeFileUpload(file)
+				const sanitizedFile = sanitizationHelper.sanitizeFileUpload(file)
 				if (!sanitizedFile) {
 					throw new Error('Invalid file type detected')
 				}

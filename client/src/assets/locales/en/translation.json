@@ -63,6 +63,8 @@
 		"fee": "Fee",
 		"balance": "Balance",
 		"change": "Change",
+		"long": "Long",
+		"short": "Short",
 		"buy": "Buy",
 		"sell": "Sell",
 		"none": "Transfer",
@@ -126,7 +128,10 @@
 			"description": "Description",
 			"registr_date": "Registration Date",
 			"start_date": "Start date",
-			"end_date": "End date"
+			"end_date": "End date",
+			"api_key": "Api key",
+			"secret_key": "Secret key",
+			"agreement_key": "I confirm that I use 'read-only' keys"
 		},
 		"error": {
 			"name": "Name is required!",
@@ -296,6 +301,11 @@
 			"keys_error_removing": "Error deleting API keys! Please try again.",
 			"keys_updated_successfully": "Api key updated successfully!",
 			"keys_error_updating": "Error updating Api key! Please try again.",
+			"keys_error_no_exchange": "No exchange selected!",
+			"keys_warning": "Bull Diary supports futures trading. <br /> The exchange stores data for the last 180 days, so after saving the keys, synchronization will begin. Synchronization will run in the background and may take some time.",
+			"keys_success_synchronization": "Synchronization successfully!",
+			"keys_error_synchronization": "Error synchronizing! Please try again.",
+			"keys_synchronizing": "Synchronizing...",
 			"tuning_language": "Language",
 			"tuning_theme": "Dark theme",
 			"tuning_shootouts": "Show shootouts",
@@ -322,6 +332,10 @@
 			"empty_error": "No users found in this period!",
 			"success_update": "Users updated successfully!",
 			"error_update": "Error updating users! Please try again.",
+			"success_active": "User activated successfully!",
+			"error_active": "Error activating user! Please try again.",
+			"success_inactive": "User deactivated successfully!",
+			"error_inactive": "Error deactivating user! Please try again.",
 			"inactive": "Inactive",
 			"active": "Active"
 		},

@@ -8,6 +8,9 @@ if (!fs.existsSync(uploadsPath)) {
 	fs.mkdirSync(uploadsPath, { recursive: true })
 }
 
+/**
+ * Настройка хранилища для загружаемых файлов
+ */
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, uploadsPath)
@@ -20,6 +23,12 @@ const storage = multer.diskStorage({
 	},
 })
 
+/**
+ * Фильтр для проверки типа загружаемых файлов
+ * @param {Object} req - Объект запроса
+ * @param {Object} file - Объект файла
+ * @param {Function} cb - Callback функция
+ */
 const fileFilter = (req, file, cb) => {
 	if (file.mimetype.startsWith('image/')) {
 		cb(null, true)

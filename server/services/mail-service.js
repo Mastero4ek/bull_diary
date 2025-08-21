@@ -1,9 +1,7 @@
 const nodemailer = require('nodemailer')
 const path = require('path')
 const ejs = require('ejs')
-const { ApiError } = require('../exceptions/api-error')
-const i18next = require('i18next')
-const Helpers = require('../helpers/helpers')
+const { handleMailError } = require('../helpers/error-helpers')
 
 class MailService {
 	constructor() {
@@ -21,6 +19,14 @@ class MailService {
 		})
 	}
 
+	/**
+	 * Отправляет email для активации аккаунта
+	 * @param {string} name - Имя пользователя
+	 * @param {string} to - Email получателя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {string} link - Ссылка для активации
+	 * @returns {Promise<void>}
+	 */
 	async sendActivationMail(name, to, lng = 'en', link) {
 		try {
 			const headerEnPath = path.join(
@@ -101,7 +107,7 @@ class MailService {
 				],
 			})
 		} catch (error) {
-			Helpers.handleMailError(
+			handleMailError(
 				error,
 				lng,
 				'sendActivationMail',

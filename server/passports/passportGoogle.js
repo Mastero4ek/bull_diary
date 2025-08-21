@@ -18,19 +18,16 @@ passport.use(
 				let user = await UserModel.findOne({ 'google.id': profile.id })
 
 				if (!user) {
-					// Check if user exists with this email
 					const googleEmail = profile.emails[0].value.toLowerCase()
 					user = await UserModel.findOne({ email: googleEmail })
 
 					if (user) {
-						// Link Google account to existing user
 						user.google = {
 							id: profile.id,
 							email: googleEmail,
 						}
 						await user.save()
 					} else {
-						// Create new user
 						const googleEmail = profile.emails[0].value.toLowerCase()
 						user = await UserModel.create({
 							email: googleEmail,
@@ -45,12 +42,10 @@ passport.use(
 							},
 						})
 
-						// Create empty keys document
 						await KeysModel.create({
 							user: user._id,
 						})
 
-						// Create empty level document
 						await LevelModel.create({
 							user: user._id,
 						})

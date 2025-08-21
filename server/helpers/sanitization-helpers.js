@@ -1,17 +1,14 @@
 const validator = require('validator')
 const xss = require('xss')
 
-/**
- * Sanitization helper class for cleaning user input
- */
-class SanitizationHelper {
+class HelpersSanitization {
 	/**
-	 * Sanitize string input
-	 * @param {string} input - input string to sanitize
-	 * @param {Object} options - sanitization options
-	 * @returns {string} - sanitized string
+	 * Санитизация строкового ввода
+	 * @param {string} input - строка для санитизации
+	 * @param {Object} options - опции санитизации
+	 * @returns {string} - санитизированная строка
 	 */
-	static sanitizeString(input, options = {}) {
+	sanitizeString(input, options = {}) {
 		if (!input || typeof input !== 'string') {
 			return input
 		}
@@ -26,12 +23,10 @@ class SanitizationHelper {
 
 		let sanitized = input
 
-		// Trim whitespace
 		if (trim) {
 			sanitized = sanitized.trim()
 		}
 
-		// Remove XSS attacks
 		if (removeXSS) {
 			sanitized = xss(sanitized, {
 				whiteList: allowHtml ? {} : undefined,
@@ -40,12 +35,10 @@ class SanitizationHelper {
 			})
 		}
 
-		// Escape HTML entities
 		if (escapeHtml && !allowHtml) {
 			sanitized = validator.escape(sanitized)
 		}
 
-		// Limit length
 		if (maxLength && sanitized.length > maxLength) {
 			sanitized = sanitized.substring(0, maxLength)
 		}
@@ -54,11 +47,11 @@ class SanitizationHelper {
 	}
 
 	/**
-	 * Sanitize email address
-	 * @param {string} email - email to sanitize
-	 * @returns {string} - sanitized email or null if invalid
+	 * Санитизация email адреса
+	 * @param {string} email - email для санитизации
+	 * @returns {string} - санитизированный email или null если недействителен
 	 */
-	static sanitizeEmail(email) {
+	sanitizeEmail(email) {
 		if (!email || typeof email !== 'string') {
 			return null
 		}
@@ -73,11 +66,11 @@ class SanitizationHelper {
 	}
 
 	/**
-	 * Sanitize URL
-	 * @param {string} url - URL to sanitize
-	 * @returns {string} - sanitized URL or null if invalid
+	 * Санитизация URL
+	 * @param {string} url - URL для санитизации
+	 * @returns {string} - санитизированный URL или null если недействителен
 	 */
-	static sanitizeUrl(url) {
+	sanitizeUrl(url) {
 		if (!url || typeof url !== 'string') {
 			return null
 		}
@@ -97,12 +90,12 @@ class SanitizationHelper {
 	}
 
 	/**
-	 * Sanitize object recursively
-	 * @param {Object} obj - object to sanitize
-	 * @param {Object} options - sanitization options
-	 * @returns {Object} - sanitized object
+	 * Рекурсивная санитизация объекта
+	 * @param {Object} obj - объект для санитизации
+	 * @param {Object} options - опции санитизации
+	 * @returns {Object} - санитизированный объект
 	 */
-	static sanitizeObject(obj, options = {}) {
+	sanitizeObject(obj, options = {}) {
 		if (!obj || typeof obj !== 'object') {
 			return obj
 		}
@@ -123,11 +116,11 @@ class SanitizationHelper {
 	}
 
 	/**
-	 * Sanitize request body
-	 * @param {Object} body - request body to sanitize
-	 * @returns {Object} - sanitized request body
+	 * Санитизация тела запроса
+	 * @param {Object} body - тело запроса для санитизации
+	 * @returns {Object} - санитизированное тело запроса
 	 */
-	static sanitizeRequestBody(body) {
+	sanitizeRequestBody(body) {
 		if (!body || typeof body !== 'object') {
 			return body
 		}
@@ -135,7 +128,6 @@ class SanitizationHelper {
 		const sanitized = {}
 
 		for (const [key, value] of Object.entries(body)) {
-			// Skip sensitive fields that shouldn't be sanitized
 			if (
 				['password', 'confirm_password', 'token', 'refresh_token'].includes(key)
 			) {
@@ -144,7 +136,6 @@ class SanitizationHelper {
 			}
 
 			if (typeof value === 'string') {
-				// Apply different sanitization rules based on field type
 				switch (key) {
 					case 'email':
 						sanitized[key] = this.sanitizeEmail(value)
@@ -180,11 +171,11 @@ class SanitizationHelper {
 	}
 
 	/**
-	 * Sanitize query parameters
-	 * @param {Object} query - query parameters to sanitize
-	 * @returns {Object} - sanitized query parameters
+	 * Санитизация параметров запроса
+	 * @param {Object} query - параметры запроса для санитизации
+	 * @returns {Object} - санитизированные параметры запроса
 	 */
-	static sanitizeQueryParams(query) {
+	sanitizeQueryParams(query) {
 		if (!query || typeof query !== 'object') {
 			return query
 		}
@@ -212,11 +203,11 @@ class SanitizationHelper {
 	}
 
 	/**
-	 * Check for suspicious patterns in input
-	 * @param {string} input - input to check
-	 * @returns {boolean} - true if suspicious patterns found
+	 * Проверка на подозрительные паттерны во вводе
+	 * @param {string} input - ввод для проверки
+	 * @returns {boolean} - true если найдены подозрительные паттерны
 	 */
-	static hasSuspiciousPatterns(input) {
+	hasSuspiciousPatterns(input) {
 		if (!input || typeof input !== 'string') {
 			return false
 		}
@@ -248,16 +239,15 @@ class SanitizationHelper {
 	}
 
 	/**
-	 * Validate and sanitize file upload
-	 * @param {Object} file - file object to validate
-	 * @returns {Object|null} - sanitized file info or null if invalid
+	 * Валидация и санитизация загружаемого файла
+	 * @param {Object} file - объект файла для валидации
+	 * @returns {Object|null} - санитизированная информация о файле или null если недействителен
 	 */
-	static sanitizeFileUpload(file) {
+	sanitizeFileUpload(file) {
 		if (!file || typeof file !== 'object') {
 			return null
 		}
 
-		// Check for suspicious file extensions
 		const suspiciousExtensions = [
 			'.exe',
 			'.bat',
@@ -288,7 +278,6 @@ class SanitizationHelper {
 			return null
 		}
 
-		// Check for suspicious MIME types
 		const suspiciousMimeTypes = [
 			'application/x-executable',
 			'application/x-msdownload',
@@ -301,7 +290,6 @@ class SanitizationHelper {
 			return null
 		}
 
-		// Sanitize filename
 		const sanitizedFileName = this.sanitizeString(fileName, {
 			maxLength: 255,
 			trim: true,
@@ -316,4 +304,4 @@ class SanitizationHelper {
 	}
 }
 
-module.exports = SanitizationHelper
+module.exports = new HelpersSanitization()

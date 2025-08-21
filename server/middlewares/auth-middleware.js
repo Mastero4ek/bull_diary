@@ -3,12 +3,14 @@ const tokenService = require('../services/token-service')
 const UserModel = require('../models/user-model')
 const { logError } = require('../config/logger')
 
-module.exports = function (req, res, next) {
+/**
+ * Middleware для аутентификации пользователей
+ * Проверяет токены доступа и обновления, обновляет активность пользователя
+ */
+const authMiddleware = (req, res, next) => {
 	try {
-		// First try to get token from cookies
 		let accessToken = req.cookies.access_token
 
-		// If no access token in cookies, try refresh token
 		if (!accessToken && req.cookies.refresh_token) {
 			const userData = tokenService.validateRefreshToken(
 				req.cookies.refresh_token,
@@ -16,12 +18,10 @@ module.exports = function (req, res, next) {
 			)
 
 			if (userData) {
-				// If refresh token is valid, proceed with the request
 				req.user = userData
 
 				return next()
 			} else {
-				// Clear expired refresh token
 				res.clearCookie('refresh_token', {
 					httpOnly: true,
 					secure: process.env.NODE_ENV === 'prod',
@@ -37,7 +37,6 @@ module.exports = function (req, res, next) {
 			}
 		}
 
-		// Fallback to Authorization header if no valid cookies
 		if (!accessToken) {
 			const authorizationHeader = req.headers.authorization
 
@@ -63,7 +62,6 @@ module.exports = function (req, res, next) {
 
 		req.user = userData
 
-		// Update user activity asynchronously
 		if (userData && userData.id) {
 			UserModel.findByIdAndUpdate(
 				userData.id,
@@ -84,3 +82,5 @@ module.exports = function (req, res, next) {
 		return next(ApiError.UnauthorizedError())
 	}
 }
+
+module.exports = authMiddleware

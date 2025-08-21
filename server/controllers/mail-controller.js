@@ -1,15 +1,15 @@
-const userService = require('../services/user-service')
-const Helpers = require('../helpers/helpers')
+const MailService = require('../services/mail-service')
+const { validationError } = require('../helpers/validation-helpers')
 const { ApiError } = require('../exceptions/api-error')
 const i18next = require('i18next')
 
 class MailController {
 	async activate(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const activation_link = req.params.link
-			const user_data = await userService.activate(activation_link, req.lng)
+			const user_data = await MailService.activate(activation_link, req.lng)
 
 			if (!user_data || !user_data.user) {
 				throw ApiError.InternalError(

@@ -3,7 +3,7 @@ const userService = require('../services/user-service')
 const { rotateLogs, cleanOldLogs, logInfo, logError } = require('./logger')
 
 const initCronJobs = () => {
-	// Check user activity every morning at 9:00
+	// Ежедневная проверка активности пользователей в 9:00
 	cron.schedule('0 9 * * *', async () => {
 		try {
 			await userService.checkUserActivity()
@@ -15,6 +15,7 @@ const initCronJobs = () => {
 		}
 	})
 
+	// Ежедневное резервное копирование MongoDB и ротация логов в 00:00
 	cron.schedule('0 0 * * *', () => {
 		require('child_process').exec(
 			'node scripts/backup-mongodb.js',
@@ -31,11 +32,13 @@ const initCronJobs = () => {
 		logInfo('Daily log rotation completed')
 	})
 
+	// Еженедельная очистка старых логов в воскресенье в 2:00
 	cron.schedule('0 2 * * 0', () => {
 		cleanOldLogs()
 		logInfo('Weekly log cleanup completed')
 	})
 
+	// Еженедельная очистка старых резервных копий MongoDB в воскресенье в 3:00
 	cron.schedule('0 3 * * 0', () => {
 		require('child_process').exec(
 			'node scripts/clean-backups.js',

@@ -76,4 +76,12 @@ export default class UserService {
 			},
 		})
 	}
+
+	static async activeUser(userId) {
+		return $api.patch(`/v1/user/${userId}/activate`)
+	}
+
+	static async inactiveUser(userId) {
+		return $api.patch(`/v1/user/${userId}/deactivate`)
+	}
 }

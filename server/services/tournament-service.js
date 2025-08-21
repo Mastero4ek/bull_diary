@@ -9,10 +9,17 @@ const mongoose = require('mongoose')
 const FileModel = require('../models/file-model')
 const fs = require('fs')
 const path = require('path')
-const Helpers = require('../helpers/helpers')
+const { handleDatabaseError } = require('../helpers/error-helpers')
 const { logError } = require('../config/logger')
 
 class TournamentService {
+	/**
+	 * Создает новый турнир
+	 * @param {Object} data - Данные турнира
+	 * @param {Object} file - Файл обложки турнира
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Созданный турнир с участниками
+	 */
 	async createTournament(data, file, lng = 'en') {
 		try {
 			let {
@@ -75,7 +82,7 @@ class TournamentService {
 
 			return tournament
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'createTournament',
@@ -84,6 +91,12 @@ class TournamentService {
 		}
 	}
 
+	/**
+	 * Удаляет турнир и все связанные файлы
+	 * @param {string} tournamentId - ID турнира
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Удаленный турнир
+	 */
 	async removeTournament(tournamentId, lng = 'en') {
 		try {
 			const tournament = await TournamentModel.findByIdAndDelete(tournamentId)
@@ -125,7 +138,7 @@ class TournamentService {
 
 			return tournament
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'removeTournament',
@@ -134,6 +147,15 @@ class TournamentService {
 		}
 	}
 
+	/**
+	 * Добавляет пользователя в турнир
+	 * @param {string} exchange - Название биржи
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {number} page - Номер страницы (по умолчанию 1)
+	 * @param {number} limit - Количество записей на странице (по умолчанию 5)
+	 * @returns {Promise<Object>} - Турнир с обновленным списком участников
+	 */
 	async addTournamentUser(exchange, userId, lng = 'en', page = 1, limit = 5) {
 		try {
 			exchange = exchange.toLowerCase()
@@ -214,7 +236,7 @@ class TournamentService {
 
 			return { tournament, users, total }
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'addTournamentUser',
@@ -223,6 +245,13 @@ class TournamentService {
 		}
 	}
 
+	/**
+	 * Удаляет пользователя из турнира
+	 * @param {string} tournamentId - ID турнира
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Сообщение об успешном удалении
+	 */
 	async removeTournamentUser(tournamentId, userId, lng = 'en') {
 		try {
 			const tournament = await TournamentModel.findById(tournamentId)
@@ -264,7 +293,7 @@ class TournamentService {
 				message: i18next.t('success.user_removed_from_tournament', { lng }),
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'removeTournamentUser',
@@ -273,6 +302,15 @@ class TournamentService {
 		}
 	}
 
+	/**
+	 * Получает турнир с участниками с пагинацией
+	 * @param {string} exchange - Название биржи
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {number} page - Номер страницы (по умолчанию 1)
+	 * @param {number} size - Количество записей на странице (по умолчанию 5)
+	 * @param {string} cursor - Курсор для пагинации (по умолчанию null)
+	 * @returns {Promise<Object>} - Турнир с участниками и метаданными пагинации
+	 */
 	async getTournaments(
 		exchange,
 		lng = 'en',
@@ -329,7 +367,7 @@ class TournamentService {
 				nextCursor: hasMore ? items[items.length - 1]._id : null,
 			}
 		} catch (error) {
-			Helpers.handleDatabaseError(
+			handleDatabaseError(
 				error,
 				lng,
 				'getTournaments',

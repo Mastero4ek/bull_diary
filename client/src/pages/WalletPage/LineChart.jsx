@@ -22,8 +22,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { RootButton } from '@/components/ui/buttons/RootButton';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { Icon } from '@/components/ui/general/Icon';
 
 import styles from './styles.module.scss';
 
@@ -491,18 +489,6 @@ export const LineChart = React.memo(() => {
 			<Line data={data} options={options} />
 
 			<div className={styles.line_chart_details}>
-				{exchange?.name === 'bybit' && (
-					<div className={styles.line_chart_details_warning}>
-						<SmallDesc>
-							<Icon id='warning-icon' />
-
-							<span style={{ color: 'var(--orange)' }}>
-								{t('page.wallet.warning')}
-							</span>
-						</SmallDesc>
-					</div>
-				)}
-
 				<RootButton
 					icon={'details'}
 					text={t('button.details')}

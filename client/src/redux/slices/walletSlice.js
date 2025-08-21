@@ -84,7 +84,7 @@ const initialState = {
 	transactionsStatus: '',
 	transactionsErrorMessage: null,
 	page: 1,
-	sort: { type: 'transactionTime', value: 'asc' },
+	sort: { type: 'transactionTime', value: 'desc' },
 }
 
 const walletSlice = createSlice({

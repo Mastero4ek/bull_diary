@@ -1,10 +1,10 @@
 const keysService = require('../services/keys-service')
-const Helpers = require('../helpers/helpers')
+const { validationError } = require('../helpers/validation-helpers')
 
 class KeysController {
 	async updateKeys(req, res, next) {
 		try {
-			Helpers.validationError(req, next)
+			validationError(req, next)
 
 			const { exchange, api, secret } = req.body
 			const user = req.user

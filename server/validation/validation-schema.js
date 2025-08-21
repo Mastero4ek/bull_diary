@@ -1,5 +1,5 @@
 const i18next = require('i18next')
-const { EXCHANGES, ROLES } = require('../helpers/constants')
+const { EXCHANGES, ROLES } = require('../helpers/constant-helpers')
 
 const ValidationSchema = {
 	signUp: {
@@ -445,26 +445,6 @@ const ValidationSchema = {
 				options: EXCHANGES,
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.exchange.invalid', { lng: req.lng }),
-			},
-		},
-		start_time: {
-			exists: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.start_time.required', { lng: req.lng }),
-			},
-			isISO8601: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.start_time.invalid', { lng: req.lng }),
-			},
-		},
-		end_time: {
-			exists: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.end_time.required', { lng: req.lng }),
-			},
-			isISO8601: {
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.end_time.invalid', { lng: req.lng }),
 			},
 		},
 	},

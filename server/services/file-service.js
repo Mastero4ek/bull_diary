@@ -1,14 +1,22 @@
 const FileModel = require('../models/file-model')
 const UserModel = require('../models/user-model')
 const TournamentUserModel = require('../models/tournament_user-model')
-const fs = require('fs')
 const path = require('path')
+const fs = require('fs')
 const i18next = require('i18next')
 const { ApiError } = require('../exceptions/api-error')
-const Helpers = require('../helpers/helpers')
+const { handleFileError } = require('../helpers/error-helpers')
 const { logError } = require('../config/logger')
 
 class FileService {
+	/**
+	 * Загружает обложку для пользователя или турнира
+	 * @param {Object} cover - Файл обложки
+	 * @param {string} userId - ID пользователя (null для турнира)
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @param {string} tournamentId - ID турнира (по умолчанию null)
+	 * @returns {Promise<Object>} - Сообщение об успешной загрузке
+	 */
 	async uploadCover(cover, userId, lng = 'en', tournamentId = null) {
 		try {
 			let file
@@ -100,15 +108,17 @@ class FileService {
 				message: i18next.t('success.file_saved', { lng }),
 			}
 		} catch (error) {
-			Helpers.handleFileError(
-				error,
-				lng,
-				'uploadCover',
-				'errors.file_upload_failed'
-			)
+			handleFileError(error, lng, 'uploadCover', 'errors.file_upload_failed')
 		}
 	}
 
+	/**
+	 * Удаляет обложку пользователя
+	 * @param {string} file_name - Имя файла для удаления
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Сообщение об успешном удалении
+	 */
 	async removeCover(file_name, userId, lng = 'en') {
 		try {
 			const file = await FileModel.findOneAndDelete({
@@ -165,11 +175,75 @@ class FileService {
 				message: i18next.t('success.file_deleted', { lng }),
 			}
 		} catch (error) {
-			Helpers.handleFileError(
+			handleFileError(error, lng, 'removeCover', 'errors.file_deletion_failed')
+		}
+	}
+
+	/**
+	 * Удаляет все файлы пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Сообщение об успешном удалении
+	 */
+	async removeUserFiles(userId, lng = 'en') {
+		try {
+			const files = await FileModel.find({ user: userId })
+
+			if (files.length === 0) {
+				return {
+					message: i18next.t('success.no_files_to_delete', { lng }),
+				}
+			}
+
+			for (const file of files) {
+				const filePath = path.join(__dirname, '../uploads', file.name)
+
+				if (fs.existsSync(filePath)) {
+					try {
+						fs.unlinkSync(filePath)
+					} catch (error) {
+						logError(error, {
+							context: 'delete user file from disk',
+							userId,
+							fileName: file.name,
+						})
+					}
+				}
+			}
+
+			await FileModel.deleteMany({ user: userId })
+
+			await UserModel.findOneAndUpdate(
+				{ _id: userId },
+				{
+					$set: {
+						cover: null,
+						updated_at: new Date(),
+					},
+				}
+			)
+
+			try {
+				await TournamentUserModel.updateMany(
+					{ id: userId },
+					{ $set: { cover: null } }
+				)
+			} catch (error) {
+				logError(error, {
+					context: 'update tournament users after user files removal',
+					userId,
+				})
+			}
+
+			return {
+				message: i18next.t('success.user_files_deleted', { lng }),
+			}
+		} catch (error) {
+			handleFileError(
 				error,
 				lng,
-				'removeCover',
-				'errors.file_deletion_failed'
+				'removeUserFiles',
+				'errors.user_files_deletion_failed'
 			)
 		}
 	}

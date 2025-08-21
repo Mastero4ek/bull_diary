@@ -1,3 +1,5 @@
+const DataService = require('../services/data-service')
+
 module.exports = class BybitOrderDto {
 	id
 	symbol
@@ -11,35 +13,34 @@ module.exports = class BybitOrderDto {
 	closed_fee
 	pnl
 	roi
+	bookmark
+	sync_time
 
 	constructor(model) {
-		this.id = model.orderId
+		this.id = model.orderId || model.id
 		this.symbol = model.symbol
-		this.closed_time = +model.updatedTime
-		this.open_time = +model.createdTime
-		this.direction = model.side === 'Buy' ? 'short' : 'long'
-		this.leverage = +model.leverage
-		this.quality = parseFloat(model.qty).toFixed(4)
-		this.margin = parseFloat(model.cumEntryValue).toFixed(2)
-		this.open_fee = parseFloat(model.openFee).toFixed(4)
-		this.closed_fee = parseFloat(model.closeFee).toFixed(4)
-		this.pnl = parseFloat(model.closedPnl).toFixed(4)
-		this.roi = parseFloat(this.calculateRoi(model).toFixed(2))
-	}
-
-	calculateRoi = model => {
-		const qty = parseFloat(model.qty) || 0
-		const leverage = parseFloat(model.leverage) || 1
-		const avgEntryPrice = parseFloat(model.avgEntryPrice) || 0
-		const closedPnl = parseFloat(model.closedPnl) || 0
-
-		if (qty <= 0 || leverage <= 0 || avgEntryPrice <= 0) {
-			return 0
-		}
-
-		const initialMargin = (qty * avgEntryPrice) / leverage
-		const roi = initialMargin > 0 ? (closedPnl / initialMargin) * 100 : 0
-
-		return roi
+		this.closed_time = model.closed_time || +model.updatedTime
+		this.open_time = model.open_time || +model.createdTime
+		this.direction =
+			model.direction || (model.side === 'Buy' ? 'short' : 'long')
+		this.leverage = Number(parseFloat(model.leverage || 1))
+		this.quality = Number(
+			parseFloat(model.quality || model.qty || 0).toFixed(4)
+		)
+		this.margin = Number(
+			parseFloat(model.margin || model.cumEntryValue || 0).toFixed(4)
+		)
+		this.open_fee = Number(
+			parseFloat(model.open_fee || model.openFee || 0).toFixed(4)
+		)
+		this.closed_fee = Number(
+			parseFloat(model.closed_fee || model.closeFee || 0).toFixed(4)
+		)
+		this.pnl = Number(parseFloat(model.pnl || model.closedPnl || 0).toFixed(4))
+		this.roi = Number(
+			parseFloat(model.roi || DataService.calculateRoi(model) || 0).toFixed(2)
+		)
+		this.bookmark = model.bookmark || false
+		this.sync_time = model.sync_time
 	}
 }
