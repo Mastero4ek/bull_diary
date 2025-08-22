@@ -1,6 +1,7 @@
+require('module-alias/register')
 require('dotenv').config()
 
-const { logError } = require('./config/logger')
+const { logError } = require('./configs/logger-config')
 
 process.on('uncaughtException', error => {
 	console.error('Uncaught Exception:', error.message)
@@ -16,30 +17,31 @@ process.on('unhandledRejection', (reason, promise) => {
 	process.exit(1)
 })
 
-const app = require('./config/express')
-const passport = require('./config/passport')
-const connectDB = require('./config/database')
-const initCronJobs = require('./config/cron')
-const { initI18next } = require('./config/i18next')
-const routerGoogleV1 = require('./routers/v1/google')
-const routerGithubV1 = require('./routers/v1/github')
-const routerKeysV1 = require('./routers/v1/keys')
-const routerAuthV1 = require('./routers/v1/auth')
-const routerMailV1 = require('./routers/v1/mail')
-const routerTournamentV1 = require('./routers/v1/tournament')
-const routerBybitV1 = require('./routers/v1/bybit')
-const routerSyncV1 = require('./routers/v1/sync')
-const routerOrdersV1 = require('./routers/v1/orders')
-const routerUserV1 = require('./routers/v1/user')
-const routerHealthV1 = require('./routers/v1/health')
-const passportSetupGoogle = require('./passports/passportGoogle')
-const passportSetupGithub = require('./passports/passportGithub')
+const app = require('./configs/express-config')
+const passport = require('./configs/passport-config')
+const connectDB = require('./configs/database-config')
+const initCronJobs = require('./configs/cron-config')
+const { initI18next } = require('./configs/i18next-config')
+const routerGoogleV1 = require('./routers/v1/integration/google-router')
+const routerGithubV1 = require('./routers/v1/integration/github-router')
+const routerKeysV1 = require('./routers/v1/auth/keys-router')
+const routerAuthV1 = require('./routers/v1/auth/auth-router')
+const routerMailV1 = require('./routers/v1/core/mail-router')
+const routerTournamentV1 = require('./routers/v1/core/tournament-router')
+const routerBybitV1 = require('./routers/v1/exchange/bybit-router')
+const routerSyncV1 = require('./routers/v1/core/sync-router')
+const routerOrdersV1 = require('./routers/v1/core/orders-router')
+const routerUserV1 = require('./routers/v1/core/user-router')
+const routerHealthV1 = require('./routers/v1/core/health-router')
+const passportSetupGoogle = require('./passports/google-passport')
+const passportSetupGithub = require('./passports/github-passport')
 const errorMiddleware = require('./middlewares/error-middleware')
 const langMiddleware = require('./middlewares/lang-middleware')
+const WebSocketService = require('./services/system/websocket-service')
 
-const { logInfo } = require('./config/logger')
+const { logInfo } = require('./configs/logger-config')
 
-const PORT = process.env.PORT || 5001
+const PORT = process.env.PORT
 
 initI18next()
 
@@ -63,9 +65,12 @@ const start = async () => {
 		await connectDB()
 		await initCronJobs()
 
-		app.listen(PORT, () => {
+		const server = app.listen(PORT, () => {
 			logInfo(`Successfully started server`, { port: Number(PORT) })
 		})
+
+		WebSocketService.initialize(server)
+		logInfo('WebSocket service initialized')
 	} catch (e) {
 		logError(e, { context: 'Server startup' })
 	}

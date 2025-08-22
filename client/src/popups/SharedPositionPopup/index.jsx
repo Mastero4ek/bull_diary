@@ -1,20 +1,20 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
-import badImage from '@/assets/images/general/bad-position.svg';
-import goodImage from '@/assets/images/general/good-position.svg';
-import { SharedPopupLayout } from '@/components/layouts/SharedPopupLayout';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Mark } from '@/components/ui/general/Mark';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { H2 } from '@/components/ui/titles/H2';
-import { capitalize } from '@/helpers/functions';
-import { useFormatDuration } from '@/hooks/FormatDuration';
+import badImage from '@/assets/images/general/bad-position.svg'
+import goodImage from '@/assets/images/general/good-position.svg'
+import { SharedPopupLayout } from '@/components/layouts/SharedPopupLayout'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Mark } from '@/components/ui/general/Mark'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { H2 } from '@/components/ui/titles/H2'
+import { capitalize } from '@/helpers/functions'
+import { useFormatDuration } from '@/hooks/useFormatDuration'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const SharedPositionPopup = React.memo(() => {
 	const { amount, color, mark } = useSelector(state => state.settings)

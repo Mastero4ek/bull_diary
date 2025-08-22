@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootDesc } from '@/components/ui/descriptions/RootDesc'
 import { InnerBlock } from '@/components/ui/general/InnerBlock'
 import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { usePeriods } from '@/hooks/Periods'
+import { usePeriods } from '@/hooks/usePeriods'
 import { setDate, setFilter, setRemoveBtn } from '@/redux/slices/filtersSlice'
 
 import styles from './styles.module.scss'

@@ -1,4 +1,4 @@
-const { ApiError } = require('../exceptions/api-error')
+const { ApiError } = require('@exceptions/api-error')
 
 /**
  * Middleware для валидации загружаемых файлов

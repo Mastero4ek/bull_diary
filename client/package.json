@@ -45,6 +45,7 @@
 		"redux": "^5.0.1",
 		"redux-persist": "^6.0.0",
 		"sass": "^1.90.0",
+		"socket.io-client": "^4.8.1",
 		"swiper": "^11.2.10",
 		"use-react-screenshot": "^4.0.0",
 		"uuid": "^11.1.0"

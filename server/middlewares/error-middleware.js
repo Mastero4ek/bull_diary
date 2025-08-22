@@ -1,5 +1,5 @@
-const { ApiError } = require('../exceptions/api-error')
-const { logError } = require('../config/logger')
+const { ApiError } = require('@exceptions/api-error')
+const { logError } = require('@configs/logger-config')
 const { v4: uuidv4 } = require('uuid')
 
 /**

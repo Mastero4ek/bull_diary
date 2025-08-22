@@ -1,0 +1,34 @@
+const Router = require('express').Router
+const router = new Router()
+const authMiddleware = require('@middlewares/auth-middleware')
+const ordersController = require('@controllers/core/orders-controller')
+const { checkSchema } = require('express-validator')
+const ValidationSchema = require('@validation/schema')
+
+router.post(
+	'/order/:id',
+	authMiddleware,
+	checkSchema(ValidationSchema.savedOrder),
+	ordersController.savedOrder
+)
+
+router.delete(
+	'/order/:id',
+	authMiddleware,
+	checkSchema(ValidationSchema.removedOrder),
+	ordersController.removedOrder
+)
+
+router.get(
+	'/order/description/:id',
+	authMiddleware,
+	ordersController.getOrderDescription
+)
+
+router.patch(
+	'/order/description/:id',
+	authMiddleware,
+	ordersController.updateOrderDescription
+)
+
+module.exports = router

@@ -21,7 +21,7 @@ export const BarChart = React.memo(() => {
 	const { t } = useTranslation()
 	const { theme, width, isMobile } = useSelector(state => state.settings)
 	const { fakePositions, ordersByDay, serverStatus } = useSelector(
-		state => state.positions
+		state => state.websocket
 	)
 
 	const chartStyles = useMemo(

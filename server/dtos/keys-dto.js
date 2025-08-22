@@ -1,4 +1,4 @@
-const EncryptionService = require('../services/encryption-service')
+const EncryptionService = require('@services/system/encryption-service')
 
 module.exports = class KeysDto {
 	static async maskKey(key, userId = null) {

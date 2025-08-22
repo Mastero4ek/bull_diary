@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt')
 const { v4: uuidv4 } = require('uuid')
 const moment = require('moment')
 
-const connectDB = require('../config/database')
-const User = require('../models/user-model')
-const Keys = require('../models/keys-model')
-const Level = require('../models/level-model')
+const connectDB = require('@configs/database-config')
+const User = require('@models/core/user-model')
+const Keys = require('@models/auth/keys-model')
+const Level = require('@models/core/level-model')
 
-const { logInfo, logWarn, logError } = require('../config/logger')
+const { logInfo, logWarn, logError } = require('@configs/logger-config')
 
 const fakeUsers = [
 	{

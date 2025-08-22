@@ -1,7 +1,7 @@
-const { ApiError } = require('../exceptions/api-error')
-const tokenService = require('../services/token-service')
-const UserModel = require('../models/user-model')
-const { logError } = require('../config/logger')
+const { ApiError } = require('@exceptions/api-error')
+const tokenService = require('@services/auth/token-service')
+const UserModel = require('@models/core/user-model')
+const { logError } = require('@configs/logger-config')
 
 /**
  * Middleware для аутентификации пользователей

@@ -1,4 +1,4 @@
-const DataService = require('../services/data-service')
+const DataService = require('@services/exchange/data-service')
 
 module.exports = class BybitOrderDto {
 	id

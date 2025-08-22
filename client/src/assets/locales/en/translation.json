@@ -376,6 +376,7 @@
 		"diary": {
 			"update_success": "Positions updated successfully!",
 			"update_error": "Error updating positions! Please try again.",
+			"connection_error": "WebSocket connection lost! Attempting to reconnect...",
 			"empty": "There were no open transactions now!",
 			"chart_label": "Profit (P&L)"
 		},

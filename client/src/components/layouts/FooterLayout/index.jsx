@@ -1,19 +1,16 @@
-import React from 'react';
+import React from 'react'
 
-import { useTranslation } from 'react-i18next';
-import {
-  Link,
-  useLocation,
-} from 'react-router-dom';
-import { Link as LinkScroll } from 'react-scroll';
+import { useTranslation } from 'react-i18next'
+import { Link, useLocation } from 'react-router-dom'
+import { Link as LinkScroll } from 'react-scroll'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { Logo } from '@/components/ui/general/Logo';
-import { Socials } from '@/components/ui/general/Socials';
-import { useNavList } from '@/hooks/Navigation';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { Logo } from '@/components/ui/general/Logo'
+import { Socials } from '@/components/ui/general/Socials'
+import { useNavList } from '@/hooks/useNavigation'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const FooterLayout = React.memo(() => {
 	const { t } = useTranslation()

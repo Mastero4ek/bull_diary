@@ -7,34 +7,15 @@ import { OuterBlock } from '@/components/ui/general/OuterBlock'
 
 import styles from './styles.module.scss'
 
-// import io from 'socket.io-client'
-
-// const socket = io(process.env.REACT_APP_API_URL)
-
 export const Total = React.memo(() => {
 	const { amount, color } = useSelector(state => state.settings)
-	const { serverStatus, fakePositions } = useSelector(state => state.positions)
+	const { serverStatus, fakePositions } = useSelector(state => state.websocket)
 	const unrealisedPnl = fakePositions ? 0.0 : 100
 	const realisedPnl = fakePositions ? 0.0 : -20
-	// const [realPrice, setRealPrice] = useState(null)
-
-	// useEffect(() => {
-	// 	socket.on('data', data => {
-	// 		if (data.data.bid1Price) {
-	// 			setRealPrice(data.data.bid1Price)
-	// 		}
-	// 	})
-
-	// 	return () => {
-	// 		socket.off('data')
-	// 	}
-	// }, [])
 
 	return (
 		<div className={styles.total_wrapper}>
 			<OuterBlock>
-				{/* <pre>{realPrice}</pre> */}
-
 				<div className={styles.total}>
 					<div className={styles.unrealized}>
 						<RootDesc>

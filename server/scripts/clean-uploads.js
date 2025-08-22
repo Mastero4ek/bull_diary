@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { logInfo, logWarn } = require('../config/logger')
+const { logInfo, logWarn } = require('@configs/logger-config')
 
 async function cleanAllUploads() {
 	const uploadsPath = path.join(__dirname, '../uploads')

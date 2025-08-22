@@ -11,13 +11,28 @@
 		"clean:uploads": "node scripts/clean-uploads.js",
 		"clean:db:uploads": "node scripts/clean-database.js --clean-uploads",
 		"backup:db": "node scripts/backup-mongodb.js",
-		"restore:db": "node scripts/restore-mongodb.js",
-		"create:indexes": "node scripts/create-indexes.js"
+		"restore:db": "node scripts/restore-mongodb.js"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"description": "",
+	"_moduleAliases": {
+		"@": ".",
+		"@configs": "./configs",
+		"@controllers": "./controllers",
+		"@dtos": "./dtos",
+		"@exceptions": "./exceptions",
+		"@helpers": "./helpers",
+		"@locales": "./locales",
+		"@mails": "./mails",
+		"@middlewares": "./middlewares",
+		"@models": "./models",
+		"@passports": "./passports",
+		"@routers": "./routers",
+		"@services": "./services",
+		"@validation": "./validation"
+	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",
 		"body-parser": "^1.20.3",
@@ -56,11 +71,15 @@
 		"pino": "^8.17.2",
 		"pino-pretty": "^10.3.1",
 		"redis": "^4.7.0",
+		"socket.io": "^4.8.1",
+		"socket.io-client": "^4.8.1",
 		"uuid": "^11.0.3",
 		"validator": "^13.15.15",
+		"ws": "^8.18.3",
 		"xss": "^1.0.15"
 	},
 	"devDependencies": {
+		"module-alias": "^2.2.3",
 		"supertest": "^7.1.4"
 	}
 }

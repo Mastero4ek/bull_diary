@@ -1,24 +1,21 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
-import { SharedButton } from '@/components/ui/buttons/SharedButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { Mark } from '@/components/ui/general/Mark';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { H2 } from '@/components/ui/titles/H2';
-import {
-  capitalize,
-  colorizedNum,
-} from '@/helpers/functions';
-import { useFormatDuration } from '@/hooks/FormatDuration';
-import { SharedPositionPopup } from '@/popups/SharedPositionPopup';
+import { SharedButton } from '@/components/ui/buttons/SharedButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { Mark } from '@/components/ui/general/Mark'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { H2 } from '@/components/ui/titles/H2'
+import { capitalize, colorizedNum } from '@/helpers/functions'
+import { useFormatDuration } from '@/hooks/useFormatDuration'
+import { SharedPositionPopup } from '@/popups/SharedPositionPopup'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const PositionLayout = React.memo(() => {
 	const { t } = useTranslation()

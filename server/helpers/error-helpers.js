@@ -1,6 +1,6 @@
-const { ApiError } = require('../exceptions/api-error')
+const { ApiError } = require('@exceptions/api-error')
 const i18next = require('i18next')
-const { logError } = require('../config/logger')
+const { logError } = require('@configs/logger-config')
 
 class HelpersError {
 	/**

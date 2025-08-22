@@ -1,28 +1,24 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import { Link } from 'react-scroll';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+import { Link } from 'react-scroll'
 
-import avatarDefault from '@/assets/images/general/default_avatar.png';
-import { NotificationLayout } from '@/components/layouts/NotificationLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Logo } from '@/components/ui/general/Logo';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { useNavList } from '@/hooks/Navigation';
-import { SignInPopup } from '@/popups/SignInPopup';
+import avatarDefault from '@/assets/images/general/default_avatar.png'
+import { NotificationLayout } from '@/components/layouts/NotificationLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Logo } from '@/components/ui/general/Logo'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { useNavList } from '@/hooks/useNavigation'
+import { SignInPopup } from '@/popups/SignInPopup'
 
-import { Exchange } from './Exchange';
-import { SettingsList } from './SettingsList';
-import styles from './styles.module.scss';
+import { Exchange } from './Exchange'
+import { SettingsList } from './SettingsList'
+import styles from './styles.module.scss'
 
 export const HeaderLayout = React.memo(() => {
 	const { t } = useTranslation()

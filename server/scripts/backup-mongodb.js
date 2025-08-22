@@ -2,7 +2,7 @@ require('dotenv').config()
 const { exec } = require('child_process')
 const path = require('path')
 const fs = require('fs')
-const { logInfo, logError } = require('../config/logger')
+const { logInfo, logError } = require('@configs/logger-config')
 
 const BACKUP_DIR = path.join(__dirname, '../backups/mongodb')
 const MONGO_URI = process.env.MONGO_URI
