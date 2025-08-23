@@ -1,25 +1,25 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 
 import {
-	BarElement,
-	CategoryScale,
-	Chart as ChartJS,
-	Filler,
-	Legend,
-	LinearScale,
-	LineElement,
-	PointElement,
-	Tooltip,
-} from 'chart.js'
-import moment from 'moment/min/moment-with-locales'
-import { Line } from 'react-chartjs-2'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Tooltip,
+} from 'chart.js';
+import moment from 'moment/min/moment-with-locales';
+import { Line } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootButton } from '@/components/ui/buttons/RootButton';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 ChartJS.register(
 	LineElement,
@@ -48,40 +48,43 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 
 		switch (period) {
 			case 'year':
-				const monthIndex = moment.monthsShort().indexOf(label)
+				const monthIndex = index
+				const currentMonth = now.month()
 
 				if (transactions.length === 0) {
 					return monthIndex > 11
 				}
 
-				return monthIndex > now.month()
+				return monthIndex > currentMonth
 			case 'quarter':
-				const quarterIndex = parseInt(label.replace('Q', '')) - 1
-				const currentQuarter = Math.floor(now.month() / 3)
+				const weekNumber = parseInt(label)
+				const currentWeekNumber = now.isoWeek()
 
 				if (transactions.length === 0) {
-					return quarterIndex > 3
+					return weekNumber > 53
 				}
 
-				return quarterIndex > currentQuarter
+				return weekNumber > currentWeekNumber
 			case 'month':
-				const dayIndex = parseInt(label) - 1
+				const dayOfMonth = parseInt(label)
+				const currentDayOfMonth = now.date()
 
 				if (transactions.length === 0) {
-					return dayIndex > 31
+					return dayOfMonth > 31
 				}
 
-				return dayIndex > now.day()
+				return dayOfMonth > currentDayOfMonth
 			case 'week':
 			default:
-				const dayOfWeek = moment.weekdaysShort().indexOf(label)
-				const currentDayOfWeek = now.day()
+				const currentISOWeekday = now.isoWeekday()
+				const dayOfWeekIndex = index
+				const labelISOWeekday = dayOfWeekIndex + 1
 
 				if (transactions.length === 0) {
-					return dayOfWeek > 6
+					return labelISOWeekday > 7
 				}
 
-				return dayOfWeek > currentDayOfWeek
+				return labelISOWeekday > currentISOWeekday
 		}
 	}
 
@@ -161,6 +164,83 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 			return { lineChartData: [], barChartData: [] }
 		}
 
+		const findLastKnownBalance = () => {
+			const now = moment()
+			let lastKnownBalance = null
+			let lastKnownDate = null
+
+			for (let i = 1; i <= 10; i++) {
+				let previousPeriodStart, previousPeriodEnd
+
+				switch (period) {
+					case 'year':
+						previousPeriodStart = now
+							.clone()
+							.subtract(i, 'year')
+							.startOf('year')
+						previousPeriodEnd = now.clone().subtract(i, 'year').endOf('year')
+						break
+					case 'quarter':
+						previousPeriodStart = now
+							.clone()
+							.subtract(i, 'quarter')
+							.startOf('quarter')
+						previousPeriodEnd = now
+							.clone()
+							.subtract(i, 'quarter')
+							.endOf('quarter')
+						break
+					case 'month':
+						previousPeriodStart = now
+							.clone()
+							.subtract(i, 'month')
+							.startOf('month')
+						previousPeriodEnd = now.clone().subtract(i, 'month').endOf('month')
+						break
+					case 'week':
+					default:
+						previousPeriodStart = now
+							.clone()
+							.subtract(i, 'week')
+							.startOf('isoWeek')
+						previousPeriodEnd = now.clone().subtract(i, 'week').endOf('isoWeek')
+						break
+				}
+
+				const previousPeriodData = groupedData.filter(item => {
+					const itemDate = moment(item.date)
+					return itemDate.isBetween(
+						previousPeriodStart,
+						previousPeriodEnd,
+						null,
+						'[]'
+					)
+				})
+
+				if (previousPeriodData.length > 0) {
+					const sortedData = previousPeriodData.sort((a, b) =>
+						moment(b.date).diff(moment(a.date))
+					)
+
+					for (const item of sortedData) {
+						if (item.cashBalance !== null && item.cashBalance !== undefined) {
+							lastKnownBalance = item.cashBalance
+							lastKnownDate = moment(item.date)
+							break
+						}
+					}
+
+					if (lastKnownBalance !== null) {
+						break
+					}
+				}
+			}
+
+			return { lastKnownBalance, lastKnownDate }
+		}
+
+		const { lastKnownBalance: previousPeriodBalance } = findLastKnownBalance()
+
 		const filteredData = groupedData.filter(item => {
 			const itemDate = moment(item.date)
 			const now = moment()
@@ -216,7 +296,7 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 		})
 
 		const lineChartData = []
-		let lastKnownBalance = null
+		let lastKnownBalance = previousPeriodBalance
 
 		labels.forEach((label, index) => {
 			const periodData = periodGroups[label]

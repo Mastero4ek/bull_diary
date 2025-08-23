@@ -1,23 +1,28 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
-import moment from 'moment'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { Loader } from '@/components/ui/general/Loader'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { useSyncStatus } from '@/hooks/useSyncStatus'
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import {
-	clearTransactions,
-	getBybitTransactions,
-} from '@/redux/slices/transactionSlice'
-import { getBybitWallet } from '@/redux/slices/walletSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import { Info } from './Info'
-import { LineChart } from './LineChart'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { Loader } from '@/components/ui/general/Loader';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { useSyncStatus } from '@/hooks/useSyncStatus';
+import {
+  clearTransactions,
+  getBybitTransactions,
+} from '@/redux/slices/transactionSlice';
+import { getBybitWallet } from '@/redux/slices/walletSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import { Info } from './Info';
+import { LineChart } from './LineChart';
 
 export const WalletPage = React.memo(() => {
 	const { t } = useTranslation()
@@ -29,6 +34,9 @@ export const WalletPage = React.memo(() => {
 	)
 	const { showSuccess, showError } = useNotification()
 	const { syncWarning, isExchangeSynced, isSynced } = useSyncStatus()
+
+	const startOfYear = moment().startOf('year').format('YYYY-MM-DD')
+	const today = moment().format('YYYY-MM-DD')
 
 	const handleClickUpdate = async () => {
 		if (!isExchangeSynced()) {
@@ -48,8 +56,8 @@ export const WalletPage = React.memo(() => {
 				dispatch(
 					getBybitTransactions({
 						exchange: exchange.name,
-						start_time: date.start_date,
-						end_time: date.end_date,
+						start_time: startOfYear,
+						end_time: today,
 						sort: { type: 'transactionTime', value: 'desc' },
 						search: '',
 						page: 1,
@@ -84,8 +92,8 @@ export const WalletPage = React.memo(() => {
 			dispatch(
 				getBybitTransactions({
 					exchange: exchange.name,
-					start_time: date.start_date,
-					end_time: date.end_date,
+					start_time: startOfYear,
+					end_time: today,
 					sort: { type: 'transactionTime', value: 'desc' },
 					search: '',
 					page: 1,
