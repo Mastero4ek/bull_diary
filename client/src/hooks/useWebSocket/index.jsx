@@ -1,40 +1,51 @@
-import { useCallback, useEffect } from 'react'
-
-import { useDispatch, useSelector } from 'react-redux'
-
-import { updateKeySyncStatus } from '@/redux/slices/candidateSlice'
 import {
-	clearError,
-	setConnectionStatus,
-	setConnectionStatusMessage,
-	setError,
-	setPositions,
-	setSubscriptionStatus,
-	setSyncCancelled,
-	setSyncCompleted,
-	setSyncError,
-	setSyncProgress,
-	setSyncReset,
-	setSyncStarted,
-} from '@/redux/slices/websocketSlice'
-import WebSocketService from '@/services/WebSocketService'
+  useCallback,
+  useEffect,
+} from 'react';
+
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+
+import { updateKeySyncStatus } from '@/redux/slices/candidateSlice';
+import {
+  clearConnectionError,
+  setConnectionError,
+  setConnectionStatus,
+  setConnectionStatusMessage,
+  setPositions,
+  setSubscriptionStatus,
+  setSyncCancelled,
+  setSyncCompleted,
+  setSyncError,
+  setSyncProgress,
+  setSyncReset,
+  setSyncStarted,
+} from '@/redux/slices/websocketSlice';
+import WebSocketService from '@/services/WebSocketService';
 
 export const useWebSocket = () => {
 	const dispatch = useDispatch()
 	const {
 		isConnected,
 		isSubscribed,
-		positions,
+		status: connectionStatus,
 		error,
-		lastUpdate,
-		connectionStatus,
+	} = useSelector(state => state.websocket.connection)
+
+	const { data: positions, lastUpdate } = useSelector(
+		state => state.websocket.positions
+	)
+
+	const {
 		isSyncing,
-		syncProgress,
-		syncStatus,
-		syncMessage,
-		lastSyncResult,
-		syncError,
-	} = useSelector(state => state.websocket)
+		progress: syncProgress,
+		status: syncStatus,
+		message: syncMessage,
+		result: lastSyncResult,
+		error: syncError,
+	} = useSelector(state => state.websocket.sync)
 	const { exchange } = useSelector(state => state.filters)
 	const user = useSelector(state => state.candidate?.user)
 	const { language } = useSelector(state => state.settings)
@@ -43,7 +54,7 @@ export const useWebSocket = () => {
 		data => {
 			dispatch(setConnectionStatus(data.connected))
 			if (data.connected) {
-				dispatch(clearError())
+				dispatch(clearConnectionError())
 			}
 		},
 		[dispatch]
@@ -52,7 +63,7 @@ export const useWebSocket = () => {
 	const handlePositionsUpdate = useCallback(
 		data => {
 			dispatch(setPositions(data.positions))
-			dispatch(clearError())
+			dispatch(clearConnectionError())
 		},
 		[dispatch]
 	)
@@ -67,7 +78,7 @@ export const useWebSocket = () => {
 
 	const handleError = useCallback(
 		data => {
-			dispatch(setError(data.message || 'WebSocket error'))
+			dispatch(setConnectionError(data.message || 'WebSocket error'))
 		},
 		[dispatch]
 	)

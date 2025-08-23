@@ -1,29 +1,39 @@
-import React, { useCallback, useEffect } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
-
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { TableLayout } from '@/components/layouts/TableLayout'
-import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { SharedButton } from '@/components/ui/buttons/SharedButton'
-import { Loader } from '@/components/ui/general/Loader'
-import { Mark } from '@/components/ui/general/Mark'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { colorizedNum } from '@/helpers/functions'
-import { useClientFiltering } from '@/hooks/useClientFiltering'
-import { useWebSocket } from '@/hooks/useWebSocket'
-import { SharedPositionPopup } from '@/popups/SharedPositionPopup'
+import { useTranslation } from 'react-i18next';
 import {
-	setPage,
-	setServerStatus,
-	setSort,
-	setWebSocketReset,
-} from '@/redux/slices/websocketSlice'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import { BarChart } from './BarChart'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { TableLayout } from '@/components/layouts/TableLayout';
+import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { SharedButton } from '@/components/ui/buttons/SharedButton';
+import { Loader } from '@/components/ui/general/Loader';
+import { Mark } from '@/components/ui/general/Mark';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { colorizedNum } from '@/helpers/functions';
+import { useClientFiltering } from '@/hooks/useClientFiltering';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { SharedPositionPopup } from '@/popups/SharedPositionPopup';
+import {
+  setPage,
+  setServerStatus,
+  setSort,
+} from '@/redux/slices/websocketSlice';
+
+import { BarChart } from './BarChart';
 
 export const DiaryPage = React.memo(() => {
 	const { t } = useTranslation()
@@ -32,31 +42,26 @@ export const DiaryPage = React.memo(() => {
 	const navigate = useNavigate()
 	const { showSuccess, showError } = useNotification()
 
+	const { connect, subscribeToPositions } = useWebSocket()
+
 	const { user } = useSelector(state => state.candidate)
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const { exchange, search, limit } = useSelector(state => state.filters)
-	const { fakePositions, page, sort, serverStatus, errorMessage } = useSelector(
-		state => state.websocket
+	const { fakeData: fakePositions, data: positions } = useSelector(
+		state => state.websocket.positions
+	)
+	const { page, sort, serverStatus, errorMessage } = useSelector(
+		state => state.websocket.ui
 	)
 
-	const {
-		isConnected,
-		isSubscribed,
-		positions: rawPositions,
-		connect,
-		disconnect,
-		subscribeToPositions,
-		unsubscribeFromPositions,
-	} = useWebSocket()
-
 	const { filteredData: filteredPositions, totalPages: totalFilteredPages } =
-		useClientFiltering(rawPositions, { search, sort, page, limit }, [
+		useClientFiltering(positions, { search, sort, page, limit }, [
 			'symbol',
 			'side',
 			'direction',
 		])
 
-	const positions = filteredPositions
+	const displayPositions = filteredPositions
 
 	const columns = [
 		{ Header: t('table.symbol'), accessor: 'symbol', width: '100%' },
@@ -148,25 +153,12 @@ export const DiaryPage = React.memo(() => {
 		try {
 			dispatch(setServerStatus('loading'))
 
-			if (!isConnected || !isSubscribed) {
-				showError(t('page.diary.update_error'))
-
-				connect()
-
-				setTimeout(() => {
-					subscribeToPositions()
-				}, 1000)
-
-				return
-			}
-
-			unsubscribeFromPositions()
+			connect()
 
 			setTimeout(() => {
 				subscribeToPositions()
-
 				showSuccess(t('page.diary.update_success'))
-			}, 100)
+			}, 1000)
 		} catch (error) {
 			dispatch(setServerStatus('error'))
 		} finally {
@@ -191,47 +183,10 @@ export const DiaryPage = React.memo(() => {
 	)
 
 	useEffect(() => {
-		if (exchange?.name && user?.id) {
-			dispatch(setServerStatus('loading'))
-
-			const timer = setTimeout(() => {
-				connect()
-				subscribeToPositions()
-
-				dispatch(setServerStatus('success'))
-			}, 1000)
-
-			return () => {
-				clearTimeout(timer)
-				unsubscribeFromPositions()
-				disconnect()
-			}
-		}
-
-		return () => {
-			unsubscribeFromPositions()
-			disconnect()
-		}
-	}, [
-		exchange?.name,
-		user?.id,
-		connect,
-		subscribeToPositions,
-		unsubscribeFromPositions,
-		disconnect,
-	])
-
-	useEffect(() => {
 		if (page !== 1) {
 			dispatch(setPage(1))
 		}
 	}, [search, limit, dispatch])
-
-	useEffect(() => {
-		return () => {
-			dispatch(setWebSocketReset())
-		}
-	}, [location, dispatch])
 
 	return (
 		<PageLayout
@@ -247,7 +202,7 @@ export const DiaryPage = React.memo(() => {
 				<TableLayout
 					columns={columns}
 					fakeData={fakePositions}
-					data={positions}
+					data={displayPositions}
 					totalPages={totalFilteredPages}
 					error={errorMessage}
 					serverStatus={serverStatus}

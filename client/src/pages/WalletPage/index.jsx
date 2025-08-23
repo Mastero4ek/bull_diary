@@ -13,12 +13,15 @@ import {
 import { PageLayout } from '@/components/layouts/PageLayout';
 import { Loader } from '@/components/ui/general/Loader';
 import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { useSyncStatus } from '@/hooks/useSyncStatus';
 import {
   clearTransactions,
   getBybitTransactions,
 } from '@/redux/slices/transactionSlice';
 import { getBybitWallet } from '@/redux/slices/walletSlice';
+import {
+  selectIsSynced,
+  selectSyncWarning,
+} from '@/redux/slices/websocketSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 import { Info } from './Info';
@@ -33,13 +36,14 @@ export const WalletPage = React.memo(() => {
 		state => state.transactions
 	)
 	const { showSuccess, showError } = useNotification()
-	const { syncWarning, isExchangeSynced, isSynced } = useSyncStatus()
+	const syncWarning = useSelector(selectSyncWarning)
+	const isSynced = useSelector(selectIsSynced)
 
 	const startOfYear = moment().startOf('year').format('YYYY-MM-DD')
 	const today = moment().format('YYYY-MM-DD')
 
 	const handleClickUpdate = async () => {
-		if (!isExchangeSynced()) {
+		if (!isSynced) {
 			showError(t('page.table.sync_required_error'))
 			return
 		}

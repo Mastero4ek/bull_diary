@@ -20,9 +20,10 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, Title)
 export const BarChart = React.memo(() => {
 	const { t } = useTranslation()
 	const { theme, width, isMobile } = useSelector(state => state.settings)
-	const { fakePositions, ordersByDay, serverStatus } = useSelector(
-		state => state.websocket
+	const { fakeData: fakePositions, ordersByDay } = useSelector(
+		state => state.websocket.positions
 	)
+	const { serverStatus } = useSelector(state => state.websocket.ui)
 
 	const chartStyles = useMemo(
 		() => ({

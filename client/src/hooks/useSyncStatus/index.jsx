@@ -1,20 +1,34 @@
-import { useCallback, useEffect, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+} from 'react';
 
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+
+import {
+  selectIsSynced,
+  selectSyncWarning,
+  setIsSynced,
+  setSyncWarning,
+} from '@/redux/slices/websocketSlice';
 
 export const useSyncStatus = () => {
 	const { t } = useTranslation()
-	const [syncWarning, setSyncWarning] = useState('')
-	const [isSynced, setIsSynced] = useState(false)
+	const dispatch = useDispatch()
 
 	const { user } = useSelector(state => state.candidate)
 	const { exchange } = useSelector(state => state.filters)
+	const syncWarning = useSelector(selectSyncWarning)
+	const isSynced = useSelector(selectIsSynced)
 
 	const isExchangeSynced = useCallback(() => {
 		if (!user?.keys || !exchange?.name) {
-			setSyncWarning(t('page.table.sync_required_error'))
-			setIsSynced(false)
+			dispatch(setSyncWarning(t('page.table.sync_required_error')))
+			dispatch(setIsSynced(false))
 			return false
 		}
 
@@ -22,14 +36,14 @@ export const useSyncStatus = () => {
 		const syncedStatus = exchangeKey?.sync === true
 
 		if (!syncedStatus) {
-			setSyncWarning(t('page.table.sync_required_error'))
+			dispatch(setSyncWarning(t('page.table.sync_required_error')))
 		} else {
-			setSyncWarning('')
+			dispatch(setSyncWarning(''))
 		}
 
-		setIsSynced(syncedStatus)
+		dispatch(setIsSynced(syncedStatus))
 		return syncedStatus
-	}, [user?.keys, exchange?.name, t])
+	}, [user?.keys, exchange?.name, t, dispatch])
 
 	useEffect(() => {
 		isExchangeSynced()

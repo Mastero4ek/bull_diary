@@ -21,6 +21,8 @@ import { FooterLayout } from '@/components/layouts/FooterLayout';
 import { HeaderLayout } from '@/components/layouts/HeaderLayout';
 import { SideBarLayout } from '@/components/layouts/SideBarLayout';
 import { Loader } from '@/components/ui/general/Loader';
+import { useSyncStatus } from '@/hooks/useSyncStatus';
+import { useWebSocket } from '@/hooks/useWebSocket';
 import { AuthCallback } from '@/pages/AuthCallback';
 import { AuthError } from '@/pages/AuthError';
 import { BattlePage } from '@/pages/BattlePage';
@@ -45,6 +47,7 @@ import styles from './styles.module.scss';
 
 export const App = () => {
 	const { isAuth, user, serverStatus } = useSelector(state => state.candidate)
+	const { exchange } = useSelector(state => state.filters)
 	const {
 		language,
 		theme,
@@ -56,6 +59,15 @@ export const App = () => {
 	} = useSelector(state => state.settings)
 
 	const dispatch = useDispatch()
+
+	const {
+		connect,
+		disconnect,
+		subscribeToPositions,
+		unsubscribeFromPositions,
+	} = useWebSocket()
+
+	useSyncStatus()
 
 	const handleResize = useCallback(() => {
 		dispatch(
@@ -101,6 +113,31 @@ export const App = () => {
 		dispatch(checkAuth())
 	}, [dispatch])
 
+	useEffect(() => {
+		if (isAuth && user?.is_activated && user?.id && exchange?.name) {
+			connect()
+
+			const timer = setTimeout(() => {
+				subscribeToPositions()
+			}, 1000)
+
+			return () => {
+				clearTimeout(timer)
+				unsubscribeFromPositions()
+				disconnect()
+			}
+		}
+	}, [
+		isAuth,
+		user?.is_activated,
+		user?.id,
+		exchange?.name,
+		connect,
+		subscribeToPositions,
+		unsubscribeFromPositions,
+		disconnect,
+	])
+
 	const routes = useMemo(
 		() => (
 			<Routes>
@@ -124,7 +161,6 @@ export const App = () => {
 					}
 				/>
 
-				{/* OAuth callback routes */}
 				<Route path='/auth/success' element={<AuthCallback />} />
 				<Route path='/auth/error' element={<AuthError />} />
 
