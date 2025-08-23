@@ -48,8 +48,7 @@ const langMiddleware = require('./middlewares/lang-middleware')
 
 const PORT = process.env.PORT
 
-initI18next()
-
+// Инициализация i18next будет выполнена в start()
 app.use(langMiddleware)
 
 app.use('/', routerHealthV1)
@@ -68,6 +67,7 @@ app.use(errorMiddleware)
 const start = async () => {
 	try {
 		await connectDB()
+		await initI18next()
 		await initCronJobs()
 
 		const server = app.listen(PORT, () => {

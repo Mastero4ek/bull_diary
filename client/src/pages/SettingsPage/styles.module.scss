@@ -177,6 +177,16 @@
 	}
 }
 
+.keys_selected_icon {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+
+	svg {
+		fill: var(--green);
+	}
+}
+
 .sync_progress {
 	padding: 10rem 100rem;
 

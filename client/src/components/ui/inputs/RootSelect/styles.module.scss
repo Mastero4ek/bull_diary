@@ -52,6 +52,12 @@
 		span {
 			color: var(--primaryHov);
 		}
+
+		div {
+			svg {
+				fill: var(--green);
+			}
+		}
 	}
 }
 

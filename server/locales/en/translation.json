@@ -150,7 +150,8 @@
 		"preparing_transactions": "Preparing to sync transactions",
 		"all_completed": "All data synchronization completed",
 		"orders": "orders",
-		"transactions": "transactions"
+		"transactions": "transactions",
+		"processing": "Processing {{dataType}}"
 	},
 	"validation": {
 		"name": {

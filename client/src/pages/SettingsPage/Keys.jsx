@@ -25,8 +25,10 @@ import styles from './styles.module.scss'
 
 export const Keys = React.memo(({ handleClickRadio }) => {
 	const { user, errorArray } = useSelector(state => state.candidate)
+	const { exchange } = useSelector(state => state.filters)
 
 	const {
+		isSynced,
 		isSyncing,
 		syncProgress: progress,
 		syncStatus: status,
@@ -73,7 +75,14 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 		{
 			name: (
 				<>
-					<Icon id='bybit-logo' /> (Bybit)
+					<Icon id='bybit-logo' />
+					<span> (Bybit)</span>
+
+					{user.keys.find(key => key.name === 'bybit')?.sync && (
+						<div className={styles.keys_selected_icon}>
+							<Icon id='checked-icon' />
+						</div>
+					)}
 				</>
 			),
 			value: 'bybit',
@@ -81,7 +90,14 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 		{
 			name: (
 				<>
-					<Icon id='mexc-logo' /> (Mexc)
+					<Icon id='mexc-logo' />
+					<span> (Mexc)</span>
+
+					{user.keys.find(key => key.name === 'mexc')?.sync && (
+						<div className={styles.keys_selected_icon}>
+							<Icon id='checked-icon' />
+						</div>
+					)}
 				</>
 			),
 			value: 'mexc',
@@ -89,7 +105,14 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 		{
 			name: (
 				<>
-					<Icon id='okx-logo' /> (OKX)
+					<Icon id='okx-logo' />
+					<span> (OKX)</span>
+
+					{user.keys.find(key => key.name === 'okx')?.sync && (
+						<div className={styles.keys_selected_icon}>
+							<Icon id='checked-icon' />
+						</div>
+					)}
 				</>
 			),
 			value: 'okx',

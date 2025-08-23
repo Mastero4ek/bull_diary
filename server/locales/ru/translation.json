@@ -150,7 +150,8 @@
 		"preparing_transactions": "Подготовка к синхронизации транзакций",
 		"all_completed": "Синхронизация всех данных завершена",
 		"orders": "ордеров",
-		"transactions": "транзакций"
+		"transactions": "транзакций",
+		"processing": "Обработка блока {{dataType}}"
 	},
 	"validation": {
 		"name": {

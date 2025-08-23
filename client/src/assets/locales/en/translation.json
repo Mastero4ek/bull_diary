@@ -529,5 +529,9 @@
 			"error": "OAuth authentication failed! Please try again.",
 			"activation_required": "Account activation required! Please check your email."
 		}
+	},
+	"sync": {
+		"completed": "Synchronization completed successfully!",
+		"error": "Synchronization error! Please try again."
 	}
 }

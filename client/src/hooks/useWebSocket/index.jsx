@@ -1,7 +1,9 @@
 import { useCallback, useEffect } from 'react'
 
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
 import { updateKeySyncStatus } from '@/redux/slices/candidateSlice'
 import {
 	clearConnectionError,
@@ -28,11 +30,15 @@ export const useWebSocket = () => {
 		error,
 	} = useSelector(state => state.websocket.connection)
 
+	const { showSuccess, showError } = useNotification()
+	const { t } = useTranslation()
+
 	const { data: positions, lastUpdate } = useSelector(
 		state => state.websocket.positions
 	)
 
 	const {
+		isSynced,
 		isSyncing,
 		progress: syncProgress,
 		status: syncStatus,
@@ -86,14 +92,16 @@ export const useWebSocket = () => {
 
 	const handleSyncCompleted = useCallback(
 		data => {
+			showSuccess(t('sync.completed'))
 			dispatch(setSyncCompleted(data))
+
 			if (exchange?.name) {
 				dispatch(
 					updateKeySyncStatus({ exchange: exchange.name, syncStatus: true })
 				)
 			}
 		},
-		[dispatch, exchange?.name]
+		[dispatch, exchange?.name, showSuccess, t]
 	)
 
 	const handleAutoSyncStarted = useCallback(data => {
@@ -108,9 +116,13 @@ export const useWebSocket = () => {
 		console.log('Auto sync completed:', data)
 	}, [])
 
-	const handleAutoSyncError = useCallback(data => {
-		console.log('Auto sync error:', data)
-	}, [])
+	const handleAutoSyncError = useCallback(
+		data => {
+			console.log('Auto sync error:', data)
+			showError(t('sync.error'))
+		},
+		[showError, t]
+	)
 
 	const handleSyncScheduled = useCallback(data => {
 		console.log('Sync scheduled:', data)
@@ -130,9 +142,6 @@ export const useWebSocket = () => {
 
 	const handleSyncCancelled = useCallback(
 		data => {
-			console.log('Sync cancelled, updating state...', data)
-			console.log('Dispatching setSyncCancelled...')
-
 			dispatch(setSyncCancelled())
 			dispatch(setConnectionStatus(false))
 			dispatch(setSubscriptionStatus(false))
@@ -142,8 +151,6 @@ export const useWebSocket = () => {
 					updateKeySyncStatus({ exchange: exchange.name, syncStatus: false })
 				)
 			}
-
-			console.log('All sync cancelled actions dispatched')
 		},
 		[dispatch, exchange?.name]
 	)
@@ -253,7 +260,7 @@ export const useWebSocket = () => {
 				)
 			}
 		},
-		[user?.id, exchange?.name, dispatch]
+		[user?.id, exchange?.name, dispatch, language]
 	)
 
 	const getSyncProgress = useCallback(() => {
@@ -294,5 +301,6 @@ export const useWebSocket = () => {
 		getSyncProgress,
 		cancelSync,
 		resetSyncState,
+		isSynced,
 	}
 }

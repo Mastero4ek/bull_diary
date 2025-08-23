@@ -65,6 +65,30 @@ class SyncExecutor {
 		this.resetCancellation(userId)
 
 		try {
+			const progressCallback = (progress, status, message) => {
+				if (this.isSyncCancelled(userId)) {
+					return
+				}
+
+				if (socketEmitter) {
+					const eventName = isAutoSync ? 'auto_sync_progress' : 'sync_progress'
+					socketEmitter(eventName, { progress, status, message })
+				}
+			}
+
+			const startingMessage = i18next.t('sync.starting_sync', {
+				lng: language,
+				dataType: 'sync',
+			})
+
+			this.setSyncProgress(
+				userId,
+				0,
+				'loading',
+				startingMessage,
+				progressCallback
+			)
+
 			if (socketEmitter) {
 				const eventName = isAutoSync ? 'auto_sync_started' : 'sync_started'
 				socketEmitter(eventName, {
@@ -76,17 +100,6 @@ class SyncExecutor {
 					endTime: moment(endTime).toISOString(),
 					period: isAutoSync ? 'current_year' : 'custom',
 				})
-			}
-
-			const progressCallback = (progress, status, message) => {
-				if (this.isSyncCancelled(userId)) {
-					return
-				}
-
-				if (socketEmitter) {
-					const eventName = isAutoSync ? 'auto_sync_progress' : 'sync_progress'
-					socketEmitter(eventName, { progress, status, message })
-				}
 			}
 
 			const ordersResult = await this.syncOrders(
@@ -368,13 +381,16 @@ class SyncExecutor {
 				}
 			}
 
-			const localizedDataType = i18next.t(`sync.${dataType}`, { language })
+			const localizedDataType = i18next.t(`sync.${dataType}`, { lng: language })
 
 			this.setSyncProgress(
 				userId,
 				finalProgress,
 				'success',
-				i18next.t('sync.completed', { language, dataType: localizedDataType }),
+				i18next.t('sync.completed', {
+					lng: language,
+					dataType: localizedDataType,
+				}),
 				progressCallback
 			)
 
@@ -385,13 +401,16 @@ class SyncExecutor {
 				dataType: dataType,
 			}
 		} catch (error) {
-			const localizedDataType = i18next.t(`sync.${dataType}`, { language })
+			const localizedDataType = i18next.t(`sync.${dataType}`, { lng: language })
 
 			this.setSyncProgress(
 				userId,
 				0,
 				'error',
-				i18next.t('sync.failed', { language, dataType: localizedDataType }),
+				i18next.t('sync.failed', {
+					lng: language,
+					dataType: localizedDataType,
+				}),
 				progressCallback
 			)
 			throw error
@@ -446,14 +465,14 @@ class SyncExecutor {
 			)
 			const totalChunks = timeChunks.length
 
-			const localizedDataType = i18next.t(`sync.${dataType}`, { language })
+			const localizedDataType = i18next.t(`sync.${dataType}`, { lng: language })
 
 			this.setSyncProgress(
 				userId,
 				initialProgress,
 				'loading',
-				i18next.t('sync.starting_sync', {
-					language,
+				i18next.t('sync.processing', {
+					lng: language,
 					days: diffDays,
 					dataType: localizedDataType,
 				}),
@@ -488,7 +507,7 @@ class SyncExecutor {
 					progress,
 					'loading',
 					i18next.t('sync.processing_chunk', {
-						language,
+						lng: language,
 						current: i + 1,
 						total: totalChunks,
 						dataType: localizedDataType,
@@ -499,14 +518,14 @@ class SyncExecutor {
 
 			allData = chunkResults.flat()
 		} else {
-			const localizedDataType = i18next.t(`sync.${dataType}`, { language })
+			const localizedDataType = i18next.t(`sync.${dataType}`, { lng: language })
 
 			this.setSyncProgress(
 				userId,
 				initialProgress,
 				'loading',
-				i18next.t('sync.fetching_data', {
-					language,
+				i18next.t('sync.processing_data', {
+					lng: language,
 					dataType: localizedDataType,
 				}),
 				progressCallback
@@ -528,8 +547,8 @@ class SyncExecutor {
 				userId,
 				finalProgress,
 				'loading',
-				i18next.t('sync.data_fetched', {
-					language,
+				i18next.t('sync.data_processed', {
+					lng: language,
 					dataType: localizedDataType,
 				}),
 				progressCallback
