@@ -1,49 +1,37 @@
-import {
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-} from 'react';
+import { Suspense, useCallback, useEffect, useMemo } from 'react'
 
-import Cookies from 'js-cookie';
-import moment from 'moment/min/moment-with-locales';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  Navigate,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import Cookies from 'js-cookie'
+import moment from 'moment/min/moment-with-locales'
+import { useDispatch, useSelector } from 'react-redux'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
-import { FooterLayout } from '@/components/layouts/FooterLayout';
-import { HeaderLayout } from '@/components/layouts/HeaderLayout';
-import { SideBarLayout } from '@/components/layouts/SideBarLayout';
-import { Loader } from '@/components/ui/general/Loader';
-import { useSyncStatus } from '@/hooks/useSyncStatus';
-import { useWebSocket } from '@/hooks/useWebSocket';
-import { AuthCallback } from '@/pages/AuthCallback';
-import { AuthError } from '@/pages/AuthError';
-import { BattlePage } from '@/pages/BattlePage';
-import { BookmarksPage } from '@/pages/BookmarksPage';
-import { ContactsPage } from '@/pages/ContactsPage';
-import { DiaryPage } from '@/pages/DiaryPage';
-import { HomePage } from '@/pages/HomePage';
-import { NotFoundPage } from '@/pages/NotFoundPage';
-import { PositionPage } from '@/pages/PositionPage';
-import { PrivacyPage } from '@/pages/PrivacyPage';
-import { ProfilePage } from '@/pages/ProfilePage';
-import { SettingsPage } from '@/pages/SettingsPage';
-import { TablePage } from '@/pages/TablePage';
-import { TermsPage } from '@/pages/TermsPage';
-import { UsersPage } from '@/pages/UsersPage';
-import { WalletDetailsPage } from '@/pages/WalletDetailsPage';
-import { WalletPage } from '@/pages/WalletPage';
-import { checkAuth } from '@/redux/slices/candidateSlice';
-import { setScreenParams } from '@/redux/slices/settingsSlice';
+import { FooterLayout } from '@/components/layouts/FooterLayout'
+import { HeaderLayout } from '@/components/layouts/HeaderLayout'
+import { SideBarLayout } from '@/components/layouts/SideBarLayout'
+import { Loader } from '@/components/ui/general/Loader'
+import { useSyncStatus } from '@/hooks/useSyncStatus'
+import { useWebSocket } from '@/hooks/useWebSocket'
+import { AuthCallback } from '@/pages/AuthCallback'
+import { AuthError } from '@/pages/AuthError'
+import { BattlePage } from '@/pages/BattlePage'
+import { BookmarksPage } from '@/pages/BookmarksPage'
+import { ContactsPage } from '@/pages/ContactsPage'
+import { DiaryPage } from '@/pages/DiaryPage'
+import { HomePage } from '@/pages/HomePage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
+import { PositionPage } from '@/pages/PositionPage'
+import { PrivacyPage } from '@/pages/PrivacyPage'
+import { ProfilePage } from '@/pages/ProfilePage'
+import { SettingsPage } from '@/pages/SettingsPage'
+import { TablePage } from '@/pages/TablePage'
+import { TermsPage } from '@/pages/TermsPage'
+import { UsersPage } from '@/pages/UsersPage'
+import { WalletDetailsPage } from '@/pages/WalletDetailsPage'
+import { WalletPage } from '@/pages/WalletPage'
+import { checkAuth } from '@/redux/slices/candidateSlice'
+import { setScreenParams } from '@/redux/slices/settingsSlice'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const App = () => {
 	const { isAuth, user, serverStatus } = useSelector(state => state.candidate)

@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const redis = require('@configs/redis-config')
+const SyncExecutor = require('@services/core/sync-executor')
 
 const router = express.Router()
 
@@ -23,6 +24,15 @@ router.get('/health', async (req, res) => {
 			timestamp: new Date().toISOString(),
 			error: error.message,
 		})
+	}
+})
+
+router.get('/auto-sync-stats', (req, res) => {
+	try {
+		const stats = SyncExecutor.getPendingSyncsStats()
+		res.json(stats)
+	} catch (error) {
+		res.status(500).json({ error: 'Failed to get auto sync stats' })
 	}
 })
 

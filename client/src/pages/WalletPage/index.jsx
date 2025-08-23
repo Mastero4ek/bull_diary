@@ -1,31 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 
-import moment from 'moment';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import moment from 'moment'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { Loader } from '@/components/ui/general/Loader'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { Loader } from '@/components/ui/general/Loader';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
+	clearTransactions,
+	getBybitTransactions,
+} from '@/redux/slices/transactionSlice'
+import { getBybitWallet } from '@/redux/slices/walletSlice'
 import {
-  clearTransactions,
-  getBybitTransactions,
-} from '@/redux/slices/transactionSlice';
-import { getBybitWallet } from '@/redux/slices/walletSlice';
-import {
-  selectIsSynced,
-  selectSyncWarning,
-} from '@/redux/slices/websocketSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	selectIsSynced,
+	selectSyncWarning,
+} from '@/redux/slices/websocketSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import { Info } from './Info';
-import { LineChart } from './LineChart';
+import { Info } from './Info'
+import { LineChart } from './LineChart'
 
 export const WalletPage = React.memo(() => {
 	const { t } = useTranslation()

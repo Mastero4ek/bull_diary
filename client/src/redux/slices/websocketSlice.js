@@ -1,5 +1,5 @@
-import { fakePositions } from '@/helpers/constants';
-import { createSlice } from '@reduxjs/toolkit';
+import { fakePositions } from '@/helpers/constants'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	connection: {
@@ -114,6 +114,8 @@ const websocketSlice = createSlice({
 			state.sync.status = ''
 			state.sync.message = ''
 			state.sync.error = null
+			state.sync.result = null
+			state.sync.isSynced = false
 		},
 		setSyncReset: state => {
 			state.sync.isSyncing = false

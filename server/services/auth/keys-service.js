@@ -1,9 +1,10 @@
 const { ApiError } = require('@exceptions/api-error')
-const { logError, logInfo } = require('@helpers/utility-helpers')
+const { logError, logInfo } = require('@configs/logger-config')
 const KeysModel = require('@models/auth/keys-model')
 const KeysDto = require('@dtos/keys-dto')
 const EncryptionService = require('@services/system/encryption-service')
 const UserModel = require('@models/core/user-model')
+const SyncExecutor = require('@services/core/sync-executor')
 const i18next = require('i18next')
 const { handleDatabaseError } = require('@helpers/error-helpers')
 
@@ -115,6 +116,34 @@ class KeysService {
 
 			await keys.save()
 
+			try {
+				const currentKey = updatedKeys.find(key => key.name === exchange)
+				if (currentKey && currentKey.api && currentKey.secret) {
+					const decryptedApi = await EncryptionService.decrypt(
+						currentKey.api,
+						userId
+					)
+					const decryptedSecret = await EncryptionService.decrypt(
+						currentKey.secret,
+						userId
+					)
+
+					if (decryptedApi !== api || decryptedSecret !== secret) {
+						const syncKeys = {
+							api: decryptedApi,
+							secret: decryptedSecret,
+						}
+
+						await SyncExecutor.scheduleSync(userId, exchange, syncKeys, lng)
+					}
+				}
+			} catch (syncError) {
+				logError(
+					`Error scheduling auto sync for user ${userId}, exchange ${exchange}:`,
+					syncError
+				)
+			}
+
 			return await KeysDto.createMaskedKeys(keys, userId)
 		} catch (error) {
 			handleDatabaseError(error, lng, 'updateKeys', 'errors.keys_update_failed')
@@ -164,6 +193,57 @@ class KeysService {
 				error,
 				lng,
 				'updateSyncStatus',
+				'errors.keys_update_failed'
+			)
+		}
+	}
+
+	/**
+	 * Очищает значения ключей для конкретной биржи (при отмене синхронизации)
+	 * @param {string} userId - ID пользователя
+	 * @param {string} exchange - Название биржи
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с замаскированными ключами
+	 */
+	async clearKeysForExchange(userId, exchange, lng = 'en') {
+		try {
+			const keys = await KeysModel.findOne({ user: userId })
+
+			if (!keys) {
+				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
+			}
+
+			const exchangeExists = keys.keys.some(key => key.name === exchange)
+
+			if (!exchangeExists) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_not_found_in_keys', { lng, exchange })
+				)
+			}
+
+			const updatedKeys = keys.keys.map(key => {
+				if (key.name === exchange) {
+					return {
+						...key,
+						api: '',
+						secret: '',
+						sync: false,
+					}
+				}
+				return key
+			})
+
+			keys.keys = updatedKeys
+			await keys.save()
+
+			logInfo(`Keys cleared for user ${userId}, exchange ${exchange}`)
+
+			return await KeysDto.createMaskedKeys(keys, userId)
+		} catch (error) {
+			handleDatabaseError(
+				error,
+				lng,
+				'clearKeysForExchange',
 				'errors.keys_update_failed'
 			)
 		}

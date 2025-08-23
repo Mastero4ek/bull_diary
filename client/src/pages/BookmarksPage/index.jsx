@@ -1,48 +1,35 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { Loader } from '@/components/ui/general/Loader'
+import { Mark } from '@/components/ui/general/Mark'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { capitalize, colorizedNum } from '@/helpers/functions'
+import { ConfirmPopup } from '@/popups/ConfirmPopup'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { Loader } from '@/components/ui/general/Loader';
-import { Mark } from '@/components/ui/general/Mark';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
+	clearOrders,
+	getBybitOrdersPnl,
+	removedOrder,
+	setPage,
+	setSort,
+} from '@/redux/slices/ordersSlice'
 import {
-  capitalize,
-  colorizedNum,
-} from '@/helpers/functions';
-import {
-  clearOrders,
-  getBybitOrdersPnl,
-  removedOrder,
-  setPage,
-  setSort,
-} from '@/redux/slices/ordersSlice';
-import {
-  selectIsSynced,
-  selectSyncWarning,
-} from '@/redux/slices/websocketSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	selectIsSynced,
+	selectSyncWarning,
+} from '@/redux/slices/websocketSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const BookmarksPage = React.memo(() => {
 	const { t } = useTranslation()

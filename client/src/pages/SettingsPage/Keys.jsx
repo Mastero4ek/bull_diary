@@ -122,9 +122,23 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 	)
 
 	const handleCancelSync = useCallback(() => {
+		console.log('Cancelling sync...')
 		cancelSync()
+
+		setValue('api-key', '')
+		setValue('secret-key', '')
+
+		if (selectedExchange) {
+			setSelectedExchange({
+				...selectedExchange,
+				api: '',
+				secret: '',
+			})
+		}
+
+		console.log('Sync cancelled, showing success message')
 		showSuccess(t('page.settings.sync_cancelled_successfully'))
-	}, [cancelSync, showSuccess, t])
+	}, [cancelSync, showSuccess, t, setValue, selectedExchange])
 
 	const handleClickRemove = () => {
 		if (!selectedExchange) return
@@ -293,7 +307,7 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 							register={register(`api-key`, { required: hasNoKeys })}
 							placeholder={hasKeys ? selectedExchange?.api || '' : ''}
 							value={hasKeys ? '' : undefined}
-							disabled={isSyncing}
+							disabled={isSyncing || !hasNoKeys}
 						/>
 
 						<RootInput
@@ -308,7 +322,7 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 							})}
 							placeholder={hasKeys ? selectedExchange?.secret || '' : ''}
 							value={hasKeys ? '' : undefined}
-							disabled={isSyncing}
+							disabled={isSyncing || !hasNoKeys}
 						/>
 
 						<RootInput

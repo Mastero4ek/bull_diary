@@ -1,29 +1,23 @@
-import {
-  useCallback,
-  useEffect,
-} from 'react';
+import { useCallback, useEffect } from 'react'
 
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'
 
-import { updateKeySyncStatus } from '@/redux/slices/candidateSlice';
+import { updateKeySyncStatus } from '@/redux/slices/candidateSlice'
 import {
-  clearConnectionError,
-  setConnectionError,
-  setConnectionStatus,
-  setConnectionStatusMessage,
-  setPositions,
-  setSubscriptionStatus,
-  setSyncCancelled,
-  setSyncCompleted,
-  setSyncError,
-  setSyncProgress,
-  setSyncReset,
-  setSyncStarted,
-} from '@/redux/slices/websocketSlice';
-import WebSocketService from '@/services/WebSocketService';
+	clearConnectionError,
+	setConnectionError,
+	setConnectionStatus,
+	setConnectionStatusMessage,
+	setPositions,
+	setSubscriptionStatus,
+	setSyncCancelled,
+	setSyncCompleted,
+	setSyncError,
+	setSyncProgress,
+	setSyncReset,
+	setSyncStarted,
+} from '@/redux/slices/websocketSlice'
+import WebSocketService from '@/services/WebSocketService'
 
 export const useWebSocket = () => {
 	const dispatch = useDispatch()
@@ -102,6 +96,26 @@ export const useWebSocket = () => {
 		[dispatch, exchange?.name]
 	)
 
+	const handleAutoSyncStarted = useCallback(data => {
+		console.log('Auto sync started:', data)
+	}, [])
+
+	const handleAutoSyncProgress = useCallback(data => {
+		console.log('Auto sync progress:', data)
+	}, [])
+
+	const handleAutoSyncCompleted = useCallback(data => {
+		console.log('Auto sync completed:', data)
+	}, [])
+
+	const handleAutoSyncError = useCallback(data => {
+		console.log('Auto sync error:', data)
+	}, [])
+
+	const handleSyncScheduled = useCallback(data => {
+		console.log('Sync scheduled:', data)
+	}, [])
+
 	const handleSyncError = useCallback(
 		data => {
 			dispatch(setSyncError(data))
@@ -116,14 +130,20 @@ export const useWebSocket = () => {
 
 	const handleSyncCancelled = useCallback(
 		data => {
+			console.log('Sync cancelled, updating state...', data)
+			console.log('Dispatching setSyncCancelled...')
+
 			dispatch(setSyncCancelled())
 			dispatch(setConnectionStatus(false))
 			dispatch(setSubscriptionStatus(false))
+
 			if (exchange?.name) {
 				dispatch(
 					updateKeySyncStatus({ exchange: exchange.name, syncStatus: false })
 				)
 			}
+
+			console.log('All sync cancelled actions dispatched')
 		},
 		[dispatch, exchange?.name]
 	)
@@ -137,6 +157,11 @@ export const useWebSocket = () => {
 		WebSocketService.addListener('sync_completed', handleSyncCompleted)
 		WebSocketService.addListener('sync_error', handleSyncError)
 		WebSocketService.addListener('sync_cancelled', handleSyncCancelled)
+		WebSocketService.addListener('auto_sync_started', handleAutoSyncStarted)
+		WebSocketService.addListener('auto_sync_progress', handleAutoSyncProgress)
+		WebSocketService.addListener('auto_sync_completed', handleAutoSyncCompleted)
+		WebSocketService.addListener('auto_sync_error', handleAutoSyncError)
+		WebSocketService.addListener('sync_scheduled', handleSyncScheduled)
 
 		return () => {
 			WebSocketService.removeListener('connection', handleConnection)
@@ -150,6 +175,20 @@ export const useWebSocket = () => {
 			WebSocketService.removeListener('sync_completed', handleSyncCompleted)
 			WebSocketService.removeListener('sync_error', handleSyncError)
 			WebSocketService.removeListener('sync_cancelled', handleSyncCancelled)
+			WebSocketService.removeListener(
+				'auto_sync_started',
+				handleAutoSyncStarted
+			)
+			WebSocketService.removeListener(
+				'auto_sync_progress',
+				handleAutoSyncProgress
+			)
+			WebSocketService.removeListener(
+				'auto_sync_completed',
+				handleAutoSyncCompleted
+			)
+			WebSocketService.removeListener('auto_sync_error', handleAutoSyncError)
+			WebSocketService.removeListener('sync_scheduled', handleSyncScheduled)
 		}
 	}, [
 		handleConnection,
@@ -160,6 +199,11 @@ export const useWebSocket = () => {
 		handleSyncCompleted,
 		handleSyncError,
 		handleSyncCancelled,
+		handleAutoSyncStarted,
+		handleAutoSyncProgress,
+		handleAutoSyncCompleted,
+		handleAutoSyncError,
+		handleSyncScheduled,
 	])
 
 	const connect = useCallback(() => {

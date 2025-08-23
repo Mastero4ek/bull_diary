@@ -1,7 +1,6 @@
 const { Server } = require('socket.io')
 const BybitWebSocketService = require('@services/exchange/bybit/bybit-websocket')
-const KeysService = require('@services/auth/keys-service')
-const SyncWebSocketService = require('@services/core/sync-websocket')
+const SyncExecutor = require('@services/core/sync-executor')
 const { logError } = require('@configs/logger-config')
 const { t } = require('i18next')
 
@@ -11,8 +10,21 @@ class WebSocketService {
 		this.clientConnections = new Map()
 		this.userSockets = new Map()
 		this.syncProgressCallbacks = new Map()
+		this.keysService = null
 	}
 
+	/**
+	 * Устанавливает сервис для работы с API ключами
+	 * @param {Object} keysService - Сервис для работы с API ключами
+	 */
+	setKeysService(keysService) {
+		this.keysService = keysService
+	}
+
+	/**
+	 * Инициализирует WebSocket сервер и настраивает обработчики событий
+	 * @param {import('http').Server} server - HTTP сервер для привязки WebSocket
+	 */
 	initialize(server) {
 		this.io = new Server(server, {
 			path: '/api/v1/socket.io',
@@ -28,6 +40,9 @@ class WebSocketService {
 					const { userId, exchange } = data
 
 					if (!userId || !exchange) {
+						logError(
+							`Missing userId or exchange: userId=${userId}, exchange=${exchange}`
+						)
 						socket.emit('error', { message: 'Missing userId or exchange' })
 						return
 					}
@@ -35,9 +50,16 @@ class WebSocketService {
 					this.clientConnections.set(socket.id, userId)
 					this.userSockets.set(userId, socket)
 
-					const keys = await KeysService.findDecryptedKeys(userId, 'en')
+					if (!this.keysService) {
+						logError('KeysService not initialized')
+						socket.emit('error', { message: 'Service not initialized' })
+						return
+					}
+
+					const keys = await this.keysService.findDecryptedKeys(userId, 'en')
 
 					if (!keys || keys.message) {
+						logError(`Keys not found for user ${userId}:`, keys)
 						socket.emit('error', { message: t('errors.keys_not_found') })
 						return
 					}
@@ -45,6 +67,9 @@ class WebSocketService {
 					const current_keys = keys.keys.find(item => item.name === exchange)
 
 					if (!current_keys || !current_keys.api || !current_keys.secret) {
+						logError(
+							`Keys not configured for user ${userId}, exchange ${exchange}`
+						)
 						socket.emit('error', {
 							message: t('errors.keys_not_configured', { exchange }),
 						})
@@ -88,7 +113,16 @@ class WebSocketService {
 						return
 					}
 
-					const keys = await KeysService.findDecryptedKeys(userId, language)
+					if (!this.keysService) {
+						logError('KeysService not initialized')
+						socket.emit('sync_error', { message: 'Service not initialized' })
+						return
+					}
+
+					const keys = await this.keysService.findDecryptedKeys(
+						userId,
+						language
+					)
 
 					if (!keys || keys.message) {
 						socket.emit('sync_error', { message: t('errors.keys_not_found') })
@@ -130,7 +164,7 @@ class WebSocketService {
 			socket.on('get_sync_progress', data => {
 				const { userId } = data
 				if (userId) {
-					const progress = SyncWebSocketService.getSyncProgress(userId)
+					const progress = SyncExecutor.getSyncProgress(userId)
 					socket.emit('sync_progress', {
 						progress: progress.progress,
 						status: progress.status,
@@ -140,18 +174,31 @@ class WebSocketService {
 			})
 
 			socket.on('cancel_sync', data => {
-				const { userId, exchange } = data
-				if (userId) {
-					SyncWebSocketService.clearSyncProgress(userId)
-					this.syncProgressCallbacks.delete(userId)
+				try {
+					const { userId, exchange } = data
+
+					SyncExecutor.clearSyncProgress(userId)
 
 					if (exchange) {
-						KeysService.updateSyncStatus(userId, exchange, false, 'en').catch(
-							error => logError('Error updating sync status on cancel:', error)
-						)
+						if (this.keysService) {
+							this.keysService
+								.updateSyncStatus(userId, exchange, false, 'en')
+								.catch(error =>
+									logError('Error updating sync status on cancel:', error)
+								)
+
+							this.keysService
+								.clearKeysForExchange(userId, exchange, 'en')
+								.catch(error =>
+									logError('Error clearing keys on cancel:', error)
+								)
+						}
 					}
 
+					this.syncProgressCallbacks.delete(userId)
 					socket.emit('sync_cancelled', { message: 'Sync cancelled' })
+				} catch (error) {
+					logError('Error in cancel_sync:', error)
 				}
 			})
 
@@ -179,18 +226,58 @@ class WebSocketService {
 
 			socket.on('disconnect', () => {
 				const userId = this.clientConnections.get(socket.id)
-
 				if (userId) {
-					BybitWebSocketService.disconnectClient(userId)
-
-					this.userSockets.delete(userId)
 					this.clientConnections.delete(socket.id)
+					this.userSockets.delete(userId)
 					this.syncProgressCallbacks.delete(userId)
+					BybitWebSocketService.disconnectClient(userId)
+				}
+			})
+
+			socket.on('auto_sync_completed', async data => {
+				try {
+					const { userId, exchange, language = 'en' } = data
+					if (userId && exchange && this.keysService) {
+						await this.keysService.updateSyncStatus(
+							userId,
+							exchange,
+							true,
+							language
+						)
+					}
+				} catch (error) {
+					logError('Error updating auto sync status:', error)
+				}
+			})
+
+			socket.on('auto_sync_error', async data => {
+				try {
+					const { userId, exchange, language = 'en' } = data
+					if (userId && exchange && this.keysService) {
+						await this.keysService.updateSyncStatus(
+							userId,
+							exchange,
+							false,
+							language
+						)
+					}
+				} catch (error) {
+					logError('Error updating auto sync error status:', error)
 				}
 			})
 		})
 	}
 
+	/**
+	 * Запускает фоновую синхронизацию данных для пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {string} exchange - Название биржи
+	 * @param {Object} keys - API ключи для биржи
+	 * @param {string|Date} start_time - Время начала периода синхронизации
+	 * @param {string|Date} end_time - Время окончания периода синхронизации
+	 * @param {string} language - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<void>}
+	 */
 	async startBackgroundSync(
 		userId,
 		exchange,
@@ -207,76 +294,28 @@ class WebSocketService {
 			const endMs =
 				typeof end_time === 'string' ? new Date(end_time).getTime() : end_time
 
-			const progressCallback = (progress, status, message) => {
+			const socketEmitter = (eventName, data) => {
 				const socket = this.userSockets.get(userId)
 				if (socket) {
-					socket.emit('sync_progress', { progress, status, message })
+					socket.emit(eventName, data)
 				}
 			}
 
-			const ordersResult = await SyncWebSocketService.syncOrdersWithCallback(
+			await SyncExecutor.executeSyncProcess(
 				userId,
-				language,
 				exchange,
 				keys,
 				startMs,
 				endMs,
-				progressCallback
+				language,
+				{
+					isAutoSync: false,
+					socketEmitter,
+					keysService: this.keysService,
+				}
 			)
 
-			if (SyncWebSocketService.isSyncCancelled(userId)) {
-				return
-			}
-
-			const transactionsResult =
-				await SyncWebSocketService.syncTransactionsWithCallback(
-					userId,
-					language,
-					exchange,
-					keys,
-					startMs,
-					endMs,
-					progressCallback
-				)
-
-			if (SyncWebSocketService.isSyncCancelled(userId)) {
-				return
-			}
-
-			const socket = this.userSockets.get(userId)
-			if (socket) {
-				const result = {
-					success: true,
-					orders: {
-						success: ordersResult.success,
-						dataCount: ordersResult.dataCount,
-						totalDataFromApi: ordersResult.totalDataFromApi,
-					},
-					transactions: {
-						success: transactionsResult.success,
-						dataCount: transactionsResult.dataCount,
-						totalDataFromApi: transactionsResult.totalDataFromApi,
-					},
-					summary: {
-						totalOrders: ordersResult.dataCount || 0,
-						totalTransactions: transactionsResult.dataCount || 0,
-						totalSynced:
-							(ordersResult.dataCount || 0) +
-							(transactionsResult.dataCount || 0),
-					},
-				}
-
-				socket.emit('sync_completed', result)
-
-				try {
-					await KeysService.updateSyncStatus(userId, exchange, true, language)
-				} catch (error) {
-					logError('Error updating sync status:', error)
-				}
-			}
-
 			setTimeout(() => {
-				SyncWebSocketService.clearSyncProgress(userId)
 				this.syncProgressCallbacks.delete(userId)
 			}, 5000)
 		} catch (error) {
@@ -289,35 +328,25 @@ class WebSocketService {
 				})
 			}
 
-			try {
-				await KeysService.updateSyncStatus(userId, exchange, false, language)
-			} catch (updateError) {
-				logError('Error updating sync status on error:', updateError)
-			}
-
-			SyncWebSocketService.clearSyncProgress(userId)
 			this.syncProgressCallbacks.delete(userId)
 		}
 	}
 
-	sendPositionsUpdate(userId, positions) {
-		const socket = this.userSockets.get(userId)
-		if (socket) {
-			socket.emit('positions_update', { positions })
-		}
-	}
-
-	sendConnectionStatus(userId, status) {
-		const socket = this.userSockets.get(userId)
-		if (socket) {
-			socket.emit('connection_status', status)
-		}
-	}
-
+	/**
+	 * Получает количество подключенных клиентов
+	 * @returns {number} Количество активных WebSocket подключений
+	 */
 	getConnectedClientsCount() {
 		return this.clientConnections.size
 	}
 
+	/**
+	 * Получает статистику подключений и состояния сервиса
+	 * @returns {Object} Объект со статистикой:
+	 * @returns {number} returns.clientConnections - Количество WebSocket подключений
+	 * @returns {number} returns.bybitConnections - Количество активных подключений к Bybit
+	 * @returns {Array} returns.connectedUsers - Список подключенных пользователей
+	 */
 	getStats() {
 		return {
 			clientConnections: this.clientConnections.size,
