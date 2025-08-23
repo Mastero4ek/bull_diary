@@ -16,8 +16,6 @@ export const SettingsPage = React.memo(() => {
 
 	return (
 		<PageLayout chartWidth={600} filter={false}>
-			{/* <Loader /> */}
-
 			<div style={{ marginBottom: 'auto' }}>
 				<div className={styles.settings_wrapper}>
 					<Keys handleClickRadio={() => setChangeDesc(!changeDesc)} />

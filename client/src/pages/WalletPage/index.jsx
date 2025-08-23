@@ -8,7 +8,11 @@ import { useNotification } from '@/components/layouts/NotificationLayout/Notific
 import { PageLayout } from '@/components/layouts/PageLayout'
 import { Loader } from '@/components/ui/general/Loader'
 import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { getBybitTransactions } from '@/redux/slices/transactionSlice'
+import { useSyncStatus } from '@/hooks/useSyncStatus'
+import {
+	clearTransactions,
+	getBybitTransactions,
+} from '@/redux/slices/transactionSlice'
 import { getBybitWallet } from '@/redux/slices/walletSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
@@ -24,8 +28,14 @@ export const WalletPage = React.memo(() => {
 		state => state.transactions
 	)
 	const { showSuccess, showError } = useNotification()
+	const { syncWarning, isExchangeSynced, isSynced } = useSyncStatus()
 
 	const handleClickUpdate = async () => {
+		if (!isExchangeSynced()) {
+			showError(t('page.table.sync_required_error'))
+			return
+		}
+
 		try {
 			const [walletResult, transactionsResult] = await Promise.all([
 				dispatch(
@@ -63,25 +73,33 @@ export const WalletPage = React.memo(() => {
 	}
 
 	useEffect(() => {
-		dispatch(
-			getBybitWallet({
-				exchange: exchange.name,
-				start_time: date.start_date,
-				end_time: date.end_date,
-			})
-		)
-		dispatch(
-			getBybitTransactions({
-				exchange: exchange.name,
-				start_time: date.start_date,
-				end_time: date.end_date,
-				sort: { type: 'transactionTime', value: 'desc' },
-				search: '',
-				page: 1,
-				limit: 10000,
-			})
-		)
-	}, [exchange, date])
+		if (exchange?.name && date?.start_date && date?.end_date && isSynced) {
+			dispatch(
+				getBybitWallet({
+					exchange: exchange.name,
+					start_time: date.start_date,
+					end_time: date.end_date,
+				})
+			)
+			dispatch(
+				getBybitTransactions({
+					exchange: exchange.name,
+					start_time: date.start_date,
+					end_time: date.end_date,
+					sort: { type: 'transactionTime', value: 'desc' },
+					search: '',
+					page: 1,
+					limit: 10000,
+				})
+			)
+		}
+	}, [exchange, date, dispatch, isSynced])
+
+	useEffect(() => {
+		return () => {
+			dispatch(clearTransactions())
+		}
+	}, [dispatch])
 
 	const isLoading =
 		serverStatus === 'loading' || transactionsStatus === 'loading'
@@ -95,10 +113,10 @@ export const WalletPage = React.memo(() => {
 		>
 			{isLoading && <Loader />}
 
-			<Info />
+			<Info syncWarning={syncWarning} />
 
 			<OuterBlock>
-				<LineChart />
+				<LineChart syncWarning={syncWarning} />
 			</OuterBlock>
 		</PageLayout>
 	)

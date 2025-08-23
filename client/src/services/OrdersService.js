@@ -52,15 +52,5 @@ export default class OrdersService {
 		})
 	}
 
-	static async getSyncProgress() {
-		return $api.get(`/v1/sync-progress`)
-	}
 
-	static async syncData(exchange, start_time, end_time) {
-		return $api.post(`/v1/sync-data`, {
-			exchange,
-			start_time,
-			end_time,
-		})
-	}
 }

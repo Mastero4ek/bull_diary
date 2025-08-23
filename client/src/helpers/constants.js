@@ -1,3 +1,9 @@
+export const EXCHANGES = [
+	{ checked_id: 0, name: 'Bybit' },
+	{ checked_id: 1, name: 'Mexc' },
+	{ checked_id: 2, name: 'Okx' },
+]
+
 export const fakePnlOrders = [
 	{
 		id: 'b1434a46-edaa-4d4d-912c-47c5aabc9d5c',
@@ -80,7 +86,7 @@ export const fakePositions = [
 		created_at: '2024-12-28T12:31:07.622Z',
 		updated_at: '2024-12-28T12:31:07.622Z',
 		leverage: 15,
-		profit: 120.34,
+		unrealisedPnl: 120.34,
 	},
 	{
 		id: 1,
@@ -89,7 +95,7 @@ export const fakePositions = [
 		created_at: '2024-12-28T12:31:07.622Z',
 		updated_at: '2024-12-28T12:31:07.622Z',
 		leverage: 3,
-		profit: -14.78,
+		unrealisedPnl: -14.78,
 	},
 	{
 		id: 2,
@@ -98,7 +104,7 @@ export const fakePositions = [
 		created_at: '2024-12-28T12:31:07.622Z',
 		updated_at: '2024-12-28T12:31:07.622Z',
 		leverage: 30,
-		profit: 65.45,
+		unrealisedPnl: 65.45,
 	},
 	{
 		id: 3,
@@ -107,7 +113,7 @@ export const fakePositions = [
 		created_at: '2024-12-28T12:31:07.622Z',
 		updated_at: '2024-12-28T12:31:07.622Z',
 		leverage: 10,
-		profit: 45.67,
+		unrealisedPnl: 45.67,
 	},
 	{
 		id: 4,
@@ -116,7 +122,7 @@ export const fakePositions = [
 		created_at: '2024-12-28T12:31:07.622Z',
 		updated_at: '2024-12-28T12:31:07.622Z',
 		leverage: 5,
-		profit: -22.15,
+		unrealisedPnl: -22.15,
 	},
 ]
 
@@ -193,684 +199,373 @@ export const fakeUsers = [
 	},
 ]
 
-export const fakeWalletTransactions = [
-	// Январь 2025 - последние транзакции
-	{
-		transactionTime: '2025-01-20T15:30:45.123Z',
-		date: '2025-01-20',
-		time: '15:30:45',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'TRANSFER_IN',
-		change: 500,
-		cashFlow: 500,
-		cashBalance: 1500.25,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-01-19T14:22:18.456Z',
-		date: '2025-01-19',
-		time: '14:22:18',
-		symbol: 'BTCUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 120.5,
-		cashFlow: 120.5,
-		cashBalance: 1000.25,
-		funding: 0,
-		fee: 2.5,
-	},
-	{
-		transactionTime: '2025-01-18T11:15:33.789Z',
-		date: '2025-01-18',
-		time: '11:15:33',
-		symbol: 'ETHUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -85.75,
-		cashFlow: -85.75,
-		cashBalance: 879.75,
-		funding: 0,
-		fee: 1.75,
-	},
-	{
-		transactionTime: '2025-01-17T09:45:12.321Z',
-		date: '2025-01-17',
-		time: '09:45:12',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'TRANSFER_OUT',
-		change: -200,
-		cashFlow: -200,
-		cashBalance: 965.5,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-01-16T16:30:27.654Z',
-		date: '2025-01-16',
-		time: '16:30:27',
-		symbol: 'SOLUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 45.25,
-		cashFlow: 45.25,
-		cashBalance: 1165.5,
-		funding: 0,
-		fee: 0.75,
-	},
-	{
-		transactionTime: '2025-01-15T13:20:41.987Z',
-		date: '2025-01-15',
-		time: '13:20:41',
-		symbol: 'ADAUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -65.3,
-		cashFlow: -65.3,
-		cashBalance: 1120.25,
-		funding: 0,
-		fee: 1.3,
-	},
-	{
-		transactionTime: '2025-01-14T10:10:55.432Z',
-		date: '2025-01-14',
-		time: '10:10:55',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'INTEREST',
-		change: 12.5,
-		cashFlow: 12.5,
-		cashBalance: 1185.55,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-01-13T08:35:19.876Z',
-		date: '2025-01-13',
-		time: '08:35:19',
-		symbol: 'DOTUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 78.9,
-		cashFlow: 78.9,
-		cashBalance: 1173.05,
-		funding: 0,
-		fee: 1.58,
-	},
-	// Декабрь 2025
-	{
-		transactionTime: '2025-12-28T16:45:22.111Z',
-		date: '2025-12-28',
-		time: '16:45:22',
-		symbol: 'LINKUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 95.75,
-		cashFlow: 95.75,
-		cashBalance: 1094.15,
-		funding: 0,
-		fee: 1.91,
-	},
-	{
-		transactionTime: '2025-12-25T12:30:15.444Z',
-		date: '2025-12-25',
-		time: '12:30:15',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'TRANSFER_IN',
-		change: 300,
-		cashFlow: 300,
-		cashBalance: 998.4,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-12-22T09:15:33.777Z',
-		date: '2025-12-22',
-		time: '09:15:33',
-		symbol: 'MATICUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -45.6,
-		cashFlow: -45.6,
-		cashBalance: 698.4,
-		funding: 0,
-		fee: 0.91,
-	},
-	// Ноябрь 2025
-	{
-		transactionTime: '2025-11-30T14:20:45.888Z',
-		date: '2025-11-30',
-		time: '14:20:45',
-		symbol: 'AVAXUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 67.25,
-		cashFlow: 67.25,
-		cashBalance: 744.0,
-		funding: 0,
-		fee: 1.34,
-	},
-	{
-		transactionTime: '2025-11-25T11:05:18.222Z',
-		date: '2025-11-25',
-		time: '11:05:18',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'INTEREST',
-		change: 8.75,
-		cashFlow: 8.75,
-		cashBalance: 676.75,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-11-20T16:40:27.555Z',
-		date: '2025-11-20',
-		time: '16:40:27',
-		symbol: 'UNIUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -32.5,
-		cashFlow: -32.5,
-		cashBalance: 668.0,
-		funding: 0,
-		fee: 0.65,
-	},
-	// Октябрь 2025
-	{
-		transactionTime: '2025-10-31T13:25:42.999Z',
-		date: '2025-10-31',
-		time: '13:25:42',
-		symbol: 'ATOMUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 54.8,
-		cashFlow: 54.8,
-		cashBalance: 700.5,
-		funding: 0,
-		fee: 1.1,
-	},
-	{
-		transactionTime: '2025-10-25T10:50:33.666Z',
-		date: '2025-10-25',
-		time: '10:50:33',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'TRANSFER_OUT',
-		change: -150,
-		cashFlow: -150,
-		cashBalance: 645.7,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-10-20T08:15:19.333Z',
-		date: '2025-10-20',
-		time: '08:15:19',
-		symbol: 'NEARUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -28.3,
-		cashFlow: -28.3,
-		cashBalance: 795.7,
-		funding: 0,
-		fee: 0.57,
-	},
-	// Сентябрь 2025
-	{
-		transactionTime: '2025-09-30T15:35:28.777Z',
-		date: '2025-09-30',
-		time: '15:35:28',
-		symbol: 'FTMUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 42.15,
-		cashFlow: 42.15,
-		cashBalance: 824.0,
-		funding: 0,
-		fee: 0.84,
-	},
-	{
-		transactionTime: '2025-09-25T12:10:44.111Z',
-		date: '2025-09-25',
-		time: '12:10:44',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'INTEREST',
-		change: 6.25,
-		cashFlow: 6.25,
-		cashBalance: 781.85,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-09-20T09:45:15.444Z',
-		date: '2025-09-20',
-		time: '09:45:15',
-		symbol: 'ALGOUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -35.7,
-		cashFlow: -35.7,
-		cashBalance: 775.6,
-		funding: 0,
-		fee: 0.71,
-	},
-	// Август 2025
-	{
-		transactionTime: '2025-08-31T14:20:37.888Z',
-		date: '2025-08-31',
-		time: '14:20:37',
-		symbol: 'VETUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 38.9,
-		cashFlow: 38.9,
-		cashBalance: 811.3,
-		funding: 0,
-		fee: 0.78,
-	},
-	{
-		transactionTime: '2025-08-25T11:30:22.555Z',
-		date: '2025-08-25',
-		time: '11:30:22',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'TRANSFER_IN',
-		change: 400,
-		cashFlow: 400,
-		cashBalance: 772.4,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-08-20T07:55:18.222Z',
-		date: '2025-08-20',
-		time: '07:55:18',
-		symbol: 'ICPUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -55.2,
-		cashFlow: -55.2,
-		cashBalance: 372.4,
-		funding: 0,
-		fee: 1.1,
-	},
-	// Июль 2025
-	{
-		transactionTime: '2025-07-31T16:40:29.999Z',
-		date: '2025-07-31',
-		time: '16:40:29',
-		symbol: 'FILUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 62.8,
-		cashFlow: 62.8,
-		cashBalance: 427.6,
-		funding: 0,
-		fee: 1.26,
-	},
-	{
-		transactionTime: '2025-07-25T13:15:33.666Z',
-		date: '2025-07-25',
-		time: '13:15:33',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'INTEREST',
-		change: 4.5,
-		cashFlow: 4.5,
-		cashBalance: 364.8,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-07-20T10:25:47.111Z',
-		date: '2025-07-20',
-		time: '10:25:47',
-		symbol: 'AAVEUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -42.3,
-		cashFlow: -42.3,
-		cashBalance: 360.3,
-		funding: 0,
-		fee: 0.85,
-	},
-	// Июнь 2025
-	{
-		transactionTime: '2025-06-30T12:50:24.777Z',
-		date: '2025-06-30',
-		time: '12:50:24',
-		symbol: 'SUSHIUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 48.75,
-		cashFlow: 48.75,
-		cashBalance: 402.6,
-		funding: 0,
-		fee: 0.98,
-	},
-	{
-		transactionTime: '2025-06-25T09:35:16.444Z',
-		date: '2025-06-25',
-		time: '09:35:16',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'TRANSFER_OUT',
-		change: -100,
-		cashFlow: -100,
-		cashBalance: 353.85,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-06-20T06:45:28.555Z',
-		date: '2025-06-20',
-		time: '06:45:28',
-		symbol: 'COMPUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -38.9,
-		cashFlow: -38.9,
-		cashBalance: 453.85,
-		funding: 0,
-		fee: 0.78,
-	},
-	// Май 2025
-	{
-		transactionTime: '2025-05-31T15:20:35.888Z',
-		date: '2025-05-31',
-		time: '15:20:35',
-		symbol: 'MKRUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 72.4,
-		cashFlow: 72.4,
-		cashBalance: 492.75,
-		funding: 0,
-		fee: 1.45,
-	},
-	{
-		transactionTime: '2025-05-25T11:55:42.222Z',
-		date: '2025-05-25',
-		time: '11:55:42',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'INTEREST',
-		change: 3.25,
-		cashFlow: 3.25,
-		cashBalance: 420.35,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-05-20T08:30:19.666Z',
-		date: '2025-05-20',
-		time: '08:30:19',
-		symbol: 'YFIUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -65.8,
-		cashFlow: -65.8,
-		cashBalance: 417.1,
-		funding: 0,
-		fee: 1.32,
-	},
-	// Апрель 2025
-	{
-		transactionTime: '2025-04-30T14:10:26.111Z',
-		date: '2025-04-30',
-		time: '14:10:26',
-		symbol: 'SNXUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 58.6,
-		cashFlow: 58.6,
-		cashBalance: 482.9,
-		funding: 0,
-		fee: 1.17,
-	},
-	{
-		transactionTime: '2025-04-25T10:40:33.777Z',
-		date: '2025-04-25',
-		time: '10:40:33',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'TRANSFER_IN',
-		change: 250,
-		cashFlow: 250,
-		cashBalance: 424.3,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-04-20T07:15:47.444Z',
-		date: '2025-04-20',
-		time: '07:15:47',
-		symbol: 'BALUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -45.2,
-		cashFlow: -45.2,
-		cashBalance: 174.3,
-		funding: 0,
-		fee: 0.9,
-	},
-	// Март 2025
-	{
-		transactionTime: '2025-03-31T13:25:38.555Z',
-		date: '2025-03-31',
-		time: '13:25:38',
-		symbol: 'CRVUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 52.8,
-		cashFlow: 52.8,
-		cashBalance: 219.5,
-		funding: 0,
-		fee: 1.06,
-	},
-	{
-		transactionTime: '2025-03-25T09:50:24.888Z',
-		date: '2025-03-25',
-		time: '09:50:24',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'INTEREST',
-		change: 2.1,
-		cashFlow: 2.1,
-		cashBalance: 166.7,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-03-20T06:20:15.222Z',
-		date: '2025-03-20',
-		time: '06:20:15',
-		symbol: 'RENUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -32.4,
-		cashFlow: -32.4,
-		cashBalance: 164.6,
-		funding: 0,
-		fee: 0.65,
-	},
-	// Февраль 2025
-	{
-		transactionTime: '2025-02-28T15:45:31.999Z',
-		date: '2025-02-28',
-		time: '15:45:31',
-		symbol: 'ZRXUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 41.3,
-		cashFlow: 41.3,
-		cashBalance: 197.0,
-		funding: 0,
-		fee: 0.83,
-	},
-	{
-		transactionTime: '2025-02-25T12:05:27.666Z',
-		date: '2025-02-25',
-		time: '12:05:27',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'TRANSFER_OUT',
-		change: -75,
-		cashFlow: -75,
-		cashBalance: 155.7,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-02-20T08:35:19.111Z',
-		date: '2025-02-20',
-		time: '08:35:19',
-		symbol: 'BANDUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -28.6,
-		cashFlow: -28.6,
-		cashBalance: 230.7,
-		funding: 0,
-		fee: 0.57,
-	},
-	// Январь 2025 (начало года)
-	{
-		transactionTime: '2025-01-31T14:30:44.777Z',
-		date: '2025-01-31',
-		time: '14:30:44',
-		symbol: 'KNCUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Sell',
-		type: 'TRADE',
-		change: 35.8,
-		cashFlow: 35.8,
-		cashBalance: 259.3,
-		funding: 0,
-		fee: 0.72,
-	},
-	{
-		transactionTime: '2025-01-25T10:55:36.444Z',
-		date: '2025-01-25',
-		time: '10:55:36',
-		symbol: 'USDT',
-		currency: 'USDT',
-		category: '',
-		side: 'None',
-		type: 'INTEREST',
-		change: 1.5,
-		cashFlow: 1.5,
-		cashBalance: 223.5,
-		funding: 0,
-		fee: 0,
-	},
-	{
-		transactionTime: '2025-01-20T07:25:22.888Z',
-		date: '2025-01-20',
-		time: '07:25:22',
-		symbol: 'STORJUSDT',
-		currency: 'USDT',
-		category: '',
-		side: 'Buy',
-		type: 'TRADE',
-		change: -25.4,
-		cashFlow: -25.4,
-		cashBalance: 222.0,
-		funding: 0,
-		fee: 0.51,
-	},
-]
+export const fakeWalletTransactions = (() => {
+	const now = new Date()
+	const currentYear = now.getFullYear()
+	const currentMonth = now.getMonth() + 1
+	const currentDate = now.getDate()
 
-export const EXCHANGES = [
-	{ checked_id: 0, name: 'Bybit' },
-	{ checked_id: 1, name: 'Mexc' },
-	{ checked_id: 2, name: 'Okx' },
-]
+	const formatDate = date => {
+		return date.toISOString().split('T')[0]
+	}
+
+	const formatTime = date => {
+		return date.toISOString().split('T')[1].split('.')[0]
+	}
+
+	const formatISO = date => {
+		return date.toISOString()
+	}
+
+	const weekTransactions = []
+	for (let i = 0; i < 7; i++) {
+		const date = new Date()
+		date.setDate(date.getDate() - i)
+
+		weekTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: [
+				'BTCUSDT',
+				'ETHUSDT',
+				'SOLUSDT',
+				'ADAUSDT',
+				'DOTUSDT',
+				'LINKUSDT',
+				'USDT',
+			][i],
+			currency: 'USDT',
+			category: '',
+			side: i % 3 === 0 ? 'None' : i % 2 === 0 ? 'Sell' : 'Buy',
+			type: i % 3 === 0 ? 'TRANSFER_IN' : 'TRADE',
+			change: i % 2 === 0 ? 50 + i * 10 : -(30 + i * 5),
+			cashFlow: i % 2 === 0 ? 50 + i * 10 : -(30 + i * 5),
+			cashBalance: 1500 - i * 50,
+			funding: 0,
+			fee: i % 3 === 0 ? 0 : 0.5 + i * 0.2,
+		})
+	}
+
+	for (let i = 0; i < 7; i++) {
+		const date = new Date()
+		date.setDate(date.getDate() - i)
+		date.setHours(date.getHours() + 6)
+
+		weekTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: [
+				'AVAXUSDT',
+				'UNIUSDT',
+				'ATOMUSDT',
+				'NEARUSDT',
+				'FTMUSDT',
+				'ALGOUSDT',
+				'VETUSDT',
+			][i],
+			currency: 'USDT',
+			category: '',
+			side: i % 2 === 0 ? 'Sell' : 'Buy',
+			type: 'TRADE',
+			change: i % 2 === 0 ? 25 + i * 5 : -(15 + i * 3),
+			cashFlow: i % 2 === 0 ? 25 + i * 5 : -(15 + i * 3),
+			cashBalance: 1400 - i * 30,
+			funding: 0,
+			fee: 0.3 + i * 0.1,
+		})
+	}
+
+	const monthTransactions = []
+	const daysInMonth = new Date(currentYear, currentMonth, 0).getDate()
+	for (let i = 1; i <= daysInMonth; i += 3) {
+		const date = new Date(
+			currentYear,
+			currentMonth - 1,
+			i,
+			12 + (i % 12),
+			30,
+			0
+		)
+
+		monthTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: [
+				'AVAXUSDT',
+				'UNIUSDT',
+				'ATOMUSDT',
+				'NEARUSDT',
+				'FTMUSDT',
+				'ALGOUSDT',
+				'VETUSDT',
+			][i % 7],
+			currency: 'USDT',
+			category: '',
+			side: i % 3 === 0 ? 'None' : i % 2 === 0 ? 'Sell' : 'Buy',
+			type: i % 3 === 0 ? 'INTEREST' : 'TRADE',
+			change: i % 2 === 0 ? 100 + i * 20 : -(60 + i * 10),
+			cashFlow: i % 2 === 0 ? 100 + i * 20 : -(60 + i * 10),
+			cashBalance: 1200 - i * 30,
+			funding: 0,
+			fee: i % 3 === 0 ? 0 : 1 + i * 0.3,
+		})
+	}
+
+	while (monthTransactions.length < 3) {
+		const i = monthTransactions.length + 1
+		const date = new Date(
+			currentYear,
+			currentMonth - 1,
+			Math.min(i, currentDate),
+			12 + (i % 12),
+			30,
+			0
+		)
+
+		monthTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: [
+				'AVAXUSDT',
+				'UNIUSDT',
+				'ATOMUSDT',
+				'NEARUSDT',
+				'FTMUSDT',
+				'ALGOUSDT',
+				'VETUSDT',
+			][i % 7],
+			currency: 'USDT',
+			category: '',
+			side: i % 3 === 0 ? 'None' : i % 2 === 0 ? 'Sell' : 'Buy',
+			type: i % 3 === 0 ? 'INTEREST' : 'TRADE',
+			change: i % 2 === 0 ? 100 + i * 20 : -(60 + i * 10),
+			cashFlow: i % 2 === 0 ? 100 + i * 20 : -(60 + i * 10),
+			cashBalance: 1200 - i * 30,
+			funding: 0,
+			fee: i % 3 === 0 ? 0 : 1 + i * 0.3,
+		})
+	}
+
+	for (let i = 1; i <= daysInMonth; i += 2) {
+		const date = new Date(currentYear, currentMonth - 1, i, 8 + (i % 8), 15, 0)
+
+		monthTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: [
+				'MKRUSDT',
+				'YFIUSDT',
+				'SNXUSDT',
+				'BALUSDT',
+				'CRVUSDT',
+				'RENUSDT',
+			][i % 6],
+			currency: 'USDT',
+			category: '',
+			side: i % 2 === 0 ? 'Sell' : 'Buy',
+			type: 'TRADE',
+			change: i % 2 === 0 ? 80 + i * 15 : -(50 + i * 8),
+			cashFlow: i % 2 === 0 ? 80 + i * 15 : -(50 + i * 8),
+			cashBalance: 1100 - i * 25,
+			funding: 0,
+			fee: 0.8 + i * 0.2,
+		})
+	}
+
+	const currentQuarter = Math.ceil(currentMonth / 3)
+	const quarterStartMonth = (currentQuarter - 1) * 3 + 1
+	const quarterTransactions = []
+	const quarterEndMonth = quarterStartMonth + 2
+
+	for (let month = quarterStartMonth; month <= quarterEndMonth; month++) {
+		const daysInMonth = new Date(currentYear, month, 0).getDate()
+		const targetDay = Math.min(daysInMonth, 28)
+
+		const date = new Date(currentYear, month - 1, targetDay, 15, 0, 0)
+
+		quarterTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: [
+				'MKRUSDT',
+				'YFIUSDT',
+				'SNXUSDT',
+				'BALUSDT',
+				'CRVUSDT',
+				'RENUSDT',
+			][month % 6],
+			currency: 'USDT',
+			category: '',
+			side: month % 3 === 0 ? 'None' : month % 2 === 0 ? 'Sell' : 'Buy',
+			type: month % 3 === 0 ? 'TRANSFER_OUT' : 'TRADE',
+			change: month % 2 === 0 ? 200 + month * 30 : -(120 + month * 20),
+			cashFlow: month % 2 === 0 ? 200 + month * 30 : -(120 + month * 20),
+			cashBalance: 1000 - month * 40,
+			funding: 0,
+			fee: month % 3 === 0 ? 0 : 2 + month * 0.5,
+		})
+	}
+
+	if (quarterTransactions.length === 0) {
+		const date = new Date(
+			currentYear,
+			currentMonth - 1,
+			Math.min(currentDate, 15),
+			15,
+			0,
+			0
+		)
+		quarterTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: 'MKRUSDT',
+			currency: 'USDT',
+			category: '',
+			side: 'Sell',
+			type: 'TRADE',
+			change: 200,
+			cashFlow: 200,
+			cashBalance: 1000,
+			funding: 0,
+			fee: 2,
+		})
+	}
+
+	const yearTransactions = []
+	for (let month = 1; month <= currentMonth; month++) {
+		const daysInMonth = new Date(currentYear, month, 0).getDate()
+		const targetDay = month === currentMonth ? Math.min(currentDate, 15) : 15
+
+		const date = new Date(currentYear, month - 1, targetDay, 10, 0, 0)
+
+		yearTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: [
+				'ZRXUSDT',
+				'BANDUSDT',
+				'KNCUSDT',
+				'STORJUSDT',
+				'SUSHIUSDT',
+				'COMPUSDT',
+				'FILUSDT',
+				'AAVEUSDT',
+				'ICPUSDT',
+				'MATICUSDT',
+				'LINKUSDT',
+				'VETUSDT',
+			][month - 1],
+			currency: 'USDT',
+			category: '',
+			side: month % 3 === 0 ? 'None' : month % 2 === 0 ? 'Sell' : 'Buy',
+			type:
+				month % 4 === 0
+					? 'TRANSFER_IN'
+					: month % 3 === 0
+					? 'INTEREST'
+					: 'TRADE',
+			change: month % 2 === 0 ? 300 + month * 50 : -(180 + month * 30),
+			cashFlow: month % 2 === 0 ? 300 + month * 50 : -(180 + month * 30),
+			cashBalance: 2000 - month * 100,
+			funding: 0,
+			fee: month % 4 === 0 ? 0 : 3 + month * 0.8,
+		})
+	}
+
+	if (yearTransactions.length === 0) {
+		const date = new Date(
+			currentYear,
+			currentMonth - 1,
+			Math.min(currentDate, 1),
+			10,
+			0,
+			0
+		)
+		yearTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: 'ZRXUSDT',
+			currency: 'USDT',
+			category: '',
+			side: 'Sell',
+			type: 'TRADE',
+			change: 350,
+			cashFlow: 350,
+			cashBalance: 2000,
+			funding: 0,
+			fee: 3,
+		})
+	}
+
+	for (let month = 1; month <= 12; month++) {
+		const daysInMonth = new Date(currentYear, month, 0).getDate()
+		const targetDay = 25
+
+		const date = new Date(currentYear, month - 1, targetDay, 14, 0, 0)
+
+		yearTransactions.push({
+			transactionTime: formatISO(date),
+			date: formatDate(date),
+			time: formatTime(date),
+			symbol: [
+				'BANDUSDT',
+				'KNCUSDT',
+				'STORJUSDT',
+				'SUSHIUSDT',
+				'COMPUSDT',
+				'FILUSDT',
+				'AAVEUSDT',
+				'ICPUSDT',
+				'MATICUSDT',
+				'LINKUSDT',
+				'VETUSDT',
+				'ZRXUSDT',
+			][month % 12],
+			currency: 'USDT',
+			category: '',
+			side: month % 2 === 0 ? 'Sell' : 'Buy',
+			type: 'TRADE',
+			change: month % 2 === 0 ? 250 + month * 40 : -(150 + month * 25),
+			cashFlow: month % 2 === 0 ? 250 + month * 40 : -(150 + month * 25),
+			cashBalance: 1800 - month * 80,
+			funding: 0,
+			fee: 2.5 + month * 0.6,
+		})
+	}
+
+	const allTransactions = [
+		...weekTransactions,
+		...monthTransactions,
+		...quarterTransactions,
+		...yearTransactions,
+	]
+
+	const uniqueTransactions = allTransactions
+		.filter((transaction, index, array) => {
+			return (
+				array.findIndex(
+					t => t.date === transaction.date && t.time === transaction.time
+				) === index
+			)
+		})
+		.sort((a, b) => new Date(a.transactionTime) - new Date(b.transactionTime))
+
+	let runningBalance = 1500
+	uniqueTransactions.forEach(transaction => {
+		runningBalance += transaction.change
+		transaction.cashBalance = runningBalance
+	})
+
+	return uniqueTransactions.sort(
+		(a, b) => new Date(b.transactionTime) - new Date(a.transactionTime)
+	)
+})()

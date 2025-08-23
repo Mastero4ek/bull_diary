@@ -102,7 +102,8 @@
 		"join": "Join",
 		"remove_cover": "Remove cover",
 		"details": "Details",
-		"confirm": "Confirm"
+		"confirm": "Confirm",
+		"cancel_sync": "Cancel sync"
 	},
 	"closed_title": {
 		"already_joined": "You have already joined this tournament!",
@@ -306,6 +307,7 @@
 			"keys_success_synchronization": "Synchronization successfully!",
 			"keys_error_synchronization": "Error synchronizing! Please try again.",
 			"keys_synchronizing": "Synchronizing...",
+			"sync_cancelled_successfully": "Synchronization cancelled successfully!",
 			"tuning_language": "Language",
 			"tuning_theme": "Dark theme",
 			"tuning_shootouts": "Show shootouts",
@@ -368,6 +370,7 @@
 			"save_order_success": "Order saved successfully!",
 			"save_order_error": "Error saving order! Please try again.",
 			"empty": "There were no closed transactions during this period!",
+			"sync_required_error": "Synchronization required! Please complete data synchronization first.",
 			"chart_income": "Income",
 			"chart_lession": "Lession",
 			"chart_profit": "Profit (ROI%): ",
@@ -394,7 +397,8 @@
 			"overview": "Overview",
 			"chart_label": "Wallet balance",
 			"chart_label_trans": "Transactions",
-			"warning": "You can currently search within the past 180 days."
+			"warning": "You can currently search within the past 180 days.",
+			"empty": "No data found in this period!"
 		},
 		"wallet_details": {
 			"update_success": "Transactions updated successfully!",

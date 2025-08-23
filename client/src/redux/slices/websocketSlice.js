@@ -9,12 +9,18 @@ const initialState = {
 	lastUpdate: null,
 	connectionStatus: null,
 	position: null,
-	fakePositions: null,
+	fakePositions: fakePositions,
 	ordersByDay: [],
 	page: 1,
 	sort: { type: 'unrealisedPnl', value: 'desc' },
 	serverStatus: '',
 	errorMessage: null,
+	isSyncing: false,
+	syncProgress: 0,
+	syncStatus: '',
+	syncMessage: '',
+	lastSyncResult: null,
+	syncError: null,
 }
 
 const websocketSlice = createSlice({
@@ -27,11 +33,9 @@ const websocketSlice = createSlice({
 		setSubscriptionStatus: (state, action) => {
 			state.isSubscribed = action.payload
 		},
-		updatePositions: (state, action) => {
+		setPositions: (state, action) => {
 			state.positions = action.payload
 			state.lastUpdate = new Date().toISOString()
-			state.fakePositions =
-				!action.payload || action.payload.length === 0 ? fakePositions : null
 			state.serverStatus = 'success'
 			state.errorMessage = null
 			state.error = null
@@ -66,20 +70,49 @@ const websocketSlice = createSlice({
 				state.fakePositions = fakePositions
 			}
 		},
-		resetWebSocket: state => {
-			state.isConnected = false
-			state.isSubscribed = false
-			state.positions = []
-			state.error = null
-			state.lastUpdate = null
-			state.connectionStatus = null
-			state.position = null
-			state.fakePositions = null
-			state.ordersByDay = []
-			state.page = 1
-			state.sort = { type: 'unrealisedPnl', value: 'desc' }
-			state.serverStatus = ''
-			state.errorMessage = null
+		setSyncStarted: state => {
+			state.isSyncing = true
+			state.syncProgress = 0
+			state.syncStatus = 'loading'
+			state.syncMessage = ''
+			state.syncError = null
+		},
+		setSyncProgress: (state, action) => {
+			state.syncProgress = action.payload.progress
+			state.syncStatus = action.payload.status
+			state.syncMessage = action.payload.message || ''
+		},
+		setSyncCompleted: (state, action) => {
+			state.isSyncing = false
+			state.syncProgress = 100
+			state.syncStatus = 'success'
+			state.syncMessage = ''
+			state.lastSyncResult = action.payload
+			state.syncError = null
+		},
+		setSyncError: (state, action) => {
+			state.isSyncing = false
+			state.syncStatus = 'error'
+			state.syncMessage = action.payload.message || ''
+			state.syncError = action.payload
+		},
+		setSyncCancelled: state => {
+			state.isSyncing = false
+			state.syncProgress = 0
+			state.syncStatus = ''
+			state.syncMessage = ''
+			state.syncError = null
+		},
+		setSyncReset: state => {
+			state.isSyncing = false
+			state.syncProgress = 0
+			state.syncStatus = ''
+			state.syncMessage = ''
+			state.syncError = null
+			state.lastSyncResult = null
+		},
+		setWebSocketReset: state => {
+			return { ...initialState, fakePositions: fakePositions }
 		},
 	},
 })
@@ -87,7 +120,7 @@ const websocketSlice = createSlice({
 export const {
 	setConnectionStatus,
 	setSubscriptionStatus,
-	updatePositions,
+	setPositions,
 	setError,
 	clearError,
 	setConnectionStatusMessage,
@@ -95,7 +128,13 @@ export const {
 	setPage,
 	setSort,
 	setServerStatus,
-	resetWebSocket,
+	setSyncStarted,
+	setSyncProgress,
+	setSyncCompleted,
+	setSyncError,
+	setSyncCancelled,
+	setSyncReset,
+	setWebSocketReset,
 } = websocketSlice.actions
 
 export default websocketSlice.reducer

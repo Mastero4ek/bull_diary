@@ -104,6 +104,7 @@ class KeysService {
 							secret !== currentSecret
 								? await EncryptionService.encrypt(secret, userId)
 								: key.secret,
+						sync: false,
 					})
 				} else {
 					updatedKeys.push(key)
@@ -117,6 +118,54 @@ class KeysService {
 			return await KeysDto.createMaskedKeys(keys, userId)
 		} catch (error) {
 			handleDatabaseError(error, lng, 'updateKeys', 'errors.keys_update_failed')
+		}
+	}
+
+	/**
+	 * Обновляет статус синхронизации для конкретной биржи
+	 * @param {string} userId - ID пользователя
+	 * @param {string} exchange - Название биржи
+	 * @param {boolean} syncStatus - Статус синхронизации
+	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
+	 * @returns {Promise<Object>} - Объект с замаскированными ключами
+	 */
+	async updateSyncStatus(userId, exchange, syncStatus, lng = 'en') {
+		try {
+			const keys = await KeysModel.findOne({ user: userId })
+
+			if (!keys) {
+				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
+			}
+
+			const exchangeExists = keys.keys.some(key => key.name === exchange)
+
+			if (!exchangeExists) {
+				throw ApiError.BadRequest(
+					i18next.t('errors.exchange_not_found_in_keys', { lng, exchange })
+				)
+			}
+
+			const updatedKeys = keys.keys.map(key => {
+				if (key.name === exchange) {
+					return {
+						...key,
+						sync: syncStatus,
+					}
+				}
+				return key
+			})
+
+			keys.keys = updatedKeys
+			await keys.save()
+
+			return await KeysDto.createMaskedKeys(keys, userId)
+		} catch (error) {
+			handleDatabaseError(
+				error,
+				lng,
+				'updateSyncStatus',
+				'errors.keys_update_failed'
+			)
 		}
 	}
 

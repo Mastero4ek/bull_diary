@@ -12,7 +12,7 @@ export const userDefault = {
 	phone: null,
 	is_activated: false,
 	change_password: false,
-	level: { name: 'hamster', value: 0 }, // level is earned for tournaments and challenges
+	level: { name: 'hamster', value: 0 },
 	tournaments: [],
 	source: 'self',
 	keys: [
@@ -63,10 +63,8 @@ const handleTokens = response => {
 		return null
 	}
 
-	// Handle both direct user data and nested user data
 	const userData = response.data.user || response.data
 
-	// Extract tokens, handling both nested and direct token properties
 	const tokens = {
 		access_token:
 			response.data.tokens?.access_token || response.data.access_token,
@@ -74,7 +72,6 @@ const handleTokens = response => {
 			response.data.tokens?.refresh_token || response.data.refresh_token,
 	}
 
-	// Only require user data to be present
 	if (!userData) {
 		console.error('Invalid response format: missing user data')
 		return null
@@ -84,6 +81,12 @@ const handleTokens = response => {
 		user: userData,
 		tokens: tokens,
 	}
+}
+
+const handleUserError = (state, action) => {
+	state.errorMessage = action?.payload?.message
+	state.serverStatus = 'error'
+	state.errorArray = action?.payload?.errors || null
 }
 
 export const checkAuth = createAsyncThunk(
@@ -230,7 +233,6 @@ export const updateKeys = createAsyncThunk(
 	async ({ exchange, api, secret }, { rejectWithValue }) => {
 		try {
 			const response = await KeysService.updateKeys(exchange, api, secret)
-
 			return response?.data?.keys || response?.data
 		} catch (e) {
 			return rejectWithValue(resError(e))
@@ -298,8 +300,26 @@ const candidateSlice = createSlice({
 		setServerStatus(state, action) {
 			state.serverStatus = action.payload
 		},
+		updateKeySyncStatus(state, action) {
+			const { exchange, syncStatus } = action.payload
+			if (state.user?.keys) {
+				const keyIndex = state.user.keys.findIndex(key => key.name === exchange)
+				if (keyIndex !== -1) {
+					state.user.keys[keyIndex].sync = syncStatus
+				}
+			}
+			if (state.changeUser?.keys) {
+				const keyIndex = state.changeUser.keys.findIndex(
+					key => key.name === exchange
+				)
+				if (keyIndex !== -1) {
+					state.changeUser.keys[keyIndex].sync = syncStatus
+				}
+			}
+		},
+
 		clearUser() {
-			return initialState
+			return { ...initialState, user: userDefault, changeUser: userDefault }
 		},
 	},
 	extraReducers: builder => {
@@ -325,11 +345,7 @@ const candidateSlice = createSlice({
 				state.errorMessage = ''
 				state.errorArray = null
 			})
-			.addCase(signUp.rejected, (state, action) => {
-				state.serverStatus = 'error'
-				state.errorMessage = action.payload?.message
-				state.errorArray = action.payload?.errors || null
-			})
+			.addCase(signUp.rejected, handleUserError)
 
 			// sign in
 			.addCase(signIn.pending, state => {
@@ -355,11 +371,7 @@ const candidateSlice = createSlice({
 					}
 				}
 			})
-			.addCase(signIn.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.errorArray = action?.payload?.errors || null
-				state.serverStatus = 'error'
-			})
+			.addCase(signIn.rejected, handleUserError)
 
 			// check auth
 			.addCase(checkAuth.pending, state => {
@@ -390,15 +402,7 @@ const candidateSlice = createSlice({
 
 				state.serverStatus = 'success'
 			})
-			.addCase(checkAuth.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.errorArray = action?.payload?.errors
-				state.serverStatus = 'error'
-				state.isAuth = false
-				state.user = userDefault
-				state.changeUser = userDefault
-				state.tokens = null
-			})
+			.addCase(checkAuth.rejected, handleUserError)
 
 			// logout
 			.addCase(logout.pending, state => {
@@ -415,15 +419,7 @@ const candidateSlice = createSlice({
 				state.errorArray = null
 				state.tokens = null
 			})
-			.addCase(logout.rejected, (state, action) => {
-				state.serverStatus = 'success'
-				state.user = userDefault
-				state.changeUser = userDefault
-				state.isAuth = false
-				state.errorMessage = null
-				state.errorArray = null
-				state.tokens = null
-			})
+			.addCase(logout.rejected, handleUserError)
 
 			// edit user
 			.addCase(editUser.pending, state => {
@@ -438,11 +434,7 @@ const candidateSlice = createSlice({
 				updateUser(state, action)
 				state.changeUser = state.user
 			})
-			.addCase(editUser.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.errorArray = action?.payload?.errors
-				state.serverStatus = 'error'
-			})
+			.addCase(editUser.rejected, handleUserError)
 
 			// remove cover
 			.addCase(removeCover.pending, state => {
@@ -455,10 +447,7 @@ const candidateSlice = createSlice({
 				state.user.cover = null
 				state.changeUser.cover = null
 			})
-			.addCase(removeCover.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(removeCover.rejected, handleUserError)
 
 			// remove user
 			.addCase(removeUser.pending, state => {
@@ -473,11 +462,7 @@ const candidateSlice = createSlice({
 				state.isAuth = false
 				state.serverStatus = 'success'
 			})
-			.addCase(removeUser.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.errorArray = action?.payload?.errors
-				state.serverStatus = 'error'
-			})
+			.addCase(removeUser.rejected, handleUserError)
 
 			// create keys
 			.addCase(updateKeys.pending, state => {
@@ -485,17 +470,18 @@ const candidateSlice = createSlice({
 				state.errorMessage = null
 			})
 			.addCase(updateKeys.fulfilled, (state, action) => {
-				state.user = { ...state.user, keys: action.payload }
-				state.changeUser = { ...state.changeUser, keys: action.payload }
+				const updatedKeys = action.payload.map(key => ({
+					...key,
+					sync: false,
+				}))
+
+				state.user = { ...state.user, keys: updatedKeys }
+				state.changeUser = { ...state.changeUser, keys: updatedKeys }
 				state.errorMessage = null
 				state.errorArray = null
 				state.serverStatus = 'success'
 			})
-			.addCase(updateKeys.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.errorArray = action?.payload?.errors
-				state.serverStatus = 'error'
-			})
+			.addCase(updateKeys.rejected, handleUserError)
 
 			// get user
 			.addCase(getUser.pending, state => {
@@ -509,10 +495,7 @@ const candidateSlice = createSlice({
 					...action.payload,
 				}
 			})
-			.addCase(getUser.rejected, (state, action) => {
-				state.serverStatus = 'error'
-				state.errorMessage = action.payload?.message || 'Failed to fetch user'
-			})
+			.addCase(getUser.rejected, handleUserError)
 
 			// create user
 			.addCase(createUser.pending, state => {
@@ -524,11 +507,7 @@ const candidateSlice = createSlice({
 				state.errorMessage = null
 				state.errorArray = null
 			})
-			.addCase(createUser.rejected, (state, action) => {
-				state.serverStatus = 'error'
-				state.errorMessage = action.payload?.message
-				state.errorArray = action.payload?.errors
-			})
+			.addCase(createUser.rejected, handleUserError)
 	},
 })
 
@@ -540,6 +519,7 @@ export const {
 	setIsAuth,
 	setServerStatus,
 	setPhone,
+	updateKeySyncStatus,
 } = candidateSlice.actions
 
 export default candidateSlice.reducer

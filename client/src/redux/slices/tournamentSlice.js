@@ -1,10 +1,7 @@
-import { fakeUsers } from '@/helpers/constants';
-import { resError } from '@/helpers/functions';
-import TournamentService from '@/services/TournamentService';
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { fakeUsers } from '@/helpers/constants'
+import { resError } from '@/helpers/functions'
+import TournamentService from '@/services/TournamentService'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const getTournaments = createAsyncThunk(
 	'get-tournaments',
@@ -81,8 +78,13 @@ export const removeTournamentUser = createAsyncThunk(
 	}
 )
 
+const handleTournamentError = (state, action) => {
+	state.errorMessage = action?.payload?.message
+	state.serverStatus = 'error'
+}
+
 const initialState = {
-	fakeUsers: null,
+	fakeUsers: fakeUsers,
 	tournament: {},
 	users: [],
 	page: 1,
@@ -115,8 +117,9 @@ const tournamentSlice = createSlice({
 		setTotalPages(state, action) {
 			state.totalPages = action.payload
 		},
+
 		clearTournaments() {
-			return initialState
+			return { ...initialState, fakeUsers: fakeUsers }
 		},
 		setErrorMessage(state, action) {
 			state.errorMessage = action.payload
@@ -140,11 +143,7 @@ const tournamentSlice = createSlice({
 					? Math.ceil(action.payload.total / state.size)
 					: state.totalPages
 			})
-			.addCase(getTournaments.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-				state.fakeUsers = fakeUsers
-			})
+			.addCase(getTournaments.rejected, handleTournamentError)
 
 			//add-tournament-user
 			.addCase(addTournamentUser.pending, state => {
@@ -161,11 +160,7 @@ const tournamentSlice = createSlice({
 					? Math.ceil(action.payload.total / state.size)
 					: state.totalPages
 			})
-			.addCase(addTournamentUser.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.fakeUsers = fakeUsers
-				state.serverStatus = 'error'
-			})
+			.addCase(addTournamentUser.rejected, handleTournamentError)
 
 			//create-tournament
 			.addCase(createTournament.pending, state => {
@@ -182,10 +177,7 @@ const tournamentSlice = createSlice({
 				state.fakeUsers = action.payload.users.length === 0 ? fakeUsers : null
 				state.serverStatus = 'success'
 			})
-			.addCase(createTournament.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(createTournament.rejected, handleTournamentError)
 
 			//delete-tournament
 			.addCase(deleteTournament.fulfilled, (state, action) => {
@@ -194,20 +186,14 @@ const tournamentSlice = createSlice({
 				state.serverStatus = 'success'
 				state.errorMessage = null
 			})
-			.addCase(deleteTournament.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(deleteTournament.rejected, handleTournamentError)
 
 			//remove-tournament-user
 			.addCase(removeTournamentUser.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = null
 			})
-			.addCase(removeTournamentUser.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(removeTournamentUser.rejected, handleTournamentError)
 	},
 })
 

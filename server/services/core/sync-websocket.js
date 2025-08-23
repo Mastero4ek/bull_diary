@@ -1,13 +1,14 @@
 const moment = require('moment')
 const i18next = require('i18next')
-const { logInfo, logError } = require('@configs/logger-config')
+const { logError } = require('@configs/logger-config')
 const { delayApi } = require('@helpers/utility-helpers')
 const ClientService = require('@services/integration/client-service')
 const DataService = require('@services/exchange/data-service')
 
 const syncProgressMap = new Map()
+const cancelledSyncs = new Set()
 
-class SyncService {
+class SyncWebSocketService {
 	/**
 	 * Получает данные от API с отображением прогресса синхронизации
 	 * @param {Object} client - API клиент
@@ -35,6 +36,7 @@ class SyncService {
 		progressConfig = {},
 		exchangeName = 'Bybit',
 		dataType = 'data',
+		progressCallback = null,
 	}) {
 		const {
 			initialProgress = 0,
@@ -54,16 +56,27 @@ class SyncService {
 			)
 			const totalChunks = timeChunks.length
 
+			const localizedDataType = i18next.t(`sync.${dataType}`, { lng })
+
 			this.setSyncProgress(
 				userId,
 				initialProgress,
 				'loading',
-				i18next.t('sync.starting_sync', { lng, days: diffDays, dataType })
+				i18next.t('sync.starting_sync', {
+					lng,
+					days: diffDays,
+					dataType: localizedDataType,
+				}),
+				progressCallback
 			)
 
 			const chunkResults = []
 
 			for (let i = 0; i < timeChunks.length; i++) {
+				if (this.isSyncCancelled(userId)) {
+					return []
+				}
+
 				const chunk = timeChunks[i]
 				const chunkData = await this.fetchDataForChunk({
 					client,
@@ -88,18 +101,22 @@ class SyncService {
 						lng,
 						current: i + 1,
 						total: totalChunks,
-						dataType,
-					})
+						dataType: localizedDataType,
+					}),
+					progressCallback
 				)
 			}
 
 			allData = chunkResults.flat()
 		} else {
+			const localizedDataType = i18next.t(`sync.${dataType}`, { lng })
+
 			this.setSyncProgress(
 				userId,
 				initialProgress,
 				'loading',
-				i18next.t('sync.fetching_data', { lng, dataType })
+				i18next.t('sync.fetching_data', { lng, dataType: localizedDataType }),
+				progressCallback
 			)
 
 			allData = await this.fetchDataForChunk({
@@ -118,7 +135,8 @@ class SyncService {
 				userId,
 				finalProgress,
 				'loading',
-				i18next.t('sync.data_fetched', { lng, dataType })
+				i18next.t('sync.data_fetched', { lng, dataType: localizedDataType }),
+				progressCallback
 			)
 		}
 
@@ -187,6 +205,7 @@ class SyncService {
 	 * @param {Date|string} start_time - Время начала периода
 	 * @param {Date|string} end_time - Время окончания периода
 	 * @param {Object} config - Конфигурация синхронизации
+	 * @param {Function} progressCallback - Callback для отправки прогресса
 	 * @returns {Promise<Object>} - Результат синхронизации
 	 */
 	async syncDataWithProgress(
@@ -196,8 +215,11 @@ class SyncService {
 		keys,
 		start_time,
 		end_time,
-		config = {}
+		config = {},
+		progressCallback = null
 	) {
+		this.resetCancellation(userId)
+
 		const {
 			apiMethod = 'getClosedPnL',
 			apiParams = { category: 'linear' },
@@ -230,9 +252,8 @@ class SyncService {
 				progressConfig,
 				exchangeName: exchange,
 				dataType,
+				progressCallback,
 			})
-
-			const dataTypeLabel = dataType === 'orders' ? 'orders' : 'transactions'
 
 			const transformedData = transformData
 				? transformData(allData, userId)
@@ -261,6 +282,16 @@ class SyncService {
 				}
 			}
 
+			const localizedDataType = i18next.t(`sync.${dataType}`, { lng })
+
+			this.setSyncProgress(
+				userId,
+				finalProgress,
+				'success',
+				i18next.t('sync.completed', { lng, dataType: localizedDataType }),
+				progressCallback
+			)
+
 			return {
 				success: true,
 				dataCount: savedData.length,
@@ -268,157 +299,17 @@ class SyncService {
 				dataType: dataType,
 			}
 		} catch (error) {
+			const localizedDataType = i18next.t(`sync.${dataType}`, { lng })
+
 			this.setSyncProgress(
 				userId,
 				0,
 				'error',
-				i18next.t('sync.failed', { lng, dataType })
+				i18next.t('sync.failed', { lng, dataType: localizedDataType }),
+				progressCallback
 			)
 			throw error
 		}
-	}
-
-	/**
-	 * Синхронизирует ордера Bybit с отображением прогресса
-	 * @param {string} userId - ID пользователя
-	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
-	 * @param {Object} keys - API ключи
-	 * @param {Date|string} start_time - Время начала периода
-	 * @param {Date|string} end_time - Время окончания периода
-	 * @returns {Promise<Object>} - Результат синхронизации
-	 */
-	async syncBybitOrdersWithProgress(
-		userId,
-		lng = 'en',
-		keys,
-		start_time,
-		end_time
-	) {
-		return await this.syncDataWithProgress(
-			userId,
-			lng,
-			'bybit',
-			keys,
-			start_time,
-			end_time,
-			{
-				apiMethod: 'getClosedPnL',
-				apiParams: { category: 'linear' },
-			}
-		)
-	}
-
-	/**
-	 * Универсальная синхронизация данных
-	 * @param {string} userId - ID пользователя
-	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
-	 * @param {string} exchange - Название биржи
-	 * @param {Object} keys - API ключи
-	 * @param {Date|string} start_time - Время начала периода
-	 * @param {Date|string} end_time - Время окончания периода
-	 * @param {Object} config - Конфигурация синхронизации
-	 * @returns {Promise<Object>} - Результат синхронизации
-	 */
-	async syncData(
-		userId,
-		lng = 'en',
-		exchange,
-		keys,
-		start_time,
-		end_time,
-		config = {}
-	) {
-		return await this.syncDataWithProgress(
-			userId,
-			lng,
-			exchange,
-			keys,
-			start_time,
-			end_time,
-			config
-		)
-	}
-
-	/**
-	 * Синхронизирует ордера с отображением прогресса
-	 * @param {string} userId - ID пользователя
-	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
-	 * @param {string} exchange - Название биржи
-	 * @param {Object} keys - API ключи
-	 * @param {Date|string} start_time - Время начала периода
-	 * @param {Date|string} end_time - Время окончания периода
-	 * @param {Object} config - Конфигурация синхронизации
-	 * @returns {Promise<Object>} - Результат синхронизации
-	 */
-	async syncOrders(
-		userId,
-		lng = 'en',
-		exchange,
-		keys,
-		start_time,
-		end_time,
-		config = {}
-	) {
-		return await this.syncDataWithProgress(
-			userId,
-			lng,
-			exchange,
-			keys,
-			start_time,
-			end_time,
-			{
-				...config,
-				apiMethod: 'getClosedPnL',
-				apiParams: { category: 'linear' },
-				dataType: 'orders',
-				progressConfig: {
-					initialProgress: 0,
-					finalProgress: 45,
-					chunkSize: 7,
-				},
-			}
-		)
-	}
-
-	/**
-	 * Синхронизирует транзакции с отображением прогресса
-	 * @param {string} userId - ID пользователя
-	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
-	 * @param {string} exchange - Название биржи
-	 * @param {Object} keys - API ключи
-	 * @param {Date|string} start_time - Время начала периода
-	 * @param {Date|string} end_time - Время окончания периода
-	 * @param {Object} config - Конфигурация синхронизации
-	 * @returns {Promise<Object>} - Результат синхронизации
-	 */
-	async syncTransactions(
-		userId,
-		lng = 'en',
-		exchange,
-		keys,
-		start_time,
-		end_time,
-		config = {}
-	) {
-		return await this.syncDataWithProgress(
-			userId,
-			lng,
-			exchange,
-			keys,
-			start_time,
-			end_time,
-			{
-				...config,
-				apiMethod: 'getTransactionLog',
-				apiParams: { accountType: 'UNIFIED' },
-				dataType: 'transactions',
-				progressConfig: {
-					initialProgress: 50,
-					finalProgress: 95,
-					chunkSize: 7,
-				},
-			}
-		)
 	}
 
 	/**
@@ -427,8 +318,9 @@ class SyncService {
 	 * @param {number} progress - Процент выполнения (0-100)
 	 * @param {string} status - Статус синхронизации ('loading', 'success', 'error')
 	 * @param {string} message - Сообщение о прогрессе
+	 * @param {Function} progressCallback - Callback для отправки прогресса через WebSocket
 	 */
-	setSyncProgress(userId, progress, status, message) {
+	setSyncProgress(userId, progress, status, message, progressCallback = null) {
 		const progressData = {
 			progress,
 			status,
@@ -437,6 +329,17 @@ class SyncService {
 		}
 
 		syncProgressMap.set(userId, progressData)
+
+		if (progressCallback && typeof progressCallback === 'function') {
+			try {
+				progressCallback(progress, status, message)
+			} catch (error) {
+				logError(
+					`Error sending sync progress via callback for user ${userId}:`,
+					error
+				)
+			}
+		}
 	}
 
 	/**
@@ -474,7 +377,107 @@ class SyncService {
 	 */
 	clearSyncProgress(userId) {
 		syncProgressMap.delete(userId)
+		cancelledSyncs.add(userId)
+	}
+
+	/**
+	 * Проверяет, была ли отменена синхронизация для пользователя
+	 * @param {string} userId - ID пользователя
+	 * @returns {boolean} - true если синхронизация отменена
+	 */
+	isSyncCancelled(userId) {
+		return cancelledSyncs.has(userId)
+	}
+
+	/**
+	 * Снимает флаг отмены синхронизации для пользователя
+	 * @param {string} userId - ID пользователя
+	 */
+	resetCancellation(userId) {
+		cancelledSyncs.delete(userId)
+	}
+
+	/**
+	 * Синхронизирует ордера с WebSocket callback
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации
+	 * @param {string} exchange - Название биржи
+	 * @param {Object} keys - API ключи
+	 * @param {Date|string} start_time - Время начала периода
+	 * @param {Date|string} end_time - Время окончания периода
+	 * @param {Function} progressCallback - Callback для отправки прогресса
+	 * @returns {Promise<Object>} - Результат синхронизации
+	 */
+	async syncOrdersWithCallback(
+		userId,
+		lng,
+		exchange,
+		keys,
+		start_time,
+		end_time,
+		progressCallback
+	) {
+		return await this.syncDataWithProgress(
+			userId,
+			lng,
+			exchange,
+			keys,
+			start_time,
+			end_time,
+			{
+				apiMethod: 'getClosedPnL',
+				apiParams: { category: 'linear' },
+				dataType: 'orders',
+				progressConfig: {
+					initialProgress: 0,
+					finalProgress: 49,
+					chunkSize: 7,
+				},
+			},
+			progressCallback
+		)
+	}
+
+	/**
+	 * Синхронизирует транзакции с WebSocket callback
+	 * @param {string} userId - ID пользователя
+	 * @param {string} lng - Язык для локализации
+	 * @param {string} exchange - Название биржи
+	 * @param {Object} keys - API ключи
+	 * @param {Date|string} start_time - Время начала периода
+	 * @param {Date|string} end_time - Время окончания периода
+	 * @param {Function} progressCallback - Callback для отправки прогресса
+	 * @returns {Promise<Object>} - Результат синхронизации
+	 */
+	async syncTransactionsWithCallback(
+		userId,
+		lng,
+		exchange,
+		keys,
+		start_time,
+		end_time,
+		progressCallback
+	) {
+		return await this.syncDataWithProgress(
+			userId,
+			lng,
+			exchange,
+			keys,
+			start_time,
+			end_time,
+			{
+				apiMethod: 'getTransactionLog',
+				apiParams: { accountType: 'UNIFIED' },
+				dataType: 'transactions',
+				progressConfig: {
+					initialProgress: 50,
+					finalProgress: 100,
+					chunkSize: 7,
+				},
+			},
+			progressCallback
+		)
 	}
 }
 
-module.exports = new SyncService()
+module.exports = new SyncWebSocketService()

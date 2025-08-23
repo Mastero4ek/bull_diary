@@ -32,7 +32,7 @@ ChartJS.register(
 	BarElement
 )
 
-export const LineChart = React.memo(() => {
+export const LineChart = React.memo(({ syncWarning = '' }) => {
 	const navigate = useNavigate()
 	const { t } = useTranslation()
 	const { theme, width, isMobile } = useSelector(state => state.settings)
@@ -49,25 +49,45 @@ export const LineChart = React.memo(() => {
 		switch (period) {
 			case 'year':
 				const monthIndex = moment.monthsShort().indexOf(label)
+
+				if (transactions.length === 0) {
+					return monthIndex > 11
+				}
+
 				return monthIndex > now.month()
 			case 'quarter':
 				const quarterIndex = parseInt(label.replace('Q', '')) - 1
 				const currentQuarter = Math.floor(now.month() / 3)
+
+				if (transactions.length === 0) {
+					return quarterIndex > 3
+				}
+
 				return quarterIndex > currentQuarter
 			case 'month':
 				const dayIndex = parseInt(label) - 1
-				return dayIndex > now.date()
+
+				if (transactions.length === 0) {
+					return dayIndex > 31
+				}
+
+				return dayIndex > now.day()
 			case 'week':
 			default:
 				const dayOfWeek = moment.weekdaysShort().indexOf(label)
 				const currentDayOfWeek = now.day()
+
+				if (transactions.length === 0) {
+					return dayOfWeek > 6
+				}
+
 				return dayOfWeek > currentDayOfWeek
 		}
 	}
 
 	const groupedData = useMemo(() => {
-		const transactionData =
-			serverStatus === 'error' ? fakeTransactions : transactions
+		const transactionData = syncWarning !== '' ? fakeTransactions : transactions
+
 		if (transactionData.length === 0) return []
 
 		const grouped = {}
@@ -267,7 +287,7 @@ export const LineChart = React.memo(() => {
 					borderWidth: 0,
 					barPercentage: 0.5,
 					type: 'bar',
-					yAxisID: 'y',
+					yAxisID: 'y1',
 				},
 			],
 		}),
@@ -364,6 +384,26 @@ export const LineChart = React.memo(() => {
 						scale.min = 0
 					},
 				},
+				y1: {
+					type: 'linear',
+					display: false,
+					position: 'right',
+					beginAtZero: true,
+					grid: { lineWidth: 0 },
+					ticks: {
+						padding: chartStyles.fontSize,
+						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
+						font: {
+							size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
+							family: chartStyles.font,
+						},
+					},
+					afterDataLimits: scale => {
+						const max = scale.max
+						scale.max = max + max * 0.25
+						scale.min = 0
+					},
+				},
 			},
 		}),
 		[theme, chartStyles, t]
@@ -373,8 +413,9 @@ export const LineChart = React.memo(() => {
 		<div
 			className={styles.line_chart}
 			style={{
-				opacity: serverStatus === 'error' ? '0.2' : '1',
-				pointerEvents: serverStatus === 'error' ? 'none' : 'auto',
+				opacity: syncWarning !== '' || serverStatus === 'error' ? '0.2' : '1',
+				pointerEvents:
+					syncWarning !== '' || serverStatus === 'error' ? 'none' : 'auto',
 			}}
 		>
 			<Line data={data} options={options} />

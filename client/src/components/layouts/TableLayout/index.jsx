@@ -24,12 +24,13 @@ export const TableLayout = props => {
 		sortBy,
 		totalPages,
 		emptyWarn,
+		syncWarn = '',
 	} = props
 
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
 		useTable({
 			columns,
-			data: fakeData || data,
+			data: data.length > 0 ? data : fakeData,
 		})
 
 	return (
@@ -38,12 +39,15 @@ export const TableLayout = props => {
 				{serverStatus === 'error' || error ? (
 					<ErrorTable error={error} />
 				) : (
-					data.length === 0 && <ErrorTable error={emptyWarn} />
+					data.length === 0 &&
+					fakeData && (
+						<ErrorTable error={syncWarn !== '' ? syncWarn : emptyWarn} />
+					)
 				)}
 
 				<table
 					style={
-						fakeData
+						fakeData && data.length === 0
 							? { opacity: '0.2', pointerEvents: 'none' }
 							: { opacity: '1', pointerEvents: 'all' }
 					}
@@ -60,7 +64,9 @@ export const TableLayout = props => {
 										title={`${t('table.sort_by')} ${column
 											.render('Header')
 											.toLowerCase()}`}
-										onClick={() => (fakeData ? undefined : sortBy(column))}
+										onClick={() =>
+											fakeData && data.length === 0 ? undefined : sortBy(column)
+										}
 										className={
 											column.id === 'cashBalance'
 												? styles.cash_balance_header

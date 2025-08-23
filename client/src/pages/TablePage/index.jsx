@@ -1,42 +1,29 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { Loader } from '@/components/ui/general/Loader'
+import { Mark } from '@/components/ui/general/Mark'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { capitalize, colorizedNum } from '@/helpers/functions'
+import { useSyncStatus } from '@/hooks/useSyncStatus'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { Loader } from '@/components/ui/general/Loader';
-import { Mark } from '@/components/ui/general/Mark';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import {
-  capitalize,
-  colorizedNum,
-} from '@/helpers/functions';
-import {
-  clearOrders,
-  getBybitOrdersPnl,
-  savedOrder,
-  setPage,
-  setSort,
-} from '@/redux/slices/ordersSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	clearOrders,
+	getBybitOrdersPnl,
+	savedOrder,
+	setPage,
+	setSort,
+} from '@/redux/slices/ordersSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import { DoughnutChart } from './DougnutChart';
+import { DoughnutChart } from './DougnutChart'
 
 export const TablePage = () => {
 	const { t } = useTranslation()
@@ -44,6 +31,7 @@ export const TablePage = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const { showSuccess, showError } = useNotification()
+	const { syncWarning, isExchangeSynced, isSynced } = useSyncStatus()
 
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const { date, limit, search, exchange } = useSelector(state => state.filters)
@@ -88,13 +76,17 @@ export const TablePage = () => {
 		{
 			Header: t('table.qty'),
 			accessor: 'quality',
-			Cell: ({ cell: { value } }) => <>{amount ? '****' : value}</>,
+			Cell: ({ cell: { value } }) => (
+				<>{amount ? '****' : parseFloat(value).toFixed(4)}</>
+			),
 			width: '100%',
 		},
 		{
 			Header: t('table.margin'),
 			accessor: 'margin',
-			Cell: ({ cell: { value } }) => <>{amount ? '****' : value}</>,
+			Cell: ({ cell: { value } }) => (
+				<>{amount ? '****' : parseFloat(value).toFixed(2)}</>
+			),
 			width: '100%',
 		},
 		{
@@ -106,13 +98,15 @@ export const TablePage = () => {
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
 					}}
 				>
-					{amount
-						? '****'
-						: value === 0
-						? '0.0000'
-						: value > 0
-						? `+${value}`
-						: value}
+					{parseFloat(
+						amount
+							? '****'
+							: value === 0
+							? '0.0000'
+							: value > 0
+							? `+${value}`
+							: value
+					).toFixed(2)}
 				</span>
 			),
 			width: '100%',
@@ -126,13 +120,15 @@ export const TablePage = () => {
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
 					}}
 				>
-					{amount
-						? '****'
-						: value === 0
-						? '0.0000'
-						: value > 0
-						? `+${value}`
-						: value}
+					{parseFloat(
+						amount
+							? '****'
+							: value === 0
+							? '0.0000'
+							: value > 0
+							? `+${value}`
+							: value
+					).toFixed(2)}
 				</span>
 			),
 			width: '100%',
@@ -151,13 +147,13 @@ export const TablePage = () => {
 					>
 						<ControlButton
 							icon={'view'}
-							disabled={fakeOrders}
+							disabled={orders.length === 0}
 							onClickBtn={() => handleClickView(row.original)}
 						/>
 
 						<ControlButton
 							icon={'save'}
-							disabled={fakeOrders || row.original.bookmark}
+							disabled={orders.length === 0 || row.original.bookmark}
 							onClickBtn={() => handleClickSave(row.original)}
 						/>
 					</div>
@@ -185,6 +181,11 @@ export const TablePage = () => {
 	}
 
 	const handleClickUpdate = async () => {
+		if (!isExchangeSynced()) {
+			showError(t('page.table.sync_required_error'))
+			return
+		}
+
 		try {
 			const resultAction = await dispatch(
 				getBybitOrdersPnl({
@@ -222,6 +223,11 @@ export const TablePage = () => {
 
 	const handleClickSave = useCallback(
 		async item => {
+			if (!isExchangeSynced()) {
+				showError(t('page.table.sync_required_error'))
+				return
+			}
+
 			try {
 				const resultAction1 = await dispatch(
 					savedOrder({ order: item, exchange: exchange.name })
@@ -262,11 +268,12 @@ export const TablePage = () => {
 			search,
 			page,
 			limit,
+			isExchangeSynced,
 		]
 	)
 
 	useEffect(() => {
-		if (exchange?.name && date?.start_date && date?.end_date) {
+		if (exchange?.name && date?.start_date && date?.end_date && isSynced) {
 			dispatch(setPage(1))
 
 			dispatch(
@@ -281,10 +288,10 @@ export const TablePage = () => {
 				})
 			)
 		}
-	}, [limit, dispatch])
+	}, [limit, dispatch, isSynced, exchange, date, sort, search])
 
 	useEffect(() => {
-		if (exchange?.name && date?.start_date && date?.end_date) {
+		if (exchange?.name && date?.start_date && date?.end_date && isSynced) {
 			dispatch(
 				getBybitOrdersPnl({
 					exchange: exchange.name,
@@ -297,7 +304,7 @@ export const TablePage = () => {
 				})
 			)
 		}
-	}, [dispatch, exchange, date, sort, search, page])
+	}, [dispatch, exchange, date, sort, search, page, limit, isSynced])
 
 	useEffect(() => {
 		return () => {
@@ -328,6 +335,7 @@ export const TablePage = () => {
 					toPage={goToPage}
 					sortBy={sortBy}
 					emptyWarn={errorMessage || t('page.table.empty')}
+					syncWarn={syncWarning}
 				/>
 			</div>
 

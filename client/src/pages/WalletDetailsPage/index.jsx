@@ -11,6 +11,7 @@ import { Icon } from '@/components/ui/general/Icon'
 import { Loader } from '@/components/ui/general/Loader'
 import { Mark } from '@/components/ui/general/Mark'
 import { colorizedNum } from '@/helpers/functions'
+import { useSyncStatus } from '@/hooks/useSyncStatus'
 import {
 	getBybitTransactions,
 	setPage,
@@ -29,7 +30,6 @@ export const WalletDetailsPage = React.memo(() => {
 		transactions,
 		serverStatus,
 		errorMessage,
-
 		page,
 		sort,
 		totalPages,
@@ -39,6 +39,7 @@ export const WalletDetailsPage = React.memo(() => {
 		state => state.filters
 	)
 	const { showSuccess, showError } = useNotification()
+	const { syncWarning, isExchangeSynced, isSynced } = useSyncStatus()
 
 	const getTransactionTypeLabel = useCallback(
 		type => {
@@ -141,13 +142,15 @@ export const WalletDetailsPage = React.memo(() => {
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
 					}}
 				>
-					{amount
-						? '****'
-						: value === 0
-						? '0.0000'
-						: value > 0
-						? `+${value}`
-						: value}
+					{parseFloat(
+						amount
+							? '****'
+							: value === 0
+							? '0.0000'
+							: value > 0
+							? `+${value}`
+							: value
+					).toFixed(4)}
 				</span>
 			),
 			width: '100%',
@@ -161,13 +164,15 @@ export const WalletDetailsPage = React.memo(() => {
 						color: `var(--${color ? colorizedNum(value, false) : 'text'})`,
 					}}
 				>
-					{amount
-						? '****'
-						: value === 0
-						? '0.0000'
-						: value > 0
-						? `-${value}`
-						: value}
+					{parseFloat(
+						amount
+							? '****'
+							: value === 0
+							? '0.0000'
+							: value > 0
+							? `-${value}`
+							: value
+					).toFixed(4)}
 				</span>
 			),
 			width: '100%',
@@ -181,13 +186,15 @@ export const WalletDetailsPage = React.memo(() => {
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
 					}}
 				>
-					{amount
-						? '****'
-						: value === 0
-						? '0.0000'
-						: value > 0
-						? `+${value}`
-						: value}
+					{parseFloat(
+						amount
+							? '****'
+							: value === 0
+							? '0.0000'
+							: value > 0
+							? `+${value}`
+							: value
+					).toFixed(4)}
 				</span>
 			),
 			width: '100%',
@@ -203,7 +210,11 @@ export const WalletDetailsPage = React.memo(() => {
 						color: `var(--${value === 0 ? 'disabled' : 'text'})`,
 					}}
 				>
-					{amount ? '****' : value === 0 ? '0.0000' : value}
+					{amount
+						? '****'
+						: value === 0
+						? '0.0000'
+						: parseFloat(value).toFixed(4)}
 				</b>
 			),
 			width: '100%',
@@ -235,6 +246,11 @@ export const WalletDetailsPage = React.memo(() => {
 	}
 
 	const handleClickUpdate = async () => {
+		if (!isExchangeSynced()) {
+			showError(t('page.table.sync_required_error'))
+			return
+		}
+
 		try {
 			const resultAction = await dispatch(
 				getBybitTransactions({
@@ -275,7 +291,7 @@ export const WalletDetailsPage = React.memo(() => {
 	}
 
 	useEffect(() => {
-		if (exchange?.name && date?.start_date && date?.end_date) {
+		if (exchange?.name && date?.start_date && date?.end_date && isSynced) {
 			dispatch(setPage(1))
 
 			dispatch(
@@ -291,10 +307,10 @@ export const WalletDetailsPage = React.memo(() => {
 				})
 			)
 		}
-	}, [dispatch])
+	}, [dispatch, isSynced, exchange, date, sort, search, limit, size])
 
 	useEffect(() => {
-		if (exchange?.name && date?.start_date && date?.end_date) {
+		if (exchange?.name && date?.start_date && date?.end_date && isSynced) {
 			dispatch(
 				getBybitTransactions({
 					exchange: exchange.name,
@@ -308,7 +324,7 @@ export const WalletDetailsPage = React.memo(() => {
 				})
 			)
 		}
-	}, [dispatch, exchange, date, sort, page, search, size])
+	}, [dispatch, exchange, date, sort, page, search, size, limit, isSynced])
 
 	return (
 		<PageLayout
@@ -328,8 +344,9 @@ export const WalletDetailsPage = React.memo(() => {
 					page={page}
 					columns={columns}
 					data={transactions}
-					fakeData={fakeTransactions}
+					fakeData={fakeTransactions.slice(0, 5)}
 					emptyWarn={errorMessage || t('page.wallet_details.empty')}
+					syncWarn={syncWarning}
 					sortBy={sortBy}
 				/>
 			</div>

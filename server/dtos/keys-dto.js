@@ -39,6 +39,7 @@ module.exports = class KeysDto {
 				name: key.name,
 				api: maskedApi,
 				secret: maskedSecret,
+				sync: key.sync || false,
 			})
 		}
 
@@ -66,6 +67,7 @@ module.exports = class KeysDto {
 				name: key.name,
 				api: maskedApi,
 				secret: maskedSecret,
+				sync: key.sync || false,
 			})
 		}
 

@@ -130,7 +130,7 @@ export const UsersPage = () => {
 					}}
 				>
 					<ControlButton
-						disabled={fakeUsers}
+						disabled={users.length === 0}
 						icon={'view'}
 						onClickBtn={() => handleClickView(row.original)}
 					/>
@@ -143,7 +143,7 @@ export const UsersPage = () => {
 						}
 					>
 						<ControlButton
-							disabled={fakeUsers}
+							disabled={users.length === 0}
 							icon={row.original.inactive ? 'active' : 'inactive'}
 							onClickBtn={() =>
 								row.original.inactive
@@ -155,7 +155,7 @@ export const UsersPage = () => {
 
 					<div className={styles.user_delete_button}>
 						<ControlButton
-							disabled={fakeUsers}
+							disabled={users.length === 0}
 							icon={'cross'}
 							onClickBtn={() => handleClickRemove(row.original)}
 						/>

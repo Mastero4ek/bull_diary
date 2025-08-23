@@ -1,10 +1,7 @@
-import { fakeUsers } from '@/helpers/constants';
-import { resError } from '@/helpers/functions';
-import UserService from '@/services/UserService';
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { fakeUsers } from '@/helpers/constants'
+import { resError } from '@/helpers/functions'
+import UserService from '@/services/UserService'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const userDefault = {
 	name: '',
@@ -140,11 +137,16 @@ export const inactiveUser = createAsyncThunk(
 	}
 )
 
+const handleUsersError = (state, action) => {
+	state.errorMessage = action?.payload?.message
+	state.serverStatus = 'error'
+}
+
 const initialState = {
 	user: userDefault,
 	changeUser: userDefault,
+	fakeUsers: fakeUsers,
 	users: [],
-	fakeUsers: null,
 	page: 1,
 	sort: { type: 'created_at', value: 'desc' },
 	totalPages: 0,
@@ -171,9 +173,7 @@ const usersSlice = createSlice({
 		setServerStatus(state, action) {
 			state.serverStatus = action.payload
 		},
-		clearUser() {
-			return initialState
-		},
+
 		setUsers(state, action) {
 			state.users = action.payload
 		},
@@ -189,13 +189,12 @@ const usersSlice = createSlice({
 		setTotalPages(state, action) {
 			state.totalPages = action.payload
 		},
+
+		clearUser() {
+			return { ...initialState, fakeUsers: fakeUsers }
+		},
 		clearUsers(state) {
-			state.users = []
-			state.fakeUsers = null
-			state.sort = { type: 'created_at', value: 'desc' } // descending
-			state.totalPages = 0
-			state.serverStatus = ''
-			state.errorMessage = null
+			return { ...initialState, fakeUsers: fakeUsers }
 		},
 	},
 	extraReducers: builder => {
@@ -208,20 +207,13 @@ const usersSlice = createSlice({
 			.addCase(getUsers.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = action.payload.message || null
-				state.fakeUsers = action.payload.users.length === 0 ? fakeUsers : null
 
 				if (!action.payload.message) {
 					state.users = action.payload.users
 					state.totalPages = action.payload.total_pages
 				}
 			})
-			.addCase(getUsers.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.fakeUsers = fakeUsers
-				state.serverStatus = 'error'
-				state.users = []
-				state.totalPages = 0
-			})
+			.addCase(getUsers.rejected, handleUsersError)
 
 			// remove user
 			.addCase(removeUser.pending, state => {
@@ -232,10 +224,7 @@ const usersSlice = createSlice({
 				state.errorMessage = null
 				state.serverStatus = 'success'
 			})
-			.addCase(removeUser.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(removeUser.rejected, handleUsersError)
 
 			// get user
 			.addCase(getUser.pending, state => {
@@ -253,10 +242,7 @@ const usersSlice = createSlice({
 					...action.payload,
 				}
 			})
-			.addCase(getUser.rejected, (state, action) => {
-				state.serverStatus = 'error'
-				state.errorMessage = action.payload?.message || 'Failed to fetch user'
-			})
+			.addCase(getUser.rejected, handleUsersError)
 
 			// edit user
 			.addCase(editUser.pending, state => {
@@ -275,10 +261,7 @@ const usersSlice = createSlice({
 					...action.payload,
 				}
 			})
-			.addCase(editUser.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(editUser.rejected, handleUsersError)
 
 			// remove cover
 			.addCase(removeCover.pending, state => {
@@ -291,10 +274,7 @@ const usersSlice = createSlice({
 				state.user.cover = null
 				state.changeUser.cover = null
 			})
-			.addCase(removeCover.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(removeCover.rejected, handleUsersError)
 
 			// active user
 			.addCase(activeUser.pending, state => {
@@ -305,10 +285,7 @@ const usersSlice = createSlice({
 				state.errorMessage = null
 				state.serverStatus = 'success'
 			})
-			.addCase(activeUser.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(activeUser.rejected, handleUsersError)
 
 			// inactive user
 			.addCase(inactiveUser.pending, state => {
@@ -319,10 +296,7 @@ const usersSlice = createSlice({
 				state.errorMessage = null
 				state.serverStatus = 'success'
 			})
-			.addCase(inactiveUser.rejected, (state, action) => {
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(inactiveUser.rejected, handleUsersError)
 	},
 })
 

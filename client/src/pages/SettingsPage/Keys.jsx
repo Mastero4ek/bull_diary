@@ -1,49 +1,39 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import {
-  Controller,
-  useForm,
-} from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import moment from 'moment/min/moment-with-locales'
+import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { RootInput } from '@/components/ui/inputs/RootInput';
-import { RootSelect } from '@/components/ui/inputs/RootSelect';
-import { H2 } from '@/components/ui/titles/H2';
-import { ConfirmPopup } from '@/popups/ConfirmPopup';
-import { updateKeys } from '@/redux/slices/candidateSlice';
-import {
-  clearSyncProgress,
-  getSyncProgress,
-  syncData,
-} from '@/redux/slices/syncSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { RootInput } from '@/components/ui/inputs/RootInput'
+import { RootSelect } from '@/components/ui/inputs/RootSelect'
+import { H2 } from '@/components/ui/titles/H2'
+import { useWebSocket } from '@/hooks/useWebSocket'
+import { ConfirmPopup } from '@/popups/ConfirmPopup'
+import { updateKeys } from '@/redux/slices/candidateSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Keys = React.memo(({ handleClickRadio }) => {
-	const { syncProgress, syncStatus, syncMessage } = useSelector(
-		state => state.sync
-	)
 	const { user, errorArray } = useSelector(state => state.candidate)
+
+	const {
+		isSyncing,
+		syncProgress: progress,
+		syncStatus: status,
+		syncMessage: message,
+		startDataSync,
+		cancelSync,
+	} = useWebSocket()
 	const { openPopup } = usePopup()
 
 	const dispatch = useDispatch()
@@ -52,6 +42,9 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 
 	const [selectedExchange, setSelectedExchange] = useState(null)
 
+	const startDate = moment().startOf('year').toISOString()
+	const endDate = moment().toISOString()
+
 	const {
 		register,
 		handleSubmit,
@@ -59,7 +52,7 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 		reset,
 		control,
 		watch,
-		formState: { errors, isValid },
+		formState: { errors },
 	} = useForm({ mode: 'onChange' })
 
 	const watchedExchange = watch('exchange')
@@ -128,6 +121,11 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 		[dispatch, showError, showSuccess]
 	)
 
+	const handleCancelSync = useCallback(() => {
+		cancelSync()
+		showSuccess(t('page.settings.sync_cancelled_successfully'))
+	}, [cancelSync, showSuccess, t])
+
 	const handleClickRemove = () => {
 		if (!selectedExchange) return
 
@@ -152,6 +150,14 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 				const api = data['api-key']
 				const secret = data['secret-key']
 
+				if (
+					selectedExchange?.api &&
+					selectedExchange?.secret &&
+					(!api || !secret)
+				) {
+					return
+				}
+
 				const resultAction = await dispatch(
 					updateKeys({
 						exchange: selectedExchange.name.toLowerCase(),
@@ -165,58 +171,8 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 				if (originalPromiseResult) {
 					showSuccess(t('page.settings.keys_updated_successfully'))
 
-					// Clear any existing progress before starting
-					dispatch(clearSyncProgress())
-
-					// Initial progress fetch
-					await dispatch(getSyncProgress())
-
-					const endDate = moment().toISOString()
-					const startDate = moment().startOf('year').toISOString()
-
-					// Start progress polling with error handling
-					const progressInterval = setInterval(async () => {
-						try {
-							await dispatch(getSyncProgress())
-						} catch (error) {
-							console.error('Error fetching sync progress:', error)
-							// Continue polling even if there's an error
-						}
-					}, 250)
-
-					// Small delay to ensure UI updates before starting sync
-					await new Promise(resolve => setTimeout(resolve, 100))
-
-					try {
-						const resultActionSync = await dispatch(
-							syncData({
-								exchange: selectedExchange.name.toLowerCase(),
-								start_time: startDate,
-								end_time: endDate,
-							})
-						)
-
-						clearInterval(progressInterval)
-
-						const originalPromiseResultSync = unwrapResult(resultActionSync)
-
-						if (originalPromiseResultSync) {
-							setTimeout(() => {
-								showSuccess(t('page.settings.keys_success_synchronization'))
-							}, 500) // Increased delay to ensure progress bar reaches 100%
-						} else {
-							console.error('Sync failed - no result')
-							showError(t('page.settings.keys_error_synchronization'))
-						}
-					} catch (error) {
-						console.error('Sync error:', error)
-						clearInterval(progressInterval)
-						showError(t('page.settings.keys_error_synchronization'))
-					} finally {
-						// Clear progress after a longer delay to ensure user sees completion
-						setTimeout(() => {
-							dispatch(clearSyncProgress())
-						}, 2000)
+					if (selectedExchange?.name) {
+						startDataSync(startDate, endDate)
 					}
 				} else {
 					showError(t('page.settings.keys_error_updating'))
@@ -248,176 +204,194 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 					setValue('api-key', exchangeData.api || '')
 					setValue('secret-key', exchangeData.secret || '')
 				} else {
-					setValue('api-key', '')
-					setValue('secret-key', '')
+					setValue('api-key', undefined)
+					setValue('secret-key', undefined)
 				}
 			}
 		}
 	}, [watchedExchange, user?.keys, setValue])
 
 	return (
-		<OuterBlock>
-			<div className={styles.keys_wrapper}>
-				<input
-					id='keys_accordion'
-					type='radio'
-					name='accordion'
-					className={styles.keys_radio}
-					onChange={handleClickRadio}
-				/>
+		<>
+			<OuterBlock>
+				<div className={styles.keys_wrapper}>
+					<input
+						id='keys_accordion'
+						type='radio'
+						name='accordion'
+						className={styles.keys_radio}
+						onChange={handleClickRadio}
+					/>
 
-				<label htmlFor='keys_accordion' className={styles.keys_header}>
-					<H2>
-						<span>{t('page.settings.keys_api_title')}</span>
-					</H2>
+					<label htmlFor='keys_accordion' className={styles.keys_header}>
+						<H2>
+							<span>{t('page.settings.keys_api_title')}</span>
+						</H2>
 
-					<ControlButton text={<i></i>} />
-				</label>
-
-				<form className={styles.keys_form} onSubmit={handleSubmit(submit)}>
-					<div className={styles.keys_warning}>
-						<SmallDesc>
-							<Icon id='warning-icon' />
-
-							<span
-								dangerouslySetInnerHTML={{
-									__html: t('page.settings.keys_warning'),
-								}}
-								style={{ color: 'var(--orange)' }}
-							></span>
-						</SmallDesc>
-					</div>
-
-					<label htmlFor='exchange' className={styles.keys_label}>
-						<div className={styles.keys_control}>
-							<RootDesc>
-								<span>{t('form.label.exchange')}</span>
-							</RootDesc>
-
-							<Controller
-								name='exchange'
-								control={control}
-								rules={{ required: true }}
-								render={({ field, fieldState }) => (
-									<RootSelect
-										arrow={!fieldState.error}
-										className={`${styles.keys_select} ${
-											fieldState.error ? styles.error : ''
-										}`}
-										options={EXCHANGE_OPTIONS}
-										value={field.value}
-										onChange={field.onChange}
-										getLabel={item => item.name}
-										getValue={item => item.value}
-										disabled={syncStatus === 'loading'}
-									>
-										{fieldState.error && (
-											<>
-												<SmallDesc>
-													<p>{t('form.error.exchange')}</p>
-												</SmallDesc>
-
-												<Icon id='error-icon' />
-											</>
-										)}
-									</RootSelect>
-								)}
-							/>
-						</div>
+						<ControlButton text={<i></i>} />
 					</label>
 
-					<RootInput
-						label={t('form.label.api_key')}
-						name={`api-key`}
-						errorMessage={t('form.error.api_key')}
-						errorArray={errorArray}
-						errors={errors}
-						type='text'
-						register={register(`api-key`, { required: hasNoKeys })}
-						placeholder={hasKeys ? selectedExchange?.api || '' : ''}
-						value={hasKeys ? '' : undefined}
-						disabled={syncStatus === 'loading'}
-					/>
+					<form className={styles.keys_form} onSubmit={handleSubmit(submit)}>
+						<div className={styles.keys_warning}>
+							<SmallDesc>
+								<Icon id='warning-icon' />
 
-					<RootInput
-						label={t('form.label.secret_key')}
-						name={`secret-key`}
-						errorMessage={t('form.error.secret_key')}
-						errors={errors}
-						errorArray={errorArray}
-						type='text'
-						register={register(`secret-key`, {
-							required: hasNoKeys,
-						})}
-						placeholder={hasKeys ? selectedExchange?.secret || '' : ''}
-						value={hasKeys ? '' : undefined}
-						disabled={syncStatus === 'loading'}
-					/>
-
-					<RootInput
-						name='agreement-key'
-						errorMessage={t('form.error.agreement_key')}
-						errorArray={errorArray}
-						errors={errors}
-						type='checkbox'
-						label={
-							<span style={{ opacity: '0.75' }}>
-								{t('form.label.agreement_key')}
-							</span>
-						}
-						register={{
-							...register('agreement-key', {
-								required: hasNoKeys,
-							}),
-						}}
-						disabled={syncStatus === 'loading' || !hasNoKeys}
-					/>
-
-					{syncStatus === 'loading' && (
-						<div className={styles.sync_progress}>
-							<div className={styles.sync_progress_header}>
-								<SmallDesc>
-									<b>{syncMessage || t('page.settings.keys_synchronizing')}</b>
-								</SmallDesc>
-
-								<SmallDesc>
-									<b>{Math.round(syncProgress || 0)}%</b>
-								</SmallDesc>
-							</div>
-
-							<div className={styles.sync_progress_bar}>
-								<div
-									className={styles.sync_progress_fill}
-									style={{
-										width: `${Math.max(0, Math.min(100, syncProgress || 0))}%`,
-										transition: 'width 0.3s ease-in-out',
+								<span
+									dangerouslySetInnerHTML={{
+										__html: t('page.settings.keys_warning'),
 									}}
+									style={{ color: 'var(--orange)' }}
+								></span>
+							</SmallDesc>
+						</div>
+
+						<label htmlFor='exchange' className={styles.keys_label}>
+							<div className={styles.keys_control}>
+								<RootDesc>
+									<span>{t('form.label.exchange')}</span>
+								</RootDesc>
+
+								<Controller
+									name='exchange'
+									control={control}
+									rules={{ required: true }}
+									render={({ field, fieldState }) => (
+										<RootSelect
+											arrow={!fieldState.error}
+											className={`${styles.keys_select} ${
+												fieldState.error ? styles.error : ''
+											}`}
+											options={EXCHANGE_OPTIONS}
+											value={field.value}
+											onChange={field.onChange}
+											getLabel={item => item.name}
+											getValue={item => item.value}
+											disabled={isSyncing}
+										>
+											{fieldState.error && (
+												<>
+													<SmallDesc>
+														<p>{t('form.error.exchange')}</p>
+													</SmallDesc>
+
+													<Icon id='error-icon' />
+												</>
+											)}
+										</RootSelect>
+									)}
 								/>
 							</div>
-						</div>
-					)}
+						</label>
 
-					<div className={styles.keys_inputs_btns}>
-						<RootButton
-							disabled={hasNoKeys || syncStatus === 'loading'}
-							text={t('button.remove')}
-							icon='remove'
-							onClickBtn={() =>
-								hasNoKeys || syncStatus === 'loading'
-									? undefined
-									: handleClickRemove()
+						<RootInput
+							label={t('form.label.api_key')}
+							name={`api-key`}
+							errorMessage={t('form.error.api_key')}
+							errorArray={errorArray}
+							errors={errors}
+							type='text'
+							register={register(`api-key`, { required: hasNoKeys })}
+							placeholder={hasKeys ? selectedExchange?.api || '' : ''}
+							value={hasKeys ? '' : undefined}
+							disabled={isSyncing}
+						/>
+
+						<RootInput
+							label={t('form.label.secret_key')}
+							name={`secret-key`}
+							errorMessage={t('form.error.secret_key')}
+							errors={errors}
+							errorArray={errorArray}
+							type='text'
+							register={register(`secret-key`, {
+								required: hasNoKeys,
+							})}
+							placeholder={hasKeys ? selectedExchange?.secret || '' : ''}
+							value={hasKeys ? '' : undefined}
+							disabled={isSyncing}
+						/>
+
+						<RootInput
+							name='agreement-key'
+							errorMessage={t('form.error.agreement_key')}
+							errorArray={errorArray}
+							errors={errors}
+							type='checkbox'
+							label={
+								<span style={{ opacity: '0.75' }}>
+									{t('form.label.agreement_key')}
+								</span>
 							}
+							register={{
+								...register('agreement-key', {
+									required: hasNoKeys,
+								}),
+							}}
+							disabled={isSyncing || !hasNoKeys}
 						/>
 
-						<RootButton
-							disabled={hasKeys || syncStatus === 'loading'}
-							text={t('button.save')}
-							icon='update'
-							type='submit'
-						/>
-					</div>
-				</form>
-			</div>
-		</OuterBlock>
+						{status === 'loading' && (
+							<div className={styles.sync_progress}>
+								<div className={styles.sync_progress_header}>
+									<SmallDesc>
+										<b>{message}</b>
+									</SmallDesc>
+
+									<div className={styles.sync_progress_controls}>
+										<SmallDesc>
+											<b>{Math.round(progress || 0)}%</b>
+										</SmallDesc>
+
+										<button
+											onClick={handleCancelSync}
+											title={t('button.cancel_sync')}
+										>
+											✕
+										</button>
+									</div>
+								</div>
+
+								<div className={styles.sync_progress_bar}>
+									<div
+										className={`${styles.sync_progress_fill} ${
+											status === 'loading'
+												? styles.loading
+												: status === 'success'
+												? styles.success
+												: ''
+										}`}
+										style={{
+											width: `${Math.max(0, Math.min(100, progress || 0))}%`,
+											transition:
+												status === 'loading'
+													? 'width 0.3s ease-in-out'
+													: 'none',
+										}}
+									/>
+								</div>
+							</div>
+						)}
+
+						<div className={styles.keys_inputs_btns}>
+							<RootButton
+								disabled={hasNoKeys || isSyncing}
+								text={t('button.remove')}
+								icon='remove'
+								onClickBtn={() =>
+									hasNoKeys || isSyncing ? undefined : handleClickRemove()
+								}
+							/>
+
+							<RootButton
+								disabled={hasKeys || isSyncing}
+								text={t('button.save')}
+								icon='update'
+								type='submit'
+							/>
+						</div>
+					</form>
+				</div>
+			</OuterBlock>
+		</>
 	)
 })

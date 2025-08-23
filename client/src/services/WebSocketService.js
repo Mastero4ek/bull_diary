@@ -51,6 +51,22 @@ class WebSocketService {
 			this.notifyListeners('connection_status', data)
 		})
 
+		this.socket.on('sync_progress', data => {
+			this.notifyListeners('sync_progress', data)
+		})
+
+		this.socket.on('sync_completed', data => {
+			this.notifyListeners('sync_completed', data)
+		})
+
+		this.socket.on('sync_error', data => {
+			this.notifyListeners('sync_error', data)
+		})
+
+		this.socket.on('sync_cancelled', data => {
+			this.notifyListeners('sync_cancelled', data)
+		})
+
 		this.socket.on('error', data => {
 			this.notifyListeners('error', data)
 		})
@@ -80,6 +96,36 @@ class WebSocketService {
 		}
 	}
 
+	startSync(userId, exchange, start_time, end_time, language = 'en') {
+		if (!this.socket || !this.isConnected) {
+			this.connect()
+		}
+
+		this.socket.emit('start_sync', {
+			userId,
+			exchange,
+			start_time,
+			end_time,
+			language,
+		})
+	}
+
+	getSyncProgress(userId) {
+		if (this.socket && this.isConnected) {
+			this.socket.emit('get_sync_progress', { userId })
+		}
+	}
+
+	cancelSync(userId, exchange) {
+		if (this.socket && this.isConnected) {
+			this.socket.emit('cancel_sync', { userId, exchange })
+
+			setTimeout(() => {
+				this.disconnect()
+			}, 1000)
+		}
+	}
+
 	getConnectionStatus(userId) {
 		if (this.socket && this.isConnected) {
 			this.socket.emit('get_connection_status', { userId })
@@ -105,7 +151,8 @@ class WebSocketService {
 
 	notifyListeners(event, data) {
 		if (this.listeners.has(event)) {
-			this.listeners.get(event).forEach(callback => {
+			const callbacks = this.listeners.get(event)
+			callbacks.forEach((callback, index) => {
 				try {
 					callback(data)
 				} catch (error) {

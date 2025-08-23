@@ -123,7 +123,9 @@
 		"failed_activate_user": "Не удалось активировать пользователя!",
 		"failed_deactivate_user": "Не удалось деактивировать пользователя!",
 		"order_required": "Ордер обязателен!",
-		"tournament_creation_failed": "Не удалось создать турнир!"
+		"tournament_creation_failed": "Не удалось создать турнир!",
+		"keys_not_found": "Ключи не найдены!",
+		"keys_not_configured": "Ключи {{exchange}} не настроены!"
 	},
 	"success": {
 		"file_saved": "Файл успешно сохранен!",
@@ -146,7 +148,9 @@
 		"failed": "Синхронизация {{dataType}} не удалась",
 		"starting_sync": "Начало синхронизации данных",
 		"preparing_transactions": "Подготовка к синхронизации транзакций",
-		"all_completed": "Синхронизация всех данных завершена"
+		"all_completed": "Синхронизация всех данных завершена",
+		"orders": "ордеров",
+		"transactions": "транзакций"
 	},
 	"validation": {
 		"name": {

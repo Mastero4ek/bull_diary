@@ -2,13 +2,20 @@ import { useCallback, useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
+import { updateKeySyncStatus } from '@/redux/slices/candidateSlice'
 import {
 	clearError,
 	setConnectionStatus,
 	setConnectionStatusMessage,
 	setError,
+	setPositions,
 	setSubscriptionStatus,
-	updatePositions,
+	setSyncCancelled,
+	setSyncCompleted,
+	setSyncError,
+	setSyncProgress,
+	setSyncReset,
+	setSyncStarted,
 } from '@/redux/slices/websocketSlice'
 import WebSocketService from '@/services/WebSocketService'
 
@@ -21,9 +28,16 @@ export const useWebSocket = () => {
 		error,
 		lastUpdate,
 		connectionStatus,
+		isSyncing,
+		syncProgress,
+		syncStatus,
+		syncMessage,
+		lastSyncResult,
+		syncError,
 	} = useSelector(state => state.websocket)
 	const { exchange } = useSelector(state => state.filters)
 	const user = useSelector(state => state.candidate?.user)
+	const { language } = useSelector(state => state.settings)
 
 	const handleConnection = useCallback(
 		data => {
@@ -37,7 +51,7 @@ export const useWebSocket = () => {
 
 	const handlePositionsUpdate = useCallback(
 		data => {
-			dispatch(updatePositions(data.positions))
+			dispatch(setPositions(data.positions))
 			dispatch(clearError())
 		},
 		[dispatch]
@@ -58,11 +72,60 @@ export const useWebSocket = () => {
 		[dispatch]
 	)
 
+	const handleSyncProgress = useCallback(
+		data => {
+			dispatch(setSyncProgress(data))
+		},
+		[dispatch]
+	)
+
+	const handleSyncCompleted = useCallback(
+		data => {
+			dispatch(setSyncCompleted(data))
+			if (exchange?.name) {
+				dispatch(
+					updateKeySyncStatus({ exchange: exchange.name, syncStatus: true })
+				)
+			}
+		},
+		[dispatch, exchange?.name]
+	)
+
+	const handleSyncError = useCallback(
+		data => {
+			dispatch(setSyncError(data))
+			if (exchange?.name) {
+				dispatch(
+					updateKeySyncStatus({ exchange: exchange.name, syncStatus: false })
+				)
+			}
+		},
+		[dispatch, exchange?.name]
+	)
+
+	const handleSyncCancelled = useCallback(
+		data => {
+			dispatch(setSyncCancelled())
+			dispatch(setConnectionStatus(false))
+			dispatch(setSubscriptionStatus(false))
+			if (exchange?.name) {
+				dispatch(
+					updateKeySyncStatus({ exchange: exchange.name, syncStatus: false })
+				)
+			}
+		},
+		[dispatch, exchange?.name]
+	)
+
 	useEffect(() => {
 		WebSocketService.addListener('connection', handleConnection)
 		WebSocketService.addListener('positions_update', handlePositionsUpdate)
 		WebSocketService.addListener('connection_status', handleConnectionStatus)
 		WebSocketService.addListener('error', handleError)
+		WebSocketService.addListener('sync_progress', handleSyncProgress)
+		WebSocketService.addListener('sync_completed', handleSyncCompleted)
+		WebSocketService.addListener('sync_error', handleSyncError)
+		WebSocketService.addListener('sync_cancelled', handleSyncCancelled)
 
 		return () => {
 			WebSocketService.removeListener('connection', handleConnection)
@@ -72,12 +135,20 @@ export const useWebSocket = () => {
 				handleConnectionStatus
 			)
 			WebSocketService.removeListener('error', handleError)
+			WebSocketService.removeListener('sync_progress', handleSyncProgress)
+			WebSocketService.removeListener('sync_completed', handleSyncCompleted)
+			WebSocketService.removeListener('sync_error', handleSyncError)
+			WebSocketService.removeListener('sync_cancelled', handleSyncCancelled)
 		}
 	}, [
 		handleConnection,
 		handlePositionsUpdate,
 		handleConnectionStatus,
 		handleError,
+		handleSyncProgress,
+		handleSyncCompleted,
+		handleSyncError,
+		handleSyncCancelled,
 	])
 
 	const connect = useCallback(() => {
@@ -110,6 +181,42 @@ export const useWebSocket = () => {
 		}
 	}, [user?.id])
 
+	const startDataSync = useCallback(
+		(startDate, endDate) => {
+			if (user?.id && exchange?.name) {
+				dispatch(setSyncStarted())
+				dispatch(
+					updateKeySyncStatus({ exchange: exchange.name, syncStatus: false })
+				)
+
+				WebSocketService.startSync(
+					user.id,
+					exchange.name,
+					startDate,
+					endDate,
+					language
+				)
+			}
+		},
+		[user?.id, exchange?.name, dispatch]
+	)
+
+	const getSyncProgress = useCallback(() => {
+		if (user?.id) {
+			WebSocketService.getSyncProgress(user.id)
+		}
+	}, [user?.id])
+
+	const cancelSync = useCallback(() => {
+		if (user?.id && exchange?.name) {
+			WebSocketService.cancelSync(user.id, exchange.name)
+		}
+	}, [user?.id, exchange?.name])
+
+	const resetSyncState = useCallback(() => {
+		dispatch(setSyncReset())
+	}, [dispatch])
+
 	return {
 		isConnected,
 		isSubscribed,
@@ -122,5 +229,15 @@ export const useWebSocket = () => {
 		subscribeToPositions,
 		unsubscribeFromPositions,
 		getConnectionStatus,
+		isSyncing,
+		syncProgress,
+		syncStatus,
+		syncMessage,
+		lastSyncResult,
+		syncError,
+		startDataSync,
+		getSyncProgress,
+		cancelSync,
+		resetSyncState,
 	}
 }

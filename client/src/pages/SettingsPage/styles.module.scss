@@ -185,6 +185,33 @@
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 16rem;
+
+		.sync_progress_controls {
+			display: flex;
+			align-items: center;
+			gap: 10rem;
+
+			button {
+				background: none;
+				border: none;
+				color: var(--red);
+				cursor: pointer;
+				width: 23rem;
+				height: 23rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				@include font(400, 16rem, 120%);
+				padding: 0;
+				border-radius: 50%;
+				transition: background-color 0.2s;
+
+				&:hover {
+					background-color: var(--red);
+					color: white;
+				}
+			}
+		}
 	}
 
 	.sync_progress_bar {
@@ -220,7 +247,16 @@
 					var(--primaryHov) 50%,
 					transparent 100%
 				);
+				animation: none;
+			}
+
+			&.loading::after {
 				animation: shimmer 1.5s infinite;
+			}
+
+			&.success::after {
+				animation: none;
+				background: var(--primaryHov);
 			}
 		}
 	}
@@ -229,6 +265,9 @@
 @keyframes shimmer {
 	0% {
 		transform: translateX(-100%);
+	}
+	50% {
+		opacity: 1;
 	}
 	100% {
 		transform: translateX(100%);

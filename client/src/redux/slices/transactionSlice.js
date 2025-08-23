@@ -34,7 +34,13 @@ export const getBybitTransactions = createAsyncThunk(
 	}
 )
 
+const handleTransactionError = (state, action) => {
+	state.errorMessage = action?.payload?.message
+	state.serverStatus = 'error'
+}
+
 const initialState = {
+	fakeTransactions: fakeWalletTransactions,
 	transactions: [],
 	serverStatus: '',
 	errorMessage: null,
@@ -42,7 +48,6 @@ const initialState = {
 	sort: { type: 'transactionTime', value: 'desc' },
 	totalPages: 0,
 	total: 0,
-	fakeTransactions: null,
 }
 
 const transactionSlice = createSlice({
@@ -59,7 +64,10 @@ const transactionSlice = createSlice({
 			state.sort = action.payload
 		},
 		clearTransactions: state => {
-			state.transactions = []
+			return {
+				...initialState,
+				fakeTransactions: fakeWalletTransactions,
+			}
 		},
 	},
 	extraReducers: builder => {
@@ -74,21 +82,10 @@ const transactionSlice = createSlice({
 				state.transactions = transactions || []
 				state.totalPages = total_pages || 0
 				state.total = total || 0
-				state.fakeTransactions =
-					!transactions || transactions.length === 0
-						? fakeWalletTransactions.slice(0, 5)
-						: null
 				state.serverStatus = 'success'
 				state.errorMessage = message
 			})
-			.addCase(getBybitTransactions.rejected, (state, action) => {
-				state.transactions = []
-				state.fakeTransactions = fakeWalletTransactions.slice(0, 5)
-				state.totalPages = 0
-				state.total = 0
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(getBybitTransactions.rejected, handleTransactionError)
 	},
 })
 

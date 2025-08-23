@@ -123,7 +123,9 @@
 		"failed_activate_user": "Failed to activate user!",
 		"failed_deactivate_user": "Failed to deactivate user!",
 		"order_required": "Order is required!",
-		"tournament_creation_failed": "Failed to create tournament!"
+		"tournament_creation_failed": "Failed to create tournament!",
+		"keys_not_found": "Keys not found!",
+		"keys_not_configured": "{{exchange}} keys are not configured!"
 	},
 	"success": {
 		"file_saved": "File saved successfully!",
@@ -146,7 +148,9 @@
 		"failed": "{{dataType}} synchronization failed",
 		"starting_sync": "Starting data synchronization",
 		"preparing_transactions": "Preparing to sync transactions",
-		"all_completed": "All data synchronization completed"
+		"all_completed": "All data synchronization completed",
+		"orders": "orders",
+		"transactions": "transactions"
 	},
 	"validation": {
 		"name": {

@@ -25,7 +25,13 @@ export const getBybitWallet = createAsyncThunk(
 	}
 )
 
+const handleWalletError = (state, action) => {
+	state.errorMessage = action?.payload?.message
+	state.serverStatus = 'error'
+}
+
 const initialState = {
+	fakeWallet: fakeWallet,
 	wallet: {
 		total_balance: 0,
 		unrealised_pnl: 0,
@@ -36,7 +42,6 @@ const initialState = {
 		net_profit: 0,
 		winrate: 0,
 	},
-	fakeWallet: null,
 	serverStatus: '',
 	errorMessage: null,
 }
@@ -51,8 +56,9 @@ const walletSlice = createSlice({
 		setErrorMessage(state, action) {
 			state.errorMessage = action.payload
 		},
+
 		clearWallet() {
-			return initialState
+			return { ...initialState, fakeWallet: fakeWallet }
 		},
 	},
 	extraReducers: builder => {
@@ -79,23 +85,8 @@ const walletSlice = createSlice({
 						100 || 0
 				state.serverStatus = 'success'
 				state.errorMessage = message
-				state.fakeWallet = null
 			})
-			.addCase(getBybitWallet.rejected, (state, action) => {
-				state.wallet = {
-					total_balance: 0,
-					unrealised_pnl: 0,
-					total_profit: 0,
-					total_loss: 0,
-					wining_trades: 0,
-					losing_trades: 0,
-					net_profit: 0,
-					winrate: 0,
-				}
-				state.fakeWallet = fakeWallet
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(getBybitWallet.rejected, handleWalletError)
 	},
 })
 

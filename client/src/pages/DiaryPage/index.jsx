@@ -17,14 +17,13 @@ import { useClientFiltering } from '@/hooks/useClientFiltering'
 import { useWebSocket } from '@/hooks/useWebSocket'
 import { SharedPositionPopup } from '@/popups/SharedPositionPopup'
 import {
-	resetWebSocket,
 	setPage,
 	setServerStatus,
 	setSort,
+	setWebSocketReset,
 } from '@/redux/slices/websocketSlice'
 
 import { BarChart } from './BarChart'
-import styles from './styles.module.scss'
 
 export const DiaryPage = React.memo(() => {
 	const { t } = useTranslation()
@@ -44,14 +43,10 @@ export const DiaryPage = React.memo(() => {
 		isConnected,
 		isSubscribed,
 		positions: rawPositions,
-		error,
-		lastUpdate,
-		connectionStatus,
 		connect,
 		disconnect,
 		subscribeToPositions,
 		unsubscribeFromPositions,
-		getConnectionStatus,
 	} = useWebSocket()
 
 	const { filteredData: filteredPositions, totalPages: totalFilteredPages } =
@@ -92,13 +87,15 @@ export const DiaryPage = React.memo(() => {
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
 					}}
 				>
-					{amount
-						? '****'
-						: value === 0
-						? '0.0000'
-						: value > 0
-						? `+${value}`
-						: value}
+					{parseFloat(
+						amount
+							? '****'
+							: value === 0
+							? '0.0000'
+							: value > 0
+							? `+${value}`
+							: value
+					).toFixed(4)}
 				</span>
 			),
 			width: '100%',
@@ -232,7 +229,7 @@ export const DiaryPage = React.memo(() => {
 
 	useEffect(() => {
 		return () => {
-			dispatch(resetWebSocket())
+			dispatch(setWebSocketReset())
 		}
 	}, [location, dispatch])
 
@@ -244,19 +241,6 @@ export const DiaryPage = React.memo(() => {
 			entries={true}
 			total={true}
 		>
-			{isSubscribed && (
-				<div
-					className={styles.websocket_status}
-					style={{
-						backgroundColor: isConnected
-							? 'var(--green)'
-							: error
-							? 'var(--red)'
-							: 'var(--orange)',
-					}}
-				></div>
-			)}
-
 			{serverStatus === 'loading' && <Loader />}
 
 			<div style={{ width: '100%' }}>

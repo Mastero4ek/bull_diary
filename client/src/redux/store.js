@@ -4,7 +4,6 @@ import candidate from './slices/candidateSlice'
 import filters from './slices/filtersSlice'
 import orders from './slices/ordersSlice'
 import settings from './slices/settingsSlice'
-import sync from './slices/syncSlice'
 import tournaments from './slices/tournamentSlice'
 import transactions from './slices/transactionSlice'
 import users from './slices/usersSlice'
@@ -19,10 +18,8 @@ export const store = configureStore({
 		tournaments,
 		orders,
 		wallet,
-
 		transactions,
 		users,
-		sync,
 		websocket,
 	},
 })

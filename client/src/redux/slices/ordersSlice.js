@@ -80,16 +80,28 @@ export const removedOrder = createAsyncThunk(
 	}
 )
 
+const handleOrderError = (state, action) => {
+	state.errorMessage = action?.payload?.message
+	state.serverStatus = 'error'
+	state.description = ''
+	state.order = null
+}
+
+const handleOrdersError = (state, action) => {
+	state.errorMessage = action?.payload?.message
+	state.serverStatus = 'error'
+}
+
 const initialState = {
+	fakeOrders: fakePnlOrders,
+	orders: [],
 	order: null,
 	description: '',
-	fakeOrders: null,
-	orders: [],
-	page: 1,
 	sort: { type: 'closed_time', value: 'desc' },
+	page: 1,
+	totalPages: 0,
 	totalProfit: 0,
 	totalLoss: 0,
-	totalPages: 0,
 	serverStatus: '',
 	errorMessage: null,
 }
@@ -119,15 +131,9 @@ const ordersSlice = createSlice({
 		clearDescription(state) {
 			state.description = ''
 		},
+
 		clearOrders(state) {
-			state.order = null
-			state.orders = []
-			state.sort = { type: 'closed_time', value: 'desc' }
-			state.totalProfit = 0
-			state.totalLoss = 0
-			state.totalPages = 0
-			state.serverStatus = ''
-			state.errorMessage = null
+			return { ...initialState, fakeOrders: fakePnlOrders }
 		},
 	},
 	extraReducers: builder => {
@@ -139,9 +145,7 @@ const ordersSlice = createSlice({
 			})
 			.addCase(getBybitOrdersPnl.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
-				state.errorMessage = action.payload.message || null
-				state.fakeOrders =
-					action.payload.orders.length === 0 ? fakePnlOrders : null
+				state.errorMessage = null
 
 				if (!action.payload.message) {
 					state.totalLoss = action.payload.total_loss
@@ -150,16 +154,7 @@ const ordersSlice = createSlice({
 					state.totalPages = action.payload.total_pages
 				}
 			})
-			.addCase(getBybitOrdersPnl.rejected, (state, action) => {
-				state.order = null
-				state.orders = []
-				state.errorMessage = action?.payload?.message
-				state.fakeOrders = fakePnlOrders
-				state.serverStatus = 'error'
-				state.totalPages = 0
-				state.totalProfit = 0
-				state.totalLoss = 0
-			})
+			.addCase(getBybitOrdersPnl.rejected, handleOrdersError)
 
 			//get-order-description
 			.addCase(getOrderDescription.pending, state => {
@@ -171,12 +166,7 @@ const ordersSlice = createSlice({
 				state.errorMessage = action.payload.message || null
 				state.description = action.payload.description
 			})
-			.addCase(getOrderDescription.rejected, (state, action) => {
-				state.order = null
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-				state.description = ''
-			})
+			.addCase(getOrderDescription.rejected, handleOrderError)
 
 			//update-order-description
 			.addCase(updateOrderDescription.pending, state => {
@@ -188,12 +178,7 @@ const ordersSlice = createSlice({
 				state.errorMessage = action.payload.message || null
 				state.description = action.payload.description
 			})
-			.addCase(updateOrderDescription.rejected, (state, action) => {
-				state.order = null
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-				state.description = ''
-			})
+			.addCase(updateOrderDescription.rejected, handleOrderError)
 
 			//saved-order
 			.addCase(savedOrder.pending, state => {
@@ -205,11 +190,7 @@ const ordersSlice = createSlice({
 				state.serverStatus = 'success'
 				state.order = action.payload.order
 			})
-			.addCase(savedOrder.rejected, (state, action) => {
-				state.order = null
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(savedOrder.rejected, handleOrderError)
 
 			//removed-order
 			.addCase(removedOrder.pending, state => {
@@ -221,11 +202,7 @@ const ordersSlice = createSlice({
 				state.serverStatus = 'success'
 				state.order = action.payload.order
 			})
-			.addCase(removedOrder.rejected, (state, action) => {
-				state.order = null
-				state.errorMessage = action?.payload?.message
-				state.serverStatus = 'error'
-			})
+			.addCase(removedOrder.rejected, handleOrderError)
 	},
 })
 

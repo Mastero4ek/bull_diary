@@ -1,45 +1,32 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { Loader } from '@/components/ui/general/Loader'
+import { Mark } from '@/components/ui/general/Mark'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { capitalize, colorizedNum } from '@/helpers/functions'
+import { useSyncStatus } from '@/hooks/useSyncStatus'
+import { ConfirmPopup } from '@/popups/ConfirmPopup'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { Loader } from '@/components/ui/general/Loader';
-import { Mark } from '@/components/ui/general/Mark';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import {
-  capitalize,
-  colorizedNum,
-} from '@/helpers/functions';
-import { ConfirmPopup } from '@/popups/ConfirmPopup';
-import {
-  clearOrders,
-  getBybitOrdersPnl,
-  removedOrder,
-  setPage,
-  setSort,
-} from '@/redux/slices/ordersSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	clearOrders,
+	getBybitOrdersPnl,
+	removedOrder,
+	setPage,
+	setSort,
+} from '@/redux/slices/ordersSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const BookmarksPage = React.memo(() => {
 	const { t } = useTranslation()
@@ -48,6 +35,7 @@ export const BookmarksPage = React.memo(() => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const { showSuccess, showError } = useNotification()
+	const { syncWarning, isExchangeSynced, isSynced } = useSyncStatus()
 
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const { date, limit, search, exchange } = useSelector(state => state.filters)
@@ -92,13 +80,17 @@ export const BookmarksPage = React.memo(() => {
 		{
 			Header: t('table.qty'),
 			accessor: 'quality',
-			Cell: ({ cell: { value } }) => <>{amount ? '****' : value}</>,
+			Cell: ({ cell: { value } }) => (
+				<>{amount ? '****' : parseFloat(value).toFixed(4)}</>
+			),
 			width: '100%',
 		},
 		{
 			Header: t('table.margin'),
 			accessor: 'margin',
-			Cell: ({ cell: { value } }) => <>{amount ? '****' : value}</>,
+			Cell: ({ cell: { value } }) => (
+				<>{amount ? '****' : parseFloat(value).toFixed(2)}</>
+			),
 			width: '100%',
 		},
 		{
@@ -110,13 +102,15 @@ export const BookmarksPage = React.memo(() => {
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
 					}}
 				>
-					{amount
-						? '****'
-						: value === 0
-						? '0.0000'
-						: value > 0
-						? `+${value}`
-						: value}
+					{parseFloat(
+						amount
+							? '****'
+							: value === 0
+							? '0.0000'
+							: value > 0
+							? `+${value}`
+							: value
+					).toFixed(2)}
 				</span>
 			),
 			width: '100%',
@@ -130,13 +124,15 @@ export const BookmarksPage = React.memo(() => {
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
 					}}
 				>
-					{amount
-						? '****'
-						: value === 0
-						? '0.0000'
-						: value > 0
-						? `+${value}`
-						: value}
+					{parseFloat(
+						amount
+							? '****'
+							: value === 0
+							? '0.0000'
+							: value > 0
+							? `+${value}`
+							: value
+					).toFixed(2)}
 				</span>
 			),
 			width: '100%',
@@ -154,14 +150,14 @@ export const BookmarksPage = React.memo(() => {
 				>
 					<ControlButton
 						icon={'view'}
-						disabled={fakeOrders}
+						disabled={orders.length === 0}
 						onClickBtn={() => handleClickView(row.original)}
 					/>
 
 					<div className={styles.bookmarks_delete_button}>
 						<ControlButton
 							icon={'cross'}
-							disabled={fakeOrders}
+							disabled={orders.length === 0}
 							onClickBtn={() => handleClickRemove(row.original)}
 						/>
 					</div>
@@ -189,6 +185,11 @@ export const BookmarksPage = React.memo(() => {
 	}
 
 	const handleClickUpdate = async () => {
+		if (!isExchangeSynced()) {
+			showError(t('page.table.sync_required_error'))
+			return
+		}
+
 		try {
 			const resultAction = await dispatch(
 				getBybitOrdersPnl({
@@ -226,6 +227,11 @@ export const BookmarksPage = React.memo(() => {
 
 	const removeBookmark = useCallback(
 		async item => {
+			if (!isExchangeSynced()) {
+				showError(t('page.table.sync_required_error'))
+				return
+			}
+
 			try {
 				const resultAction1 = await dispatch(
 					removedOrder({
@@ -270,6 +276,7 @@ export const BookmarksPage = React.memo(() => {
 			limit,
 			showSuccess,
 			showError,
+			isExchangeSynced,
 		]
 	)
 
@@ -284,7 +291,7 @@ export const BookmarksPage = React.memo(() => {
 	}
 
 	useEffect(() => {
-		if (exchange?.name && date?.start_date && date?.end_date) {
+		if (exchange?.name && date?.start_date && date?.end_date && isSynced) {
 			dispatch(setPage(1))
 
 			dispatch(
@@ -300,10 +307,10 @@ export const BookmarksPage = React.memo(() => {
 				})
 			)
 		}
-	}, [limit, dispatch])
+	}, [limit, dispatch, isSynced, exchange, date, sort, search])
 
 	useEffect(() => {
-		if (exchange?.name && date?.start_date && date?.end_date) {
+		if (exchange?.name && date?.start_date && date?.end_date && isSynced) {
 			dispatch(
 				getBybitOrdersPnl({
 					sort,
@@ -317,7 +324,7 @@ export const BookmarksPage = React.memo(() => {
 				})
 			)
 		}
-	}, [dispatch, exchange, date, sort, page, search])
+	}, [dispatch, exchange, date, sort, page, search, limit, isSynced])
 
 	useEffect(() => {
 		if (orders.length === 0 && serverStatus === 'success') {
@@ -353,7 +360,8 @@ export const BookmarksPage = React.memo(() => {
 					page={page}
 					toPage={goToPage}
 					sortBy={sortBy}
-					emptyWarn={errorMessage || t('page.bookmarks.empty')}
+					emptyWarn={errorMessage || t('page.table.empty')}
+					syncWarn={syncWarning}
 				/>
 			</div>
 
