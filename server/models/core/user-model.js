@@ -1,5 +1,13 @@
 const { Schema, model } = require('mongoose')
 
+const KeysModel = require('../auth/keys-model')
+const LevelModel = require('./level-model')
+const TokenModel = require('../auth/token-model')
+const TournamentUserModel = require('./tournament_user-model')
+const OrderModel = require('./order-model')
+const TransactionModel = require('./transaction-model')
+const FileModel = require('./file-model')
+
 const UserSchema = new Schema({
 	name: { type: String, required: true },
 	role: { type: String, default: 'user' },
@@ -68,15 +76,8 @@ UserSchema.pre('updateMany', function (next) {
 UserSchema.pre('findOneAndDelete', async function (next) {
 	try {
 		const user = await this.model.findOne(this.getQuery())
-		if (user) {
-			const KeysModel = require('./keys-model')
-			const LevelModel = require('./level-model')
-			const TokenModel = require('./token-model')
-			const TournamentUserModel = require('./tournament_user-model')
-			const OrderModel = require('./order-model')
-			const TransactionModel = require('./transaction-model')
-			const FileModel = require('./file-model')
 
+		if (user) {
 			await Promise.all([
 				KeysModel.deleteOne({ user: user._id }),
 				LevelModel.deleteOne({ user: user._id }),
@@ -96,15 +97,8 @@ UserSchema.pre('findOneAndDelete', async function (next) {
 UserSchema.pre('deleteOne', async function (next) {
 	try {
 		const user = await this.model.findOne(this.getQuery())
-		if (user) {
-			const KeysModel = require('./keys-model')
-			const LevelModel = require('./level-model')
-			const TokenModel = require('./token-model')
-			const TournamentUserModel = require('./tournament_user-model')
-			const OrderModel = require('./order-model')
-			const TransactionModel = require('./transaction-model')
-			const FileModel = require('./file-model')
 
+		if (user) {
 			await Promise.all([
 				KeysModel.deleteOne({ user: user._id }),
 				LevelModel.deleteOne({ user: user._id }),
@@ -124,15 +118,8 @@ UserSchema.pre('deleteOne', async function (next) {
 UserSchema.pre('deleteMany', async function (next) {
 	try {
 		const users = await this.model.find(this.getQuery())
-		if (users.length > 0) {
-			const KeysModel = require('./keys-model')
-			const LevelModel = require('./level-model')
-			const TokenModel = require('./token-model')
-			const TournamentUserModel = require('./tournament_user-model')
-			const OrderModel = require('./order-model')
-			const TransactionModel = require('./transaction-model')
-			const FileModel = require('./file-model')
 
+		if (users.length > 0) {
 			const userIds = users.map(user => user._id)
 
 			await Promise.all([

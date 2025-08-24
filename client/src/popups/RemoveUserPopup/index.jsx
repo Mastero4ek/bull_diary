@@ -1,43 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
+import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { ErrorForm } from '@/components/ui/general/ErrorForm'
+import { Loader } from '@/components/ui/general/Loader'
+import { RootInput } from '@/components/ui/inputs/RootInput'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
+	removeUser as removeUserCandidate,
+	setChangeUser as setChangeUserCandidate,
+} from '@/redux/slices/candidateSlice'
 import {
-  PopupDescLayout,
-} from '@/components/layouts/PopupLayout/PopupDescLayout';
-import {
-  PopupFormLayout,
-} from '@/components/layouts/PopupLayout/PopupFormLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { ErrorForm } from '@/components/ui/general/ErrorForm';
-import { Loader } from '@/components/ui/general/Loader';
-import { RootInput } from '@/components/ui/inputs/RootInput';
-import {
-  removeUser as removeUserCandidate,
-  setChangeUser as setChangeUserCandidate,
-} from '@/redux/slices/candidateSlice';
-import {
-  getUsers,
-  removeUser as removeUserUsers,
-  setChangeUser as setChangeUserUsers,
-} from '@/redux/slices/usersSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	getUsers,
+	getUsersList,
+	removeUser as removeUserUsers,
+	setChangeUser as setChangeUserUsers,
+} from '@/redux/slices/usersSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const RemoveUserPopup = React.memo(({ item }) => {
 	const { t } = useTranslation()
@@ -69,7 +58,7 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 					? removeUserUsers({
 							current_email: item.email,
 							fill_email: data.email,
-							userId: item.id,
+							userId: item._id,
 					  })
 					: removeUserCandidate({
 							current_email: item.email,
@@ -92,6 +81,8 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 						end_time: date.end_date,
 					})
 				)
+
+				dispatch(getUsersList())
 				originalPromiseResult2 = unwrapResult(resultAction2)
 			}
 
