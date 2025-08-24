@@ -1,33 +1,24 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from 'react'
 
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import {
-  PopupDescLayout,
-} from '@/components/layouts/PopupLayout/PopupDescLayout';
-import {
-  PopupFormLayout,
-} from '@/components/layouts/PopupLayout/PopupFormLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { ErrorForm } from '@/components/ui/general/ErrorForm';
-import { RootInput } from '@/components/ui/inputs/RootInput';
-import { signIn } from '@/redux/slices/candidateSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
+import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { ErrorForm } from '@/components/ui/general/ErrorForm'
+import { RootInput } from '@/components/ui/inputs/RootInput'
+import { signIn } from '@/redux/slices/candidateSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import { ForgotPopup } from '../ForgotPopup';
-import { SignUpPopup } from '../SignUpPopup';
-import styles from './styles.module.scss';
+import { ForgotPopup } from '../ForgotPopup'
+import { SignUpPopup } from '../SignUpPopup'
+import styles from './styles.module.scss'
 
 export const SignInPopup = React.memo(() => {
 	const { t } = useTranslation()
@@ -86,8 +77,18 @@ export const SignInPopup = React.memo(() => {
 	return (
 		<>
 			<PopupDescLayout
-				title={t('popup.signin.title_signup')}
-				text={t('popup.signin.subtitle_signup')}
+				title={
+					<span
+						dangerouslySetInnerHTML={{ __html: t('popup.signin.title_signup') }}
+					/>
+				}
+				text={
+					<span
+						dangerouslySetInnerHTML={{
+							__html: t('popup.signin.subtitle_signup'),
+						}}
+					/>
+				}
 			>
 				<RootButton
 					onClickBtn={handleSignUp}
@@ -97,9 +98,15 @@ export const SignInPopup = React.memo(() => {
 			</PopupDescLayout>
 
 			<PopupFormLayout
-				title={t('popup.signin.title')}
+				title={
+					<span dangerouslySetInnerHTML={{ __html: t('popup.signin.title') }} />
+				}
 				socials={true}
-				subtitle={t('popup.signin.subtitle')}
+				subtitle={
+					<span
+						dangerouslySetInnerHTML={{ __html: t('popup.signin.subtitle') }}
+					/>
+				}
 			>
 				<form
 					className={styles.signin_form_wrapper}

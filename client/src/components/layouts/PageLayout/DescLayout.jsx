@@ -1,7 +1,9 @@
+import React from 'react'
+
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
 import { Icon } from '@/components/ui/general/Icon'
 import { H4 } from '@/components/ui/titles/H4'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import React from 'react'
+
 import styles from './styles.module.scss'
 
 export const DescLayout = React.memo(props => {
@@ -20,9 +22,11 @@ export const DescLayout = React.memo(props => {
 			</div>
 
 			{description && (
-				<RootDesc>
-					<span>{description}</span>
-				</RootDesc>
+				<div className={styles.desc_layout}>
+					<RootDesc>
+						<span>{description}</span>
+					</RootDesc>
+				</div>
 			)}
 
 			{children}

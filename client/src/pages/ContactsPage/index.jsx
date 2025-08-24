@@ -19,8 +19,6 @@ export const ContactsPage = React.memo(() => {
 			<div className={styles.contacts_wrapper}>
 				<OuterBlock>
 					<div className={styles.contacts_form}>
-						{/* <Loader /> */}
-
 						<ContactForm />
 					</div>
 				</OuterBlock>
@@ -29,7 +27,13 @@ export const ContactsPage = React.memo(() => {
 			<OuterBlock>
 				<DescLayout
 					icon={'contacts'}
-					title={t('page.contacts.title')}
+					title={
+						<span
+							dangerouslySetInnerHTML={{
+								__html: t('page.contacts.title'),
+							}}
+						/>
+					}
 					description={
 						<span
 							dangerouslySetInnerHTML={{

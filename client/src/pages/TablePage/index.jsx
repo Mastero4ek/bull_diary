@@ -155,13 +155,13 @@ export const TablePage = () => {
 					>
 						<ControlButton
 							icon={'view'}
-							disabled={orders.length === 0}
+							disabled={!orders || orders.length === 0}
 							onClickBtn={() => handleClickView(row.original)}
 						/>
 
 						<ControlButton
 							icon={'save'}
-							disabled={orders.length === 0 || row.original.bookmark}
+							disabled={!orders || orders.length === 0 || row.original.bookmark}
 							onClickBtn={() => handleClickSave(row.original)}
 						/>
 					</div>

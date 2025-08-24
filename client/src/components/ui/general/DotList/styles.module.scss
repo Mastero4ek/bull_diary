@@ -8,20 +8,49 @@
 
 	li {
 		position: relative;
-		padding-left: 25rem;
 
-		span {
-			font-size: 20rem;
-		}
+		div {
+			width: 100%;
 
-		&::after {
-			position: absolute;
-			content: '★';
-			left: 0;
-			top: 50%;
-			transform: translateY(-50%);
-			font-size: 20rem;
-			color: var(--primaryDef);
+			span {
+				@include font(400, 20rem, 125%);
+			}
 		}
+	}
+}
+
+.left {
+	padding-left: 25rem;
+
+	&::after {
+		left: 0;
+		right: auto;
+		position: absolute;
+		content: '★';
+		top: -3rem;
+		@include font(400, 20rem, 125%);
+		color: var(--primaryDef);
+	}
+
+	div {
+		text-align: left;
+	}
+}
+
+.right {
+	padding-right: 25rem;
+
+	&::after {
+		right: 0;
+		left: auto;
+		position: absolute;
+		content: '★';
+		top: -3rem;
+		@include font(400, 20rem, 125%);
+		color: var(--primaryDef);
+	}
+
+	div {
+		text-align: right;
 	}
 }

@@ -1,17 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import {
-  PopupDescLayout,
-} from '@/components/layouts/PopupLayout/PopupDescLayout';
-import {
-  PopupFormLayout,
-} from '@/components/layouts/PopupLayout/PopupFormLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
+import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
+import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const ConfirmPopup = React.memo(props => {
 	const { subtitle, onClickConfirm } = props
@@ -30,7 +26,13 @@ export const ConfirmPopup = React.memo(props => {
 	return (
 		<>
 			<PopupDescLayout
-				title={t('popup.confirm.title')}
+				title={
+					<span
+						dangerouslySetInnerHTML={{
+							__html: t('popup.confirm.title'),
+						}}
+					/>
+				}
 				text={
 					<span
 						dangerouslySetInnerHTML={{

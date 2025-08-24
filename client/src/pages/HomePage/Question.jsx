@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { ContactForm } from '@/components/ui/general/ContactForm';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { H1 } from '@/components/ui/titles/H1';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { ContactForm } from '@/components/ui/general/ContactForm'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { H1 } from '@/components/ui/titles/H1'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Question = () => {
 	const { t } = useTranslation()
@@ -16,7 +16,11 @@ export const Question = () => {
 				<div className={styles.question_wrap}>
 					<div className={styles.question_content}>
 						<H1>
-							<b>{t('page.home.question.title')}</b>
+							<b
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.question.title'),
+								}}
+							/>
 						</H1>
 
 						<RootDesc>

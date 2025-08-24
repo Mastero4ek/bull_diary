@@ -56,7 +56,9 @@ export const NotificationLayout = React.memo(() => {
 						</div>
 
 						<SmallDesc>
-							<span>{notification.message}</span>
+							<span
+								dangerouslySetInnerHTML={{ __html: notification.message }}
+							/>
 						</SmallDesc>
 
 						<div

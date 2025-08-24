@@ -1,6 +1,8 @@
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import styles from './styles.module.scss'
 import React from 'react'
+
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+
+import styles from './styles.module.scss'
 
 export const ErrorTable = React.memo(({ error, width = 70, center = true }) => {
 	return (
@@ -9,7 +11,7 @@ export const ErrorTable = React.memo(({ error, width = 70, center = true }) => {
 			style={{ width: `${width}%`, textAlign: `${center ? 'center' : 'left'}` }}
 		>
 			<RootDesc>
-				<span>{error}</span>
+				<span dangerouslySetInnerHTML={{ __html: error }} />
 			</RootDesc>
 		</div>
 	)

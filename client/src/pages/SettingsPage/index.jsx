@@ -27,7 +27,13 @@ export const SettingsPage = React.memo(() => {
 				{!changeDesc ? (
 					<DescLayout
 						icon={'settings'}
-						title={t('page.settings.tuning_title')}
+						title={
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.settings.tuning_title'),
+								}}
+							/>
+						}
 						description={
 							<span
 								dangerouslySetInnerHTML={{
@@ -39,7 +45,13 @@ export const SettingsPage = React.memo(() => {
 				) : (
 					<DescLayout
 						icon={'keys'}
-						title={t('page.settings.keys_title')}
+						title={
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.settings.keys_title'),
+								}}
+							/>
+						}
 						description={
 							<span
 								dangerouslySetInnerHTML={{

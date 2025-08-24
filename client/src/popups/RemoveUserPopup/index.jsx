@@ -10,7 +10,6 @@ import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayou
 import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
 import { ErrorForm } from '@/components/ui/general/ErrorForm'
 import { Loader } from '@/components/ui/general/Loader'
 import { RootInput } from '@/components/ui/inputs/RootInput'
@@ -133,9 +132,13 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 	return (
 		<>
 			<PopupDescLayout
-				title={`${t('popup.remove_user.title')} ${
-					isAdminContext ? currentUser?.name : item?.name
-				}!`}
+				title={
+					<span
+						dangerouslySetInnerHTML={{
+							__html: t('popup.remove_user.title'),
+						}}
+					/>
+				}
 				text={
 					isAdminContext ? (
 						<span
@@ -179,14 +182,6 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 							}),
 						}}
 					/>
-
-					<RootDesc>
-						<span>
-							{isAdminContext
-								? t('popup.remove_user.admin_description')
-								: t('popup.remove_user.user_description')}
-						</span>
-					</RootDesc>
 
 					<RootButton
 						type={'submit'}

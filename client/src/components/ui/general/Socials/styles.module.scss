@@ -1,9 +1,14 @@
 .socials_wrapper {
 	display: flex;
-	align-items: center;
-	gap: 16rem;
+	flex-direction: row !important;
+	align-items: center !important;
+	gap: 16rem !important;
+	padding-left: 0 !important;
+	list-style: none !important;
 
 	li {
+		list-style: none !important;
+
 		a {
 			display: block;
 

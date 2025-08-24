@@ -4,6 +4,20 @@
 	padding-right: 40rem;
 }
 
+.desc_layout {
+	ul {
+		list-style: disc;
+		padding-left: 15rem;
+		display: flex;
+		flex-direction: column;
+		gap: 10rem;
+
+		li {
+			list-style: disc;
+		}
+	}
+}
+
 .page {
 	display: flex;
 	flex-direction: column;

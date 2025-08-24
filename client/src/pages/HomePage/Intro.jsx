@@ -1,13 +1,13 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { H1 } from '@/components/ui/titles/H1';
-import { SignUpPopup } from '@/popups/SignUpPopup';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { H1 } from '@/components/ui/titles/H1'
+import { SignUpPopup } from '@/popups/SignUpPopup'
 
-import { Counts } from './Counts';
-import styles from './styles.module.scss';
+import { Counts } from './Counts'
+import styles from './styles.module.scss'
 
 export const Intro = () => {
 	const { openPopup } = usePopup()
@@ -23,11 +23,17 @@ export const Intro = () => {
 				<div className={styles.intro_wrap}>
 					<div className={styles.intro_content}>
 						<H1>
-							<b>{t('page.home.intro.title')}</b>
+							<b
+								dangerouslySetInnerHTML={{ __html: t('page.home.intro.title') }}
+							/>
 						</H1>
 
 						<RootDesc>
-							<span>{t('page.home.intro.description')}</span>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.intro.description'),
+								}}
+							/>
 						</RootDesc>
 
 						<RootButton

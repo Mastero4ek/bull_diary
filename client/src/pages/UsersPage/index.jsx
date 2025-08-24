@@ -134,7 +134,7 @@ export const UsersPage = () => {
 					}}
 				>
 					<ControlButton
-						disabled={users.length === 0}
+						disabled={!users || users.length === 0}
 						icon={'view'}
 						onClickBtn={() => handleClickView(row.original)}
 					/>
@@ -147,7 +147,7 @@ export const UsersPage = () => {
 						}
 					>
 						<ControlButton
-							disabled={users.length === 0}
+							disabled={!users || users.length === 0}
 							icon={row.original.inactive ? 'active' : 'inactive'}
 							onClickBtn={() =>
 								row.original.inactive
@@ -159,7 +159,7 @@ export const UsersPage = () => {
 
 					<div className={styles.user_delete_button}>
 						<ControlButton
-							disabled={users.length === 0}
+							disabled={!users || users.length === 0}
 							icon={'cross'}
 							onClickBtn={() => handleClickRemove(row.original)}
 						/>
@@ -389,8 +389,16 @@ export const UsersPage = () => {
 			<OuterBlock>
 				<DescLayout
 					icon={'all-users'}
-					title={t('page.users.title')}
-					description={t('page.users.subtitle')}
+					title={
+						<span
+							dangerouslySetInnerHTML={{ __html: t('page.users.title') }}
+						></span>
+					}
+					description={
+						<span
+							dangerouslySetInnerHTML={{ __html: t('page.users.subtitle') }}
+						></span>
+					}
 				>
 					{user && user?.role === 'admin' && (
 						<RootButton

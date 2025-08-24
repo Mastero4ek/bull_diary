@@ -129,7 +129,7 @@
 		article {
 			width: 100%;
 			height: 100%;
-			padding: 20rem 40rem;
+			padding: 20rem;
 			display: flex;
 			justify-content: space-between;
 			flex-direction: column;
@@ -137,6 +137,8 @@
 		}
 
 		h4 {
+			@include font(700, 22rem, 125%);
+
 			b {
 				color: var(--primaryDef);
 			}
@@ -152,8 +154,7 @@
 
 			div:nth-child(2) {
 				span {
-					font-size: 20rem;
-					line-height: 125%;
+					@include font(400, 18rem, 125%);
 				}
 			}
 		}
@@ -169,7 +170,7 @@
 .start_wrap {
 	display: flex;
 	width: 100%;
-	padding: 20rem 70rem;
+	padding: 20rem 40rem;
 
 	button {
 		padding: 20rem 30rem;
@@ -201,6 +202,7 @@
 	grid-template-columns: repeat(3, 1fr);
 	gap: 20rem;
 	margin-right: 20rem;
+	width: 1260rem;
 
 	li {
 		position: relative;
@@ -209,11 +211,12 @@
 		align-items: flex-start;
 
 		article {
-			padding: 20rem 30rem;
-			padding-right: 150rem;
+			padding: 20rem;
+			padding-right: 100rem;
 			display: flex;
 			flex-direction: column;
 			gap: 20rem;
+			height: 100%;
 		}
 
 		strong {
@@ -241,8 +244,6 @@
 	width: 700rem;
 
 	div {
-		width: 100%;
-
 		h1 {
 			width: 100%;
 			text-align: right;
@@ -311,11 +312,11 @@
 	margin-right: 70rem;
 	display: flex;
 	justify-content: space-between;
-	gap: 30rem;
+	gap: 100rem;
 }
 
 .benefits_slider {
-	width: 1000rem;
+	width: 930rem;
 	height: auto;
 }
 
@@ -344,10 +345,6 @@
 	flex-direction: column;
 	gap: 30rem;
 	align-items: flex-end;
-
-	div {
-		width: 100%;
-	}
 
 	h1 {
 		width: 100%;

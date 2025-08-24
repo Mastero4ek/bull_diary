@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-import { useTranslation } from 'react-i18next';
-import { useTable } from 'react-table';
-import { v4 as uuidv4 } from 'uuid';
+import { useTranslation } from 'react-i18next'
+import { useTable } from 'react-table'
+import { v4 as uuidv4 } from 'uuid'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { ErrorTable } from '@/components/ui/general/ErrorTable';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { ErrorTable } from '@/components/ui/general/ErrorTable'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
 
-import { Paginate } from './Paginate';
-import styles from './styles.module.scss';
+import { Paginate } from './Paginate'
+import styles from './styles.module.scss'
 
 export const TableLayout = props => {
 	const { t } = useTranslation()
@@ -30,7 +30,7 @@ export const TableLayout = props => {
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
 		useTable({
 			columns,
-			data: data.length > 0 ? data : fakeData,
+			data: data && data.length > 0 ? data : fakeData,
 		})
 
 	return (
@@ -39,7 +39,7 @@ export const TableLayout = props => {
 				{serverStatus === 'error' || error ? (
 					<ErrorTable error={error} />
 				) : (
-					data.length === 0 &&
+					(!data || data.length === 0) &&
 					fakeData && (
 						<ErrorTable error={syncWarn !== '' ? syncWarn : emptyWarn} />
 					)
@@ -47,7 +47,7 @@ export const TableLayout = props => {
 
 				<table
 					style={
-						fakeData && data.length === 0
+						fakeData && (!data || data.length === 0)
 							? { opacity: '0.2', pointerEvents: 'none' }
 							: { opacity: '1', pointerEvents: 'all' }
 					}
@@ -65,7 +65,9 @@ export const TableLayout = props => {
 											.render('Header')
 											.toLowerCase()}`}
 										onClick={() =>
-											fakeData && data.length === 0 ? undefined : sortBy(column)
+											fakeData && (!data || data.length === 0)
+												? undefined
+												: sortBy(column)
 										}
 										className={
 											column.id === 'cashBalance'

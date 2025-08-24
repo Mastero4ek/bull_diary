@@ -1,36 +1,28 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from 'react'
 
-import Cookies from 'js-cookie';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import Cookies from 'js-cookie'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { ClosedContent } from '@/components/ui/general/ClosedContent'
+import { Icon } from '@/components/ui/general/Icon'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch'
+import i18n from '@/i18n'
+import { logout } from '@/redux/slices/candidateSlice'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { ClosedContent } from '@/components/ui/general/ClosedContent';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
-import i18n from '@/i18n';
-import { logout } from '@/redux/slices/candidateSlice';
-import {
-  setIsLoadingLanguage,
-  setIsLoadingTheme,
-  setLanguage,
-  setTheme,
-} from '@/redux/slices/settingsSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	setIsLoadingLanguage,
+	setIsLoadingTheme,
+	setLanguage,
+	setTheme,
+} from '@/redux/slices/settingsSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const SideBarItem = React.memo(({ item }) => {
 	const dispatch = useDispatch()
@@ -56,7 +48,6 @@ export const SideBarItem = React.memo(({ item }) => {
 				const resultAction = await dispatch(logout())
 				const originalPromiseResult = unwrapResult(resultAction)
 
-				// Logout успешен если нет ошибки (результат может быть null)
 				navigate('/home')
 				showSuccess(t('error.logout_success'))
 			} catch (e) {
@@ -120,7 +111,9 @@ export const SideBarItem = React.memo(({ item }) => {
 			>
 				<Icon id={item?.icon} />
 
-				{(sideBar.open || sideBar.blocked_value === 'open') && (
+				{(sideBar.open ||
+					sideBar.blocked_value === 'open' ||
+					location.pathname.includes('home')) && (
 					<div className={styles.sidebar_item_desc}>
 						<RootDesc>
 							<span>{item?.name}</span>

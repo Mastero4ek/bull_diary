@@ -1,26 +1,20 @@
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import './platform_slider.scss';
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import './platform_slider.scss'
 
-import { useTranslation } from 'react-i18next';
-import {
-  Autoplay,
-  Pagination,
-} from 'swiper/modules';
-import {
-  Swiper,
-  SwiperSlide,
-} from 'swiper/react';
+import { useTranslation } from 'react-i18next'
+import { Autoplay, Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { DotList } from '@/components/ui/general/DotList';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { H1 } from '@/components/ui/titles/H1';
-import { SignUpPopup } from '@/popups/SignUpPopup';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { DotList } from '@/components/ui/general/DotList'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { H1 } from '@/components/ui/titles/H1'
+import { SignUpPopup } from '@/popups/SignUpPopup'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Platform = () => {
 	const { t } = useTranslation()
@@ -67,7 +61,13 @@ export const Platform = () => {
 			<div className={styles.container_wrapper}>
 				<div className={styles.benefits_wrapper}>
 					<div className={styles.benefits_content}>
-						<H1>{t('page.home.platform.title')}</H1>
+						<H1>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.platform.title'),
+								}}
+							/>
+						</H1>
 
 						<DotList listArr={platformList} />
 

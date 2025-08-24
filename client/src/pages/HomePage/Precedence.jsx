@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { DotList } from '@/components/ui/general/DotList';
-import { H1 } from '@/components/ui/titles/H1';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { DotList } from '@/components/ui/general/DotList'
+import { H1 } from '@/components/ui/titles/H1'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Precedence = () => {
 	const { t } = useTranslation()
@@ -41,14 +41,22 @@ export const Precedence = () => {
 
 					<div className={styles.precedence_content}>
 						<H1>
-							<b>{t('page.home.precedence.title')}</b>
+							<b
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.precedence.title'),
+								}}
+							/>
 						</H1>
 
 						<RootDesc>
-							<span>{t('page.home.precedence.subtitle')}</span>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.precedence.subtitle'),
+								}}
+							/>
 						</RootDesc>
 
-						<DotList listArr={precedenceList} />
+						<DotList listArr={precedenceList} direction='right' />
 					</div>
 				</div>
 			</div>

@@ -1,15 +1,15 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { H1 } from '@/components/ui/titles/H1';
-import { H4 } from '@/components/ui/titles/H4';
-import { SignUpPopup } from '@/popups/SignUpPopup';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { H1 } from '@/components/ui/titles/H1'
+import { H4 } from '@/components/ui/titles/H4'
+import { SignUpPopup } from '@/popups/SignUpPopup'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Start = () => {
 	const { openPopup } = usePopup()
@@ -46,7 +46,9 @@ export const Start = () => {
 				<div className={styles.start_wrapper}>
 					<div className={styles.start_content}>
 						<H1>
-							<b>{t('page.home.start.title')}</b>
+							<b
+								dangerouslySetInnerHTML={{ __html: t('page.home.start.title') }}
+							/>
 						</H1>
 					</div>
 
@@ -59,14 +61,22 @@ export const Start = () => {
 										<li key={stepItem.id}>
 											<InnerBlock>
 												<H4>
-													<span>{stepItem.title}</span>
+													<span
+														dangerouslySetInnerHTML={{ __html: stepItem.title }}
+													/>
 												</H4>
 
 												<RootDesc>
-													<span>{stepItem.subtitle}</span>
+													<span
+														dangerouslySetInnerHTML={{
+															__html: stepItem.subtitle,
+														}}
+													/>
 												</RootDesc>
 
-												<strong>{stepItem.step}</strong>
+												<strong
+													dangerouslySetInnerHTML={{ __html: stepItem.step }}
+												/>
 											</InnerBlock>
 										</li>
 									))}

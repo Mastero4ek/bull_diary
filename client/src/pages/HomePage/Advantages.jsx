@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { H1 } from '@/components/ui/titles/H1';
-import { H4 } from '@/components/ui/titles/H4';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { H1 } from '@/components/ui/titles/H1'
+import { H4 } from '@/components/ui/titles/H4'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Advantages = () => {
 	const { t } = useTranslation()
@@ -23,13 +23,13 @@ export const Advantages = () => {
 		{
 			id: 1,
 			iconId: 'save-history',
-			title: <>{t('page.home.advantages.card_2.title')}</>,
+			title: t('page.home.advantages.card_2.title'),
 			subtitle: t('page.home.advantages.card_2.subtitle'),
 		},
 		{
 			id: 2,
 			iconId: 'econom-clock',
-			title: <>{t('page.home.advantages.card_3.title')}</>,
+			title: t('page.home.advantages.card_3.title'),
 			subtitle: t('page.home.advantages.card_3.subtitle'),
 		},
 		{
@@ -56,11 +56,19 @@ export const Advantages = () => {
 
 					<div className={styles.advantages_content}>
 						<H1>
-							<b>{t('page.home.advantages.title')}</b>
+							<b
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.advantages.title'),
+								}}
+							/>
 						</H1>
 
 						<RootDesc>
-							<span>{t('page.home.advantages.subtitle')}</span>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.advantages.subtitle'),
+								}}
+							/>
 						</RootDesc>
 					</div>
 				</div>
@@ -76,11 +84,15 @@ export const Advantages = () => {
 
 										<div>
 											<H4>
-												<span>{card.title}</span>
+												<span
+													dangerouslySetInnerHTML={{ __html: card.title }}
+												/>
 											</H4>
 
 											<SmallDesc>
-												<span>{card.subtitle}</span>
+												<span
+													dangerouslySetInnerHTML={{ __html: card.subtitle }}
+												/>
 											</SmallDesc>
 										</div>
 									</InnerBlock>

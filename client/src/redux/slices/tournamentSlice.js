@@ -204,6 +204,7 @@ const tournamentSlice = createSlice({
 			.addCase(deleteTournament.fulfilled, (state, action) => {
 				state.tournament = {}
 				state.users = []
+				state.fakeUsers = fakeUsers
 				state.serverStatus = 'success'
 				state.errorMessage = null
 			})
@@ -213,6 +214,9 @@ const tournamentSlice = createSlice({
 			.addCase(removeTournamentUser.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = null
+				if (!state.users) {
+					state.users = []
+				}
 			})
 			.addCase(removeTournamentUser.rejected, handleTournamentError)
 

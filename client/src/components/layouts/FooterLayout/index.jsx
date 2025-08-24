@@ -25,7 +25,7 @@ export const FooterLayout = React.memo(() => {
 
 			<div className={styles.footer_content}>
 				<RootDesc>
-					<span>{t('footer.description')}</span>
+					<span dangerouslySetInnerHTML={{ __html: t('footer.description') }} />
 				</RootDesc>
 
 				<div className={styles.footer_links}>
@@ -77,7 +77,11 @@ export const FooterLayout = React.memo(() => {
 				<Socials />
 
 				<SmallDesc>
-					<span>{t('footer.copyright')}</span>
+					<span
+						dangerouslySetInnerHTML={{
+							__html: t('footer.copyright', { year: new Date().getFullYear() }),
+						}}
+					/>
 				</SmallDesc>
 			</div>
 		</footer>

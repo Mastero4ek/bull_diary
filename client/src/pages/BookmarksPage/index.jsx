@@ -158,14 +158,14 @@ export const BookmarksPage = React.memo(() => {
 				>
 					<ControlButton
 						icon={'view'}
-						disabled={orders.length === 0}
+						disabled={!orders || orders.length === 0}
 						onClickBtn={() => handleClickView(row.original)}
 					/>
 
 					<div className={styles.bookmarks_delete_button}>
 						<ControlButton
 							icon={'cross'}
-							disabled={orders.length === 0}
+							disabled={!orders || orders.length === 0}
 							onClickBtn={() => handleClickRemove(row.original)}
 						/>
 					</div>
@@ -335,7 +335,7 @@ export const BookmarksPage = React.memo(() => {
 	}, [dispatch, exchange, date, sort, page, search, limit, isSynced])
 
 	useEffect(() => {
-		if (orders.length === 0 && serverStatus === 'success') {
+		if ((!orders || orders.length === 0) && serverStatus === 'success') {
 			dispatch(setPage(1))
 		}
 	}, [orders])

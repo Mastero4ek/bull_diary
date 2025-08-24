@@ -35,8 +35,8 @@
 		"privacy": "Privacy"
 	},
 	"footer": {
-		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam esse facilis sit ipsam repellat aut est sunt! Sit, aspernatur? Sapiente tempora assumenda cum illum ea autem nulla beatae rerum quo.",
-		"copyright": "© 2024. Created with love, Mastero4ek."
+		"description": "<b>Bull Diary</b>&nbsp;is your professional trading companion, designed to&nbsp;help traders analyze their performance, track portfolio growth, and&nbsp;compete in&nbsp;exciting tournaments. <br/><br/> Connect your exchange accounts, save your best trades to&nbsp;bookmarks, and&nbsp;join our growing community of&nbsp;traders striving for excellence in&nbsp;the cryptocurrency markets.",
+		"copyright": "© {{year}}. Created with love, Mastero4ek."
 	},
 	"table": {
 		"sort_by": "Sort by",
@@ -169,8 +169,8 @@
 	"page": {
 		"home": {
 			"intro": {
-				"title": "Unleash Your Trading Ambitions",
-				"description": "Bull Diary is not only a multifunctional platform that allows you to save trading history and analyze trading decisions. This is also an assistant for identifying errors in trading settlement strategies."
+				"title": "Master Your <br /> Trading Journey",
+				"description": "Transform your trading experience with&nbsp;<b>Bull Diary</b>&nbsp;— the&nbsp;ultimate platform for&nbsp;professional traders. <br/><br/> Analyze your performance, track your progress, and&nbsp;compete with the best in&nbsp;exciting tournaments. <br/> Join thousands of&nbsp;traders who have already elevated their skills and&nbsp;achieved consistent results."
 			},
 			"counts": {
 				"registered_users": "registered users",
@@ -180,134 +180,134 @@
 				"client_support": "client support"
 			},
 			"manual": {
-				"title": "How to Keep a Diary",
-				"subtitle": "Conceived by Traders for a Seamless Trading Experience from eager novices to sophisticated professionals.",
+				"title": "Get Started in&nbsp;<b>5</b>&nbsp;Simple Steps",
+				"subtitle": "Designed by&nbsp;professional traders for&nbsp;traders of&nbsp;all levels&nbsp;— from&nbsp;beginners to&nbsp;advanced professionals. <br/> Follow these steps to&nbsp;unlock your full trading potential.",
 				"step_1": {
-					"title": "Register and connect keys",
-					"subtitle": "Create an account and enter your API keys. You have the opportunity to connect several accounts from one exchange or accounts from several exchanges at once."
+					"title": "Create Your Account",
+					"subtitle": "Sign up for&nbsp;<b>Bull Diary</b>&nbsp;and connect your exchange&nbsp;<b>API</b>&nbsp;keys securely. <br/><br/> Support for&nbsp;multiple exchanges and accounts&nbsp;— manage everything in&nbsp;one place. Your&nbsp;<b>API</b>&nbsp;keys are encrypted and stored safely with&nbsp;read-only permissions for&nbsp;maximum security."
 				},
 				"step_2": {
-					"title": "Wait for the update",
-					"subtitle": "In your personal account, Diary will download the transactions and save them in your account, this will take a couple of minutes. The data is automatically updated by the service; the trader does not need to worry about this."
+					"title": "Sync Data",
+					"subtitle": "Our platform automatically imports your trading history from&nbsp;the&nbsp;last&nbsp;<b>180 days</b>&nbsp;. Real-time synchronization keeps your&nbsp;data always up to&nbsp;date."
 				},
 				"step_3": {
-					"title": "Find a situation",
-					"subtitle": "Using signals, scripts or trader chat, you can find an idea for a deal. Open and close a sell position."
+					"title": "Trade",
+					"subtitle": "Use your preferred trading strategy, signals, or&nbsp;analysis to&nbsp;make informed decisions. Open and close positions on&nbsp;your connected exchanges."
 				},
 				"step_4": {
-					"title": "Post a comment",
-					"subtitle": "First, study the transactions on the chart, then evaluate the financial result. Record in the comments why you decided to enter the position, describe your feelings during the transaction."
+					"title": "Record",
+					"subtitle": "Review your trades on&nbsp;interactive charts and&nbsp;add detailed comments. Record your reasoning, emotions, and&nbsp;lessons learned for&nbsp;future reference."
 				},
 				"step_5": {
-					"title": "Analyze your trade",
-					"subtitle": "Analyze situations and comments regularly. Analyze the situation to identify mistakes in past actions and prevent their repetition."
+					"title": "Analyze",
+					"subtitle": "Regularly review your trading performance and&nbsp;identify patterns. Learn from mistakes, refine your strategy, and&nbsp;continuously improve your skills."
 				}
 			},
 			"start": {
-				"title": "Start today with Bull Diary",
+				"title": "Ready to Transform <br /> Your Trading?",
 				"step_1": {
-					"title": "Register",
-					"subtitle": "Create a profile in less than 2 minutes"
+					"title": "Sign Up",
+					"subtitle": "Join in&nbsp;<b>2 minutes</b>&nbsp; and&nbsp;unlock <b>PRO</b>&nbsp;tools"
 				},
 				"step_2": {
-					"title": "Add keys",
-					"subtitle": "Select an exchange and add keys"
+					"title": "Link",
+					"subtitle": "Securely link your exchange accounts with&nbsp;read-only <b>API</b> keys"
 				},
 				"step_3": {
-					"title": "Analyze",
-					"subtitle": "Write comments to orders, analyze your path"
+					"title": "Trade",
+					"subtitle": "Analyze and compete in&nbsp;tournaments"
 				}
 			},
 			"advantages": {
-				"title": "Why traders choose us?",
-				"subtitle": "Join the 100,000 users who have already chosen Traders Diary as their support platform!",
+				"title": "Why Choose <br /> Bull Diary?",
+				"subtitle": "Join thousands of&nbsp;traders who trust&nbsp;<b>Bull Diary</b>&nbsp;for their professional trading needs. <br/> Experience the difference that makes us the preferred choice.",
 				"card_1": {
-					"title": "Read-only keys",
-					"subtitle": "The diary uses 'read-only' keys. Transactions using such keys are prohibited."
+					"title": "Safe",
+					"subtitle": "Your&nbsp;<b>API</b>&nbsp;keys are encrypted and stored with&nbsp;read-only permissions. No&nbsp;trading operations are possible&nbsp;— only data import for&nbsp;analysis."
 				},
 				"card_2": {
-					"title": "Keeps history",
-					"subtitle": "Upload transaction information to your account. The transaction archive will be securely stored in one place."
+					"title": "History",
+					"subtitle": "Automatically import and store your entire trading history in&nbsp;one secure location. Access your data anytime, anywhere with&nbsp;full backup protection."
 				},
 				"card_3": {
-					"title": "Saves time",
-					"subtitle": "Automatically marks trades on the chart. You don't need to waste time 'manually' transferring trades or calculating trades in Excel."
+					"title": "Fast",
+					"subtitle": "Automated trade tracking eliminates manual data entry. Focus on&nbsp;strategy instead of&nbsp;spreadsheet management."
 				},
 				"card_4": {
-					"title": "Share your strategy",
-					"subtitle": "With Traders Diary, you can share statistics and trades with other people by creating detailed screenshots."
+					"title": "Sharing",
+					"subtitle": "Create professional trading reports and&nbsp;share insights with your community. Build your reputation as&nbsp;a&nbsp;skilled trader."
 				},
 				"card_5": {
-					"title": "Complete delete",
-					"subtitle": "Your Diary account can be deleted at any time. The deletion is irreversible and the data will be deleted from the project server."
+					"title": "Control",
+					"subtitle": "Complete ownership of your data with&nbsp;permanent deletion option. Your privacy and control are our top priorities."
 				}
 			},
 			"platform": {
-				"title": "A feature-packed online Platform",
+				"title": "Professional Trading Platform",
 				"list_1": {
-					"title": "Clean & User-Friendly Interface"
+					"title": "Intuitive Interface&nbsp;- User-friendly design"
 				},
 				"list_2": {
-					"title": "Cutting-edge Charting"
+					"title": "Advanced Charts&nbsp;- Professional visualization"
 				},
 				"list_3": {
-					"title": "Ultra-fast update of orders in the diary"
+					"title": "Real-time Updates&nbsp;- Instant synchronization"
 				},
 				"list_4": {
-					"title": "No download - cross browser compatibility"
+					"title": "Cross-platform Access&nbsp;- Any device"
 				},
 				"list_5": {
-					"title": "Real-time Quotes"
+					"title": "Live Market Data&nbsp;- Real-time feeds"
 				},
 				"list_6": {
-					"title": "Interactive Charts"
+					"title": "Interactive Analysis&nbsp;- Dynamic tools"
 				},
 				"list_7": {
-					"title": "Add comments to the order"
+					"title": "Trade Documentation&nbsp;- Complete records"
 				}
 			},
 			"precedence": {
-				"title": "Beat the Best",
-				"subtitle": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas repudiandae reprehenderit qui minus sit soluta totam accusamus sed, expedita ipsam cum at voluptates itaque debitis fuga eveniet officia. Quaerat, ducimus.",
+				"title": "Compete & Win",
+				"subtitle": "Join exciting trading tournaments and prove your skills against the best traders. Climb the leaderboard, earn recognition, and&nbsp;become a&nbsp;trading champion.",
 				"list_1": {
-					"title": "Clean & User-Friendly Interface"
+					"title": "Fair Competition&nbsp;- Equal opportunities for all"
 				},
 				"list_2": {
-					"title": "Cutting-edge Charting"
+					"title": "Real-time Rankings&nbsp;- Live leaderboard updates"
 				},
 				"list_3": {
-					"title": "Ultra-fast update of orders in the diary"
+					"title": "Skill-based Rewards&nbsp;- Recognition for performance"
 				},
 				"list_4": {
-					"title": "No download - cross browser compatibility"
+					"title": "Community Recognition&nbsp;- Build your reputation"
 				},
 				"list_5": {
-					"title": "Real-time Quotes"
+					"title": "Champion Status&nbsp;- Elite status with benefits"
 				}
 			},
 			"question": {
-				"title": "Still have Questions",
-				"subtitle": "Have a question or require specialist assistance? <br /> Contact our dedicated customer service team <br /> who are available 24/7 to assist you! <br/><br/>Please fill out the form, we will be glad to hear your opinion or write to us on email!"
+				"title": "Need Help?",
+				"subtitle": "Our expert support team is&nbsp;here to&nbsp;help you succeed in your trading journey. <br/><br/> Get instant assistance with platform features, <b>API</b>&nbsp;connections, data synchronization, trading strategies, or any technical issues you might encounter. Whether you're a beginner learning the basics or an experienced trader optimizing your workflow, we're here to guide you every step of&nbsp;the way. <br/><br/> Fill out the form below for personalized support, or contact us directly via email&nbsp;- our dedicated team is available <b>24/7</b>&nbsp;to&nbsp;ensure your trading success!"
 			}
 		},
 		"contacts": {
-			"title": "Still have Questions",
-			"description": "Have a question or require specialist assistance? <br /> Contact our dedicated customer service team <br /> who are available 24/7 to assist you! <br/><br/>Please fill out the form, we will be glad to hear your opinion or write to us on email!"
+			"title": "Get in <br /> Touch",
+			"description": "Need help with your trading platform or&nbsp;have questions about&nbsp;Bull&nbsp;Diary? <br/><br/> <ul><li><strong>24/7 Support:</strong> Our dedicated team is&nbsp;always ready to&nbsp;assist you with any questions.</li><li><strong>Technical Help:</strong> Get assistance with platform features, API connections, and&nbsp;data synchronization.</li><li><strong>Feedback Welcome:</strong> Share your suggestions and&nbsp;help us improve the&nbsp;trading experience.</li><li><strong>Multiple Channels:</strong> Contact us&nbsp;via email, social media, or&nbsp;fill out the&nbsp;contact form.</li></ul>"
 		},
 		"settings": {
-			"tuning_title": "Application settings",
-			"tuning_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
-			"keys_title": "Connecting the exchange",
-			"keys_description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
+			"tuning_title": "Application <br /> Settings",
+			"tuning_description": "Customize your trading experience with personalized settings. <br/><br/> <ul><li><strong>Language:</strong> Switch between Russian and&nbsp;English interfaces.</li><li><strong>Dark Theme:</strong> Enable dark mode for&nbsp;comfortable trading in&nbsp;low-light conditions.</li><li><strong>Show Markers:</strong> Display visual indicators for&nbsp;buy/sell positions in&nbsp;trade tables.</li><li><strong>Hide Amounts:</strong> Conceal financial data for&nbsp;privacy and&nbsp;security.</li><li><strong>Text Highlighting:</strong> Color-code positive and&nbsp;negative values for&nbsp;better readability.</li><li><strong>Sidebar Control:</strong> Manage sidebar visibility&nbsp;- keep&nbsp;it&nbsp;open, closed, or&nbsp;unblocked for&nbsp;easy navigation.</li></ul>",
+			"keys_title": "Exchange <br /> Connection",
+			"keys_description": "Connect your cryptocurrency exchange accounts to&nbsp;import trading data. <br/><br/> <ul><li><strong>Supported Exchanges:</strong> Bybit, MEXC, and OKX with futures trading support.</li><li><strong>API Keys:</strong> Securely store your read-only API keys for&nbsp;automatic data synchronization.</li><li><strong>Data Sync:</strong> Import trading history from the&nbsp;last 180&nbsp;days with real-time progress tracking.</li><li><strong>Background Processing:</strong> Synchronization runs automatically without interrupting your workflow.</li><li><strong>Multi-Exchange:</strong> Connect multiple exchanges simultaneously for&nbsp;comprehensive portfolio analysis.</li></ul>",
 			"keys_api_title": "Api keys",
 			"keys_removed_successfully": "Deleting API keys successfully!",
-			"keys_error_removing": "Error deleting API keys! Please try again.",
+			"keys_error_removing": "Error deleting API keys! <br/> Please try again.",
 			"keys_updated_successfully": "Api key updated successfully!",
-			"keys_error_updating": "Error updating Api key! Please try again.",
+			"keys_error_updating": "Error updating Api key! <br/> Please try again.",
 			"keys_error_no_exchange": "No exchange selected!",
-			"keys_warning": "Bull Diary supports futures trading. <br /> The exchange stores data for the last 180 days, so after saving the keys, synchronization will begin. Synchronization will run in the background and may take some time.",
+			"keys_warning": "Bull Diary supports futures trading. <br /> The exchange stores data for&nbsp;the last 180&nbsp;days. <br/> After saving the&nbsp;keys, synchronization will begin. <br/> Synchronization will run in&nbsp;the background and&nbsp;may take some time.",
 			"keys_success_synchronization": "Synchronization successfully!",
-			"keys_error_synchronization": "Error synchronizing! Please try again.",
+			"keys_error_synchronization": "Error synchronizing! <br/> Please try again.",
 			"keys_synchronizing": "Synchronizing...",
 			"sync_cancelled_successfully": "Synchronization cancelled successfully!",
 			"tuning_language": "Language",
@@ -322,57 +322,57 @@
 			"tuning_sidebar_unblock": "Unblock"
 		},
 		"profile": {
-			"title": "Edit account <br /> or delete it permanently",
-			"subtitle": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atqueillo consequatur magni eos odit perferendis, cumque minusobcaecati reiciendis sed. Id in eaque asperiores. Enim autem aperiam cumque adipisci tenetur.",
+			"title": "Account <br /> Management",
+			"subtitle": "Edit your profile information and account settings. <br/><br/> Update your name, last name, and phone number. <br/> Change your avatar&nbsp;- supported formats: <b>JPG</b>, <b>PNG</b>, maximum file size: <b>5</b>&nbsp;megabytes. <br/><br/> Maintain your professional presence in the trading community.",
 			"edit_user_action_not_available": "Editing user is not available!",
 			"updated_successfully": "Account updated successfully!",
-			"error_updating": "Error updating account! Please try again.",
+			"error_updating": "Error updating account! <br/> Please try again.",
 			"cover_removed_successfully": "Cover removed successfully!",
-			"error_removing_cover": "Error removing cover! Please try again."
+			"error_removing_cover": "Error removing cover! <br/> Please try again."
 		},
 		"users": {
-			"title": "Platform users",
-			"subtitle": "Registered users of the platform. You can view their profiles and their statistics.",
-			"empty_error": "No users found in this period!",
+			"title": "Trading <br /> Community",
+			"subtitle": "Discover and connect with fellow traders in&nbsp;our growing community. <br/><br/> View profiles, analyze trading statistics, and&nbsp;manage platform users. <br/> Every member contributes to&nbsp;building a&nbsp;stronger trading ecosystem.",
+			"empty_error": "No users found in&nbsp;this period!",
 			"success_update": "Users updated successfully!",
-			"error_update": "Error updating users! Please try again.",
+			"error_update": "Error updating users! <br/> Please try again.",
 			"success_active": "User activated successfully!",
-			"error_active": "Error activating user! Please try again.",
+			"error_active": "Error activating user! <br/> Please try again.",
 			"success_inactive": "User deactivated successfully!",
-			"error_inactive": "Error deactivating user! Please try again.",
+			"error_inactive": "Error deactivating user! <br/> Please try again.",
 			"inactive": "Inactive",
 			"active": "Active"
 		},
 		"battle": {
-			"title": "Take part in the tournament<br />for the title of the best trader",
-			"subtitle": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo, provident unde! Quasi repellendus enim minus blanditiis dolore, saepe eligendi suscipit a nostrum sit, deleniti in commodi nemo perferendis, error qui?",
+			"title": "Trading <br /> Championships",
+			"subtitle": "Compete with the&nbsp;best traders in&nbsp;exciting tournaments. <br/><br/> Test your skills, strategies, and&nbsp;market intuition against other professionals. <br/> Join tournaments to&nbsp;prove your trading mastery and&nbsp;climb the&nbsp;leaderboard.",
 			"remove_user_success": "User removed from tournament!",
-			"remove_user_error": "Error removing user from tournament! Please try again.",
+			"remove_user_error": "Error removing user from tournament! <br/> Please try again.",
 			"update_success": "Tournament updated successfully!",
-			"update_error": "Error updating tournament! Please try again.",
+			"update_error": "Error updating tournament! <br/> Please try again.",
 			"join_user_success": "You have joined the tournament!",
-			"join_user_error": "Error joining tournament! Please try again.",
+			"join_user_error": "Error joining tournament! <br/> Please try again.",
 			"remove_battle_success": "Tournament deleted successfully!",
-			"remove_battle_error": "Error deleting tournament! Please try again.",
+			"remove_battle_error": "Error deleting tournament! <br/> Please try again.",
 			"empty_users": "Tournament not found!",
 			"is_over": "Tournament is over!"
 		},
 		"bookmarks": {
-			"title": "Save and analyze <br /> transactions",
-			"subtitle": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse, maxime porro harum quidem obcaecati nisi rem in voluptas corrupti alias sunt quis numquam qui rerum, voluptatem sed aperiam iure impedit. Cum aliquam libero veniam, dolorum est quod minima eum alias dolores? Nisi in nesciunt consequatur similique asperiores facere autem porro molestias consequuntur aperiam et assumenda, dolore ea mollitia a iste.",
+			"title": "Trade <br /> Collection",
+			"subtitle": "Transform your best trades into valuable lessons. <br/><br/> Save exceptional transactions to&nbsp;your bookmarks and&nbsp;revisit them anytime for&nbsp;inspiration, strategy refinement, and&nbsp;continuous learning. <br/><br/> Every bookmark is&nbsp;a&nbsp;step toward trading mastery.",
 			"update_success": "Bookmarks orders updated successfully!",
-			"update_error": "Error updating bookmarks! Please try again.",
+			"update_error": "Error updating bookmarks! <br/> Please try again.",
 			"remove_order_success": "Order successfully removed from bookmarks!",
-			"remove_order_error": "Error deleting order from bookmarks! Please try again.",
-			"empty": "There were no saved transactions during this period!"
+			"remove_order_error": "Error deleting order from bookmarks! <br/> Please try again.",
+			"empty": "There were no&nbsp;saved transactions during this period!"
 		},
 		"table": {
 			"update_success": "Orders updated successfully!",
-			"update_error": "Error updating orders! Please try again.",
+			"update_error": "Error updating orders! <br/> Please try again.",
 			"save_order_success": "Order saved successfully!",
-			"save_order_error": "Error saving order! Please try again.",
+			"save_order_error": "Error saving order! <br/> Please try again.",
 			"empty": "There were no closed transactions during this period!",
-			"sync_required_error": "Synchronization required! Please complete data synchronization first.",
+			"sync_required_error": "Synchronization required! <br/><br/> Please complete data synchronization first.",
 			"chart_income": "Income",
 			"chart_lession": "Lession",
 			"chart_profit": "Profit (ROI%): ",
@@ -380,14 +380,14 @@
 		},
 		"diary": {
 			"update_success": "Positions updated successfully!",
-			"update_error": "Error updating positions! Please try again.",
-			"connection_error": "WebSocket connection lost! Attempting to reconnect...",
+			"update_error": "Error updating positions! <br/> Please try again.",
+			"connection_error": "WebSocket connection lost! <br/> Attempting to reconnect...",
 			"empty": "There were no open transactions now!",
 			"chart_label": "Profit (P&L)"
 		},
 		"wallet": {
 			"update_success": "Wallet updated successfully!",
-			"update_error": "Error updating wallet! Please try again.",
+			"update_error": "Error updating wallet! <br/> Please try again.",
 			"balance": "Wallet Balance",
 			"unrealized": "Unrealised P&L",
 			"total_profit": "Total Profit",
@@ -404,7 +404,7 @@
 		},
 		"wallet_details": {
 			"update_success": "Transactions updated successfully!",
-			"update_error": "Error updating transactions! Please try again.",
+			"update_error": "Error updating transactions! <br/> Please try again.",
 			"empty": "There were no transactions during this period!",
 			"label": {
 				"in": "Transfer In",
@@ -437,7 +437,7 @@
 			"open_fee": "Open Fee",
 			"closed_fee": "Close Fee",
 			"update_desc_success": "Order description updated successfully!",
-			"update_desc_error": "Error updating order description! Please try again.",
+			"update_desc_error": "Error updating order description! <br/> Please try again.",
 			"duration_time_days": "D",
 			"duration_time_hours": "H",
 			"duration_time_minutes": "M",
@@ -446,49 +446,47 @@
 	},
 	"popup": {
 		"signup": {
-			"title": "Create Account",
-			"subtitle": "or use email for registration",
+			"title": "Join Bull Diary",
+			"subtitle": "or use email for&nbsp;registration",
 			"success": "Signed up successfully!",
-			"error": "Error signing up! Please try again.",
-			"title_signin": "Welcome back!",
-			"subtitle_signin": "To keep connected with us please login with your personal info.",
-			"agreement": "By clicking you agree to our",
+			"error": "Error signing up! <br/> Please try again.",
+			"title_signin": "Have an account?",
+			"subtitle_signin": "Welcome back to&nbsp;<b>Bull Diary</b>! <br/><br/> Sign in to access your personalized trading dashboard, view your portfolio performance, analyze your trading history, and participate in exciting tournaments. <br/><br/> Continue your journey toward trading mastery with our professional tools and community.",
+			"agreement": "By clicking you agree to&nbsp;our ",
 			"privacy_statement": "Privacy Statement"
 		},
 		"signin": {
-			"title": "Sign in to app",
-			"subtitle": "or use email for login",
+			"title": "Welcome Back",
+			"subtitle": "or use email for&nbsp;login",
 			"success": "Signed in successfully!",
-			"error": "Error signing in! Please try again.",
-			"title_signup": "Hello friend!",
-			"subtitle_signup": "Enter your personal details and start journey with us.",
+			"error": "Error signing in! <br/> Please try again.",
+			"title_signup": "New here?",
+			"subtitle_signup": "Join our growing trading community and unlock powerful features! <br/><br/> Create your account to&nbsp;start analyzing your trades with professional tools, save your best transactions to&nbsp;bookmarks, participate in&nbsp;tournaments, and connect with other traders. <br/><br/> Begin your journey toward trading excellence today.",
 			"forgot": "Forgot your password?"
 		},
 		"forgot": {
-			"title": "Dear friend",
-			"subtitle": "To change your password, enter the email address specified when registering your account.<br/><br/> We will send instructions for resetting your password to this address.",
-			"success": "Instruction to reset your password has been sent to your email!",
-			"error": "Error sending email! Please try again."
+			"title": "Reset Password",
+			"subtitle": "Don't worry! <br/> We'll help you get back to&nbsp;your trading dashboard. <br/><br/> Enter the email address you used to&nbsp;register your <b>Bull Diary</b> account, <br/> and we'll send you a secure link to&nbsp;reset your password.",
+			"success": "Instruction to&nbsp;reset your password has been sent to&nbsp;your email!",
+			"error": "Error sending email! <br/> Please try again."
 		},
 		"avatar_user": {
 			"title": "Upload an image",
 			"subtitle": "Please select and upload an image to be used on your profile."
 		},
 		"remove_user": {
-			"title": "Dear ",
+			"title": "Delete <br /> Account",
 			"admin_success": "User removed successfully!",
 			"user_success": "Account removed successfully!",
-			"admin_error": "User not removed! Please try again.",
-			"user_error": "Account not removed! Please try again.",
-			"admin_subtitle": "Are you sure you want to delete this user account? Once the account is deleted, there is no going back.",
-			"user_subtitle": "Enter the email to which this account is registered to delete your account! Once the account is deleted, there is no going back.",
-			"admin_description": "Do you really want to delete this user account PERMANENTLY?",
-			"user_description": "Do you really want to delete this account PERMANENTLY?"
+			"admin_error": "User not removed! <br/> Please try again.",
+			"user_error": "Account not removed! <br/> Please try again.",
+			"admin_subtitle": "Are you sure you want to permanently delete this user's account? <br/><br/> This action will permanently remove: <br/> • User's trading history and data <br/> • All saved bookmarks and analysis <br/> • Tournament participation and achievements <br/> • Profile information and settings <br/><br/> This action cannot be undone and all data will be lost forever.",
+			"user_subtitle": "Are you sure you want to permanently delete your account? <br/><br/> This action will permanently remove: <br/> • Your complete trading history <br/> • All saved bookmarks and analysis <br/> • Tournament participation and achievements <br/> • Profile information and settings <br/><br/> This action cannot be undone and all your data will be lost forever."
 		},
 		"new_battle": {
 			"title": "Create Tournament",
 			"create_success": "Tournament created successfully!",
-			"create_error": "Error creating tournament! Please try again."
+			"create_error": "Error creating tournament! <br/> Please try again."
 		},
 		"new_user": {
 			"role": {
@@ -497,26 +495,26 @@
 			},
 			"title": "New User",
 			"create_success": "User created successfully!",
-			"create_error": "Error creating user! Please try again."
+			"create_error": "Error creating user! <br/> Please try again."
 		},
 		"confirm": {
-			"title": "Attention",
-			"keys_remove_subtitle": "Are you sure you want to completely delete the API keys of the selected exchange?<br/>After deletion, you will not have access to orders, bookmarks and wallet!",
-			"bookmark_remove_subtitle": "Do you really want to delete the saved order?<br/>After deleting, the associated data (order description, etc.) will also be deleted!",
-			"tournament_user_remove_subtitle": "Are you sure you want to remove the user from this tournament?<br/>All the user's progress will be reset!",
-			"tournament_remove_subtitle": "Are you sure you want to delete the selected tournament?<br/>All tournament data will be deleted and all user progress will be reset!"
+			"title": "Confirm <br /> Action",
+			"keys_remove_subtitle": "Are you sure you want to delete the API keys for this exchange? <br/><br/> This action will permanently remove your connection to the exchange. You will lose access to: <br/> • Trading history and orders <br/> • Saved bookmarks <br/> • Wallet data and balance information <br/><br/> This action cannot be undone.",
+			"bookmark_remove_subtitle": "Are you sure you want to remove this trade from your bookmarks? <br/><br/> This will permanently delete: <br/> • The saved trade entry <br/> • Any comments or notes you added <br/> • Associated trading analysis <br/><br/> This action cannot be undone.",
+			"tournament_user_remove_subtitle": "Are you sure you want to remove this user from the tournament? <br/><br/> This action will: <br/> • Remove the user from all tournament activities <br/> • Reset their tournament progress and rankings <br/> • Delete their tournament statistics <br/><br/> This action cannot be undone.",
+			"tournament_remove_subtitle": "Are you sure you want to delete this tournament? <br/><br/> This action will permanently delete: <br/> • All tournament data and settings <br/> • Participant rankings and progress <br/> • Tournament statistics and results <br/> • All associated user achievements <br/><br/> This action cannot be undone."
 		}
 	},
 	"error": {
 		"unknown": "An unknown error occurred",
-		"network": "Network error. Please check your internet connection.",
-		"timeout": "Request timeout. Please try again.",
-		"too_many_requests": "Too many requests. Please try again later.",
-		"authentication_required": "Authentication required. Please log in again.",
-		"access_denied": "Access denied. You do not have permission for this action.",
+		"network": "Network error. <br/> Please check your internet connection.",
+		"timeout": "Request timeout. <br/> Please try again.",
+		"too_many_requests": "Too many requests. <br/> Please try again later.",
+		"authentication_required": "Authentication required. <br/> Please log in again.",
+		"access_denied": "Access denied. <br/> You do not have permission for this action.",
 		"resource_not_found": "Resource not found.",
-		"server_error": "Server error. Please try again later.",
-		"logout_error": "Error logging out! Please try again.",
+		"server_error": "Server error. <br/> Please try again later.",
+		"logout_error": "Error logging out! <br/> Please try again.",
 		"logout_success": "Logged out successfully!"
 	},
 	"success": {
@@ -528,12 +526,12 @@
 	"auth": {
 		"oauth": {
 			"success": "Successfully authenticated via OAuth!",
-			"error": "OAuth authentication failed! Please try again.",
-			"activation_required": "Account activation required! Please check your email."
+			"error": "OAuth authentication failed! <br/> Please try again.",
+			"activation_required": "Account activation required! <br/> Please check your email."
 		}
 	},
 	"sync": {
 		"completed": "Synchronization completed successfully!",
-		"error": "Synchronization error! Please try again."
+		"error": "Synchronization error! <br/> Please try again."
 	}
 }
