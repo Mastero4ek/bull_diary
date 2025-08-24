@@ -1,25 +1,25 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from 'react'
 
 import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Tooltip,
-} from 'chart.js';
-import moment from 'moment/min/moment-with-locales';
-import { Line } from 'react-chartjs-2';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+	BarElement,
+	CategoryScale,
+	Chart as ChartJS,
+	Filler,
+	Legend,
+	LinearScale,
+	LineElement,
+	PointElement,
+	Tooltip,
+} from 'chart.js'
+import moment from 'moment/min/moment-with-locales'
+import { Line } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootButton } from '@/components/ui/buttons/RootButton'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 ChartJS.register(
 	LineElement,
@@ -42,6 +42,47 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 	const { filter } = useSelector(state => state.filters)
 
 	const period = filter?.value?.toLowerCase() || 'week'
+
+	const getTooltipTitle = context => {
+		if (period === 'year') {
+			const monthIndex = parseInt(context[0].label) - 1
+			const now = moment()
+
+			return moment({ year: now.year(), month: monthIndex }).format('MMMM')
+		} else if (period === 'week') {
+			const dayIndex = context[0].dataIndex
+			const now = moment()
+
+			return now.clone().startOf('isoWeek').add(dayIndex, 'days').format('dddd')
+		} else if (period === 'quarter') {
+			const weekNumber = context[0].label
+
+			return `${weekNumber} ${t('filter.period.week')}`
+		}
+
+		return context[0].label
+	}
+
+	const getTooltipLabel = context => {
+		if (context.dataset.type === 'line') {
+			const balance = context.dataset.data[context.dataIndex]
+
+			return `USD: ~${
+				typeof balance === 'number' ? balance.toFixed(2) : balance
+			}`
+		} else {
+			const count = context.dataset.data[context.dataIndex]
+
+			return `${t('page.wallet.chart_label_trans')}: ${count || 0}`
+		}
+	}
+
+	const handleAfterDataLimits = scale => {
+		const max = scale.max
+
+		scale.max = max + max * 0.75
+		scale.min = 0
+	}
 
 	const checkIfFuture = (label, index, period) => {
 		const now = moment()
@@ -135,7 +176,7 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 		switch (period) {
 			case 'year':
 				return Array.from({ length: 12 }, (_, i) =>
-					moment({ year: now.year(), month: i }).format('MMM')
+					(i + 1).toString().padStart(2, '0')
 				)
 			case 'quarter':
 				const startOfQuarter = now.clone().startOf('quarter')
@@ -264,7 +305,7 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 			let key
 			switch (period) {
 				case 'year':
-					key = moment(item.date).format('MMM')
+					key = (moment(item.date).month() + 1).toString().padStart(2, '0')
 					break
 				case 'quarter':
 					key = moment(item.date).isoWeek().toString()
@@ -418,17 +459,8 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 						family: chartStyles.font,
 					},
 					callbacks: {
-						label: context => {
-							if (context.dataset.type === 'line') {
-								const balance = context.dataset.data[context.dataIndex]
-								return `USD: ~${
-									typeof balance === 'number' ? balance.toFixed(2) : balance
-								}`
-							} else {
-								const count = context.dataset.data[context.dataIndex]
-								return `${t('page.wallet.chart_label_trans')}: ${count || 0}`
-							}
-						},
+						title: getTooltipTitle,
+						label: getTooltipLabel,
 					},
 				},
 			},
@@ -458,11 +490,7 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 							family: chartStyles.font,
 						},
 					},
-					afterDataLimits: scale => {
-						const max = scale.max
-						scale.max = max + max * 0.25
-						scale.min = 0
-					},
+					afterDataLimits: handleAfterDataLimits,
 				},
 				y1: {
 					type: 'linear',
@@ -478,15 +506,19 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 							family: chartStyles.font,
 						},
 					},
-					afterDataLimits: scale => {
-						const max = scale.max
-						scale.max = max + max * 0.25
-						scale.min = 0
-					},
+					afterDataLimits: handleAfterDataLimits,
 				},
 			},
 		}),
-		[theme, chartStyles, t]
+		[
+			theme,
+			chartStyles,
+			t,
+			period,
+			getTooltipTitle,
+			getTooltipLabel,
+			handleAfterDataLimits,
+		]
 	)
 
 	return (

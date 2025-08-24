@@ -20,7 +20,7 @@ import {
 	setPage,
 	setServerStatus,
 	setSort,
-} from '@/redux/slices/websocketSlice'
+} from '@/redux/slices/positionsSlice'
 
 import { BarChart } from './BarChart'
 
@@ -37,10 +37,10 @@ export const DiaryPage = React.memo(() => {
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const { exchange, search, limit } = useSelector(state => state.filters)
 	const { fakeData: fakePositions, data: positions } = useSelector(
-		state => state.websocket.positions
+		state => state.positions
 	)
 	const { page, sort, serverStatus, errorMessage } = useSelector(
-		state => state.websocket.ui
+		state => state.positions
 	)
 
 	const { filteredData: filteredPositions, totalPages: totalFilteredPages } =

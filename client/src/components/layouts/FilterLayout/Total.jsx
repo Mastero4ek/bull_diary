@@ -1,18 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const Total = React.memo(() => {
 	const { amount, color } = useSelector(state => state.settings)
-	const { serverStatus } = useSelector(state => state.websocket.ui)
-	const { fakeData: fakePositions } = useSelector(
-		state => state.websocket.positions
-	)
+	const { fakeData: fakePositions } = useSelector(state => state.positions)
 	const unrealisedPnl = fakePositions ? 0.0 : 100
 	const realisedPnl = fakePositions ? 0.0 : -20
 

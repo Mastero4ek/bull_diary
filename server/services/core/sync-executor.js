@@ -78,7 +78,7 @@ class SyncExecutor {
 
 			const startingMessage = i18next.t('sync.starting_sync', {
 				lng: language,
-				dataType: 'sync',
+				exchange,
 			})
 
 			this.setSyncProgress(
@@ -91,6 +91,7 @@ class SyncExecutor {
 
 			if (socketEmitter) {
 				const eventName = isAutoSync ? 'auto_sync_started' : 'sync_started'
+
 				socketEmitter(eventName, {
 					message: isAutoSync
 						? 'Auto sync started (current year)'
@@ -152,6 +153,7 @@ class SyncExecutor {
 
 			if (socketEmitter) {
 				const eventName = isAutoSync ? 'auto_sync_completed' : 'sync_completed'
+
 				socketEmitter(eventName, result)
 
 				if (isAutoSync && keysService) {
@@ -390,6 +392,7 @@ class SyncExecutor {
 				i18next.t('sync.completed', {
 					lng: language,
 					dataType: localizedDataType,
+					exchange: exchange,
 				}),
 				progressCallback
 			)
@@ -410,6 +413,7 @@ class SyncExecutor {
 				i18next.t('sync.failed', {
 					lng: language,
 					dataType: localizedDataType,
+					exchange: exchange,
 				}),
 				progressCallback
 			)
@@ -473,8 +477,8 @@ class SyncExecutor {
 				'loading',
 				i18next.t('sync.processing', {
 					lng: language,
-					days: diffDays,
 					dataType: localizedDataType,
+					exchange: exchangeName,
 				}),
 				progressCallback
 			)
@@ -511,6 +515,7 @@ class SyncExecutor {
 						current: i + 1,
 						total: totalChunks,
 						dataType: localizedDataType,
+						exchange: exchangeName,
 					}),
 					progressCallback
 				)
@@ -527,6 +532,7 @@ class SyncExecutor {
 				i18next.t('sync.processing_data', {
 					lng: language,
 					dataType: localizedDataType,
+					exchange: exchangeName,
 				}),
 				progressCallback
 			)
@@ -550,6 +556,7 @@ class SyncExecutor {
 				i18next.t('sync.data_processed', {
 					lng: language,
 					dataType: localizedDataType,
+					exchange: exchangeName,
 				}),
 				progressCallback
 			)

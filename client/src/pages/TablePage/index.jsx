@@ -1,46 +1,28 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { Loader } from '@/components/ui/general/Loader'
+import { Mark } from '@/components/ui/general/Mark'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { capitalize, colorizedNum } from '@/helpers/functions'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { Loader } from '@/components/ui/general/Loader';
-import { Mark } from '@/components/ui/general/Mark';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import {
-  capitalize,
-  colorizedNum,
-} from '@/helpers/functions';
-import {
-  clearOrders,
-  getBybitOrdersPnl,
-  savedOrder,
-  setPage,
-  setSort,
-} from '@/redux/slices/ordersSlice';
-import {
-  selectIsSynced,
-  selectSyncWarning,
-} from '@/redux/slices/websocketSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	clearOrders,
+	getBybitOrdersPnl,
+	savedOrder,
+	setPage,
+	setSort,
+} from '@/redux/slices/ordersSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import { DoughnutChart } from './DougnutChart';
+import { DoughnutChart } from './DougnutChart'
 
 export const TablePage = () => {
 	const { t } = useTranslation()
@@ -48,8 +30,8 @@ export const TablePage = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const { showSuccess, showError } = useNotification()
-	const syncWarning = useSelector(selectSyncWarning)
-	const isSynced = useSelector(selectIsSynced)
+	const syncWarning = useSelector(state => state.sync.warning)
+	const isSynced = useSelector(state => state.sync.isSynced)
 
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const { date, limit, search, exchange } = useSelector(state => state.filters)

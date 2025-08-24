@@ -411,7 +411,7 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 
 						<div className={styles.keys_inputs_btns}>
 							<RootButton
-								disabled={hasNoKeys || isSyncing}
+								disabled={status === 'loading' || hasNoKeys || isSyncing}
 								text={t('button.remove')}
 								icon='remove'
 								onClickBtn={() =>
@@ -420,7 +420,7 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 							/>
 
 							<RootButton
-								disabled={hasKeys || isSyncing}
+								disabled={status === 'loading' || hasKeys || isSyncing}
 								text={t('button.save')}
 								icon='update'
 								type='submit'

@@ -13,10 +13,6 @@ import {
 	getBybitTransactions,
 } from '@/redux/slices/transactionSlice'
 import { getBybitWallet } from '@/redux/slices/walletSlice'
-import {
-	selectIsSynced,
-	selectSyncWarning,
-} from '@/redux/slices/websocketSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
 import { Info } from './Info'
@@ -31,8 +27,8 @@ export const WalletPage = React.memo(() => {
 		state => state.transactions
 	)
 	const { showSuccess, showError } = useNotification()
-	const syncWarning = useSelector(selectSyncWarning)
-	const isSynced = useSelector(selectIsSynced)
+	const syncWarning = useSelector(state => state.sync.warning)
+	const isSynced = useSelector(state => state.sync.isSynced)
 
 	const startOfYear = moment().startOf('year').format('YYYY-MM-DD')
 	const today = moment().format('YYYY-MM-DD')

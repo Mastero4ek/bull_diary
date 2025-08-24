@@ -5,19 +5,21 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
 import { updateKeySyncStatus } from '@/redux/slices/candidateSlice'
+import { setPositions } from '@/redux/slices/positionsSlice'
 import {
-	clearConnectionError,
-	setConnectionError,
-	setConnectionStatus,
-	setConnectionStatusMessage,
-	setPositions,
-	setSubscriptionStatus,
 	setSyncCancelled,
 	setSyncCompleted,
 	setSyncError,
 	setSyncProgress,
 	setSyncReset,
 	setSyncStarted,
+} from '@/redux/slices/syncSlice'
+import {
+	clearConnectionError,
+	setConnectionError,
+	setConnectionStatus,
+	setConnectionStatusMessage,
+	setSubscriptionStatus,
 } from '@/redux/slices/websocketSlice'
 import WebSocketService from '@/services/WebSocketService'
 
@@ -28,14 +30,12 @@ export const useWebSocket = () => {
 		isSubscribed,
 		status: connectionStatus,
 		error,
-	} = useSelector(state => state.websocket.connection)
+	} = useSelector(state => state.websocket)
 
 	const { showSuccess, showError } = useNotification()
 	const { t } = useTranslation()
 
-	const { data: positions, lastUpdate } = useSelector(
-		state => state.websocket.positions
-	)
+	const { data: positions, lastUpdate } = useSelector(state => state.positions)
 
 	const {
 		isSynced,
@@ -45,7 +45,8 @@ export const useWebSocket = () => {
 		message: syncMessage,
 		result: lastSyncResult,
 		error: syncError,
-	} = useSelector(state => state.websocket.sync)
+	} = useSelector(state => state.sync)
+
 	const { exchange } = useSelector(state => state.filters)
 	const user = useSelector(state => state.candidate?.user)
 	const { language } = useSelector(state => state.settings)

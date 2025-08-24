@@ -1,20 +1,9 @@
-import {
-  useCallback,
-  useEffect,
-} from 'react';
+import { useCallback, useEffect } from 'react'
 
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {
-  selectIsSynced,
-  selectSyncWarning,
-  setIsSynced,
-  setSyncWarning,
-} from '@/redux/slices/websocketSlice';
+import { setIsSynced, setSyncWarning } from '@/redux/slices/syncSlice'
 
 export const useSyncStatus = () => {
 	const { t } = useTranslation()
@@ -22,8 +11,7 @@ export const useSyncStatus = () => {
 
 	const { user } = useSelector(state => state.candidate)
 	const { exchange } = useSelector(state => state.filters)
-	const syncWarning = useSelector(selectSyncWarning)
-	const isSynced = useSelector(selectIsSynced)
+	const { syncWarning, isSynced } = useSelector(state => state.sync)
 
 	const isExchangeSynced = useCallback(() => {
 		if (!user?.keys || !exchange?.name) {

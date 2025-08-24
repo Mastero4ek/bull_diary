@@ -1,19 +1,19 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from 'react'
 
 import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-  Tooltip,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+	BarElement,
+	CategoryScale,
+	Chart as ChartJS,
+	Legend,
+	LinearScale,
+	Title,
+	Tooltip,
+} from 'chart.js'
+import { Bar } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend, Title)
 
@@ -21,9 +21,9 @@ export const BarChart = React.memo(() => {
 	const { t } = useTranslation()
 	const { theme, width, isMobile } = useSelector(state => state.settings)
 	const { fakeData: fakePositions, ordersByDay } = useSelector(
-		state => state.websocket.positions
+		state => state.positions
 	)
-	const { serverStatus } = useSelector(state => state.websocket.ui)
+	const { serverStatus } = useSelector(state => state.positions)
 
 	const chartStyles = useMemo(
 		() => ({

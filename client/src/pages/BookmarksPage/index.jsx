@@ -23,10 +23,6 @@ import {
 	setPage,
 	setSort,
 } from '@/redux/slices/ordersSlice'
-import {
-	selectIsSynced,
-	selectSyncWarning,
-} from '@/redux/slices/websocketSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
 import styles from './styles.module.scss'
@@ -38,8 +34,8 @@ export const BookmarksPage = React.memo(() => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const { showSuccess, showError } = useNotification()
-	const syncWarning = useSelector(selectSyncWarning)
-	const isSynced = useSelector(selectIsSynced)
+	const syncWarning = useSelector(state => state.sync.warning)
+	const isSynced = useSelector(state => state.sync.isSynced)
 
 	const { mark, color, amount } = useSelector(state => state.settings)
 	const { date, limit, search, exchange } = useSelector(state => state.filters)

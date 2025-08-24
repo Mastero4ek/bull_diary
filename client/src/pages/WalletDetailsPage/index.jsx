@@ -1,36 +1,24 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { Icon } from '@/components/ui/general/Icon'
+import { Loader } from '@/components/ui/general/Loader'
+import { Mark } from '@/components/ui/general/Mark'
+import { colorizedNum } from '@/helpers/functions'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { Icon } from '@/components/ui/general/Icon';
-import { Loader } from '@/components/ui/general/Loader';
-import { Mark } from '@/components/ui/general/Mark';
-import { colorizedNum } from '@/helpers/functions';
-import {
-  getBybitTransactions,
-  setPage,
-  setSort,
-} from '@/redux/slices/transactionSlice';
-import {
-  selectIsSynced,
-  selectSyncWarning,
-} from '@/redux/slices/websocketSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	getBybitTransactions,
+	setPage,
+	setSort,
+} from '@/redux/slices/transactionSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const WalletDetailsPage = React.memo(() => {
 	const dispatch = useDispatch()
@@ -50,8 +38,8 @@ export const WalletDetailsPage = React.memo(() => {
 		state => state.filters
 	)
 	const { showSuccess, showError } = useNotification()
-	const syncWarning = useSelector(selectSyncWarning)
-	const isSynced = useSelector(selectIsSynced)
+	const syncWarning = useSelector(state => state.sync.warning)
+	const isSynced = useSelector(state => state.sync.isSynced)
 
 	const getTransactionTypeLabel = useCallback(
 		type => {
