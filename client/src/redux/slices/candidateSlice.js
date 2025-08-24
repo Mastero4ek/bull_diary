@@ -89,6 +89,12 @@ const handleUserError = (state, action) => {
 	state.errorArray = action?.payload?.errors || null
 }
 
+const handleUserLoading = (state, action) => {
+	state.serverStatus = 'loading'
+	state.errorMessage = null
+	state.errorArray = null
+}
+
 export const checkAuth = createAsyncThunk(
 	'user/check-auth',
 	async (_, { rejectWithValue }) => {
@@ -325,11 +331,7 @@ const candidateSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			// Sign Up
-			.addCase(signUp.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = ''
-				state.errorArray = null
-			})
+			.addCase(signUp.pending, state => handleUserLoading(state))
 			.addCase(signUp.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.isAuth = false
@@ -348,11 +350,7 @@ const candidateSlice = createSlice({
 			.addCase(signUp.rejected, handleUserError)
 
 			// sign in
-			.addCase(signIn.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(signIn.pending, state => handleUserLoading(state))
 			.addCase(signIn.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = null
@@ -374,11 +372,7 @@ const candidateSlice = createSlice({
 			.addCase(signIn.rejected, handleUserError)
 
 			// check auth
-			.addCase(checkAuth.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(checkAuth.pending, state => handleUserLoading(state))
 			.addCase(checkAuth.fulfilled, (state, action) => {
 				if (action.payload?.user) {
 					state.isAuth = action.payload.user.is_activated === true
@@ -405,11 +399,7 @@ const candidateSlice = createSlice({
 			.addCase(checkAuth.rejected, handleUserError)
 
 			// logout
-			.addCase(logout.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(logout.pending, state => handleUserLoading(state))
 			.addCase(logout.fulfilled, state => {
 				state.serverStatus = 'success'
 				state.user = userDefault
@@ -422,11 +412,7 @@ const candidateSlice = createSlice({
 			.addCase(logout.rejected, handleUserError)
 
 			// edit user
-			.addCase(editUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(editUser.pending, state => handleUserLoading(state))
 			.addCase(editUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.errorArray = null
@@ -437,10 +423,7 @@ const candidateSlice = createSlice({
 			.addCase(editUser.rejected, handleUserError)
 
 			// remove cover
-			.addCase(removeCover.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(removeCover.pending, state => handleUserLoading(state))
 			.addCase(removeCover.fulfilled, (state, action) => {
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'success'
@@ -450,10 +433,7 @@ const candidateSlice = createSlice({
 			.addCase(removeCover.rejected, handleUserError)
 
 			// remove user
-			.addCase(removeUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(removeUser.pending, state => handleUserLoading(state))
 			.addCase(removeUser.fulfilled, (state, action) => {
 				state.user = userDefault
 				state.changeUser = userDefault
@@ -465,10 +445,7 @@ const candidateSlice = createSlice({
 			.addCase(removeUser.rejected, handleUserError)
 
 			// create keys
-			.addCase(updateKeys.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(updateKeys.pending, state => handleUserLoading(state))
 			.addCase(updateKeys.fulfilled, (state, action) => {
 				const updatedKeys = action.payload.map(key => ({
 					...key,
@@ -484,10 +461,7 @@ const candidateSlice = createSlice({
 			.addCase(updateKeys.rejected, handleUserError)
 
 			// get user
-			.addCase(getUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(getUser.pending, state => handleUserLoading(state))
 			.addCase(getUser.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.user = {
@@ -498,10 +472,7 @@ const candidateSlice = createSlice({
 			.addCase(getUser.rejected, handleUserError)
 
 			// create user
-			.addCase(createUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(createUser.pending, state => handleUserLoading(state))
 			.addCase(createUser.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = null

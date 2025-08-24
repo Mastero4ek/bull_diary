@@ -92,6 +92,11 @@ const handleOrdersError = (state, action) => {
 	state.serverStatus = 'error'
 }
 
+const handleOrdersLoading = (state, action) => {
+	state.serverStatus = 'loading'
+	state.errorMessage = null
+}
+
 const initialState = {
 	fakeOrders: fakePnlOrders,
 	orders: [],
@@ -139,10 +144,7 @@ const ordersSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			//get-orders-pnl
-			.addCase(getBybitOrdersPnl.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(getBybitOrdersPnl.pending, state => handleOrdersLoading(state))
 			.addCase(getBybitOrdersPnl.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = null
@@ -157,10 +159,7 @@ const ordersSlice = createSlice({
 			.addCase(getBybitOrdersPnl.rejected, handleOrdersError)
 
 			//get-order-description
-			.addCase(getOrderDescription.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(getOrderDescription.pending, state => handleOrdersLoading(state))
 			.addCase(getOrderDescription.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = action.payload.message || null
@@ -169,10 +168,9 @@ const ordersSlice = createSlice({
 			.addCase(getOrderDescription.rejected, handleOrderError)
 
 			//update-order-description
-			.addCase(updateOrderDescription.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(updateOrderDescription.pending, state =>
+				handleOrdersLoading(state)
+			)
 			.addCase(updateOrderDescription.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = action.payload.message || null
@@ -181,10 +179,7 @@ const ordersSlice = createSlice({
 			.addCase(updateOrderDescription.rejected, handleOrderError)
 
 			//saved-order
-			.addCase(savedOrder.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(savedOrder.pending, state => handleOrdersLoading(state))
 			.addCase(savedOrder.fulfilled, (state, action) => {
 				state.errorMessage = action.payload.message || null
 				state.serverStatus = 'success'
@@ -193,10 +188,7 @@ const ordersSlice = createSlice({
 			.addCase(savedOrder.rejected, handleOrderError)
 
 			//removed-order
-			.addCase(removedOrder.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(removedOrder.pending, state => handleOrdersLoading(state))
 			.addCase(removedOrder.fulfilled, (state, action) => {
 				state.errorMessage = action.payload.message || null
 				state.serverStatus = 'success'

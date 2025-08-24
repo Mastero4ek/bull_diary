@@ -30,6 +30,11 @@ const handleWalletError = (state, action) => {
 	state.serverStatus = 'error'
 }
 
+const handleWalletLoading = (state, action) => {
+	state.serverStatus = 'loading'
+	state.errorMessage = null
+}
+
 const initialState = {
 	fakeWallet: fakeWallet,
 	wallet: {
@@ -63,10 +68,7 @@ const walletSlice = createSlice({
 	},
 	extraReducers: builder => {
 		builder
-			.addCase(getBybitWallet.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(getBybitWallet.pending, state => handleWalletLoading(state))
 			.addCase(getBybitWallet.fulfilled, (state, action) => {
 				const { wallet, message } = action.payload
 

@@ -143,6 +143,12 @@ const handleUsersError = (state, action) => {
 	state.errorArray = action?.payload?.errors || null
 }
 
+const handleUsersLoading = (state, action) => {
+	state.serverStatus = 'loading'
+	state.errorMessage = null
+	state.errorArray = null
+}
+
 const initialState = {
 	user: userDefault,
 	changeUser: userDefault,
@@ -204,11 +210,7 @@ const usersSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			//get-users
-			.addCase(getUsers.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(getUsers.pending, state => handleUsersLoading(state))
 			.addCase(getUsers.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = action.payload.message || null
@@ -222,11 +224,7 @@ const usersSlice = createSlice({
 			.addCase(getUsers.rejected, handleUsersError)
 
 			// remove user
-			.addCase(removeUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(removeUser.pending, state => handleUsersLoading(state))
 			.addCase(removeUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.serverStatus = 'success'
@@ -235,11 +233,7 @@ const usersSlice = createSlice({
 			.addCase(removeUser.rejected, handleUsersError)
 
 			// get user
-			.addCase(getUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(getUser.pending, state => handleUsersLoading(state))
 			.addCase(getUser.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.user = {
@@ -255,11 +249,7 @@ const usersSlice = createSlice({
 			.addCase(getUser.rejected, handleUsersError)
 
 			// edit user
-			.addCase(editUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(editUser.pending, state => handleUsersLoading(state))
 			.addCase(editUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.serverStatus = 'success'
@@ -276,11 +266,7 @@ const usersSlice = createSlice({
 			.addCase(editUser.rejected, handleUsersError)
 
 			// remove cover
-			.addCase(removeCover.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(removeCover.pending, state => handleUsersLoading(state))
 			.addCase(removeCover.fulfilled, (state, action) => {
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'success'
@@ -291,11 +277,7 @@ const usersSlice = createSlice({
 			.addCase(removeCover.rejected, handleUsersError)
 
 			// active user
-			.addCase(activeUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(activeUser.pending, state => handleUsersLoading(state))
 			.addCase(activeUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.serverStatus = 'success'
@@ -304,11 +286,7 @@ const usersSlice = createSlice({
 			.addCase(activeUser.rejected, handleUsersError)
 
 			// inactive user
-			.addCase(inactiveUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-				state.errorArray = null
-			})
+			.addCase(inactiveUser.pending, state => handleUsersLoading(state))
 			.addCase(inactiveUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.serverStatus = 'success'

@@ -1,39 +1,28 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
 
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { SharedButton } from '@/components/ui/buttons/SharedButton'
+import { Loader } from '@/components/ui/general/Loader'
+import { Mark } from '@/components/ui/general/Mark'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { colorizedNum } from '@/helpers/functions'
+import { useClientFiltering } from '@/hooks/useClientFiltering'
+import { useWebSocket } from '@/hooks/useWebSocket'
+import { SharedPositionPopup } from '@/popups/SharedPositionPopup'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { SharedButton } from '@/components/ui/buttons/SharedButton';
-import { Loader } from '@/components/ui/general/Loader';
-import { Mark } from '@/components/ui/general/Mark';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { colorizedNum } from '@/helpers/functions';
-import { useClientFiltering } from '@/hooks/useClientFiltering';
-import { useWebSocket } from '@/hooks/useWebSocket';
-import { SharedPositionPopup } from '@/popups/SharedPositionPopup';
-import {
-  setPage,
-  setServerStatus,
-  setSort,
-} from '@/redux/slices/websocketSlice';
+	setPage,
+	setServerStatus,
+	setSort,
+} from '@/redux/slices/websocketSlice'
 
-import { BarChart } from './BarChart';
+import { BarChart } from './BarChart'
 
 export const DiaryPage = React.memo(() => {
 	const { t } = useTranslation()
@@ -155,10 +144,8 @@ export const DiaryPage = React.memo(() => {
 
 			connect()
 
-			setTimeout(() => {
-				subscribeToPositions()
-				showSuccess(t('page.diary.update_success'))
-			}, 1000)
+			subscribeToPositions()
+			showSuccess(t('page.diary.update_success'))
 		} catch (error) {
 			dispatch(setServerStatus('error'))
 		} finally {

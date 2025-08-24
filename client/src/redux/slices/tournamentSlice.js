@@ -83,6 +83,11 @@ const handleTournamentError = (state, action) => {
 	state.serverStatus = 'error'
 }
 
+const handleTournamentLoading = (state, action) => {
+	state.serverStatus = 'loading'
+	state.errorMessage = null
+}
+
 const initialState = {
 	fakeUsers: fakeUsers,
 	tournament: {},
@@ -128,10 +133,7 @@ const tournamentSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			//tournaments
-			.addCase(getTournaments.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(getTournaments.pending, state => handleTournamentLoading(state))
 			.addCase(getTournaments.fulfilled, (state, action) => {
 				state.errorMessage = action.payload.message || null
 				state.serverStatus =
@@ -146,10 +148,9 @@ const tournamentSlice = createSlice({
 			.addCase(getTournaments.rejected, handleTournamentError)
 
 			//add-tournament-user
-			.addCase(addTournamentUser.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(addTournamentUser.pending, state =>
+				handleTournamentLoading(state)
+			)
 			.addCase(addTournamentUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.serverStatus = 'success'
@@ -163,10 +164,9 @@ const tournamentSlice = createSlice({
 			.addCase(addTournamentUser.rejected, handleTournamentError)
 
 			//create-tournament
-			.addCase(createTournament.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(createTournament.pending, state =>
+				handleTournamentLoading(state)
+			)
 			.addCase(createTournament.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.tournament = action.payload.tournament

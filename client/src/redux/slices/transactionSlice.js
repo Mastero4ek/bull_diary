@@ -39,6 +39,11 @@ const handleTransactionError = (state, action) => {
 	state.serverStatus = 'error'
 }
 
+const handleTransactionLoading = (state, action) => {
+	state.serverStatus = 'loading'
+	state.errorMessage = null
+}
+
 const initialState = {
 	fakeTransactions: fakeWalletTransactions,
 	transactions: [],
@@ -72,10 +77,9 @@ const transactionSlice = createSlice({
 	},
 	extraReducers: builder => {
 		builder
-			.addCase(getBybitTransactions.pending, state => {
-				state.serverStatus = 'loading'
-				state.errorMessage = null
-			})
+			.addCase(getBybitTransactions.pending, state =>
+				handleTransactionLoading(state)
+			)
 			.addCase(getBybitTransactions.fulfilled, (state, action) => {
 				const { transactions, total_pages, total, message } = action.payload
 
