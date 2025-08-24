@@ -308,6 +308,7 @@ class TournamentService {
 	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
 	 * @param {number} page - Номер страницы (по умолчанию 1)
 	 * @param {number} size - Количество записей на странице (по умолчанию 5)
+	 * @param {string} search - Поисковый запрос (по умолчанию null)
 	 * @param {string} cursor - Курсор для пагинации (по умолчанию null)
 	 * @returns {Promise<Object>} - Турнир с участниками и метаданными пагинации
 	 */
@@ -316,6 +317,7 @@ class TournamentService {
 		lng = 'en',
 		page = 1,
 		size = 5,
+		search = null,
 		cursor = null
 	) {
 		try {
@@ -339,6 +341,30 @@ class TournamentService {
 
 			if (cursor && mongoose.Types.ObjectId.isValid(cursor)) {
 				query._id = { $gt: mongoose.Types.ObjectId(cursor) }
+			}
+
+			if (search) {
+				const userFilter = {
+					$or: [
+						{ name: { $regex: search, $options: 'i' } },
+						{ last_name: { $regex: search, $options: 'i' } },
+						{ email: { $regex: search, $options: 'i' } },
+						{
+							$expr: {
+								$regexMatch: {
+									input: { $concat: ['$name', ' ', '$last_name'] },
+									regex: search,
+									options: 'i',
+								},
+							},
+						},
+					],
+				}
+
+				const matchingUsers = await UserModel.find(userFilter).select('_id')
+				const userIds = matchingUsers.map(user => user._id)
+
+				query.user = { $in: userIds }
 			}
 
 			const participants = await TournamentUserModel.find(query)

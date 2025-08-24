@@ -83,7 +83,9 @@
 		},
 		"search": {
 			"placeholder": "Все USDT-PERP",
-			"empty": "Результаты не найдены"
+			"empty": "Результаты не найдены",
+			"users_placeholder": "Активные пользователи",
+			"ticker_placeholder": "Все USDT-PERP"
 		}
 	},
 	"button": {

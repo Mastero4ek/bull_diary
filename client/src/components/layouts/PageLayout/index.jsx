@@ -13,11 +13,15 @@ export const PageLayout = React.memo(props => {
 		entries,
 		calendar,
 		search,
+		searchOptions,
+		onChange,
 		total,
 		children,
 		chartWidth = 0,
 		update,
 		minDate,
+		placeholder,
+		searchPlaceholder,
 	} = props
 
 	return (
@@ -31,9 +35,13 @@ export const PageLayout = React.memo(props => {
 							entries={entries}
 							calendar={calendar}
 							search={search}
+							searchOptions={searchOptions}
+							onChange={onChange}
 							total={total}
 							update={update}
 							minDate={minDate}
+							placeholder={placeholder}
+							searchPlaceholder={searchPlaceholder}
 						/>
 					)}
 

@@ -165,12 +165,12 @@
     <path d="M1.93782 15.5C1.32344 14.4359 1 13.2288 1 12C1 10.7712 1.32344 9.56413 1.93782 8.5C2.5522 7.43587 3.43587 6.5522 4.5 5.93782C5.56413 5.32344 6.77124 5 8 5" stroke="var(--white)" stroke-linecap="round"></path>
   </symbol>
 
- <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="entries">
+ <symbol fill="none" stroke="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="entries">
     <g clip-path="url(#clip0_2390_748)">
-      <path d="M2 0C0.895431 0 0 0.89543 0 2V13C0 14.1046 0.89543 15 2 15H13C14.1046 15 15 14.1046 15 13V2C15 0.895431 14.1046 0 13 0H2Z"></path>
-      <path d="M2 17C0.895431 17 0 17.8954 0 19V30C0 31.1046 0.89543 32 2 32H13C14.1046 32 15 31.1046 15 30V19C15 17.8954 14.1046 17 13 17H2Z"></path>
-      <path d="M17 2C17 0.89543 17.8954 0 19 0H30C31.1046 0 32 0.895431 32 2V13C32 14.1046 31.1046 15 30 15H19C17.8954 15 17 14.1046 17 13V2Z" ></path>
-      <path d="M19 17C17.8954 17 17 17.8954 17 19V30C17 31.1046 17.8954 32 19 32H30C31.1046 32 32 31.1046 32 30V19C32 17.8954 31.1046 17 30 17H19Z"></path>
+      <path d="M2 0C0.895431 0 0 0.89543 0 2V13C0 14.1046 0.89543 15 2 15H13C14.1046 15 15 14.1046 15 13V2C15 0.895431 14.1046 0 13 0H2Z" fill="var(--text)"></path>
+      <path d="M2 17C0.895431 17 0 17.8954 0 19V30C0 31.1046 0.89543 32 2 32H13C14.1046 32 15 31.1046 15 30V19C15 17.8954 14.1046 17 13 17H2Z" fill="var(--text)"></path>
+      <path d="M17 2C17 0.89543 17.8954 0 19 0H30C31.1046 0 32 0.895431 32 2V13C32 14.1046 31.1046 15 30 15H19C17.8954 15 17 14.1046 17 13V2Z" fill="var(--text)"></path>
+      <path d="M19 17C17.8954 17 17 17.8954 17 19V30C17 31.1046 17.8954 32 19 32H30C31.1046 32 32 31.1046 32 30V19C32 17.8954 31.1046 17 30 17H19Z" fill="var(--text)"></path>
     </g>
   </symbol>
 
@@ -198,8 +198,8 @@
   </symbol>
 
   <symbol fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" id="search">
-    <circle cx="8" cy="8" r="7" stroke="var(--text)" stroke-width="2"></circle>
-    <path d="M17 17L14 14" stroke="var(--text)" stroke-width="2" stroke-linecap="round"></path>
+    <circle cx="8" cy="8" r="7" ></circle>
+    <path d="M17 17L14 14" stroke-linecap="round"></path>
   </symbol>
 
   <symbol fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16" id="shared">

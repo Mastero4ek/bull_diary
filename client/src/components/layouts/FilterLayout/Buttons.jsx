@@ -8,13 +8,12 @@ import {
 	setDate,
 	setFilter,
 	setLimit,
-	setRemoveBtn,
 	setSearch,
 } from '@/redux/slices/filtersSlice'
 
 import styles from './styles.module.scss'
 
-export const Buttons = React.memo(({ onClickUpdate, setInputSearch }) => {
+export const Buttons = React.memo(({ onClickUpdate }) => {
 	const { remove_btn } = useSelector(state => state.filters)
 
 	const dispatch = useDispatch()
@@ -36,10 +35,7 @@ export const Buttons = React.memo(({ onClickUpdate, setInputSearch }) => {
 			})
 		)
 
-		dispatch(setRemoveBtn(true))
-
 		dispatch(setSearch(''))
-		setInputSearch('')
 	}, [dispatch])
 
 	return (

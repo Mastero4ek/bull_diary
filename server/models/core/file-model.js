@@ -8,4 +8,11 @@ const FileSchema = new Schema({
 	mimetype: { type: String, required: true },
 })
 
+FileSchema.index({ user: 1 })
+FileSchema.index({ tournament: 1 })
+FileSchema.index({ name: 1 })
+FileSchema.index({ mimetype: 1 })
+FileSchema.index({ user: 1, name: 1 })
+FileSchema.index({ tournament: 1, name: 1 })
+
 module.exports = model('File', FileSchema)

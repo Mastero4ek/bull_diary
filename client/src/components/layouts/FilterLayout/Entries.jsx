@@ -21,6 +21,10 @@ export const Entries = React.memo(() => {
 	return (
 		<div className={styles.entries}>
 			<RootSelect
+				iconId='entries'
+				placeholder={t('filter.entries.placeholder')}
+				getLabel={item => item.name}
+				getValue={item => item.value}
 				dropdownClassName={styles.entries_list}
 				options={ENTRIES_OPTIONS}
 				value={limit}
@@ -28,10 +32,6 @@ export const Entries = React.memo(() => {
 					dispatch(setLimit(val))
 					dispatch(setRemoveBtn(false))
 				}}
-				iconId='entries'
-				placeholder={t('filter.entries.placeholder')}
-				getLabel={item => item.name}
-				getValue={item => item.value}
 			/>
 		</div>
 	)

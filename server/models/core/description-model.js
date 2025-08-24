@@ -6,4 +6,8 @@ const DescriptionSchema = new Schema({
 	text: { type: String, required: true },
 })
 
+DescriptionSchema.index({ user: 1 })
+DescriptionSchema.index({ orderId: 1 })
+DescriptionSchema.index({ user: 1, orderId: 1 })
+
 module.exports = model('Description', DescriptionSchema)

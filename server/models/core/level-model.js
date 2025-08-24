@@ -9,4 +9,7 @@ const LevelSchema = new Schema({
 	},
 })
 
+LevelSchema.index({ user: 1 })
+LevelSchema.index({ 'level.value': -1 })
+
 module.exports = model('Level', LevelSchema)

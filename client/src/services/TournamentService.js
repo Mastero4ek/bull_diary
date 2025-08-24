@@ -1,9 +1,9 @@
 import $api from '../http'
 
 export default class TournamentService {
-	static async getTournaments(exchange, page, size) {
+	static async getTournaments(exchange, page, size, search) {
 		return $api.get(`/v1/tournaments`, {
-			params: { exchange, page, size },
+			params: { exchange, page, size, search },
 		})
 	}
 

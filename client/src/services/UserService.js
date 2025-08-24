@@ -1,4 +1,4 @@
-import $api from '../http';
+import $api from '../http'
 
 export default class UserService {
 	static async getUsers(sort, search, page, limit, start_time, end_time) {
@@ -83,5 +83,9 @@ export default class UserService {
 
 	static async inactiveUser(userId) {
 		return $api.patch(`/v1/user/${userId}/deactivate`)
+	}
+
+	static async getUsersList() {
+		return $api.get('/v1/users/list')
 	}
 }

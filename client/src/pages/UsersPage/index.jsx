@@ -18,10 +18,13 @@ import { OuterBlock } from '@/components/ui/general/OuterBlock'
 import { NewUserPopup } from '@/popups/NewUserPopup'
 import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
 import { getUser } from '@/redux/slices/candidateSlice'
+import { setSearch } from '@/redux/slices/filtersSlice'
 import {
 	activeUser,
 	clearUsers,
+	clearUsersList,
 	getUsers,
+	getUsersList,
 	inactiveUser,
 	setPage,
 	setSort,
@@ -42,6 +45,7 @@ export const UsersPage = () => {
 	const {
 		fakeUsers,
 		users,
+		usersList,
 		serverStatus,
 		errorMessage,
 		page,
@@ -210,6 +214,8 @@ export const UsersPage = () => {
 							end_time: date.end_date,
 						})
 					)
+
+					dispatch(getUsersList())
 				} else {
 					showError(t('page.users.error_inactive'))
 				}
@@ -240,6 +246,8 @@ export const UsersPage = () => {
 							end_time: date.end_date,
 						})
 					)
+
+					dispatch(getUsersList())
 				} else {
 					showError(t('page.users.error_active'))
 				}
@@ -289,6 +297,16 @@ export const UsersPage = () => {
 		openPopup(<NewUserPopup />)
 	}, [navigate])
 
+	const handleUserSearch = useCallback(
+		selectedValue => {
+			const selectedUser = usersList.find(user => user.value === selectedValue)
+			const searchTerm = selectedUser ? selectedUser.label : selectedValue
+
+			dispatch(setSearch(searchTerm))
+		},
+		[usersList, dispatch]
+	)
+
 	useEffect(() => {
 		if (date?.start_date && date?.end_date) {
 			dispatch(setPage(1))
@@ -331,6 +349,15 @@ export const UsersPage = () => {
 		}
 	}, [location, dispatch, user?.id])
 
+	useEffect(() => {
+		dispatch(getUsersList())
+
+		return () => {
+			dispatch(clearUsersList())
+			dispatch(setSearch(''))
+		}
+	}, [dispatch])
+
 	return (
 		<PageLayout
 			update={handleClickUpdate}
@@ -338,6 +365,11 @@ export const UsersPage = () => {
 			entries={true}
 			periods={true}
 			calendar={true}
+			search={true}
+			searchOptions={usersList}
+			onChange={handleUserSearch}
+			placeholder={t('filter.search.users_placeholder')}
+			searchPlaceholder={t('filter.search.users_placeholder')}
 		>
 			<div style={{ width: '100%' }}>
 				<TableLayout

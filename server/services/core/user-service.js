@@ -722,7 +722,17 @@ class UserService {
 			if (search) {
 				filter.$or = [
 					{ name: { $regex: search, $options: 'i' } },
+					{ last_name: { $regex: search, $options: 'i' } },
 					{ email: { $regex: search, $options: 'i' } },
+					{
+						$expr: {
+							$regexMatch: {
+								input: { $concat: ['$name', ' ', '$last_name'] },
+								regex: search,
+								options: 'i',
+							},
+						},
+					},
 				]
 			}
 
@@ -920,6 +930,28 @@ class UserService {
 			return result.modifiedCount
 		} catch (error) {
 			logError(error, { context: 'markInactiveUsers' })
+			throw error
+		}
+	}
+
+	/**
+	 * Получает список пользователей с объединенным именем и фамилией
+	 * @returns {Promise<Array>} - Список пользователей с полным именем
+	 */
+	async getUsersList() {
+		try {
+			const users = await UserModel.find({ inactive: { $ne: true } })
+				.select('_id name last_name email')
+				.sort({ name: 1, last_name: 1 })
+
+			return users.map(user => ({
+				id: user._id,
+				value: user._id.toString(),
+				label: `${user.name} ${user.last_name}`.trim(),
+				email: user.email,
+			}))
+		} catch (error) {
+			logError(error, { context: 'getUsersList' })
 			throw error
 		}
 	}

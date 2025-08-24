@@ -43,14 +43,14 @@ class TournamentController {
 		try {
 			validationError(req, next)
 
-			const { exchange } = req.query
-			const { page, size } = req.query
+			const { exchange, page, size, search } = req.query
 
 			const tournament = await TournamentService.getTournaments(
 				exchange,
 				req.lng,
 				page,
-				size
+				size,
+				search
 			)
 
 			return res.json(tournament)

@@ -151,4 +151,14 @@ UserSchema.pre('deleteMany', async function (next) {
 	}
 })
 
+UserSchema.index({ name: 1 })
+UserSchema.index({ last_name: 1 })
+UserSchema.index({ email: 1 })
+UserSchema.index({ inactive: 1 })
+UserSchema.index({ created_at: -1 })
+UserSchema.index({ updated_at: -1 })
+UserSchema.index({ name: 1, last_name: 1 })
+UserSchema.index({ inactive: 1, created_at: -1 })
+UserSchema.index({ name: 'text', last_name: 'text', email: 'text' })
+
 module.exports = model('User', UserSchema)

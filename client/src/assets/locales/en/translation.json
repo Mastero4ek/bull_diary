@@ -83,7 +83,9 @@
 		},
 		"search": {
 			"placeholder": "All USDT-PERP",
-			"empty": "No results found"
+			"empty": "No results found",
+			"users_placeholder": "All active users",
+			"ticker_placeholder": "All USDT-PERP"
 		}
 	},
 	"button": {

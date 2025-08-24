@@ -30,4 +30,6 @@ const KeysSchema = new Schema({
 	},
 })
 
+KeysSchema.index({ user: 1 })
+
 module.exports = model('Keys', KeysSchema)

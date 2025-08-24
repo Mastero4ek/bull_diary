@@ -13,6 +13,7 @@ import { Loader } from '@/components/ui/general/Loader'
 import { Mark } from '@/components/ui/general/Mark'
 import { OuterBlock } from '@/components/ui/general/OuterBlock'
 import { capitalize, colorizedNum } from '@/helpers/functions'
+import { clearTickers, getBybitTickers } from '@/redux/slices/filtersSlice'
 import {
 	clearOrders,
 	getBybitOrdersPnl,
@@ -34,7 +35,9 @@ export const TablePage = () => {
 	const isSynced = useSelector(state => state.sync.isSynced)
 
 	const { mark, color, amount } = useSelector(state => state.settings)
-	const { date, limit, search, exchange } = useSelector(state => state.filters)
+	const { date, limit, search, exchange, tickers } = useSelector(
+		state => state.filters
+	)
 	const {
 		fakeOrders,
 		orders,
@@ -44,6 +47,11 @@ export const TablePage = () => {
 		errorMessage,
 		serverStatus,
 	} = useSelector(state => state.orders)
+
+	const tickerOptions = tickers.map(ticker => ({
+		value: ticker.symbol,
+		label: ticker.symbol,
+	}))
 
 	const columns = [
 		{
@@ -312,6 +320,14 @@ export const TablePage = () => {
 		}
 	}, [location])
 
+	useEffect(() => {
+		dispatch(getBybitTickers({ exchange: exchange.name }))
+
+		return () => {
+			dispatch(clearTickers())
+		}
+	}, [dispatch, exchange.name])
+
 	return (
 		<PageLayout
 			chartWidth={460}
@@ -319,7 +335,10 @@ export const TablePage = () => {
 			periods={true}
 			calendar={true}
 			search={true}
+			searchOptions={tickerOptions}
 			entries={true}
+			placeholder={t('filter.search.ticker_placeholder')}
+			searchPlaceholder={t('filter.search.ticker_placeholder')}
 		>
 			{serverStatus === 'loading' && <Loader />}
 

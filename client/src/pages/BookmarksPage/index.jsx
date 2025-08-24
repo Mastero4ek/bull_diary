@@ -16,6 +16,7 @@ import { Mark } from '@/components/ui/general/Mark'
 import { OuterBlock } from '@/components/ui/general/OuterBlock'
 import { capitalize, colorizedNum } from '@/helpers/functions'
 import { ConfirmPopup } from '@/popups/ConfirmPopup'
+import { clearTickers, getBybitTickers } from '@/redux/slices/filtersSlice'
 import {
 	clearOrders,
 	getBybitOrdersPnl,
@@ -38,7 +39,9 @@ export const BookmarksPage = React.memo(() => {
 	const isSynced = useSelector(state => state.sync.isSynced)
 
 	const { mark, color, amount } = useSelector(state => state.settings)
-	const { date, limit, search, exchange } = useSelector(state => state.filters)
+	const { date, limit, search, exchange, tickers } = useSelector(
+		state => state.filters
+	)
 	const {
 		orders,
 		fakeOrders,
@@ -48,6 +51,11 @@ export const BookmarksPage = React.memo(() => {
 		errorMessage,
 		serverStatus,
 	} = useSelector(state => state.orders)
+
+	const tickerOptions = tickers.map(ticker => ({
+		value: ticker.symbol,
+		label: ticker.symbol,
+	}))
 
 	const columns = [
 		{
@@ -338,6 +346,14 @@ export const BookmarksPage = React.memo(() => {
 		}
 	}, [location])
 
+	useEffect(() => {
+		dispatch(getBybitTickers({ exchange: exchange.name }))
+
+		return () => {
+			dispatch(clearTickers())
+		}
+	}, [dispatch, exchange.name])
+
 	return (
 		<PageLayout
 			chartWidth={460}
@@ -345,7 +361,10 @@ export const BookmarksPage = React.memo(() => {
 			periods={true}
 			calendar={true}
 			search={true}
+			searchOptions={tickerOptions}
 			entries={true}
+			placeholder={t('filter.search.ticker_placeholder')}
+			searchPlaceholder={t('filter.search.ticker_placeholder')}
 		>
 			{serverStatus === 'loading' && <Loader />}
 

@@ -1,3 +1,5 @@
+@import '@/styles/mixins.scss';
+
 .select_head {
 	width: 100%;
 	padding: 0 15rem;
@@ -29,7 +31,8 @@
 		width: 24rem;
 		height: 24rem;
 		transition: all 0.15s ease-in-out;
-		fill: var(--text);
+		stroke: var(--text);
+		stroke-width: 2rem;
 	}
 
 	div {
@@ -78,9 +81,9 @@
 	transform: translateX(-50%) rotateX(-90deg) !important;
 	visibility: hidden !important;
 	opacity: 0 !important;
-
 	background: var(--bgLight);
 	box-shadow: var(--shadowOuter);
+	max-height: 295rem;
 
 	li {
 		width: 100%;
@@ -105,8 +108,11 @@
 		}
 
 		span {
-			text-align: center;
-			display: inline-block;
+			text-align: left;
+			display: block;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	}
 }
@@ -117,4 +123,59 @@
 	opacity: 1 !important;
 	visibility: visible !important;
 	transform: translateX(-50%) rotateX(0deg) !important;
+	overflow-y: scroll !important;
+	scrollbar-width: none !important;
+
+	&::-webkit-scrollbar {
+		display: none !important;
+	}
+}
+
+.search_item {
+	cursor: default !important;
+
+	&:hover {
+		background-color: transparent !important;
+		box-shadow: none !important;
+		color: inherit !important;
+	}
+}
+
+.search_input {
+	display: flex;
+	align-items: center;
+	gap: 14rem;
+
+	svg {
+		stroke: var(--disabled);
+		stroke-width: 2rem;
+		width: 20rem;
+		height: 20rem;
+	}
+
+	input {
+		width: 100%;
+		background: transparent;
+		color: var(--text);
+		@include font(400, 18rem, 120%);
+		outline: none;
+		transition: all 0.15s ease-in-out;
+		position: relative;
+
+		&::placeholder {
+			color: var(--disabled);
+		}
+	}
+}
+
+.no_results {
+	cursor: default !important;
+	color: var(--disabled) !important;
+	font-style: italic;
+
+	&:hover {
+		background-color: transparent !important;
+		box-shadow: none !important;
+		color: var(--disabled) !important;
+	}
 }

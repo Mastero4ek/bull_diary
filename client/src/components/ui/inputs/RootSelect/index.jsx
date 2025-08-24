@@ -1,16 +1,13 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { useTranslation } from 'react-i18next'
 
-import styles from './styles.module.scss';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+
+import styles from './styles.module.scss'
 
 export const RootSelect = React.memo(
 	({
@@ -25,10 +22,15 @@ export const RootSelect = React.memo(
 		className = '',
 		dropdownClassName = '',
 		disabled = false,
+		search = false,
+		searchPlaceholder = '',
 		children,
 	}) => {
 		const selectRef = useRef()
 		const [open, setOpen] = useState(false)
+		const [searchQuery, setSearchQuery] = useState('')
+
+		const { t } = useTranslation()
 
 		const toggleOpen = () => !disabled && setOpen(prev => !prev)
 
@@ -36,6 +38,7 @@ export const RootSelect = React.memo(
 			item => {
 				onChange(getValue(item))
 				setOpen(false)
+				setSearchQuery('')
 			},
 			[onChange, getValue]
 		)
@@ -45,7 +48,12 @@ export const RootSelect = React.memo(
 
 			if (!path.includes(selectRef.current)) {
 				setOpen(false)
+				setSearchQuery('')
 			}
+		}, [])
+
+		const handleSearchChange = useCallback(e => {
+			setSearchQuery(e.target.value)
 		}, [])
 
 		useEffect(() => {
@@ -56,7 +64,18 @@ export const RootSelect = React.memo(
 		}, [handleClickOutside])
 
 		const ItemBlock = open ? InnerBlock : OuterBlock
-		const selectedOption = options.find(opt => getValue(opt) === value)
+		let selectedOption = options.find(opt => getLabel(opt) === value)
+
+		if (!selectedOption) {
+			selectedOption = options.find(opt => getValue(opt) === value)
+		}
+
+		const filteredOptions =
+			search && searchQuery
+				? options.filter(option =>
+						getLabel(option).toLowerCase().includes(searchQuery.toLowerCase())
+				  )
+				: options
 
 		return (
 			<div
@@ -101,9 +120,25 @@ export const RootSelect = React.memo(
 						(dropdownClassName ? ' ' + dropdownClassName : '')
 					}
 				>
-					{options &&
-						options.length > 0 &&
-						options.map(option => (
+					{search && open && (
+						<li className={styles.search_item}>
+							<div className={styles.search_input}>
+								<Icon id='search' />
+
+								<input
+									type='text'
+									placeholder={searchPlaceholder}
+									value={searchQuery}
+									onChange={handleSearchChange}
+									onClick={e => e.stopPropagation()}
+								/>
+							</div>
+						</li>
+					)}
+
+					{filteredOptions &&
+						filteredOptions.length > 0 &&
+						filteredOptions.map(option => (
 							<li
 								onClick={() => handleListItemClick(option)}
 								key={getValue(option)}
@@ -113,6 +148,14 @@ export const RootSelect = React.memo(
 								</RootDesc>
 							</li>
 						))}
+
+					{search && searchQuery && filteredOptions.length === 0 && (
+						<li className={styles.no_results}>
+							<RootDesc>
+								<span>{t('filter.search.empty')}</span>
+							</RootDesc>
+						</li>
+					)}
 				</ul>
 
 				{children && children}

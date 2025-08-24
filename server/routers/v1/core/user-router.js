@@ -50,6 +50,8 @@ router.get(
 	userController.getUsers
 )
 
+router.get('/users/list', authMiddleware, userController.getUsersList)
+
 router.post(
 	'/user',
 	authMiddleware,

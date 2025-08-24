@@ -1,4 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
+
+import { useDispatch, useSelector } from 'react-redux'
+
+import { setSearch } from '@/redux/slices/filtersSlice'
 
 import { Buttons } from './Buttons'
 import { Calendar } from './Calendar'
@@ -14,12 +18,23 @@ export const FilterLayout = React.memo(props => {
 		entries,
 		calendar,
 		search,
+		searchOptions,
+		onChange,
 		total,
 		update,
 		disabled,
 		minDate,
+		placeholder,
+		searchPlaceholder,
 	} = props
-	const [inputSearch, setInputSearch] = useState('')
+	const { search: searchValue } = useSelector(state => state.filters)
+	const dispatch = useDispatch()
+
+	const handleSetSearch = value => {
+		dispatch(setSearch(value))
+	}
+
+	const handleSearchChange = onChange || handleSetSearch
 
 	return (
 		<div
@@ -36,12 +51,18 @@ export const FilterLayout = React.memo(props => {
 			{calendar && <Calendar minDate={minDate} />}
 
 			{search && (
-				<Search inputSearch={inputSearch} setInputSearch={setInputSearch} />
+				<Search
+					inputSearch={searchValue}
+					onChange={handleSearchChange}
+					options={searchOptions || []}
+					placeholder={placeholder}
+					searchPlaceholder={searchPlaceholder}
+				/>
 			)}
 
 			{entries && <Entries />}
 
-			<Buttons onClickUpdate={update} setInputSearch={setInputSearch} />
+			<Buttons onClickUpdate={update} />
 		</div>
 	)
 })

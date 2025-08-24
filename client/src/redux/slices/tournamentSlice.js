@@ -5,12 +5,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const getTournaments = createAsyncThunk(
 	'get-tournaments',
-	async ({ exchange, page, size }, { rejectWithValue }) => {
+	async ({ exchange, page, size, search }, { rejectWithValue }) => {
 		try {
 			const response = await TournamentService.getTournaments(
 				exchange,
 				page,
-				size
+				size,
+				search
 			)
 
 			return response?.data

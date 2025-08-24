@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
 import { PageLayout } from '@/components/layouts/PageLayout'
@@ -16,6 +16,7 @@ import { colorizedNum } from '@/helpers/functions'
 import { useClientFiltering } from '@/hooks/useClientFiltering'
 import { useWebSocket } from '@/hooks/useWebSocket'
 import { SharedPositionPopup } from '@/popups/SharedPositionPopup'
+import { clearTickers, getBybitTickers } from '@/redux/slices/filtersSlice'
 import {
 	setPage,
 	setServerStatus,
@@ -26,22 +27,26 @@ import { BarChart } from './BarChart'
 
 export const DiaryPage = React.memo(() => {
 	const { t } = useTranslation()
-	const location = useLocation()
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	const { showSuccess, showError } = useNotification()
+	const { showSuccess } = useNotification()
 
 	const { connect, subscribeToPositions } = useWebSocket()
-
-	const { user } = useSelector(state => state.candidate)
 	const { mark, color, amount } = useSelector(state => state.settings)
-	const { exchange, search, limit } = useSelector(state => state.filters)
+	const { exchange, search, limit, tickers } = useSelector(
+		state => state.filters
+	)
 	const { fakeData: fakePositions, data: positions } = useSelector(
 		state => state.positions
 	)
 	const { page, sort, serverStatus, errorMessage } = useSelector(
 		state => state.positions
 	)
+
+	const tickerOptions = tickers.map(ticker => ({
+		value: ticker.symbol,
+		label: ticker.symbol,
+	}))
 
 	const { filteredData: filteredPositions, totalPages: totalFilteredPages } =
 		useClientFiltering(positions, { search, sort, page, limit }, [
@@ -175,13 +180,24 @@ export const DiaryPage = React.memo(() => {
 		}
 	}, [search, limit, dispatch])
 
+	useEffect(() => {
+		dispatch(getBybitTickers({ exchange: exchange.name }))
+
+		return () => {
+			dispatch(clearTickers())
+		}
+	}, [dispatch, exchange.name])
+
 	return (
 		<PageLayout
 			update={handleClickUpdate}
 			chartWidth={700}
 			search={true}
+			searchOptions={tickerOptions}
 			entries={true}
 			total={true}
+			placeholder={t('filter.search.ticker_placeholder')}
+			searchPlaceholder={t('filter.search.ticker_placeholder')}
 		>
 			{serverStatus === 'loading' && <Loader />}
 

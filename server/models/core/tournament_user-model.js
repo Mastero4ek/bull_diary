@@ -11,4 +11,14 @@ const TournamentUserSchema = new Schema({
 	updated_at: { type: Date, default: Date.now },
 })
 
+TournamentUserSchema.index({ tournament: 1 })
+TournamentUserSchema.index({ id: 1 })
+TournamentUserSchema.index({ name: 1 })
+TournamentUserSchema.index({ last_name: 1 })
+TournamentUserSchema.index({ registration_at: -1 })
+TournamentUserSchema.index({ updated_at: -1 })
+TournamentUserSchema.index({ tournament: 1, registration_at: -1 })
+TournamentUserSchema.index({ tournament: 1, id: 1 })
+TournamentUserSchema.index({ name: 1, last_name: 1 })
+
 module.exports = model('TournamentUser', TournamentUserSchema)

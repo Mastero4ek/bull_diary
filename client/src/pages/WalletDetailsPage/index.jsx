@@ -12,6 +12,11 @@ import { Loader } from '@/components/ui/general/Loader'
 import { Mark } from '@/components/ui/general/Mark'
 import { colorizedNum } from '@/helpers/functions'
 import {
+	clearTickers,
+	getBybitTickers,
+	setSearch,
+} from '@/redux/slices/filtersSlice'
+import {
 	getBybitTransactions,
 	setPage,
 	setSort,
@@ -34,12 +39,17 @@ export const WalletDetailsPage = React.memo(() => {
 		totalPages,
 		fakeTransactions,
 	} = useSelector(state => state.transactions)
-	const { exchange, date, limit, search, size } = useSelector(
+	const { exchange, date, limit, search, size, tickers } = useSelector(
 		state => state.filters
 	)
 	const { showSuccess, showError } = useNotification()
 	const syncWarning = useSelector(state => state.sync.warning)
 	const isSynced = useSelector(state => state.sync.isSynced)
+
+	const tickerOptions = tickers.map(ticker => ({
+		value: ticker.symbol,
+		label: ticker.symbol,
+	}))
 
 	const getTransactionTypeLabel = useCallback(
 		type => {
@@ -326,12 +336,24 @@ export const WalletDetailsPage = React.memo(() => {
 		}
 	}, [dispatch, exchange, date, sort, page, search, size, limit, isSynced])
 
+	useEffect(() => {
+		dispatch(getBybitTickers({ exchange: exchange.name }))
+
+		return () => {
+			dispatch(clearTickers())
+			dispatch(setSearch(''))
+		}
+	}, [dispatch, exchange.name])
+
 	return (
 		<PageLayout
 			update={handleClickUpdate}
 			entries={true}
 			periods={true}
 			search={true}
+			searchOptions={tickerOptions}
+			placeholder={t('filter.search.ticker_placeholder')}
+			searchPlaceholder={t('filter.search.ticker_placeholder')}
 		>
 			{serverStatus === 'loading' && <Loader />}
 

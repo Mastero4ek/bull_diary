@@ -137,6 +137,19 @@ export const inactiveUser = createAsyncThunk(
 	}
 )
 
+export const getUsersList = createAsyncThunk(
+	'users/get-users-list',
+	async (_, { rejectWithValue }) => {
+		try {
+			const response = await UserService.getUsersList()
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
 const handleUsersError = (state, action) => {
 	state.errorMessage = action?.payload?.message
 	state.serverStatus = 'error'
@@ -154,6 +167,7 @@ const initialState = {
 	changeUser: userDefault,
 	fakeUsers: fakeUsers,
 	users: [],
+	usersList: [],
 	page: 1,
 	sort: { type: 'created_at', value: 'desc' },
 	totalPages: 0,
@@ -205,6 +219,9 @@ const usersSlice = createSlice({
 		},
 		clearUsers(state) {
 			return { ...initialState, fakeUsers: fakeUsers }
+		},
+		clearUsersList(state) {
+			state.usersList = []
 		},
 	},
 	extraReducers: builder => {
@@ -293,6 +310,19 @@ const usersSlice = createSlice({
 				state.errorArray = null
 			})
 			.addCase(inactiveUser.rejected, handleUsersError)
+
+			// get users list
+			.addCase(getUsersList.pending, state => handleUsersLoading(state))
+			.addCase(getUsersList.fulfilled, (state, action) => {
+				state.serverStatus = 'success'
+				state.errorMessage = action.payload.message || null
+				state.errorArray = null
+
+				if (!action.payload.message) {
+					state.usersList = action.payload
+				}
+			})
+			.addCase(getUsersList.rejected, handleUsersError)
 	},
 })
 
@@ -309,6 +339,7 @@ export const {
 	setErrorMessage,
 	setServerStatus,
 	clearUser,
+	clearUsersList,
 } = usersSlice.actions
 
 export default usersSlice.reducer
