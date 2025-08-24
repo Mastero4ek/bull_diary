@@ -25,13 +25,14 @@ import { setSearch } from '@/redux/slices/filtersSlice'
 import {
 	addTournamentUser,
 	clearTournaments,
+	clearTournamentUsersList,
 	deleteTournament,
 	getTournaments,
+	getTournamentUsersList,
 	removeTournamentUser,
 	setPage,
 	setSort,
 } from '@/redux/slices/tournamentSlice'
-import { clearUsersList, getUsersList } from '@/redux/slices/usersSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
 import styles from './styles.module.scss'
@@ -46,7 +47,7 @@ export const BattlePage = () => {
 
 	const { color, amount } = useSelector(state => state.settings)
 	const { search, limit } = useSelector(state => state.filters)
-	const { usersList } = useSelector(state => state.users)
+	const { tournamentUsersList } = useSelector(state => state.tournaments)
 	const {
 		tournament,
 		fakeUsers,
@@ -192,6 +193,10 @@ export const BattlePage = () => {
 
 				if (originalPromiseResult1 && originalPromiseResult2) {
 					showSuccess(t('page.battle.remove_user_success'))
+
+					if (tournament?._id) {
+						dispatch(getTournamentUsersList(tournament._id))
+					}
 				} else {
 					showError(t('page.battle.remove_user_error'))
 				}
@@ -213,6 +218,7 @@ export const BattlePage = () => {
 			search,
 			showSuccess,
 			showError,
+			tournament?._id,
 		]
 	)
 
@@ -266,6 +272,10 @@ export const BattlePage = () => {
 
 			if (originalPromiseResult) {
 				showSuccess(t('page.battle.join_user_success'))
+
+				if (tournament?._id) {
+					dispatch(getTournamentUsersList(tournament._id))
+				}
 			} else {
 				showError(t('page.battle.join_user_error'))
 			}
@@ -273,7 +283,14 @@ export const BattlePage = () => {
 			showError(t('page.battle.join_user_error'))
 			console.log(e)
 		}
-	}, [dispatch, exchange.name, user.email, showSuccess, showError])
+	}, [
+		dispatch,
+		exchange.name,
+		user.email,
+		showSuccess,
+		showError,
+		tournament?._id,
+	])
 
 	const handleClickNewTournament = useCallback(() => {
 		openPopup(<NewTournamentPopup />)
@@ -281,12 +298,14 @@ export const BattlePage = () => {
 
 	const handleUserSearch = useCallback(
 		selectedValue => {
-			const selectedUser = usersList.find(user => user.value === selectedValue)
+			const selectedUser = tournamentUsersList.find(
+				user => user.value === selectedValue
+			)
 			const searchTerm = selectedUser ? selectedUser.label : selectedValue
 
 			dispatch(setSearch(searchTerm))
 		},
-		[usersList, dispatch]
+		[tournamentUsersList, dispatch]
 	)
 
 	const removeTournament = useCallback(async () => {
@@ -298,6 +317,10 @@ export const BattlePage = () => {
 
 			if (originalPromiseResult) {
 				showSuccess(t('page.battle.remove_battle_success'))
+
+				if (tournament?._id) {
+					dispatch(getTournamentUsersList(tournament._id))
+				}
 			} else {
 				showError(t('page.battle.remove_battle_error'))
 			}
@@ -305,7 +328,7 @@ export const BattlePage = () => {
 			showError(t('page.battle.remove_battle_error'))
 			console.log(e)
 		}
-	}, [dispatch, tournament, showSuccess, showError])
+	}, [dispatch, tournament, showSuccess, showError, tournament?._id])
 
 	const handleClickDeleteTournament = () => {
 		openPopup(
@@ -356,12 +379,15 @@ export const BattlePage = () => {
 	}, [location, dispatch, user?.id])
 
 	useEffect(() => {
-		dispatch(getUsersList())
+		if (tournament?._id) {
+			dispatch(getTournamentUsersList(tournament._id))
+		}
 
 		return () => {
-			dispatch(clearUsersList())
+			dispatch(clearTournamentUsersList())
+			dispatch(setSearch(''))
 		}
-	}, [dispatch])
+	}, [dispatch, tournament?._id])
 
 	const registrationClosed = moment(tournament?.registration_date).isBefore(
 		moment()
@@ -378,7 +404,7 @@ export const BattlePage = () => {
 			chartWidth={600}
 			entries={true}
 			search={true}
-			searchOptions={usersList}
+			searchOptions={tournamentUsersList}
 			onChange={handleUserSearch}
 			placeholder={t('filter.search.users_placeholder')}
 			searchPlaceholder={t('filter.search.users_placeholder')}

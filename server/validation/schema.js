@@ -549,6 +549,15 @@ const ValidationSchema = {
 		},
 	},
 
+	getTournamentUsersList: {
+		id: {
+			exists: {
+				errorMessage: (value, { req }) =>
+					i18next.t('validation.id.required', { lng: req.lng }),
+			},
+		},
+	},
+
 	getUser: {
 		id: {
 			exists: {

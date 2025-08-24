@@ -38,4 +38,8 @@ export default class TournamentService {
 			data: { userId },
 		})
 	}
+
+	static async getTournamentUsersList(id) {
+		return $api.get(`/v1/tournaments/users/${id}`)
+	}
 }

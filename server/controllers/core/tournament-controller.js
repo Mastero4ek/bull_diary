@@ -96,6 +96,19 @@ class TournamentController {
 			next(e)
 		}
 	}
+
+	async getTournamentUsersList(req, res, next) {
+		try {
+			validationError(req, next)
+
+			const { id } = req.params
+			const users = await TournamentService.getTournamentUsersList(id)
+
+			return res.json(users)
+		} catch (e) {
+			next(e)
+		}
+	}
 }
 
 module.exports = new TournamentController()

@@ -198,6 +198,7 @@ class TournamentService {
 				tournament: tournament._id,
 				id: user._id,
 				name: user.name,
+				last_name: user.last_name || '',
 				cover: user.cover,
 				level: {
 					name: level.level.name || 'hamster',
@@ -344,27 +345,21 @@ class TournamentService {
 			}
 
 			if (search) {
-				const userFilter = {
-					$or: [
-						{ name: { $regex: search, $options: 'i' } },
-						{ last_name: { $regex: search, $options: 'i' } },
-						{ email: { $regex: search, $options: 'i' } },
-						{
-							$expr: {
-								$regexMatch: {
-									input: { $concat: ['$name', ' ', '$last_name'] },
-									regex: search,
-									options: 'i',
+				query.$or = [
+					{ name: { $regex: search, $options: 'i' } },
+					{ last_name: { $regex: search, $options: 'i' } },
+					{
+						$expr: {
+							$regexMatch: {
+								input: {
+									$concat: ['$name', ' ', { $ifNull: ['$last_name', ''] }],
 								},
+								regex: search,
+								options: 'i',
 							},
 						},
-					],
-				}
-
-				const matchingUsers = await UserModel.find(userFilter).select('_id')
-				const userIds = matchingUsers.map(user => user._id)
-
-				query.user = { $in: userIds }
+					},
+				]
 			}
 
 			const participants = await TournamentUserModel.find(query)
@@ -399,6 +394,27 @@ class TournamentService {
 				'getTournaments',
 				'errors.tournament_fetch_failed'
 			)
+		}
+	}
+
+	/**
+	 * Получает список пользователей турнира с объединенным именем и фамилией
+	 * @returns {Promise<Array>} - Список пользователей с полным именем
+	 */
+	async getTournamentUsersList(tournamentId) {
+		try {
+			const users = await TournamentUserModel.find({ tournament: tournamentId })
+				.select('id name last_name')
+				.sort({ name: 1, last_name: 1 })
+
+			return users.map(user => ({
+				id: user.id,
+				value: user.id.toString(),
+				label: `${user.name} ${user.last_name || ''}`.trim(),
+			}))
+		} catch (error) {
+			logError(error, { context: 'getTournamentUsersList' })
+			throw error
 		}
 	}
 }

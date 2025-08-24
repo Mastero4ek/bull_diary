@@ -42,4 +42,11 @@ router.delete(
 	tournamentController.removeTournament
 )
 
+router.get(
+	'/tournaments/users/:id',
+	authMiddleware,
+	checkSchema(ValidationSchema.getTournamentUsersList, ['params']),
+	tournamentController.getTournamentUsersList
+)
+
 module.exports = router

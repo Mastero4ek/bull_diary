@@ -79,6 +79,19 @@ export const removeTournamentUser = createAsyncThunk(
 	}
 )
 
+export const getTournamentUsersList = createAsyncThunk(
+	'tournament/get-tournament-users-list',
+	async (id, { rejectWithValue }) => {
+		try {
+			const response = await TournamentService.getTournamentUsersList(id)
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
 const handleTournamentError = (state, action) => {
 	state.errorMessage = action?.payload?.message
 	state.serverStatus = 'error'
@@ -93,6 +106,7 @@ const initialState = {
 	fakeUsers: fakeUsers,
 	tournament: {},
 	users: [],
+	tournamentUsersList: [],
 	page: 1,
 	size: 5,
 	sort: {},
@@ -110,6 +124,9 @@ const tournamentSlice = createSlice({
 		},
 		setUsers(state, action) {
 			state.users = action.payload
+		},
+		setTournamentUsersList(state, action) {
+			state.tournamentUsersList = action.payload
 		},
 		setPage(state, action) {
 			state.page = action.payload
@@ -129,6 +146,9 @@ const tournamentSlice = createSlice({
 		},
 		setErrorMessage(state, action) {
 			state.errorMessage = action.payload
+		},
+		clearTournamentUsersList(state) {
+			state.tournamentUsersList = []
 		},
 	},
 	extraReducers: builder => {
@@ -195,6 +215,17 @@ const tournamentSlice = createSlice({
 				state.errorMessage = null
 			})
 			.addCase(removeTournamentUser.rejected, handleTournamentError)
+
+			//get-tournament-users-list
+			.addCase(getTournamentUsersList.pending, state =>
+				handleTournamentLoading(state)
+			)
+			.addCase(getTournamentUsersList.fulfilled, (state, action) => {
+				state.tournamentUsersList = action.payload
+				state.serverStatus = 'success'
+				state.errorMessage = null
+			})
+			.addCase(getTournamentUsersList.rejected, handleTournamentError)
 	},
 })
 
@@ -207,6 +238,8 @@ export const {
 	setTotalPages,
 	clearTournaments,
 	setErrorMessage,
+	setTournamentUsersList,
+	clearTournamentUsersList,
 } = tournamentSlice.actions
 
 export default tournamentSlice.reducer
