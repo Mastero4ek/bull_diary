@@ -1,15 +1,15 @@
-import React from 'react'
+import React from 'react';
 
-import { useTranslation } from 'react-i18next'
-import { useTable } from 'react-table'
-import { v4 as uuidv4 } from 'uuid'
+import { useTranslation } from 'react-i18next';
+import { useTable } from 'react-table';
+import { v4 as uuidv4 } from 'uuid';
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { ErrorTable } from '@/components/ui/general/ErrorTable'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { ErrorTable } from '@/components/ui/general/ErrorTable';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
 
-import { Paginate } from './Paginate'
-import styles from './styles.module.scss'
+import { Paginate } from './Paginate';
+import styles from './styles.module.scss';
 
 export const TableLayout = props => {
 	const { t } = useTranslation()
@@ -64,11 +64,12 @@ export const TableLayout = props => {
 										title={`${t('table.sort_by')} ${column
 											.render('Header')
 											.toLowerCase()}`}
-										onClick={() =>
-											fakeData && (!data || data.length === 0)
-												? undefined
-												: sortBy(column)
-										}
+										onClick={() => {
+											if (fakeData && (!data || data.length === 0)) {
+												return undefined
+											}
+											sortBy(column)
+										}}
 										className={
 											column.id === 'cashBalance'
 												? styles.cash_balance_header
@@ -77,7 +78,8 @@ export const TableLayout = props => {
 										style={
 											column.id === 'cover' ||
 											column.id === 'actions' ||
-											column.id === 'cashBalance'
+											column.id === 'cashBalance' ||
+											column.id === 'roi'
 												? { pointerEvents: 'none' }
 												: {}
 										}
@@ -88,7 +90,8 @@ export const TableLayout = props => {
 
 										{column.id !== 'cover' &&
 											column.id !== 'actions' &&
-											column.id !== 'cashBalance' && <i></i>}
+											column.id !== 'cashBalance' &&
+											column.id !== 'roi' && <i></i>}
 									</th>
 								))}
 							</tr>

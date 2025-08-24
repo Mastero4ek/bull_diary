@@ -1,25 +1,25 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 
 import {
-	BarElement,
-	CategoryScale,
-	Chart as ChartJS,
-	Filler,
-	Legend,
-	LinearScale,
-	LineElement,
-	PointElement,
-	Tooltip,
-} from 'chart.js'
-import moment from 'moment/min/moment-with-locales'
-import { Line } from 'react-chartjs-2'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Tooltip,
+} from 'chart.js';
+import moment from 'moment/min/moment-with-locales';
+import { Line } from 'react-chartjs-2';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootButton } from '@/components/ui/buttons/RootButton';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 ChartJS.register(
 	LineElement,
@@ -44,20 +44,40 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 	const period = filter?.value?.toLowerCase() || 'week'
 
 	const getTooltipTitle = context => {
+		const now = moment()
+
 		if (period === 'year') {
 			const monthIndex = parseInt(context[0].label) - 1
-			const now = moment()
+			return moment({ year: now.year(), month: monthIndex }).format('MMMM YYYY')
+		} else if (period === 'quarter') {
+			const weekIndex = context[0].dataIndex
+			const currentQuarterStart = now.clone().startOf('quarter')
+			const currentQuarterEnd = now.clone().endOf('quarter')
 
-			return moment({ year: now.year(), month: monthIndex }).format('MMMM')
+			let firstWeekOfQuarter = currentQuarterStart.clone().startOf('isoWeek')
+			if (firstWeekOfQuarter.isBefore(currentQuarterStart)) {
+				firstWeekOfQuarter.add(1, 'week')
+			}
+
+			const weekStart = firstWeekOfQuarter.clone().add(weekIndex, 'weeks')
+			const weekEnd = weekStart.clone().endOf('isoWeek')
+
+			return `${weekStart.format('DD.MM.YYYY')} - ${weekEnd.format(
+				'DD.MM.YYYY'
+			)}`
+		} else if (period === 'month') {
+			const dayOfMonth = parseInt(context[0].label)
+			const currentMonth = now.clone().startOf('month')
+			return moment({
+				year: currentMonth.year(),
+				month: currentMonth.month(),
+				date: dayOfMonth,
+			}).format('DD MMMM YYYY')
 		} else if (period === 'week') {
 			const dayIndex = context[0].dataIndex
-			const now = moment()
-
-			return now.clone().startOf('isoWeek').add(dayIndex, 'days').format('dddd')
-		} else if (period === 'quarter') {
-			const weekNumber = context[0].label
-
-			return `${weekNumber} ${t('filter.period.week')}`
+			const currentWeek = now.clone().startOf('isoWeek')
+			const dayDate = currentWeek.add(dayIndex, 'days')
+			return `${dayDate.format('dddd')} ${dayDate.format('DD.MM.YYYY')}`
 		}
 
 		return context[0].label

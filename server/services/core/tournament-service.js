@@ -78,7 +78,14 @@ class TournamentService {
 				})
 			}
 
-			const tournament = await this.getTournaments(exchange, lng, 1, 5)
+			const tournament = await this.getTournaments(
+				exchange,
+				lng,
+				1,
+				5,
+				null,
+				null
+			)
 
 			return tournament
 		} catch (error) {
@@ -304,13 +311,13 @@ class TournamentService {
 	}
 
 	/**
-	 * Получает турнир с участниками с пагинацией
+	 * Получает турнир с участниками с пагинацией и сортировкой
 	 * @param {string} exchange - Название биржи
 	 * @param {string} lng - Язык для локализации (по умолчанию 'en')
 	 * @param {number} page - Номер страницы (по умолчанию 1)
 	 * @param {number} size - Количество записей на странице (по умолчанию 5)
 	 * @param {string} search - Поисковый запрос (по умолчанию null)
-	 * @param {string} cursor - Курсор для пагинации (по умолчанию null)
+	 * @param {string} sort - Параметры сортировки в формате JSON (по умолчанию null)
 	 * @returns {Promise<Object>} - Турнир с участниками и метаданными пагинации
 	 */
 	async getTournaments(
@@ -319,7 +326,7 @@ class TournamentService {
 		page = 1,
 		size = 5,
 		search = null,
-		cursor = null
+		sort = null
 	) {
 		try {
 			exchange = exchange.toLowerCase()
@@ -340,10 +347,6 @@ class TournamentService {
 			const limit = parseInt(size)
 			let query = { tournament: tournament._id }
 
-			if (cursor && mongoose.Types.ObjectId.isValid(cursor)) {
-				query._id = { $gt: mongoose.Types.ObjectId(cursor) }
-			}
-
 			if (search) {
 				query.$or = [
 					{ name: { $regex: search, $options: 'i' } },
@@ -362,30 +365,62 @@ class TournamentService {
 				]
 			}
 
+			let sortQuery = { _id: 1 }
+
+			if (sort) {
+				let sortObj = sort
+
+				if (typeof sort === 'string') {
+					try {
+						sortObj = JSON.parse(sort)
+					} catch (e) {
+						sortQuery = { _id: 1 }
+						return
+					}
+				}
+
+				if (sortObj.type && sortObj.value) {
+					const sortValue = sortObj.value === 'asc' ? 1 : -1
+
+					switch (sortObj.type) {
+						case 'name':
+							sortQuery = { name: sortValue, last_name: sortValue }
+							break
+						case 'level':
+							sortQuery = { 'level.name': sortValue }
+							break
+						case 'score':
+							sortQuery = { 'level.value': sortValue }
+							break
+						default:
+							sortQuery = { _id: 1 }
+					}
+				}
+			}
+
 			const participants = await TournamentUserModel.find(query)
 				.skip(skip)
 				.limit(limit)
-				.sort({ _id: 1 })
+				.sort(sortQuery)
 				.exec()
 
-			const hasMore = participants.length > limit
-			const items = hasMore ? participants.slice(0, -1) : participants
-
-			if (!items || items.length === 0) {
+			if (!participants || participants.length === 0) {
 				return {
 					tournament,
 					users: [],
-					hasMore: false,
-					nextCursor: null,
+					total: 0,
 					message: i18next.t('errors.no_members', { lng }),
 				}
 			}
 
+			const total = await TournamentUserModel.countDocuments({
+				tournament: tournament._id,
+			})
+
 			return {
 				tournament,
-				users: items,
-				hasMore,
-				nextCursor: hasMore ? items[items.length - 1]._id : null,
+				users: participants,
+				total,
 			}
 		} catch (error) {
 			handleDatabaseError(

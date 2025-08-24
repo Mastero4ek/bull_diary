@@ -1,17 +1,21 @@
-import { fakeUsers } from '@/helpers/constants'
-import { resError } from '@/helpers/functions'
-import TournamentService from '@/services/TournamentService'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { fakeUsers } from '@/helpers/constants';
+import { resError } from '@/helpers/functions';
+import TournamentService from '@/services/TournamentService';
+import {
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 
 export const getTournaments = createAsyncThunk(
 	'get-tournaments',
-	async ({ exchange, page, size, search }, { rejectWithValue }) => {
+	async ({ exchange, page, size, search, sort }, { rejectWithValue }) => {
 		try {
 			const response = await TournamentService.getTournaments(
 				exchange,
 				page,
 				size,
-				search
+				search,
+				sort
 			)
 
 			return response?.data
@@ -109,7 +113,7 @@ const initialState = {
 	tournamentUsersList: [],
 	page: 1,
 	size: 5,
-	sort: {},
+	sort: { type: 'name', value: 'desc' },
 	totalPages: 1,
 	serverStatus: '',
 	errorMessage: null,
