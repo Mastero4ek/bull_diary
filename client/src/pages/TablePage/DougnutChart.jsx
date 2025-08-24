@@ -1,28 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from 'react'
 
-import {
-  ArcElement,
-  Chart as ChartJS,
-  Legend,
-  Title,
-  Tooltip,
-} from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { ArcElement, Chart as ChartJS, Legend, Title, Tooltip } from 'chart.js'
+import { Doughnut } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { colorizedNum } from '@/helpers/functions';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { colorizedNum } from '@/helpers/functions'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
-export const DoughnutChart = () => {
+export const DoughnutChart = ({ syncWarning = '' }) => {
 	const { t } = useTranslation()
 	const { theme, width, isMobile, color } = useSelector(state => state.settings)
-	const { totalLoss, totalProfit } = useSelector(state => state.orders)
-	const { fakeOrders } = useSelector(state => state.orders)
+	const { totalLoss, totalProfit, fakeOrders, serverStatus } = useSelector(
+		state => state.orders
+	)
 
 	const chartStyles = useMemo(
 		() => ({
@@ -68,12 +63,20 @@ export const DoughnutChart = () => {
 		[width, isMobile, fakeOrders]
 	)
 
+	const getTooltipLabel = context => {
+		const count = context.dataset.data[context.dataIndex]
+
+		return `${t('page.table.chart_loss')}: ${count || 0}`
+	}
+
+	const currentData = syncWarning !== '' ? fakeOrders : [totalProfit, totalLoss]
+
 	const data = useMemo(
 		() => ({
 			labels: [t('page.table.chart_income'), t('page.table.chart_lession')],
 			datasets: [
 				{
-					data: fakeOrders ? [650, -350] : [totalProfit, totalLoss],
+					data: currentData,
 					backgroundColor: theme
 						? [chartStyles.backgroundGreenDark, chartStyles.backgroundRedDark]
 						: [
@@ -87,7 +90,7 @@ export const DoughnutChart = () => {
 				},
 			],
 		}),
-		[theme, totalProfit, totalLoss, fakeOrders, chartStyles, t]
+		[theme, currentData, chartStyles, t]
 	)
 
 	const options = useMemo(
@@ -131,18 +134,25 @@ export const DoughnutChart = () => {
 						size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
 						family: chartStyles.font,
 					},
+					callbacks: {
+						label: getTooltipLabel,
+					},
 				},
 			},
 		}),
-		[theme, chartStyles]
+		[theme, chartStyles, t, getTooltipLabel]
 	)
 
 	return (
 		<div
 			className={styles.doughnut_chart}
 			style={{
-				opacity: `${fakeOrders ? '0.2' : '1'}`,
-				pointerEvents: `${fakeOrders ? 'none' : 'auto'}`,
+				opacity: `${
+					syncWarning !== '' || serverStatus === 'error' ? '0.2' : '1'
+				}`,
+				pointerEvents: `${
+					syncWarning !== '' || serverStatus === 'error' ? 'none' : 'auto'
+				}`,
 			}}
 		>
 			<Doughnut data={data} options={options} />
@@ -158,7 +168,7 @@ export const DoughnutChart = () => {
 								})`,
 							}}
 						>
-							{fakeOrders
+							{syncWarning !== '' || serverStatus === 'error'
 								? 650
 								: totalProfit > 0
 								? `+${totalProfit}`
@@ -177,7 +187,9 @@ export const DoughnutChart = () => {
 								})`,
 							}}
 						>
-							{fakeOrders ? -350 : totalLoss}
+							{syncWarning !== '' || serverStatus === 'error'
+								? -350
+								: totalLoss}
 						</strong>
 					</RootDesc>
 				</div>

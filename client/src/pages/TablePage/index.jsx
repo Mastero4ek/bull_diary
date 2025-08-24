@@ -340,7 +340,7 @@ export const TablePage = () => {
 			</div>
 
 			<OuterBlock>
-				<DoughnutChart />
+				<DoughnutChart syncWarning={syncWarning} />
 			</OuterBlock>
 		</PageLayout>
 	)
