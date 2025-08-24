@@ -1,55 +1,45 @@
-import './phone_input.scss';
+import './phone_input.scss'
 
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import PhoneInput from 'react-phone-input-2';
-import ru from 'react-phone-input-2/lang/ru.json';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useParams,
-} from 'react-router-dom';
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import PhoneInput from 'react-phone-input-2'
+import ru from 'react-phone-input-2/lang/ru.json'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useParams } from 'react-router-dom'
 
-import avatarDefault from '@/assets/images/general/default_avatar.png';
-import { useNotification } from '@/components/layouts/NotificationLayout';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { RootInput } from '@/components/ui/inputs/RootInput';
-import { AvatarUserPopup } from '@/popups/AvatarUserPopup';
-import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
+import avatarDefault from '@/assets/images/general/default_avatar.png'
+import { useNotification } from '@/components/layouts/NotificationLayout'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { RootInput } from '@/components/ui/inputs/RootInput'
+import { AvatarUserPopup } from '@/popups/AvatarUserPopup'
+import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
 import {
-  editUser as editUserCandidate,
-  getUser as getUserCandidate,
-  removeCover as removeCoverCandidate,
-  setChangeUser as setChangeUserCandidate,
-  setPhone as setPhoneCandidate,
-} from '@/redux/slices/candidateSlice';
+	editUser as editUserCandidate,
+	getUser as getUserCandidate,
+	removeCover as removeCoverCandidate,
+	setChangeUser as setChangeUserCandidate,
+	setPhone as setPhoneCandidate,
+} from '@/redux/slices/candidateSlice'
 import {
-  editUser as editUserUsers,
-  getUser as getUserUsers,
-  removeCover as removeCoverUsers,
-  setChangeUser as setChangeUserUsers,
-  setPhone as setPhoneUsers,
-} from '@/redux/slices/usersSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	editUser as editUserUsers,
+	getUser as getUserUsers,
+	removeCover as removeCoverUsers,
+	setChangeUser as setChangeUserUsers,
+	setPhone as setPhoneUsers,
+} from '@/redux/slices/usersSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import { Level } from './Level';
-import styles from './styles.module.scss';
+import { Level } from './Level'
+import styles from './styles.module.scss'
 
 export const ProfilePage = React.memo(() => {
 	const { t } = useTranslation()
@@ -69,7 +59,7 @@ export const ProfilePage = React.memo(() => {
 		? setChangeUserUsers
 		: setChangeUserCandidate
 	const setPhone = isAdminContext ? setPhoneUsers : setPhoneCandidate
-	const { user, changeUser, serverStatus } = useSelector(state =>
+	const { user, changeUser, serverStatus, errorArray } = useSelector(state =>
 		isAdminContext ? state.users : state.candidate
 	)
 
@@ -132,6 +122,7 @@ export const ProfilePage = React.memo(() => {
 				if (originalPromiseResult) {
 					showSuccess(t('page.profile.updated_successfully'))
 					setPassword('')
+					setValue('password', '')
 					setPhotoFile(null)
 
 					if (isAdminContext && params.id && getUser) {
@@ -326,6 +317,7 @@ export const ProfilePage = React.memo(() => {
 									name='name'
 									label={t('form.label.name')}
 									errorMessage={t('form.error.name')}
+									errorArray={errorArray}
 									errors={errors}
 									type='text'
 									register={register('name', {
@@ -377,6 +369,8 @@ export const ProfilePage = React.memo(() => {
 									name='password'
 									label={t('form.label.password')}
 									errorMessage={t('form.error.password')}
+									errorArray={errorArray}
+									errors={errors}
 									warningMessage={
 										changeUser && !changeUser?.change_password
 											? t('form.warning.create_user_password')
@@ -389,7 +383,16 @@ export const ProfilePage = React.memo(() => {
 									}
 									type='text'
 									register={{
-										...register('password', {}),
+										...register('password', {
+											validate: value => {
+												if (value) {
+													return t('form.error.password')
+												}
+
+												return true
+											},
+											onChange: e => setPassword(e.target.value),
+										}),
 									}}
 								/>
 
@@ -398,6 +401,7 @@ export const ProfilePage = React.memo(() => {
 									<RootInput
 										name='email'
 										errorMessage={t('form.error.email')}
+										errorArray={errorArray}
 										errors={errors}
 										type='email'
 										label={t('form.label.email')}

@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from 'react'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
-import { Icon } from '@/components/ui/general/Icon';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
+import { Icon } from '@/components/ui/general/Icon'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const RootInput = ({
 	name,
@@ -21,11 +21,34 @@ export const RootInput = ({
 	type,
 	disabled,
 }) => {
-	const findErrorField = useCallback(field => {
-		if (errorArray) {
-			return errorArray.find(item => item.field === field)
-		} else return false
-	}, [])
+	const findErrorField = useCallback(
+		field => {
+			if (errorArray) {
+				try {
+					const array =
+						typeof errorArray === 'string' ? JSON.parse(errorArray) : errorArray
+					const result = array.find(item => item.field === field)
+
+					return result
+				} catch (error) {
+					return false
+				}
+			} else return false
+		},
+		[errorArray]
+	)
+
+	const hasError = useCallback(
+		field => {
+			const formError = errors && errors[field]
+			const serverError = !!findErrorField(field)
+
+			return formError || serverError
+		},
+		[errors, findErrorField]
+	)
+
+	const fieldHasError = hasError(name)
 
 	return type === 'checkbox' ? (
 		<label
@@ -48,13 +71,7 @@ export const RootInput = ({
 			/>
 
 			<div className={styles.label_checkbox}>
-				<i
-					style={
-						errors && (errors[name] || findErrorField(name))
-							? { border: '1rem solid var(--red)' }
-							: {}
-					}
-				>
+				<i style={fieldHasError ? { border: '1rem solid var(--red)' } : {}}>
 					<Icon id={'checked'} />
 				</i>
 
@@ -73,9 +90,9 @@ export const RootInput = ({
 				pointerEvents: disabled ? 'none' : 'auto',
 			}}
 			htmlFor={name}
-			className={`${styles.label} ${warningMessage && styles.label_warning} ${
-				errors && (errors[name] || findErrorField(name)) && styles.label_error
-			}`}
+			className={`${styles.label} ${
+				warningMessage && !fieldHasError ? styles.label_warning : ''
+			} ${fieldHasError ? styles.label_error : ''}`}
 		>
 			{label && (
 				<div className={styles.label_control}>
@@ -83,7 +100,7 @@ export const RootInput = ({
 						<span>{label}</span>
 					</RootDesc>
 
-					{errors && (errors[name] || findErrorField(name)) && (
+					{fieldHasError && (
 						<>
 							<Icon id={'error-icon'} />
 
@@ -95,7 +112,7 @@ export const RootInput = ({
 						</>
 					)}
 
-					{warningMessage && (
+					{warningMessage && !fieldHasError && (
 						<>
 							<Icon id={'warning-icon'} />
 

@@ -140,6 +140,7 @@ export const inactiveUser = createAsyncThunk(
 const handleUsersError = (state, action) => {
 	state.errorMessage = action?.payload?.message
 	state.serverStatus = 'error'
+	state.errorArray = action?.payload?.errors || null
 }
 
 const initialState = {
@@ -152,6 +153,7 @@ const initialState = {
 	totalPages: 0,
 	serverStatus: '',
 	errorMessage: null,
+	errorArray: null,
 }
 
 const usersSlice = createSlice({
@@ -173,7 +175,9 @@ const usersSlice = createSlice({
 		setServerStatus(state, action) {
 			state.serverStatus = action.payload
 		},
-
+		setErrorArray(state, action) {
+			state.errorArray = action.payload
+		},
 		setUsers(state, action) {
 			state.users = action.payload
 		},
@@ -203,10 +207,12 @@ const usersSlice = createSlice({
 			.addCase(getUsers.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
+				state.errorArray = null
 			})
 			.addCase(getUsers.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
 				state.errorMessage = action.payload.message || null
+				state.errorArray = null
 
 				if (!action.payload.message) {
 					state.users = action.payload.users
@@ -219,10 +225,12 @@ const usersSlice = createSlice({
 			.addCase(removeUser.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
+				state.errorArray = null
 			})
 			.addCase(removeUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.serverStatus = 'success'
+				state.errorArray = null
 			})
 			.addCase(removeUser.rejected, handleUsersError)
 
@@ -230,6 +238,7 @@ const usersSlice = createSlice({
 			.addCase(getUser.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
+				state.errorArray = null
 			})
 			.addCase(getUser.fulfilled, (state, action) => {
 				state.serverStatus = 'success'
@@ -241,6 +250,7 @@ const usersSlice = createSlice({
 					...userDefault,
 					...action.payload,
 				}
+				state.errorArray = null
 			})
 			.addCase(getUser.rejected, handleUsersError)
 
@@ -248,6 +258,7 @@ const usersSlice = createSlice({
 			.addCase(editUser.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
+				state.errorArray = null
 			})
 			.addCase(editUser.fulfilled, (state, action) => {
 				state.errorMessage = null
@@ -260,6 +271,7 @@ const usersSlice = createSlice({
 					...userDefault,
 					...action.payload,
 				}
+				state.errorArray = null
 			})
 			.addCase(editUser.rejected, handleUsersError)
 
@@ -267,12 +279,14 @@ const usersSlice = createSlice({
 			.addCase(removeCover.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
+				state.errorArray = null
 			})
 			.addCase(removeCover.fulfilled, (state, action) => {
 				state.errorMessage = action?.payload?.message
 				state.serverStatus = 'success'
 				state.user.cover = null
 				state.changeUser.cover = null
+				state.errorArray = null
 			})
 			.addCase(removeCover.rejected, handleUsersError)
 
@@ -280,10 +294,12 @@ const usersSlice = createSlice({
 			.addCase(activeUser.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
+				state.errorArray = null
 			})
 			.addCase(activeUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.serverStatus = 'success'
+				state.errorArray = null
 			})
 			.addCase(activeUser.rejected, handleUsersError)
 
@@ -291,10 +307,12 @@ const usersSlice = createSlice({
 			.addCase(inactiveUser.pending, state => {
 				state.serverStatus = 'loading'
 				state.errorMessage = null
+				state.errorArray = null
 			})
 			.addCase(inactiveUser.fulfilled, (state, action) => {
 				state.errorMessage = null
 				state.serverStatus = 'success'
+				state.errorArray = null
 			})
 			.addCase(inactiveUser.rejected, handleUsersError)
 	},

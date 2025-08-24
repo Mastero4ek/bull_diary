@@ -10,7 +10,7 @@ const UserSchema = new Schema({
 	source: { type: String, default: 'self' },
 	is_activated: { type: Boolean, default: false },
 	inactive: { type: Boolean, default: false },
-	change_password: { type: Boolean, default: true },
+	change_password: { type: Boolean, default: false },
 	phone: { type: Number, default: null },
 	cover: { type: String, default: null },
 	tournaments: [

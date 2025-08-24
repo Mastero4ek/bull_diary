@@ -79,6 +79,7 @@ class UserService {
 				name,
 				email: normalizedEmail,
 				...(source === 'self' ? { password: hashedPassword } : {}),
+				change_password: source === 'self',
 				activation_link,
 				source,
 				updated_at: new Date(),
@@ -463,6 +464,7 @@ class UserService {
 			if (password) {
 				const salt = await bcrypt.genSalt(10)
 				updateData.password = await bcrypt.hash(password, salt)
+				updateData.change_password = true
 			}
 
 			if (cover) {
