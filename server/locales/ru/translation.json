@@ -1,165 +1,85 @@
 {
-	"errors": {
-		"user_not_found": "Пользователь не найден!",
-		"invalid_email": "Неверный формат email!",
-		"email_exists": "Пользователь с таким email уже существует!",
-		"validation": "Ошибка при валидации!",
-		"email_mismatch": "Введённый Email-адрес не совпадает с Email-адресом аккаунта!",
-		"keys_not_found": "Ключи не найдены!",
-		"keys_not_configured": "Ключи {{exchange}} не настроены!",
-		"file_not_found": "Файл не найден!",
-		"order_exists": "Ордер уже сохранен!",
-		"tournament_not_found": "Соревнование на бирже {{exchange}} не найдено!",
-		"user_with_email_not_found": "Пользователь с таким email не найден!",
-		"no_members": "На данный момент нет участников!",
-		"activate_account_first": "Пожалуйста, активируйте свой аккаунт!",
-		"invalid_email_or_password": "Неверный email или пароль!",
-		"user_data_incomplete": "Данные пользователя неполные!",
-		"failed_generate_tokens": "Не удалось сгенерировать токены авторизации!",
-		"failed_sign_in": "Не удалось войти!",
-		"activation_link_required": "Требуется ссылка для активации!",
-		"invalid_activation_link": "Неверная ссылка активации!",
-		"account_already_activated": "Аккаунт уже активирован!",
-		"activation_link_expired": "Срок действия ссылки для активации истек. Новая ссылка отправлена на вашу почту.",
-		"failed_create_user": "Не удалось создать пользователя!",
-		"failed_activate_account": "Не удалось активировать аккаунт!",
-		"api_key_invalid": "API-ключ недействителен.",
-		"tournament_already_exists": "Соревнование на бирже {{exchange}} уже существует!",
-		"already_joined": "Вы уже присоединились к этому соревнованию!",
-		"wallet_not_found": "Кошелёк не найден!",
-		"usdt_not_found": "USDT баланс не найден в кошельке!",
-		"connection_error": "Не удалось подключиться к API {{exchange}}. Пожалуйста, проверьте ваше интернет-соединение!",
-		"timeout_error": "Запрос к API {{exchange}} превысил время ожидания! Пожалуйста, попробуйте снова...",
-		"fetch_wallet_error": "Не удалось получить данные кошелька из API {{exchange}}!",
-		"fetch_tickers_error": "Не удалось получить данные тикеров из API {{exchange}}!",
-		"fetch_positions_error": "Не удалось получить данные позиций из API {{exchange}}!",
-		"fetch_wallet_changes_error": "Не удалось получить данные изменений кошелька из API {{exchange}}!",
-		"fetch_transactions_error": "Не удалось получить данные транзакций из API {{exchange}}!",
-		"fetch_orders_error": "Не удалось получить данные ордеров из API {{exchange}}!",
-		"api_error": "Ошибка API {{exchange}}: {{error}}",
-		"file_required": "Файл обязателен!",
-		"file_too_large": "Размер файла превышает максимально допустимый размер {{maxSize}}!",
-		"invalid_file_type": "Неверный тип файла. Разрешены только изображения!",
-		"user_update_failed": "Не удалось обновить пользователя!",
-		"file_name_required": "Имя файла обязательно!",
-		"user_id_required": "ID пользователя обязателен!",
-		"file_upload_failed": "Не удалось загрузить файл!",
-		"file_deletion_failed": "Не удалось удалить файл!",
-		"disk_space_full": "Диск заполнен. Не удается сохранить файл!",
-		"file_permission_denied": "Доступ запрещен. Не удается получить доступ к файлу!",
-		"file_path_not_found": "Путь к файлу не найден!",
-		"file_busy": "Файл используется и не может быть удален!",
-		"validation_error": "Ошибка валидации данных!",
-		"invalid_id_format": "Неверный формат ID!",
-		"duplicate_key_error": "Ошибка дублирования ключа!",
-		"database_connection_error": "Ошибка подключения к базе данных!",
-		"exchange_required": "Биржа обязательна!",
-		"api_secret_required": "API ключ и секрет обязательны!",
-		"exchange_not_found_in_keys": "Биржа {{exchange}} не найдена в ключах!",
-		"email_required": "Email обязателен!",
-		"keys_update_failed": "Не удалось обновить ключи!",
-		"keys_deletion_failed": "Не удалось удалить ключи!",
-		"smtp_auth_error": "Ошибка аутентификации SMTP!",
-		"smtp_connection_error": "Ошибка подключения SMTP!",
-		"smtp_timeout_error": "Ошибка таймаута SMTP!",
-		"smtp_host_not_found": "SMTP хост не найден!",
-		"smtp_envelope_error": "Ошибка конверта SMTP!",
-		"mail_template_not_found": "Шаблон письма не найден!",
-		"mail_send_failed": "Не удалось отправить письмо!",
-		"invalid_email_format": "Неверный формат email!",
-		"name_required": "Имя обязательно!",
-		"activation_link_required": "Ссылка активации обязательна!",
-		"order_required": "Ордер обязателен!",
-		"order_id_required": "ID ордера обязателен!",
-		"order_exists": "Ордер уже существует!",
-		"order_not_exists": "Ордер не найден!",
-		"order_save_failed": "Не удалось сохранить ордер!",
-		"order_removal_failed": "Не удалось удалить ордер!",
-		"orders_fetch_failed": "Не удалось получить ордера!",
-		"time_range_required": "Время начала и окончания обязательны!",
-		"invalid_page_number": "Неверный номер страницы!",
-		"invalid_limit_value": "Неверное значение лимита! Лимит должен быть от 1 до 100!",
-		"payload_required": "Payload обязателен!",
-		"invalid_payload_format": "Неверный формат payload! ID и email обязательны!",
-		"refresh_token_required": "Refresh token обязателен!",
-		"invalid_token_format": "Неверный формат токена!",
-		"token_expired": "Токен истек!",
-		"token_not_active": "Токен еще не активен!",
-		"token_validation_error": "Ошибка валидации токена!",
-		"invalid_token_id_format": "Неверный формат ID токена!",
-		"token_generation_failed": "Не удалось сгенерировать токены!",
-		"token_save_failed": "Не удалось сохранить токен!",
-		"token_removal_failed": "Не удалось удалить токен!",
-		"token_find_failed": "Не удалось найти токен!",
-		"tournament_data_required": "Данные турнира обязательны!",
-		"tournament_name_required": "Название турнира обязательно!",
-		"tournament_dates_required": "Даты начала и окончания турнира обязательны!",
-		"tournament_already_exists": "Турнир для биржи {{exchange}} уже существует!",
-		"tournament_id_required": "ID турнира обязателен!",
-		"tournament_not_found": "Турнир не найден!",
-		"tournament_user_add_failed": "Не удалось добавить пользователя в турнир!",
-		"tournament_fetch_failed": "Не удалось получить данные турнира!",
-		"tournament_creation_failed": "Не удалось создать турнир!",
-		"tournament_deletion_failed": "Не удалось удалить турнир!",
-		"tournament_user_removal_failed": "Не удалось удалить пользователя из турнира!",
-		"user_level_not_found": "Уровень пользователя не найден!",
-		"user_not_in_tournament": "Пользователь не участвует в этом турнире!",
-		"password_required": "Пароль обязателен!",
-		"password_too_short": "Пароль должен содержать минимум 6 символов!",
-		"user_id_or_email_required": "ID пользователя или email обязателен!",
-		"email_already_exists": "Email уже существует!",
-		"user_update_failed": "Не удалось обновить пользователя!",
-		"user_edit_failed": "Не удалось отредактировать пользователя!",
-		"user_removal_failed": "Не удалось удалить пользователя!",
-		"failed_get_user_data": "Не удалось получить данные пользователя!",
-		"failed_get_users": "Не удалось получить пользователей!",
-		"users_not_found": "Пользователи не найдены!",
-		"failed_source_auth": "Не удалось аутентифицироваться с источником!",
-		"failed_logout": "Не удалось выйти из системы!",
-		"invalid_refresh_token": "Неверный refresh token!",
-		"refresh_token_not_found": "Refresh token не найден!",
-		"failed_refresh_token": "Не удалось обновить токен!",
-		"failed_to_get_user_data_after_activation": "Не удалось получить данные пользователя после активации!",
-		"failed_activate_user": "Не удалось активировать пользователя!",
-		"failed_deactivate_user": "Не удалось деактивировать пользователя!",
-		"order_required": "Ордер обязателен!",
-		"tournament_creation_failed": "Не удалось создать турнир!",
-		"keys_not_found": "Ключи не найдены!",
-		"keys_not_configured": "Ключи {{exchange}} не настроены!"
+	"error": {
+		"user": {
+			"not_found": "Пользователь не&nbsp;найден!",
+			"users_not_found": "Пользователи не&nbsp;найдены!",
+			"get_user_data_failed_after_activation": "Не удалось получить данные пользователя после активации!"
+		},
+		"validation": {
+			"root": "Ошибка при валидации!",
+			"email_exists": "Пользователь с&nbsp;таким email уже существует!",
+			"email_mismatch": "Введённый Email-адрес не&nbsp;совпадает с&nbsp;email-адресом аккаунта!",
+			"order_not_exists": "Ордер не&nbsp;найден!",
+			"id_format": "Неверный формат&nbsp;ID!"
+		},
+		"keys": {
+			"not_found": "Ключи не&nbsp;найдены!"
+		},
+		"tournament": {
+			"not_found": "Соревнование на&nbsp;бирже {{exchange}} не&nbsp;найдено!"
+		},
+		"file": {
+			"not_found": "Файл не&nbsp;найден!",
+			"disk_space_full": "Диск заполнен. Не&nbsp;удается сохранить файл!",
+			"permission_denied": "Доступ запрещен. Не&nbsp;удается получить доступ к&nbsp;файлу!",
+			"path_not_found": "Путь к&nbsp;файлу не&nbsp;найден!",
+			"busy": "Файл используется и&nbsp;не&nbsp;может быть удален!"
+		},
+		"smtp": {
+			"auth_error": "Ошибка аутентификации SMTP!",
+			"connection_error": "Ошибка подключения SMTP!",
+			"timeout_error": "Ошибка таймаута SMTP!",
+			"host_not_found": "SMTP хост не&nbsp;найден!",
+			"envelope_error": "Ошибка конверта SMTP!",
+			"template_not_found": "Шаблон письма не&nbsp;найден!"
+		},
+		"api": {
+			"wallet_not_found": "Кошелёк не найден!",
+			"usdt_not_found": "USDT баланс не&nbsp;найден в&nbsp;кошельке!",
+			"connection_error": "Не удалось подключиться к&nbsp;API {{exchange}}. Пожалуйста, проверьте ваше интернет-соединение!",
+			"timeout_error": "Запрос к&nbsp;API {{exchange}} превысил время ожидания! Пожалуйста, попробуйте снова...",
+			"error": "Ошибка API {{exchange}}: {{error}}",
+			"exchange_not_found": "Биржа {{exchange}} не&nbsp;найдена в&nbsp;ключах!"
+		},
+		"auth": {
+			"token_expired": "Токен истек!",
+			"token_not_active": "Токен еще не&nbsp;активен!"
+		},
+		"database": {
+			"duplicate_key": "Ошибка дублирования ключа!",
+			"connection_error": "Ошибка подключения к&nbsp;базе данных!"
+		}
 	},
 	"success": {
-		"file_saved": "Файл успешно сохранен!",
-		"file_deleted": "Файл успешно удален!",
-		"keys_deleted": "Ключи успешно удалены!",
-		"user_removed_from_tournament": "Пользователь успешно удален из турнира!",
-		"user_activated": "Пользователь успешно активирован!",
-		"user_deactivated": "Пользователь успешно деактивирован!"
+		"file": {
+			"saved": "Файл успешно сохранен!",
+			"deleted": "Файл успешно удален!"
+		},
+		"user": {
+			"activated": "Пользователь успешно активирован!",
+			"deactivated": "Пользователь успешно деактивирован!"
+		},
+		"keys": {
+			"deleted": "Ключи успешно удалены!"
+		},
+		"tournament": {
+			"user_removed": "Пользователь успешно удален из&nbsp;турнира!"
+		}
 	},
 	"sync": {
-		"initializing": "Начало синхронизации {{dataType}} с биржей {{exchange}}",
-		"removing_old_data": "Удаление старых {{dataType}} из базы данных на бирже {{exchange}}",
-		"fetching_data": "Получение {{dataType}} из API {{exchange}}",
-		"data_fetched": "{{dataType}} успешно получены из API {{exchange}}",
-		"processing_chunk": "Обработка блока {{dataType}} {{current}}/{{total}} на бирже {{exchange}}",
-		"transforming_data": "Трансформация {{dataType}} на бирже {{exchange}}",
-		"saving_database": "Сохранение {{dataType}} в базу данных на бирже {{exchange}}",
-		"finalizing": "Завершение синхронизации {{dataType}} на бирже {{exchange}}",
-		"completed": "Синхронизация {{dataType}} завершена на бирже {{exchange}}",
-		"failed": "Синхронизация {{dataType}} не удалась на бирже {{exchange}}",
-		"starting_sync": "Начало синхронизации данных на бирже {{exchange}}",
-		"preparing_transactions": "Подготовка к синхронизации транзакций на бирже {{exchange}}",
-		"all_completed": "Синхронизация всех данных завершена на бирже {{exchange}}",
-		"orders": "ордеров",
-		"transactions": "транзакций",
-		"processing": "Обработка блока {{dataType}} на бирже {{exchange}}",
-		"processing_data": "Обработка блока {{dataType}} на бирже {{exchange}}",
-		"data_processed": "{{dataType}} успешно обработаны на бирже {{exchange}}"
+		"processing_chunk": "Обработка блока {{dataType}} {{current}}/{{total}} на&nbsp;бирже {{exchange}}",
+		"completed": "Синхронизация {{dataType}} завершена на&nbsp;бирже {{exchange}}",
+		"failed": "Синхронизация {{dataType}} не&nbsp;удалась на&nbsp;бирже {{exchange}}",
+		"starting_sync": "Начало синхронизации данных на&nbsp;бирже {{exchange}}",
+		"processing": "Обработка блока {{dataType}} на&nbsp;бирже {{exchange}}",
+		"processing_data": "Обработка блока {{dataType}} на&nbsp;бирже {{exchange}}",
+		"data_processed": "{{dataType}} успешно обработаны на&nbsp;бирже {{exchange}}"
 	},
 	"validation": {
 		"name": {
 			"required": "Имя обязательно!",
 			"string": "Имя должно быть строкой!",
-			"length": "Имя должно быть от 2 до 50 символов!"
+			"length": "Имя должно быть от&nbsp;2 до&nbsp;50&nbsp;символов!"
 		},
 		"start_date": {
 			"required": "Дата начала обязательна!",
@@ -176,7 +96,7 @@
 		"password": {
 			"required": "Пароль обязателен!",
 			"string": "Пароль должен быть строкой!",
-			"length": "Пароль должен быть от 6 до 50 символов!"
+			"length": "Пароль должен быть от&nbsp;6 до&nbsp;50&nbsp;символов!"
 		},
 		"confirm_password": {
 			"required": "Подтверждение пароля обязательно!",
@@ -185,7 +105,7 @@
 		"agreement": {
 			"required": "Необходимо согласие!",
 			"boolean": "Согласие должно быть булевым значением!",
-			"must_agree": "Вы должны согласиться с условиями!"
+			"must_agree": "Вы должны согласиться с&nbsp;условиями!"
 		},
 		"current_email": {
 			"required": "Текущий email обязателен!",
@@ -195,14 +115,6 @@
 			"required": "Email для подтверждения обязателен!",
 			"invalid": "Неверный формат email!",
 			"mismatch": "Email-адреса не совпадают!"
-		},
-		"phone": {
-			"string": "Телефон должен быть строкой!",
-			"invalid": "Неверный формат телефона!"
-		},
-		"keys": {
-			"array": "Ключи должны быть массивом!",
-			"invalid": "Неверный формат ключей!"
 		},
 		"exchange": {
 			"required": "Биржа обязательна!",
@@ -221,37 +133,19 @@
 			"required": "Ордер обязателен!",
 			"object": "Ордер должен быть объектом!"
 		},
-		"cursor": {
-			"string": "Cursor должен быть строкой!"
-		},
-		"limit": {
-			"invalid": "Лимит должен быть от 1 до 100!"
-		},
-		"page": {
-			"invalid": "Страница должна быть положительным числом!"
-		},
 		"start_time": {
 			"invalid": "Неверный формат времени начала!"
 		},
 		"end_time": {
 			"invalid": "Неверный формат времени окончания!"
 		},
-		"description": {
-			"string": "Описание должно быть строкой!"
-		},
 		"registration_date": {
 			"invalid": "Неверный формат даты регистрации!"
-		},
-		"tournament_id": {
-			"string": "ID турнира должен быть строкой!"
-		},
-		"user_id": {
-			"string": "ID пользователя должен быть строкой!"
 		},
 		"role": {
 			"required": "Роль обязательна!",
 			"string": "Роль должна быть строкой!",
-			"invalid": "Неверная роль! Должна быть 'admin' или 'user'."
+			"invalid": "Неверная роль! Должна быть 'admin' или&nbsp;'user'."
 		}
 	}
 }

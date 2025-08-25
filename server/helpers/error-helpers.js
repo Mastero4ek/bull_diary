@@ -16,7 +16,7 @@ class HelpersError {
 
 		if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.connection_error', {
+				i18next.t('error.api.connection_error', {
 					lng: language,
 					exchange: exchange,
 				})
@@ -25,7 +25,7 @@ class HelpersError {
 
 		if (error.message && error.message.includes('timeout')) {
 			throw ApiError.BadRequest(
-				i18next.t('errors.timeout_error', {
+				i18next.t('error.api.timeout_error', {
 					lng: language,
 					exchange: exchange,
 				})
@@ -60,26 +60,24 @@ class HelpersError {
 
 		if (error.code === 'ENOSPC') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.disk_space_full', { lng: language })
+				i18next.t('error.file.disk_space_full', { lng: language })
 			)
 		}
 
 		if (error.code === 'EACCES') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.file_permission_denied', { lng: language })
+				i18next.t('error.file.permission_denied', { lng: language })
 			)
 		}
 
 		if (error.code === 'ENOENT') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.file_path_not_found', { lng: language })
+				i18next.t('error.file.path_not_found', { lng: language })
 			)
 		}
 
 		if (error.code === 'EBUSY') {
-			throw ApiError.BadRequest(
-				i18next.t('errors.file_busy', { lng: language })
-			)
+			throw ApiError.BadRequest(i18next.t('error.file.busy', { lng: language }))
 		}
 
 		throw ApiError.InternalError(i18next.t(defaultErrorType, { lng: language }))
@@ -101,19 +99,19 @@ class HelpersError {
 
 		if (error.name === 'ValidationError') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.validation_error', { lng: language })
+				i18next.t('error.validation.root', { lng: language })
 			)
 		}
 
 		if (error.name === 'CastError') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.invalid_id_format', { lng: language })
+				i18next.t('error.validation.id_format', { lng: language })
 			)
 		}
 
 		if (error.code === 11000) {
 			throw ApiError.BadRequest(
-				i18next.t('errors.duplicate_key_error', { lng: language })
+				i18next.t('error.database.duplicate_key', { lng: language })
 			)
 		}
 
@@ -122,7 +120,7 @@ class HelpersError {
 			error.name === 'MongoTimeoutError'
 		) {
 			throw ApiError.InternalError(
-				i18next.t('errors.database_connection_error', { lng: language })
+				i18next.t('error.database.connection_error', { lng: language })
 			)
 		}
 
@@ -145,37 +143,37 @@ class HelpersError {
 
 		if (error.code === 'EAUTH') {
 			throw ApiError.InternalError(
-				i18next.t('errors.smtp_auth_error', { lng: language })
+				i18next.t('error.smtp.auth_error', { lng: language })
 			)
 		}
 
 		if (error.code === 'ECONNECTION') {
 			throw ApiError.InternalError(
-				i18next.t('errors.smtp_connection_error', { lng: language })
+				i18next.t('error.smtp.connection_error', { lng: language })
 			)
 		}
 
 		if (error.code === 'ETIMEDOUT') {
 			throw ApiError.InternalError(
-				i18next.t('errors.smtp_timeout_error', { lng: language })
+				i18next.t('error.smtp.timeout_error', { lng: language })
 			)
 		}
 
 		if (error.code === 'ENOTFOUND') {
 			throw ApiError.InternalError(
-				i18next.t('errors.smtp_host_not_found', { lng: language })
+				i18next.t('error.smtp.host_not_found', { lng: language })
 			)
 		}
 
 		if (error.code === 'EENVELOPE') {
 			throw ApiError.InternalError(
-				i18next.t('errors.smtp_envelope_error', { lng: language })
+				i18next.t('error.smtp.envelope_error', { lng: language })
 			)
 		}
 
 		if (error.code === 'ENOENT') {
 			throw ApiError.InternalError(
-				i18next.t('errors.mail_template_not_found', { lng: language })
+				i18next.t('error.smtp.template_not_found', { lng: language })
 			)
 		}
 
@@ -198,31 +196,31 @@ class HelpersError {
 
 		if (error.name === 'JsonWebTokenError') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.invalid_token_format', { lng: language })
+				i18next.t('error.auth.token_format', { lng: language })
 			)
 		}
 
 		if (error.name === 'TokenExpiredError') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.token_expired', { lng: language })
+				i18next.t('error.auth.token_expired', { lng: language })
 			)
 		}
 
 		if (error.name === 'NotBeforeError') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.token_not_active', { lng: language })
+				i18next.t('error.auth.token_not_active', { lng: language })
 			)
 		}
 
 		if (error.name === 'ValidationError') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.token_validation_error', { lng: language })
+				i18next.t('error.auth.token_validation_error', { lng: language })
 			)
 		}
 
 		if (error.name === 'CastError') {
 			throw ApiError.BadRequest(
-				i18next.t('errors.invalid_token_id_format', { lng: language })
+				i18next.t('error.auth.token_id_format', { lng: language })
 			)
 		}
 
@@ -231,7 +229,7 @@ class HelpersError {
 			error.name === 'MongoTimeoutError'
 		) {
 			throw ApiError.InternalError(
-				i18next.t('errors.database_connection_error', { lng: language })
+				i18next.t('error.database.connection_error', { lng: language })
 			)
 		}
 

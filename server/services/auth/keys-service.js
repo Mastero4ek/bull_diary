@@ -20,12 +20,12 @@ class KeysService {
 			const keys = await KeysModel.findOne({ user: userId })
 
 			if (!keys) {
-				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.keys.not_found', { lng }))
 			}
 
 			return keys
 		} catch (error) {
-			handleDatabaseError(error, lng, 'findKeys', 'errors.keys_not_found')
+			handleDatabaseError(error, lng, 'findKeys', 'Can not find keys')
 		}
 	}
 
@@ -40,7 +40,7 @@ class KeysService {
 			const keys = await KeysModel.findOne({ user: userId })
 
 			if (!keys) {
-				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.keys.not_found', { lng }))
 			}
 
 			const decryptedKeys = {
@@ -54,7 +54,7 @@ class KeysService {
 				error,
 				lng,
 				'findDecryptedKeys',
-				'errors.keys_not_found'
+				'Can not find decrypted keys'
 			)
 		}
 	}
@@ -73,14 +73,14 @@ class KeysService {
 			const keys = await KeysModel.findOne({ user: userId })
 
 			if (!keys) {
-				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.keys.not_found', { lng }))
 			}
 
 			const exchangeExists = keys.keys.some(key => key.name === exchange)
 
 			if (!exchangeExists) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_not_found_in_keys', { lng, exchange })
+					i18next.t('error.api.exchange_not_found', { lng, exchange })
 				)
 			}
 
@@ -146,7 +146,7 @@ class KeysService {
 
 			return await KeysDto.createMaskedKeys(keys, userId)
 		} catch (error) {
-			handleDatabaseError(error, lng, 'updateKeys', 'errors.keys_update_failed')
+			handleDatabaseError(error, lng, 'updateKeys', 'Failed to update keys')
 		}
 	}
 
@@ -163,14 +163,14 @@ class KeysService {
 			const keys = await KeysModel.findOne({ user: userId })
 
 			if (!keys) {
-				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.keys.not_found', { lng }))
 			}
 
 			const exchangeExists = keys.keys.some(key => key.name === exchange)
 
 			if (!exchangeExists) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_not_found_in_keys', { lng, exchange })
+					i18next.t('error.api.exchange_not_found', { lng, exchange })
 				)
 			}
 
@@ -193,7 +193,7 @@ class KeysService {
 				error,
 				lng,
 				'updateSyncStatus',
-				'errors.keys_update_failed'
+				'Failed to update keys'
 			)
 		}
 	}
@@ -210,14 +210,14 @@ class KeysService {
 			const keys = await KeysModel.findOne({ user: userId })
 
 			if (!keys) {
-				throw ApiError.BadRequest(i18next.t('errors.keys_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.keys.not_found', { lng }))
 			}
 
 			const exchangeExists = keys.keys.some(key => key.name === exchange)
 
 			if (!exchangeExists) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.exchange_not_found_in_keys', { lng, exchange })
+					i18next.t('error.api.exchange_not_found', { lng, exchange })
 				)
 			}
 
@@ -236,15 +236,13 @@ class KeysService {
 			keys.keys = updatedKeys
 			await keys.save()
 
-			logInfo(`Keys cleared for user ${userId}, exchange ${exchange}`)
-
 			return await KeysDto.createMaskedKeys(keys, userId)
 		} catch (error) {
 			handleDatabaseError(
 				error,
 				lng,
 				'clearKeysForExchange',
-				'errors.keys_update_failed'
+				'Failed to clear keys'
 			)
 		}
 	}
@@ -260,22 +258,22 @@ class KeysService {
 			const user = await UserModel.findOne({ email })
 
 			if (!user) {
-				throw ApiError.BadRequest(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.user.not_found', { lng }))
 			}
 
 			const keys = await KeysModel.findOneAndDelete({ user: user._id })
 
 			return {
 				message: keys
-					? i18next.t('success.keys_deleted', { lng })
-					: i18next.t('success.keys_already_deleted', { lng }),
+					? i18next.t('success.keys.deleted', { lng })
+					: i18next.t('error.keys_not_found', { lng }),
 			}
 		} catch (error) {
 			handleDatabaseError(
 				error,
 				lng,
 				'removeKeys',
-				'errors.keys_deletion_failed'
+				'Failed to remove keys'
 			)
 		}
 	}

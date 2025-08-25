@@ -5,7 +5,6 @@ const LevelModel = require('@models/core/level-model')
 const { ApiError } = require('@exceptions/api-error')
 const i18next = require('i18next')
 const fileService = require('./file-service')
-const mongoose = require('mongoose')
 const FileModel = require('@models/core/file-model')
 const fs = require('fs')
 const path = require('path')
@@ -93,7 +92,7 @@ class TournamentService {
 				error,
 				lng,
 				'createTournament',
-				'errors.tournament_creation_failed'
+				'Failed to create tournament'
 			)
 		}
 	}
@@ -149,7 +148,7 @@ class TournamentService {
 				error,
 				lng,
 				'removeTournament',
-				'errors.tournament_deletion_failed'
+				'Failed to delete tournament'
 			)
 		}
 	}
@@ -248,7 +247,7 @@ class TournamentService {
 				error,
 				lng,
 				'addTournamentUser',
-				'errors.tournament_user_add_failed'
+				'Failed to add user to tournament'
 			)
 		}
 	}
@@ -273,7 +272,7 @@ class TournamentService {
 			const user = await UserModel.findById(userId)
 
 			if (!user) {
-				throw ApiError.BadRequest(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.user.not_found', { lng }))
 			}
 
 			const tournamentUser = await TournamentUserModel.findOne({
@@ -298,14 +297,14 @@ class TournamentService {
 			)
 
 			return {
-				message: i18next.t('success.user_removed_from_tournament', { lng }),
+				message: i18next.t('success.tournament.user_removed', { lng }),
 			}
 		} catch (error) {
 			handleDatabaseError(
 				error,
 				lng,
 				'removeTournamentUser',
-				'errors.tournament_user_removal_failed'
+				'Failed to remove user from tournament'
 			)
 		}
 	}
@@ -427,7 +426,7 @@ class TournamentService {
 				error,
 				lng,
 				'getTournaments',
-				'errors.tournament_fetch_failed'
+				'Failed to fetch tournament data'
 			)
 		}
 	}

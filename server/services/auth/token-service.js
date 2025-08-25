@@ -33,7 +33,7 @@ class TokenService {
 				error,
 				lng,
 				'generateTokens',
-				'errors.token_generation_failed'
+				'Failed to generate tokens'
 			)
 		}
 	}
@@ -62,7 +62,7 @@ class TokenService {
 
 			return token
 		} catch (error) {
-			handleTokenError(error, lng, 'saveToken', 'errors.token_save_failed')
+			handleTokenError(error, lng, 'saveToken', 'Failed to save token')
 		}
 	}
 
@@ -78,7 +78,12 @@ class TokenService {
 
 			return tokenData
 		} catch (error) {
-			handleTokenError(error, lng, 'removeToken', 'errors.token_removal_failed')
+					handleTokenError(
+			error,
+			lng,
+			'removeToken',
+			'Failed to remove token'
+		)
 		}
 	}
 
@@ -94,7 +99,7 @@ class TokenService {
 
 			return tokenData
 		} catch (error) {
-			handleTokenError(error, lng, 'findToken', 'errors.token_find_failed')
+			handleTokenError(error, lng, 'findToken', 'Failed to find token')
 		}
 	}
 

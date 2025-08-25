@@ -62,7 +62,9 @@ class UserService {
 			})
 
 			if (existingUser) {
-				throw ApiError.BadRequest(i18next.t('errors.email_exists', { lng }))
+				throw ApiError.BadRequest(
+					i18next.t('error.validation.email_exists', { lng })
+				)
 			}
 
 			let hashedPassword = undefined
@@ -143,7 +145,7 @@ class UserService {
 				}
 			}
 
-			handleDatabaseError(error, lng, 'signUp', 'errors.failed_create_user')
+			handleDatabaseError(error, lng, 'signUp', 'Failed to create user')
 		}
 	}
 
@@ -161,7 +163,7 @@ class UserService {
 
 			if (!user || user.inactive) {
 				throw ApiError.UnauthorizedError(
-					i18next.t('errors.user_not_found', { lng })
+					i18next.t('error.user.not_found', { lng })
 				)
 			}
 
@@ -214,7 +216,7 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			handleDatabaseError(error, lng, 'signIn', 'errors.failed_sign_in')
+			handleDatabaseError(error, lng, 'signIn', 'Failed to sign in')
 		}
 	}
 
@@ -231,7 +233,7 @@ class UserService {
 
 			if (!user) {
 				throw ApiError.UnauthorizedError(
-					i18next.t('errors.user_not_found', { lng })
+					i18next.t('error.user.not_found', { lng })
 				)
 			}
 
@@ -274,7 +276,7 @@ class UserService {
 				error,
 				lng,
 				'checkSourceAuth',
-				'errors.failed_source_auth'
+				'Failed to check source auth'
 			)
 		}
 	}
@@ -289,7 +291,7 @@ class UserService {
 		try {
 			return await tokenService.removeToken(refresh_token, lng)
 		} catch (error) {
-			handleTokenError(error, lng, 'logout', 'errors.failed_logout')
+			handleTokenError(error, lng, 'logout', 'Failed to logout')
 		}
 	}
 
@@ -321,7 +323,7 @@ class UserService {
 
 			if (!user) {
 				throw ApiError.UnauthorizedError(
-					i18next.t('errors.user_not_found', { lng })
+					i18next.t('error.user.not_found', { lng })
 				)
 			}
 
@@ -357,7 +359,7 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			handleTokenError(error, lng, 'refresh', 'errors.failed_refresh')
+			handleTokenError(error, lng, 'refresh', 'Failed to refresh token')
 		}
 	}
 
@@ -421,7 +423,7 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			handleDatabaseError(error, lng, 'activate', 'errors.failed_activate')
+			handleDatabaseError(error, lng, 'activate', 'Failed to activate user')
 		}
 	}
 
@@ -451,7 +453,7 @@ class UserService {
 			const user = await UserModel.findById(userId)
 
 			if (!user) {
-				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.NotFound(i18next.t('error.user.not_found', { lng }))
 			}
 
 			const updateData = {
@@ -482,7 +484,7 @@ class UserService {
 
 			if (!updatedUser) {
 				throw ApiError.InternalError(
-					i18next.t('errors.failed_update_user', { lng })
+					i18next.t('error.user.update_user_failed', { lng })
 				)
 			}
 
@@ -510,7 +512,7 @@ class UserService {
 				user: result,
 			}
 		} catch (error) {
-			handleDatabaseError(error, lng, 'editUser', 'errors.failed_update_user')
+			handleDatabaseError(error, lng, 'editUser', 'Failed to update user')
 		}
 	}
 
@@ -526,12 +528,12 @@ class UserService {
 			const user = await UserModel.findById(userId)
 
 			if (!user) {
-				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.NotFound(i18next.t('error.user.not_found', { lng }))
 			}
 
 			if (!user.cover) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.no_cover_to_remove', { lng })
+					i18next.t('error.file.no_cover_to_remove', { lng })
 				)
 			}
 
@@ -541,15 +543,10 @@ class UserService {
 			await user.save()
 
 			return {
-				message: i18next.t('success.cover_removed', { lng }),
+				message: i18next.t('success.file.deleted', { lng }),
 			}
 		} catch (error) {
-			handleDatabaseError(
-				error,
-				lng,
-				'removeCover',
-				'errors.failed_remove_cover'
-			)
+			handleDatabaseError(error, lng, 'removeCover', 'Failed to remove cover')
 		}
 	}
 
@@ -565,14 +562,14 @@ class UserService {
 			const user = await UserModel.findOne({ email: current_email })
 
 			if (!user) {
-				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.NotFound(i18next.t('error.user.not_found', { lng }))
 			}
 
 			try {
 				await fileService.removeUserFiles(user._id, lng)
 			} catch (fileError) {
 				logError(fileError, {
-					context: 'removeUser - file cleanup',
+					context: 'Remove user - file cleanup',
 					userId: user._id,
 				})
 			}
@@ -580,10 +577,10 @@ class UserService {
 			await UserModel.findByIdAndDelete(user._id)
 
 			return {
-				message: i18next.t('success.user_removed', { lng }),
+				message: i18next.t('success.user.deactivated', { lng }),
 			}
 		} catch (error) {
-			handleDatabaseError(error, lng, 'removeUser', 'errors.failed_remove_user')
+			handleDatabaseError(error, lng, 'removeUser', 'Failed to remove user')
 		}
 	}
 
@@ -602,19 +599,14 @@ class UserService {
 			)
 
 			if (!user) {
-				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.NotFound(i18next.t('error.user.not_found', { lng }))
 			}
 
 			return {
-				message: i18next.t('success.user_activated', { lng }),
+				message: i18next.t('success.user.activated', { lng }),
 			}
 		} catch (error) {
-			handleDatabaseError(
-				error,
-				lng,
-				'activeUser',
-				'errors.failed_activate_user'
-			)
+			handleDatabaseError(error, lng, 'activeUser', 'Failed to activate user')
 		}
 	}
 
@@ -633,18 +625,18 @@ class UserService {
 			)
 
 			if (!user) {
-				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.NotFound(i18next.t('error.user.not_found', { lng }))
 			}
 
 			return {
-				message: i18next.t('success.user_deactivated', { lng }),
+				message: i18next.t('success.user.deactivated', { lng }),
 			}
 		} catch (error) {
 			handleDatabaseError(
 				error,
 				lng,
 				'inactiveUser',
-				'errors.failed_deactivate_user'
+				'Failed to deactivate user'
 			)
 		}
 	}
@@ -660,7 +652,7 @@ class UserService {
 			const user = await UserModel.findById(userId)
 
 			if (!user) {
-				throw ApiError.NotFound(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.NotFound(i18next.t('error.user.not_found', { lng }))
 			}
 
 			const keys = await KeysModel.findOne({ user: userId })
@@ -685,7 +677,7 @@ class UserService {
 
 			return result
 		} catch (error) {
-			handleDatabaseError(error, lng, 'getUser', 'errors.failed_get_user_data')
+			handleDatabaseError(error, lng, 'getUser', 'Failed to get user data')
 		}
 	}
 
@@ -753,14 +745,16 @@ class UserService {
 				.limit(limit)
 
 			if (!users) {
-				throw ApiError.NotFound(i18next.t('errors.users_not_found', { lng }))
+				throw ApiError.NotFound(
+					i18next.t('error.user.users_not_found', { lng })
+				)
 			}
 
 			const result = { users, total_pages: totalPages }
 
 			return result
 		} catch (error) {
-			handleDatabaseError(error, lng, 'getUsers', 'errors.failed_get_users')
+			handleDatabaseError(error, lng, 'getUsers', 'Failed to get users')
 		}
 	}
 
@@ -794,7 +788,9 @@ class UserService {
 			})
 
 			if (existingUser) {
-				throw ApiError.BadRequest(i18next.t('errors.email_exists', { lng }))
+				throw ApiError.BadRequest(
+					i18next.t('error.validation.email_exists', { lng })
+				)
 			}
 
 			const salt = await bcrypt.genSalt(10)
@@ -846,7 +842,7 @@ class UserService {
 				user: { ...user_dto, keys: maskedKeys.keys, level: level.level },
 			}
 		} catch (error) {
-			handleDatabaseError(error, lng, 'createUser', 'errors.failed_create_user')
+			handleDatabaseError(error, lng, 'createUser', 'Failed to create user')
 		}
 	}
 

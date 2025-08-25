@@ -1,7 +1,7 @@
 const cron = require('node-cron')
 const moment = require('moment')
 const i18next = require('i18next')
-const { logError, logInfo } = require('@configs/logger-config')
+const { logError } = require('@configs/logger-config')
 const { delayApi } = require('@helpers/utility-helpers')
 const ClientService = require('@services/integration/client-service')
 const DataService = require('@services/exchange/data-service')

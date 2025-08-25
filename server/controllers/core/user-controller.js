@@ -48,7 +48,7 @@ class UserController {
 				if (!targetUser) {
 					return next(
 						ApiError.NotFound(
-							i18next.t('errors.user_not_found', { lng: req.lng })
+							i18next.t('error.user.not_found', { lng: req.lng })
 						)
 					)
 				}
@@ -98,7 +98,7 @@ class UserController {
 			if (!current_user) {
 				return next(
 					ApiError.NotFound(
-						i18next.t('errors.user_not_found', { lng: req.lng })
+						i18next.t('error.user.not_found', { lng: req.lng })
 					)
 				)
 			}
@@ -106,7 +106,7 @@ class UserController {
 			if (current_user.email !== fill_email) {
 				return next(
 					ApiError.BadRequest(
-						i18next.t('errors.email_mismatch', { lng: req.lng }),
+						i18next.t('error.validation.email_mismatch', { lng: req.lng }),
 						errors.array()
 					)
 				)

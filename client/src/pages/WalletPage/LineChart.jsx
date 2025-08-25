@@ -50,16 +50,11 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 			const monthIndex = parseInt(context[0].label) - 1
 			return moment({ year: now.year(), month: monthIndex }).format('MMMM YYYY')
 		} else if (period === 'quarter') {
-			const weekIndex = context[0].dataIndex
-			const currentQuarterStart = now.clone().startOf('quarter')
-			const currentQuarterEnd = now.clone().endOf('quarter')
+			const weekNumber = parseInt(context[0].label)
+			const currentYear = now.year()
 
-			let firstWeekOfQuarter = currentQuarterStart.clone().startOf('isoWeek')
-			if (firstWeekOfQuarter.isBefore(currentQuarterStart)) {
-				firstWeekOfQuarter.add(1, 'week')
-			}
-
-			const weekStart = firstWeekOfQuarter.clone().add(weekIndex, 'weeks')
+			// Находим дату начала недели по номеру недели и году
+			const weekStart = moment().isoWeek(weekNumber).startOf('isoWeek')
 			const weekEnd = weekStart.clone().endOf('isoWeek')
 
 			return `${weekStart.format('DD.MM.YYYY')} - ${weekEnd.format(

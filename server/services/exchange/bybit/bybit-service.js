@@ -198,7 +198,7 @@ class BybitService {
 				error,
 				lng,
 				'getBybitOrdersPnl',
-				'errors.fetch_orders_error',
+				'Failed to get Bybit orders PnL',
 				'Bybit'
 			)
 		}
@@ -247,7 +247,7 @@ class BybitService {
 				error,
 				lng,
 				'getBybitTickers',
-				'errors.fetch_tickers_error',
+				'Failed to get Bybit tickers',
 				'Bybit'
 			)
 		}
@@ -285,7 +285,9 @@ class BybitService {
 			let wallet = {}
 
 			if (!result.list || !result.list[0].coin) {
-				throw ApiError.BadRequest(i18next.t('errors.wallet_not_found', { lng }))
+				throw ApiError.BadRequest(
+					i18next.t('error.api.wallet_not_found', { lng })
+				)
 			}
 
 			if (result.list && result.list[0].coin) {
@@ -293,7 +295,9 @@ class BybitService {
 				const usdtCoin = coins.find(coin => coin.coin === 'USDT')
 
 				if (!usdtCoin) {
-					throw ApiError.BadRequest(i18next.t('errors.usdt_not_found', { lng }))
+					throw ApiError.BadRequest(
+						i18next.t('error.api.usdt_not_found', { lng })
+					)
 				}
 
 				let totalBalance = usdtCoin ? Number(usdtCoin.walletBalance) : 0
@@ -326,7 +330,7 @@ class BybitService {
 				error,
 				lng,
 				'getBybitWallet',
-				'errors.fetch_wallet_error',
+				'Failed to get Bybit wallet',
 				'Bybit'
 			)
 		}
@@ -491,7 +495,7 @@ class BybitService {
 				error,
 				lng,
 				'getBybitTransactions',
-				'errors.fetch_transactions_error',
+				'Failed to get Bybit transactions',
 				'Bybit'
 			)
 		}

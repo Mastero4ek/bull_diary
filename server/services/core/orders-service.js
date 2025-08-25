@@ -34,7 +34,9 @@ class OrdersService {
 			)
 
 			if (!existing_order) {
-				throw ApiError.BadRequest(i18next.t('errors.order_not_exists', { lng }))
+				throw ApiError.BadRequest(
+					i18next.t('error.validation.order_not_exists', { lng })
+				)
 			}
 
 			await clearOrdersCache(userId, exchange, 'savedOrder')
@@ -43,7 +45,7 @@ class OrdersService {
 
 			return { order: order_dto }
 		} catch (error) {
-			handleDatabaseError(error, lng, 'savedOrder', 'errors.order_save_failed')
+			handleDatabaseError(error, lng, 'savedOrder', 'Failed to save order')
 		}
 	}
 
@@ -74,7 +76,9 @@ class OrdersService {
 			)
 
 			if (!removed_order) {
-				throw ApiError.BadRequest(i18next.t('errors.order_not_exists', { lng }))
+				throw ApiError.BadRequest(
+					i18next.t('error.validation.order_not_exists', { lng })
+				)
 			}
 
 			await clearOrdersCache(userId, exchange, 'removedOrder')
@@ -83,12 +87,7 @@ class OrdersService {
 
 			return { order: order_dto }
 		} catch (error) {
-			handleDatabaseError(
-				error,
-				lng,
-				'removedOrder',
-				'errors.order_removal_failed'
-			)
+			handleDatabaseError(error, lng, 'removedOrder', 'Failed to remove order')
 		}
 	}
 
@@ -116,7 +115,7 @@ class OrdersService {
 				error,
 				lng,
 				'getOrderDescription',
-				'errors.order_get_description_failed'
+				'Failed to get order description'
 			)
 		}
 	}
@@ -169,7 +168,7 @@ class OrdersService {
 				error,
 				lng,
 				'getOrderDescription',
-				'errors.order_update_description_failed'
+				'Failed to update order description'
 			)
 		}
 	}

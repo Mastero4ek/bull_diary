@@ -13,7 +13,7 @@ class MailController {
 
 			if (!user_data || !user_data.user) {
 				throw ApiError.InternalError(
-					i18next.t('errors.failed_to_get_user_data_after_activation', {
+					i18next.t('error.user.get_user_data_failed_after_activation', {
 						lng: req.lng,
 					})
 				)

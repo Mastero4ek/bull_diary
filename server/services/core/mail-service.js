@@ -111,7 +111,7 @@ class MailService {
 				error,
 				lng,
 				'sendActivationMail',
-				'errors.mail_send_failed'
+				'Failed to send email'
 			)
 		}
 	}

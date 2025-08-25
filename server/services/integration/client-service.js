@@ -71,7 +71,7 @@ class ClientService {
 
 		if (response[config.errorCodeField] !== config.successCode) {
 			throw ApiError.BadRequest(
-				i18next.t('errors.api_error', {
+				i18next.t('error.api.error', {
 					lng,
 					exchange: exchangeName,
 					error: response[config.errorMessageField],
@@ -114,7 +114,7 @@ class ClientService {
 
 			if (response.retCode !== 0) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.api_error', {
+					i18next.t('error.api.error', {
 						lng,
 						exchange: exchangeName,
 						error: response.retMsg,
@@ -222,7 +222,7 @@ class ClientService {
 
 		if (response.retCode !== 0) {
 			throw ApiError.BadRequest(
-				i18next.t('errors.api_error', {
+				i18next.t('error.api.error', {
 					lng,
 					exchange: exchangeName,
 					error: response.retMsg,

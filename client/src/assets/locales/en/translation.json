@@ -36,7 +36,7 @@
 	},
 	"footer": {
 		"description": "<b>Bull Diary</b>&nbsp;is your professional trading companion, designed to&nbsp;help traders analyze their performance, track portfolio growth, and&nbsp;compete in&nbsp;exciting tournaments. <br/><br/> Connect your exchange accounts, save your best trades to&nbsp;bookmarks, and&nbsp;join our growing community of&nbsp;traders striving for excellence in&nbsp;the cryptocurrency markets.",
-		"copyright": "© {{year}}. Created with love, Mastero4ek."
+		"copyright": "© {{year}} Bull Diary. All rights reserved."
 	},
 	"table": {
 		"sort_by": "Sort by",
@@ -82,7 +82,6 @@
 			"year": "Year"
 		},
 		"search": {
-			"placeholder": "All USDT-PERP",
 			"empty": "No results found",
 			"users_placeholder": "All active users",
 			"ticker_placeholder": "All USDT-PERP"
@@ -131,7 +130,6 @@
 			"description": "Description",
 			"registr_date": "Registration Date",
 			"start_date": "Start date",
-			"end_date": "End date",
 			"api_key": "Api key",
 			"secret_key": "Secret key",
 			"agreement_key": "I confirm that I use 'read-only' keys"
@@ -150,16 +148,9 @@
 			"battle_name": "Battle name is required!"
 		},
 		"placeholder": {
-			"api_key": "Your api key",
-			"secret_key": "Your secret key",
-			"name": "Name",
-			"last_name": "Last name",
-			"email": "Email",
-			"password": "Password",
 			"order_description": "Description..."
 		},
 		"warning": {
-			"create_password": "Create password for enter!",
 			"create_user_password": "Create password for user!"
 		}
 	},
@@ -306,9 +297,6 @@
 			"keys_error_updating": "Error updating Api key! <br/> Please try again.",
 			"keys_error_no_exchange": "No exchange selected!",
 			"keys_warning": "Bull Diary supports futures trading. <br /> The exchange stores data for&nbsp;the last 180&nbsp;days. <br/> After saving the&nbsp;keys, synchronization will begin. <br/> Synchronization will run in&nbsp;the background and&nbsp;may take some time.",
-			"keys_success_synchronization": "Synchronization successfully!",
-			"keys_error_synchronization": "Error synchronizing! <br/> Please try again.",
-			"keys_synchronizing": "Synchronizing...",
 			"sync_cancelled_successfully": "Synchronization cancelled successfully!",
 			"tuning_language": "Language",
 			"tuning_theme": "Dark theme",
@@ -339,9 +327,7 @@
 			"success_active": "User activated successfully!",
 			"error_active": "Error activating user! <br/> Please try again.",
 			"success_inactive": "User deactivated successfully!",
-			"error_inactive": "Error deactivating user! <br/> Please try again.",
-			"inactive": "Inactive",
-			"active": "Active"
+			"error_inactive": "Error deactivating user! <br/> Please try again."
 		},
 		"battle": {
 			"title": "Trading <br /> Championships",
@@ -363,8 +349,7 @@
 			"update_success": "Bookmarks orders updated successfully!",
 			"update_error": "Error updating bookmarks! <br/> Please try again.",
 			"remove_order_success": "Order successfully removed from bookmarks!",
-			"remove_order_error": "Error deleting order from bookmarks! <br/> Please try again.",
-			"empty": "There were no&nbsp;saved transactions during this period!"
+			"remove_order_error": "Error deleting order from bookmarks! <br/> Please try again."
 		},
 		"table": {
 			"update_success": "Orders updated successfully!",
@@ -380,8 +365,6 @@
 		},
 		"diary": {
 			"update_success": "Positions updated successfully!",
-			"update_error": "Error updating positions! <br/> Please try again.",
-			"connection_error": "WebSocket connection lost! <br/> Attempting to reconnect...",
 			"empty": "There were no open transactions now!",
 			"chart_label": "Profit (P&L)"
 		},
@@ -398,9 +381,7 @@
 			"winrate": "Winrate",
 			"overview": "Overview",
 			"chart_label": "Wallet balance",
-			"chart_label_trans": "Transactions",
-			"warning": "You can currently search within the past 180 days.",
-			"empty": "No data found in this period!"
+			"chart_label_trans": "Transactions"
 		},
 		"wallet_details": {
 			"update_success": "Transactions updated successfully!",
@@ -414,7 +395,6 @@
 				"delivery": "Delivery",
 				"liquidation": "Liquidation",
 				"adl": "Auto-Deleveraging",
-				"Airdrop": "Airdrop",
 				"bonus": "Bonus",
 				"recollect": "Bonus Recollect",
 				"fee": "Fee Refund",
@@ -506,22 +486,8 @@
 		}
 	},
 	"error": {
-		"unknown": "An unknown error occurred",
-		"network": "Network error. <br/> Please check your internet connection.",
-		"timeout": "Request timeout. <br/> Please try again.",
-		"too_many_requests": "Too many requests. <br/> Please try again later.",
-		"authentication_required": "Authentication required. <br/> Please log in again.",
-		"access_denied": "Access denied. <br/> You do not have permission for this action.",
-		"resource_not_found": "Resource not found.",
-		"server_error": "Server error. <br/> Please try again later.",
 		"logout_error": "Error logging out! <br/> Please try again.",
 		"logout_success": "Logged out successfully!"
-	},
-	"success": {
-		"unknown": "An unknown success occurred!",
-		"created": "Successfully created!",
-		"updated": "Successfully updated!",
-		"deleted": "Successfully deleted!"
 	},
 	"auth": {
 		"oauth": {

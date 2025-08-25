@@ -33,7 +33,7 @@ class FileService {
 				const user = await UserModel.findById(userId)
 
 				if (!user) {
-					throw ApiError.BadRequest(i18next.t('errors.user_not_found', { lng }))
+					throw ApiError.BadRequest(i18next.t('error.user.not_found', { lng }))
 				}
 
 				if (user.cover) {
@@ -105,10 +105,10 @@ class FileService {
 			await file.save()
 
 			return {
-				message: i18next.t('success.file_saved', { lng }),
+				message: i18next.t('success.file.saved', { lng }),
 			}
 		} catch (error) {
-			handleFileError(error, lng, 'uploadCover', 'errors.file_upload_failed')
+			handleFileError(error, lng, 'uploadCover', 'Failed to upload cover')
 		}
 	}
 
@@ -127,7 +127,7 @@ class FileService {
 			})
 
 			if (!file) {
-				throw ApiError.BadRequest(i18next.t('errors.file_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.file.not_found', { lng }))
 			}
 
 			const filePath = path.join(__dirname, '../uploads', file.name)
@@ -137,7 +137,7 @@ class FileService {
 					fs.unlinkSync(filePath)
 				} catch (error) {
 					logError(error, {
-						context: 'delete file from disk',
+						context: 'Delete file from disk',
 						userId,
 						fileName: file.name,
 					})
@@ -156,7 +156,7 @@ class FileService {
 			)
 
 			if (!updatedUser) {
-				throw ApiError.BadRequest(i18next.t('errors.user_not_found', { lng }))
+				throw ApiError.BadRequest(i18next.t('error.user.not_found', { lng }))
 			}
 
 			try {
@@ -166,16 +166,16 @@ class FileService {
 				)
 			} catch (error) {
 				logError(error, {
-					context: 'update tournament users after file removal',
+					context: 'Update tournament users after file removal',
 					userId,
 				})
 			}
 
 			return {
-				message: i18next.t('success.file_deleted', { lng }),
+				message: i18next.t('success.file.deleted', { lng }),
 			}
 		} catch (error) {
-			handleFileError(error, lng, 'removeCover', 'errors.file_deletion_failed')
+			handleFileError(error, lng, 'removeCover', 'Failed to remove cover')
 		}
 	}
 
@@ -191,7 +191,7 @@ class FileService {
 
 			if (files.length === 0) {
 				return {
-					message: i18next.t('success.no_files_to_delete', { lng }),
+					message: i18next.t('success.file.deleted', { lng }),
 				}
 			}
 
@@ -203,7 +203,7 @@ class FileService {
 						fs.unlinkSync(filePath)
 					} catch (error) {
 						logError(error, {
-							context: 'delete user file from disk',
+							context: 'Delete user file from disk',
 							userId,
 							fileName: file.name,
 						})
@@ -230,20 +230,20 @@ class FileService {
 				)
 			} catch (error) {
 				logError(error, {
-					context: 'update tournament users after user files removal',
+					context: 'Update tournament users after user files removal',
 					userId,
 				})
 			}
 
 			return {
-				message: i18next.t('success.user_files_deleted', { lng }),
+				message: i18next.t('success.file.deleted', { lng }),
 			}
 		} catch (error) {
 			handleFileError(
 				error,
 				lng,
 				'removeUserFiles',
-				'errors.user_files_deletion_failed'
+				'Failed to remove user files'
 			)
 		}
 	}

@@ -1,165 +1,85 @@
 {
-	"errors": {
-		"user_not_found": "User not found!",
-		"invalid_email": "Invalid email format!",
-		"email_exists": "User with this email already exists!",
-		"validation": "Validation error!",
-		"email_mismatch": "The email address you entered does not match your account email address!",
-		"keys_not_found": "Keys not found!",
-		"keys_not_configured": "{{exchange}} keys are not configured!",
-		"file_not_found": "File not found!",
-		"order_exists": "Order already saved!",
-		"tournament_not_found": "Tournament on the {{exchange}} exchange not found!",
-		"user_with_email_not_found": "User with this email was not found!",
-		"no_members": "There are currently no members!",
-		"activate_account_first": "Please activate your account first!",
-		"invalid_email_or_password": "Invalid email or password!",
-		"user_data_incomplete": "User data incomplete!",
-		"failed_generate_tokens": "Failed to generate authentication tokens!",
-		"failed_sign_in": "Failed to sign in!",
-		"activation_link_required": "Activation link is required!",
-		"invalid_activation_link": "Invalid activation link!",
-		"account_already_activated": "Account is already activated!",
-		"activation_link_expired": "Activation link has expired. A new activation link has been sent to your email.",
-		"failed_create_user": "Failed to create user!",
-		"failed_activate_account": "Failed to activate account!",
-		"api_key_invalid": "API key is invalid.",
-		"tournament_already_exists": "Tournament on the {{exchange}} exchange already exists!",
-		"already_joined": "You have already joined this tournament!",
-		"wallet_not_found": "Wallet not found!",
-		"usdt_not_found": "USDT balance not found in wallet!",
-		"connection_error": "Unable to connect to {{exchange}} API. Please check your internet connection!",
-		"timeout_error": "Request to {{exchange}} API timed out! Please try again...",
-		"fetch_wallet_error": "Failed to fetch wallet data from {{exchange}} API!",
-		"fetch_tickers_error": "Failed to fetch tickers data from {{exchange}} API!",
-		"fetch_positions_error": "Failed to fetch positions data from {{exchange}} API!",
-		"fetch_wallet_changes_error": "Failed to fetch wallet changes data from {{exchange}} API!",
-		"fetch_transactions_error": "Failed to fetch transactions data from {{exchange}} API!",
-		"fetch_orders_error": "Failed to fetch orders data from {{exchange}} API!",
-		"api_error": "{{exchange}} API Error: {{error}}",
-		"file_required": "File is required!",
-		"file_too_large": "File size exceeds the maximum allowed size of {{maxSize}}!",
-		"invalid_file_type": "Invalid file type. Only image files are allowed!",
-		"user_update_failed": "Failed to update user!",
-		"file_name_required": "File name is required!",
-		"user_id_required": "User ID is required!",
-		"file_upload_failed": "Failed to upload file!",
-		"file_deletion_failed": "Failed to delete file!",
-		"disk_space_full": "Disk space is full. Cannot save file!",
-		"file_permission_denied": "Permission denied. Cannot access file!",
-		"file_path_not_found": "File path not found!",
-		"file_busy": "File is currently in use and cannot be deleted!",
-		"validation_error": "Data validation error!",
-		"invalid_id_format": "Invalid ID format!",
-		"duplicate_key_error": "Duplicate key error!",
-		"database_connection_error": "Database connection error!",
-		"exchange_required": "Exchange is required!",
-		"api_secret_required": "API key and secret are required!",
-		"exchange_not_found_in_keys": "Exchange {{exchange}} not found in keys!",
-		"email_required": "Email is required!",
-		"keys_update_failed": "Failed to update keys!",
-		"keys_deletion_failed": "Failed to delete keys!",
-		"smtp_auth_error": "SMTP authentication failed!",
-		"smtp_connection_error": "SMTP connection error!",
-		"smtp_timeout_error": "SMTP timeout error!",
-		"smtp_host_not_found": "SMTP host not found!",
-		"smtp_envelope_error": "SMTP envelope error!",
-		"mail_template_not_found": "Email template not found!",
-		"mail_send_failed": "Failed to send email!",
-		"invalid_email_format": "Invalid email format!",
-		"name_required": "Name is required!",
-		"activation_link_required": "Activation link is required!",
-		"order_required": "Order is required!",
-		"order_id_required": "Order ID is required!",
-		"order_exists": "Order already exists!",
-		"order_not_exists": "Order not found!",
-		"order_save_failed": "Failed to save order!",
-		"order_removal_failed": "Failed to remove order!",
-		"orders_fetch_failed": "Failed to fetch orders!",
-		"time_range_required": "Start time and end time are required!",
-		"invalid_page_number": "Invalid page number!",
-		"invalid_limit_value": "Invalid limit value! Limit must be between 1 and 100!",
-		"payload_required": "Payload is required!",
-		"invalid_payload_format": "Invalid payload format! ID and email are required!",
-		"refresh_token_required": "Refresh token is required!",
-		"invalid_token_format": "Invalid token format!",
-		"token_expired": "Token has expired!",
-		"token_not_active": "Token is not yet active!",
-		"token_validation_error": "Token validation error!",
-		"invalid_token_id_format": "Invalid token ID format!",
-		"token_generation_failed": "Failed to generate tokens!",
-		"token_save_failed": "Failed to save token!",
-		"token_removal_failed": "Failed to remove token!",
-		"token_find_failed": "Failed to find token!",
-		"tournament_data_required": "Tournament data is required!",
-		"tournament_name_required": "Tournament name is required!",
-		"tournament_dates_required": "Tournament start and end dates are required!",
-		"tournament_already_exists": "Tournament for exchange {{exchange}} already exists!",
-		"tournament_id_required": "Tournament ID is required!",
-		"tournament_not_found": "Tournament not found!",
-		"tournament_user_add_failed": "Failed to add user to tournament!",
-		"tournament_fetch_failed": "Failed to fetch tournament data!",
-		"tournament_creation_failed": "Failed to create tournament!",
-		"tournament_deletion_failed": "Failed to delete tournament!",
-		"tournament_user_removal_failed": "Failed to remove user from tournament!",
-		"user_level_not_found": "User level not found!",
-		"user_not_in_tournament": "User is not participating in this tournament!",
-		"password_required": "Password is required!",
-		"password_too_short": "Password must be at least 6 characters long!",
-		"user_id_or_email_required": "User ID or email is required!",
-		"email_already_exists": "Email already exists!",
-		"user_update_failed": "Failed to update user!",
-		"user_edit_failed": "Failed to edit user!",
-		"user_removal_failed": "Failed to remove user!",
-		"failed_get_user_data": "Failed to get user data!",
-		"failed_get_users": "Failed to get users!",
-		"users_not_found": "Users not found!",
-		"failed_source_auth": "Failed to authenticate with source!",
-		"failed_logout": "Failed to logout!",
-		"invalid_refresh_token": "Invalid refresh token!",
-		"refresh_token_not_found": "Refresh token not found!",
-		"failed_refresh_token": "Failed to refresh token!",
-		"failed_to_get_user_data_after_activation": "Failed to get user data after activation!",
-		"failed_activate_user": "Failed to activate user!",
-		"failed_deactivate_user": "Failed to deactivate user!",
-		"order_required": "Order is required!",
-		"tournament_creation_failed": "Failed to create tournament!",
-		"keys_not_found": "Keys not found!",
-		"keys_not_configured": "{{exchange}} keys are not configured!"
+	"error": {
+		"user": {
+			"not_found": "User not&nbsp;found!",
+			"users_not_found": "Users not&nbsp;found!",
+			"get_user_data_failed_after_activation": "Failed to&nbsp;get user data after activation!"
+		},
+		"validation": {
+			"root": "Validation error!",
+			"email_exists": "User with this email already exists!",
+			"email_mismatch": "The email address you entered does not&nbsp;match your account email address!",
+			"order_not_exists": "Order not&nbsp;found!",
+			"id_format": "Invalid ID format!"
+		},
+		"keys": {
+			"not_found": "Keys not&nbsp;found!"
+		},
+		"tournament": {
+			"not_found": "Tournament on the {{exchange}} exchange not&nbsp;found!"
+		},
+		"file": {
+			"not_found": "File not&nbsp;found!",
+			"disk_space_full": "Disk space is full. Cannot save file!",
+			"permission_denied": "Permission denied. Cannot access file!",
+			"path_not_found": "File path not&nbsp;found!",
+			"busy": "File is currently in use and cannot be deleted!"
+		},
+		"smtp": {
+			"auth_error": "SMTP authentication failed!",
+			"connection_error": "SMTP connection error!",
+			"timeout_error": "SMTP timeout error!",
+			"host_not_found": "SMTP host not&nbsp;found!",
+			"envelope_error": "SMTP envelope error!",
+			"template_not_found": "Email template not&nbsp;found!"
+		},
+		"api": {
+			"wallet_not_found": "Wallet not&nbsp;found!",
+			"usdt_not_found": "USDT balance not&nbsp;found in wallet!",
+			"connection_error": "Unable to connect to {{exchange}} API. Please check your internet connection!",
+			"timeout_error": "Request to {{exchange}} API timed out! Please try again...",
+			"error": "{{exchange}} API Error: {{error}}",
+			"exchange_not_found": "Exchange {{exchange}} not&nbsp;found in keys!"
+		},
+		"auth": {
+			"token_expired": "Token has expired!",
+			"token_not_active": "Token is not&nbsp;yet active!"
+		},
+		"database": {
+			"duplicate_key": "Duplicate key error!",
+			"connection_error": "Database connection error!"
+		}
 	},
 	"success": {
-		"file_saved": "File saved successfully!",
-		"file_deleted": "The file was successfully deleted!",
-		"keys_deleted": "The keys were successfully deleted!",
-		"user_removed_from_tournament": "User removed from tournament successfully!",
-		"user_activated": "User activated successfully!",
-		"user_deactivated": "User deactivated successfully!"
+		"file": {
+			"saved": "File saved successfully!",
+			"deleted": "The file was successfully deleted!"
+		},
+		"user": {
+			"activated": "User activated successfully!",
+			"deactivated": "User deactivated successfully!"
+		},
+		"keys": {
+			"deleted": "Keys deleted successfully!"
+		},
+		"tournament": {
+			"user_removed": "User removed from tournament successfully!"
+		}
 	},
 	"sync": {
-		"initializing": "Starting {{dataType}} synchronization with {{exchange}}",
-		"removing_old_data": "Removing old {{dataType}} from database in {{exchange}}",
-		"fetching_data": "Fetching {{dataType}} from {{exchange}} API",
-		"data_fetched": "{{dataType}} fetched successfully from {{exchange}} API",
-		"processing_chunk": "Processing {{dataType}} chunk {{current}}/{{total}} in {{exchange}}",
-		"transforming_data": "Transforming {{dataType}} in {{exchange}}",
-		"saving_database": "Saving {{dataType}} to database in {{exchange}}",
-		"finalizing": "Finalizing {{dataType}} synchronization in {{exchange}}",
-		"completed": "{{dataType}} synchronization completed in {{exchange}}",
-		"failed": "{{dataType}} synchronization failed in {{exchange}}",
-		"starting_sync": "Starting data synchronization in {{exchange}}",
-		"preparing_transactions": "Preparing to sync transactions in {{exchange}}",
-		"all_completed": "All data synchronization completed in {{exchange}}",
-		"orders": "orders",
-		"transactions": "transactions",
-		"processing": "Processing {{dataType}} in {{exchange}}",
-		"processing_data": "Processing {{dataType}} in {{exchange}}",
-		"data_processed": "{{dataType}} processed successfully in {{exchange}}"
+		"processing_chunk": "Processing {{dataType}} chunk {{current}}/{{total}} in&nbsp;{{exchange}}",
+		"completed": "{{dataType}} synchronization completed in&nbsp;{{exchange}}",
+		"failed": "{{dataType}} synchronization failed in&nbsp;{{exchange}}",
+		"starting_sync": "Starting data synchronization in&nbsp;{{exchange}}",
+		"processing": "Processing {{dataType}} in&nbsp;{{exchange}}",
+		"processing_data": "Processing {{dataType}} in&nbsp;{{exchange}}",
+		"data_processed": "{{dataType}} processed successfully in&nbsp;{{exchange}}"
 	},
 	"validation": {
 		"name": {
 			"required": "Name is required!",
-			"string": "Name must be a string!",
-			"length": "Name must be between 2 and 50 characters!"
+			"string": "Name must be a&nbsp;string!",
+			"length": "Name must be between 2&nbsp;and&nbsp;50&nbsp;characters!"
 		},
 		"start_date": {
 			"required": "Start date is required!",
@@ -175,60 +95,43 @@
 		},
 		"password": {
 			"required": "Password is required!",
-			"string": "Password must be a string!",
-			"length": "Password must be between 6 and 50 characters!"
+			"string": "Password must be a&nbsp;string!",
+			"length": "Password must be between 6&nbsp;and&nbsp;50&nbsp;characters!"
 		},
 		"confirm_password": {
-			"required": "Password confirmation is required!",
-			"mismatch": "Passwords do not match!"
+			"required": "Password confirmation is&nbsp;required!",
+			"mismatch": "Passwords do&nbsp;not&nbsp;match!"
 		},
 		"agreement": {
 			"required": "Agreement is required!",
-			"boolean": "Agreement must be a boolean!",
-			"must_agree": "You must agree to the terms!"
+			"boolean": "Agreement must be a&nbsp;boolean!",
+			"must_agree": "You must agree to&nbsp;the&nbsp;terms!"
 		},
 		"current_email": {
-			"required": "Current email is required!",
+			"required": "Current email is&nbsp;required!",
 			"invalid": "Invalid email format!"
 		},
 		"fill_email": {
-			"required": "Confirmation email is required!",
+			"required": "Confirmation email is&nbsp;required!",
 			"invalid": "Invalid email format!",
-			"mismatch": "Email addresses do not match!"
-		},
-		"phone": {
-			"string": "Phone must be a string!",
-			"invalid": "Invalid phone number format!"
-		},
-		"keys": {
-			"array": "Keys must be an array!",
-			"invalid": "Invalid keys format!"
+			"mismatch": "Email addresses do&nbsp;not&nbsp;match!"
 		},
 		"exchange": {
 			"required": "Exchange is required!",
-			"string": "Exchange must be a string!",
+			"string": "Exchange must be a&nbsp;string!",
 			"invalid": "Invalid exchange!"
 		},
 		"api": {
 			"required": "API key is required!",
-			"string": "API key must be a string!"
+			"string": "API key must be a&nbsp;string!"
 		},
 		"secret": {
 			"required": "API secret is required!",
-			"string": "API secret must be a string!"
+			"string": "API secret must be a&nbsp;string!"
 		},
 		"order": {
 			"required": "Order is required!",
-			"object": "Order must be an object!"
-		},
-		"cursor": {
-			"string": "Cursor must be a string!"
-		},
-		"limit": {
-			"invalid": "Limit must be between 1 and 100!"
-		},
-		"page": {
-			"invalid": "Page must be a positive integer!"
+			"object": "Order must be an&nbsp;object!"
 		},
 		"start_time": {
 			"invalid": "Invalid start time format!"
@@ -236,22 +139,13 @@
 		"end_time": {
 			"invalid": "Invalid end time format!"
 		},
-		"description": {
-			"string": "Description must be a string!"
-		},
 		"registration_date": {
 			"invalid": "Invalid registration date format!"
 		},
-		"tournament_id": {
-			"string": "Tournament ID must be a string!"
-		},
-		"user_id": {
-			"string": "User ID must be a string!"
-		},
 		"role": {
 			"required": "Role is required!",
-			"string": "Role must be a string!",
-			"invalid": "Invalid role! Must be 'admin' or 'user'."
+			"string": "Role must be a&nbsp;string!",
+			"invalid": "Invalid role! Must be&nbsp;'admin' or&nbsp;'user'."
 		}
 	}
 }

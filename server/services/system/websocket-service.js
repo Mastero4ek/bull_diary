@@ -60,7 +60,7 @@ class WebSocketService {
 
 					if (!keys || keys.message) {
 						logError(`Keys not found for user ${userId}:`, keys)
-						socket.emit('error', { message: t('errors.keys_not_found') })
+						socket.emit('error', { message: t('error.keys.not_found') })
 						return
 					}
 
@@ -71,7 +71,7 @@ class WebSocketService {
 							`Keys not configured for user ${userId}, exchange ${exchange}`
 						)
 						socket.emit('error', {
-							message: t('errors.keys_not_configured', { exchange }),
+							message: t('error.keys.not_configured', { exchange }),
 						})
 						return
 					}
@@ -125,7 +125,7 @@ class WebSocketService {
 					)
 
 					if (!keys || keys.message) {
-						socket.emit('sync_error', { message: t('errors.keys_not_found') })
+						socket.emit('sync_error', { message: t('error.keys.not_found') })
 						return
 					}
 
@@ -133,7 +133,7 @@ class WebSocketService {
 
 					if (!current_keys || !current_keys.api || !current_keys.secret) {
 						socket.emit('sync_error', {
-							message: t('errors.keys_not_configured', { exchange }),
+							message: t('error.keys.not_configured', { exchange }),
 						})
 						return
 					}
