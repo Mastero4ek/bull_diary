@@ -1,7 +1,10 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .order_desc {
 	display: flex;
 	flex-direction: column;
 	gap: 20rem;
+	order: 2;
 
 	textarea {
 		height: 400rem;
@@ -12,5 +15,9 @@
 	button {
 		margin-right: 0;
 		margin-left: auto;
+	}
+
+	@include mixins.tablet {
+		order: 1;
 	}
 }

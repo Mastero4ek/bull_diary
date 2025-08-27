@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .dot_list {
 	display: flex;
@@ -13,8 +13,56 @@
 			width: 100%;
 
 			span {
-				@include font(400, 20rem, 125%);
+				@include mixins.font(400, 20rem, 125%);
 			}
+		}
+	}
+
+	@include mixins.tablet {
+		gap: 8rem;
+
+		li {
+			div {
+				span {
+					@include mixins.font(400, 16rem, 125%);
+				}
+			}
+		}
+	}
+}
+
+.center {
+	align-items: center;
+
+	li {
+		width: fit-content;
+		text-align: center;
+		padding: 0 20rem;
+
+		&::after {
+			left: 0;
+			right: unset;
+			position: absolute;
+			content: '★';
+			top: -3rem;
+			@include mixins.font(400, 20rem, 125%);
+			color: var(--primaryDef);
+		}
+
+		&::before {
+			right: 0;
+			left: unset;
+			position: absolute;
+			content: '★';
+			top: -3rem;
+			@include mixins.font(400, 20rem, 125%);
+			color: var(--primaryDef);
+		}
+	}
+
+	@include mixins.phone {
+		li {
+			width: 100%;
 		}
 	}
 }
@@ -28,12 +76,20 @@
 		position: absolute;
 		content: '★';
 		top: -3rem;
-		@include font(400, 20rem, 125%);
+		@include mixins.font(400, 20rem, 125%);
 		color: var(--primaryDef);
 	}
 
 	div {
 		text-align: left;
+	}
+
+	@include mixins.tablet {
+		padding-left: 20rem;
+
+		div {
+			text-align: center;
+		}
 	}
 }
 
@@ -46,11 +102,19 @@
 		position: absolute;
 		content: '★';
 		top: -3rem;
-		@include font(400, 20rem, 125%);
+		@include mixins.font(400, 20rem, 125%);
 		color: var(--primaryDef);
 	}
 
 	div {
 		text-align: right;
+	}
+
+	@include mixins.tablet {
+		padding-right: 20rem;
+
+		div {
+			text-align: center;
+		}
 	}
 }

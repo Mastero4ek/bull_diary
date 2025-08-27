@@ -1,31 +1,42 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
-
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { ErrorForm } from '@/components/ui/general/ErrorForm'
-import { Loader } from '@/components/ui/general/Loader'
-import { RootInput } from '@/components/ui/inputs/RootInput'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import {
-	removeUser as removeUserCandidate,
-	setChangeUser as setChangeUserCandidate,
-} from '@/redux/slices/candidateSlice'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 import {
-	getUsers,
-	getUsersList,
-	removeUser as removeUserUsers,
-	setChangeUser as setChangeUserUsers,
-} from '@/redux/slices/usersSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import styles from './styles.module.scss'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import {
+  PopupDescLayout,
+} from '@/components/layouts/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { Loader } from '@/components/ui/general/Loader';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import {
+  removeUser as removeUserCandidate,
+  setChangeUser as setChangeUserCandidate,
+} from '@/redux/slices/candidateSlice';
+import {
+  getUsers,
+  getUsersList,
+  removeUser as removeUserUsers,
+  setChangeUser as setChangeUserUsers,
+} from '@/redux/slices/usersSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+
+import styles from './styles.module.scss';
 
 export const RemoveUserPopup = React.memo(({ item }) => {
 	const { t } = useTranslation()
@@ -192,8 +203,6 @@ export const RemoveUserPopup = React.memo(({ item }) => {
 						}
 						disabled={serverStatus === 'loading' ? true : false}
 					/>
-
-					<ErrorForm error={errorMessage} bottom={85} />
 
 					{serverStatus === 'loading' && <Loader logo={false} />}
 				</form>

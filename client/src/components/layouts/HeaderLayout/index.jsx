@@ -1,119 +1,51 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react';
 
-import moment from 'moment/min/moment-with-locales'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
-import { Link } from 'react-scroll'
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { Link } from 'react-scroll';
 
-import avatarDefault from '@/assets/images/general/default_avatar.png'
-import { NotificationLayout } from '@/components/layouts/NotificationLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { Logo } from '@/components/ui/general/Logo'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { useNavList } from '@/hooks/useNavigation'
-import { SignInPopup } from '@/popups/SignInPopup'
+import { NotificationLayout } from '@/components/layouts/NotificationLayout';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { Logo } from '@/components/ui/general/Logo';
+import { useNavList } from '@/hooks/useNavigation';
 
-import { Exchange } from './Exchange'
-import { SettingsList } from './SettingsList'
-import styles from './styles.module.scss'
+import { Exchange } from './Exchange';
+import { SettingsWrapper } from './SettingsWrapper';
+import styles from './styles.module.scss';
+import { UserWrapper } from './UserWrapper';
 
 export const HeaderLayout = React.memo(() => {
-	const { t } = useTranslation()
 	const location = useLocation()
-	const { openPopup } = usePopup()
 	const { NAVLIST } = useNavList()
+
+	const { isTablet, isMobile } = useSelector(state => state.settings)
 	const { isAuth, user } = useSelector(state => state.candidate)
-	const [currentTime, setCurrentTime] = useState(moment())
-
-	const handleSignIn = useCallback(() => {
-		openPopup(<SignInPopup />)
-	})
-
-	const renderUserSection = () => (
-		<>
-			<RootDesc>
-				<span style={{ display: 'flex', flexDirection: 'column' }}>
-					<b>{moment(currentTime).format('DD MMMM YYYY')}</b>
-					<br />
-					<span
-						style={{
-							fontWeight: '400',
-							opacity: '0.5',
-							display: 'inline-block',
-							marginLeft: 'auto',
-						}}
-					>
-						{moment(currentTime).format('HH:mm:ss')}
-					</span>
-				</span>
-			</RootDesc>
-
-			<div className={styles.header_user_wrapper}>
-				<OuterBlock>
-					<div className={styles.header_user}>
-						<RootDesc>
-							<span>
-								{`${user?.name} ${user?.last_name}` || t('user_default.name')}
-							</span>
-						</RootDesc>
-
-						<div className={styles.header_avatar}>
-							<img src={user?.cover || avatarDefault} alt='avatar' />
-						</div>
-					</div>
-				</OuterBlock>
-			</div>
-		</>
-	)
-
-	const renderSettingsSection = () => (
-		<div className={styles.header_settings}>
-			<SettingsList />
-
-			<RootButton
-				onClickBtn={handleSignIn}
-				text={t('button.sign_in')}
-				icon='sign-in'
-			/>
-		</div>
-	)
-
-	useEffect(() => {
-		let timeoutId
-
-		const updateTime = () => {
-			setCurrentTime(moment())
-
-			const now = new Date()
-			const msToNextSecond = 1000 - now.getMilliseconds()
-
-			timeoutId = setTimeout(updateTime, msToNextSecond)
-		}
-
-		updateTime()
-
-		return () => clearTimeout(timeoutId)
-	}, [])
 
 	return (
-		<div style={isAuth && user.is_activated ? { paddingRight: '40rem' } : {}}>
+		<header
+			style={
+				isAuth && user.is_activated
+					? { paddingRight: isMobile ? '0' : isTablet ? '16rem' : '40rem' }
+					: {}
+			}
+		>
 			<div className={styles.header_wrapper}>
 				{isAuth && user.is_activated ? (
-					!(
+					isMobile ||
+					isTablet ||
+					(!(
 						location.pathname.includes('profile') ||
 						location.pathname.includes('settings') ||
 						location.pathname.includes('contacts')
-					) && <Exchange />
+					) && <Exchange />)
 				) : (
 					<div className={styles.header_logo}>
-						<Logo />
+						<Logo desc={isMobile ? false : true} />
 					</div>
 				)}
 
 				{!isAuth &&
+					!isTablet &&
 					!user.is_activated &&
 					!location.pathname.includes('privacy') &&
 					!location.pathname.includes('terms') && (
@@ -139,12 +71,10 @@ export const HeaderLayout = React.memo(() => {
 						</nav>
 					)}
 
-				{isAuth && user.is_activated
-					? renderUserSection()
-					: renderSettingsSection()}
+				{isAuth && user.is_activated ? <UserWrapper /> : <SettingsWrapper />}
 
 				<NotificationLayout />
 			</div>
-		</div>
+		</header>
 	)
 })

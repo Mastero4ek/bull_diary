@@ -1,26 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
-import { Logo } from '@/components/ui/general/logo';
-import { SideBarItem } from '@/components/ui/general/SideBarItem';
-import { setSideBar } from '@/redux/slices/settingsSlice';
+import { Logo } from '@/components/ui/general/logo'
+import { SideBarItem } from '@/components/ui/general/SideBarItem'
+import { setSideBar } from '@/redux/slices/settingsSlice'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const SideBarLayout = React.memo(() => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 	const location = useLocation()
 	const { user } = useSelector(state => state.candidate)
-	const { sideBar, language } = useSelector(state => state.settings)
+	const { sideBar, language, isTablet } = useSelector(state => state.settings)
 
-	const themeItem = { name: t('sidebar.theme'), icon: 'theme' }
 	const logoutItem = { name: t('sidebar.logout'), icon: 'logout' }
 
 	const sideBarItems = [
@@ -56,7 +52,7 @@ export const SideBarLayout = React.memo(() => {
 	]
 
 	useEffect(() => {
-		if (sideBar.blocked_value === 'unblock') {
+		if (!isTablet && sideBar.blocked_value === 'unblock') {
 			dispatch(setSideBar({ ...sideBar, open: false }))
 		}
 	}, [])
@@ -72,23 +68,27 @@ export const SideBarLayout = React.memo(() => {
 	}
 
 	return (
-		<div
+		<aside
 			onMouseEnter={() =>
+				!isTablet &&
 				sideBar.blocked_value === 'unblock' &&
 				dispatch(setSideBar({ ...sideBar, open: true }))
 			}
 			onMouseLeave={() =>
+				!isTablet &&
 				sideBar.blocked_value === 'unblock' &&
 				dispatch(setSideBar({ ...sideBar, open: false }))
 			}
 			className={`${styles.sidebar_wrapper} ${
-				sideBar.open || sideBar.blocked_value === 'open'
+				!isTablet && (sideBar.open || sideBar.blocked_value === 'open')
 					? styles.sidebar_open
 					: ''
 			}`}
 		>
 			<div className={styles.sidebar_header}>
-				<Logo desc={sideBar.open || sideBar.blocked_value === 'open'} />
+				<Logo
+					desc={(sideBar.open || sideBar.blocked_value === 'open') && !isTablet}
+				/>
 			</div>
 
 			<ul className={styles.sidebar_body}>
@@ -119,9 +119,8 @@ export const SideBarLayout = React.memo(() => {
 			</ul>
 
 			<div className={styles.sidebar_footer}>
-				<SideBarItem item={themeItem} />
 				<SideBarItem item={logoutItem} />
 			</div>
-		</div>
+		</aside>
 	)
 })

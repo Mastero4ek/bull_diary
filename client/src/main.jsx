@@ -18,6 +18,8 @@ import { PopupLayout } from '@/components/layouts/PopupLayout/PopupLayout'
 import { PopupProvider } from '@/components/layouts/PopupLayout/PopupProvider'
 import { store } from '@/redux/store'
 
+window.__REDUX_STORE__ = store
+
 const rootElem = document.getElementById('root')
 
 if (rootElem) {

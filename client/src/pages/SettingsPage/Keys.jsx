@@ -1,27 +1,39 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
-import moment from 'moment/min/moment-with-locales'
-import { Controller, useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment/min/moment-with-locales';
+import {
+  Controller,
+  useForm,
+} from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Icon } from '@/components/ui/general/Icon'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { RootSelect } from '@/components/ui/inputs/RootSelect'
-import { H2 } from '@/components/ui/titles/H2'
-import { useWebSocket } from '@/hooks/useWebSocket'
-import { ConfirmPopup } from '@/popups/ConfirmPopup'
-import { updateKeys } from '@/redux/slices/candidateSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
+import { Icon } from '@/components/ui/general/Icon';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { RootSelect } from '@/components/ui/inputs/RootSelect';
+import { H2 } from '@/components/ui/titles/H2';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { ConfirmPopup } from '@/popups/ConfirmPopup';
+import { updateKeys } from '@/redux/slices/candidateSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const Keys = React.memo(({ handleClickRadio }) => {
 	const { user, errorArray } = useSelector(state => state.candidate)
@@ -371,7 +383,7 @@ export const Keys = React.memo(({ handleClickRadio }) => {
 							<div className={styles.sync_progress}>
 								<div className={styles.sync_progress_header}>
 									<SmallDesc>
-										<b>{message}</b>
+										<b dangerouslySetInnerHTML={{ __html: message }}></b>
 									</SmallDesc>
 
 									<div className={styles.sync_progress_controls}>

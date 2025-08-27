@@ -14,13 +14,36 @@ export const colorizedNum = (text, positive) => {
 	}
 }
 
+export const calculateFakeTotals = array => {
+	if (!array)
+		return {
+			totalProfit: { value: 0, count: 0 },
+			totalLoss: { value: 0, count: 0 },
+		}
+
+	const profitOrders = array.filter(order => order.roi > 0)
+	const lossOrders = array.filter(order => order.roi < 0)
+
+	return {
+		totalProfit: {
+			value: profitOrders.reduce((sum, order) => sum + order.pnl, 0),
+			count: profitOrders.length,
+		},
+		totalLoss: {
+			value: lossOrders.reduce((sum, order) => sum + order.pnl, 0),
+			count: lossOrders.length,
+		},
+	}
+}
+
 export const resError = error => {
+	if (!error) return { message: 'An unknown error occurred' }
+
 	const currentErrors =
 		error?.response?.data?.errors?.map(item => {
 			return { field: item?.path, value: item?.value }
 		}) || []
 
-	// Определяем тип ошибки
 	let message = 'An unknown error occurred'
 
 	if (error?.response?.data?.message) {

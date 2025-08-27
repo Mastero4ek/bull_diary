@@ -15,13 +15,16 @@ const getTheme = () => {
 const getSetting = cookie => {
 	if (Cookies.get(cookie)) {
 		return Cookies.get(cookie) === 'true' ? true : false
+	} else if (cookie === 'help') {
+		return false
 	} else {
 		return true
 	}
 }
 
 const initialState = {
-	isMobile: window.innerWidth < 768,
+	isTablet: window.innerWidth < 768,
+	isMobile: window.innerWidth < 460,
 	width: window.innerWidth,
 	sideBar: {
 		open: false,
@@ -34,6 +37,7 @@ const initialState = {
 	mark: getSetting('mark'),
 	amount: getSetting('amount'),
 	color: getSetting('color'),
+	help: getSetting('help'),
 	language: Cookies.get('language') || 'en',
 }
 
@@ -43,6 +47,9 @@ export const settingsSlice = createSlice({
 	reducers: {
 		setSideBar(state, action) {
 			state.sideBar = action.payload
+		},
+		setIsTablet(state, action) {
+			state.isTablet = action.payload
 		},
 		setIsMobile(state, action) {
 			state.isMobile = action.payload
@@ -65,6 +72,9 @@ export const settingsSlice = createSlice({
 		setAmount(state, action) {
 			state.amount = action.payload
 		},
+		setHelp(state, action) {
+			state.help = action.payload
+		},
 		setLanguage(state, action) {
 			state.language = action.payload
 		},
@@ -73,6 +83,7 @@ export const settingsSlice = createSlice({
 		},
 		setScreenParams(state, action) {
 			state.isMobile = action.payload.isMobile
+			state.isTablet = action.payload.isTablet
 			state.width = action.payload.width
 		},
 	},
@@ -80,6 +91,7 @@ export const settingsSlice = createSlice({
 
 export const {
 	setSideBar,
+	setIsTablet,
 	setIsMobile,
 	setWidth,
 	setTheme,
@@ -87,6 +99,7 @@ export const {
 	setMark,
 	setAmount,
 	setColor,
+	setHelp,
 	setIsLoadingTheme,
 	setIsLoadingLanguage,
 	setScreenParams,

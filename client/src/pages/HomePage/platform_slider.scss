@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .swiper {
 	width: 100%;
@@ -14,7 +14,11 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	@include font(500, 20rem, 100%);
+
+	@include mixins.tablet {
+		max-width: 500rem;
+		height: 350rem;
+	}
 }
 
 .swiper {
@@ -37,6 +41,15 @@
 
 			&:hover {
 				transform: scale(1.1);
+			}
+		}
+	}
+
+	@include mixins.tablet {
+		.swiper-pagination {
+			span {
+				width: 10rem !important;
+				height: 10rem !important;
 			}
 		}
 	}

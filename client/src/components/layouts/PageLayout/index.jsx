@@ -1,11 +1,13 @@
-import React from 'react'
+import React from 'react';
 
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { useSelector } from 'react-redux';
 
-import { FilterLayout } from '../FilterLayout'
-import styles from './styles.module.scss'
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
 
-export const PageLayout = React.memo(props => {
+import { FilterLayout } from '../FilterLayout';
+import styles from './styles.module.scss';
+
+export const PageLayout = props => {
 	const {
 		filter = true,
 		disabled = false,
@@ -24,11 +26,13 @@ export const PageLayout = React.memo(props => {
 		searchPlaceholder,
 	} = props
 
+	const { isTablet, isMobile } = useSelector(state => state.settings)
+
 	return (
 		<div className={styles.page_wrapper}>
 			<InnerBlock>
 				<div className={styles.page}>
-					{filter && (
+					{!isMobile && !isTablet && filter && (
 						<FilterLayout
 							disabled={disabled}
 							periods={periods}
@@ -46,12 +50,12 @@ export const PageLayout = React.memo(props => {
 					)}
 
 					<div
+						className={styles.page_content}
 						style={
 							chartWidth > 0
 								? { gridTemplateColumns: `1fr ${chartWidth}rem` }
 								: { display: 'flex' }
 						}
-						className={styles.page_content}
 					>
 						{children}
 					</div>
@@ -59,4 +63,4 @@ export const PageLayout = React.memo(props => {
 			</InnerBlock>
 		</div>
 	)
-})
+}

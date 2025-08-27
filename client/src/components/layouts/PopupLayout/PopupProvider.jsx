@@ -19,24 +19,31 @@ export const PopupProvider = React.memo(({ children }) => {
 		content: null,
 		closeButton: true,
 		shared: false,
+		direction: '',
 	})
 
 	const dispatch = useDispatch()
 
 	const openPopup = (
 		content,
-		options = { closeButton: true, shared: false }
+		options = { closeButton: true, shared: false, direction: '' }
 	) => {
 		setPopupContent({
 			content,
 			closeButton: options.closeButton,
 			shared: options.shared,
+			direction: options.direction,
 		})
 	}
 
 	const closePopup = () => {
 		dispatch(setErrorMessage(''))
-		setPopupContent({ content: null, closeButton: true, shared: false })
+		setPopupContent({
+			content: null,
+			closeButton: true,
+			shared: false,
+			direction: '',
+		})
 	}
 
 	return (

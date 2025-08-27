@@ -15,6 +15,7 @@ import i18n from '@/i18n'
 import {
 	setAmount,
 	setColor,
+	setHelp,
 	setIsLoadingLanguage,
 	setIsLoadingTheme,
 	setLanguage,
@@ -27,9 +28,17 @@ import styles from './styles.module.scss'
 
 export const Tuning = React.memo(({ handleClickRadio }) => {
 	const dispatch = useDispatch()
-	const { language, theme, mark, amount, color, sideBar } = useSelector(
-		state => state.settings
-	)
+	const {
+		language,
+		theme,
+		mark,
+		amount,
+		color,
+		help,
+		sideBar,
+		isMobile,
+		isTablet,
+	} = useSelector(state => state.settings)
 	const { t } = useTranslation()
 	const languageList = ['ru', 'en']
 
@@ -88,12 +97,18 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 			},
 			{
 				id: 5,
+				title: t('page.settings.tuning_help'),
+				value: 'help',
+				checked: help,
+			},
+			{
+				id: 6,
 				title: t('page.settings.tuning_sidebar'),
 				value: 'sidebar',
 				checked: sideBar.open,
 			},
 		],
-		[language, theme, mark, amount, color, sideBar, t]
+		[language, theme, mark, amount, color, help, sideBar, t]
 	)
 
 	const switchCheckbox = useCallback(
@@ -125,6 +140,11 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 				case 'color':
 					Cookies.set('color', currentValue)
 					dispatch(setColor(currentValue))
+					break
+
+				case 'help':
+					Cookies.set('help', currentValue)
+					dispatch(setHelp(currentValue))
 					break
 
 				default:
@@ -191,9 +211,18 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 						tuningList.length > 0 &&
 						tuningList.map(item => (
 							<li key={item?.id}>
-								<RootDesc>
-									<span>{item?.title}</span>
-								</RootDesc>
+								{item?.value === 'sidebar' ? (
+									!isMobile &&
+									!isTablet && (
+										<RootDesc>
+											<span>{item?.title}</span>
+										</RootDesc>
+									)
+								) : (
+									<RootDesc>
+										<span>{item?.title}</span>
+									</RootDesc>
+								)}
 
 								{item?.value === 'language' ? (
 									<ul className={styles.tuning_language_item}>
@@ -227,17 +256,20 @@ export const Tuning = React.memo(({ handleClickRadio }) => {
 											})}
 									</ul>
 								) : item?.value === 'sidebar' ? (
-									<RootSelect
-										arrow={true}
-										className={styles.tuning_sidebar}
-										options={sideBarOptions}
-										value={sideBar.blocked_value}
-										onChange={val => {
-											handleListItemClick(val)
-										}}
-										getLabel={item => item.name}
-										getValue={item => item.value}
-									/>
+									!isMobile &&
+									!isTablet && (
+										<RootSelect
+											arrow={true}
+											className={styles.tuning_sidebar}
+											options={sideBarOptions}
+											value={sideBar.blocked_value}
+											onChange={val => {
+												handleListItemClick(val)
+											}}
+											getLabel={item => item.name}
+											getValue={item => item.value}
+										/>
+									)
 								) : (
 									<CheckboxSwitch
 										name={item?.value}

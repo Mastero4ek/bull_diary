@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .control {
 	position: relative;
@@ -27,7 +27,7 @@
 			top: -17.5rem;
 			text-align: left;
 			left: 0;
-			@include font(500, 18rem, 120%);
+			@include mixins.font(500, 18rem, 120%);
 			transition: all 0.15s ease-in-out;
 			color: var(--red);
 		}
@@ -56,7 +56,7 @@
 	width: 450rem;
 	padding: 15rem;
 	padding-right: 40rem;
-	@include font(500, 18rem, 120%);
+	@include mixins.font(500, 18rem, 120%);
 	border-radius: 10rem;
 	border: 1rem solid transparent;
 	transition: all 0.15s ease-in;

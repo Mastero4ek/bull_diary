@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .signup_form_wrapper {
 	width: 80%;

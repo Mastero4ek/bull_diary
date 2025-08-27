@@ -23,7 +23,7 @@ import {
 } from '@/redux/slices/ordersSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
-import { DoughnutChart } from './DougnutChart'
+import { PieChart } from './PieChart'
 
 export const TablePage = () => {
 	const { t } = useTranslation()
@@ -66,9 +66,8 @@ export const TablePage = () => {
 					</span>
 				</span>
 			),
-			width: '100%',
 		},
-		{ Header: t('table.symbol'), accessor: 'symbol', width: '100%' },
+		{ Header: t('table.symbol'), accessor: 'symbol' },
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
@@ -79,7 +78,6 @@ export const TablePage = () => {
 					{capitalize(value === 'Sell' ? t('table.long') : t('table.short'))}
 				</div>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.qty'),
@@ -87,7 +85,6 @@ export const TablePage = () => {
 			Cell: ({ cell: { value } }) => (
 				<>{amount ? '****' : parseFloat(value).toFixed(4)}</>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.margin'),
@@ -95,7 +92,6 @@ export const TablePage = () => {
 			Cell: ({ cell: { value } }) => (
 				<>{amount ? '****' : parseFloat(value).toFixed(2)}</>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.pnl'),
@@ -117,7 +113,6 @@ export const TablePage = () => {
 					).toFixed(2)}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.roi'),
@@ -139,7 +134,6 @@ export const TablePage = () => {
 					).toFixed(2)}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.actions'),
@@ -167,7 +161,6 @@ export const TablePage = () => {
 					</div>
 				)
 			},
-			width: 130,
 		},
 	]
 
@@ -359,7 +352,7 @@ export const TablePage = () => {
 			</div>
 
 			<OuterBlock>
-				<DoughnutChart syncWarning={syncWarning} />
+				<PieChart syncWarning={syncWarning} />
 			</OuterBlock>
 		</PageLayout>
 	)

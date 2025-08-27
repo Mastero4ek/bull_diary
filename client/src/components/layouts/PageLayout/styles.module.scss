@@ -1,7 +1,17 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .page_wrapper {
 	width: 100%;
 	height: 100%;
 	padding-right: 40rem;
+
+	@include mixins.tablet {
+		padding-right: 16rem;
+	}
+
+	@include mixins.phone {
+		padding-right: 0;
+	}
 }
 
 .desc_layout {
@@ -25,6 +35,11 @@
 	padding: 40rem;
 	position: relative;
 	min-height: calc(100vh - 200rem);
+
+	@include mixins.tablet {
+		padding: 20rem;
+		gap: 20rem;
+	}
 }
 
 .page_content {
@@ -34,6 +49,12 @@
 
 	article {
 		height: fit-content;
+	}
+
+	@include mixins.tablet {
+		display: flex;
+		flex-direction: column-reverse;
+		gap: 20rem;
 	}
 }
 
@@ -65,6 +86,11 @@
 			height: 24rem;
 			fill: var(--white);
 		}
+	}
+
+	@include mixins.tablet {
+		padding: 20rem;
+		gap: 20rem;
 	}
 }
 
@@ -100,5 +126,23 @@
 
 	h4 {
 		color: var(--primaryHov);
+	}
+
+	@include mixins.tablet {
+		grid-template-columns: 60rem 1fr;
+
+		svg {
+			width: 60rem;
+			height: 60rem;
+		}
+	}
+
+	@include mixins.phone {
+		grid-template-columns: 40rem 1fr;
+
+		svg {
+			width: 40rem;
+			height: 40rem;
+		}
 	}
 }

@@ -6,6 +6,8 @@ import React, {
 } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-scroll';
 
 import { Icon } from '@/components/ui/general/Icon';
 import { SideBarItem } from '@/components/ui/general/SideBarItem';
@@ -16,9 +18,73 @@ export const SettingsList = React.memo(() => {
 	const selectRef = useRef()
 	const { t } = useTranslation()
 	const [open, setOpen] = useState(false)
+	const { isTablet } = useSelector(state => state.settings)
 
 	const themeItem = { name: t('sidebar.theme'), icon: 'theme' }
 	const languageItem = { name: t('sidebar.language'), icon: 'language' }
+
+	const mobileMenu = [
+		{
+			id: 0,
+			name: (
+				<Link
+					onClick={() => setOpen(false)}
+					to={'manual'}
+					spy={true}
+					smooth={true}
+					duration={500}
+				>
+					<span>{t('nav.manual')}</span>
+				</Link>
+			),
+			icon: 'manual',
+		},
+		{
+			id: 1,
+			name: (
+				<Link
+					onClick={() => setOpen(false)}
+					to={'advantages'}
+					spy={true}
+					smooth={true}
+					duration={500}
+				>
+					{t('nav.advantages')}
+				</Link>
+			),
+			icon: 'bookmarks',
+		},
+		{
+			id: 2,
+			name: (
+				<Link
+					onClick={() => setOpen(false)}
+					to={'platform'}
+					spy={true}
+					smooth={true}
+					duration={500}
+				>
+					{t('nav.platform')}
+				</Link>
+			),
+			icon: 'platform',
+		},
+		{
+			id: 3,
+			name: (
+				<Link
+					onClick={() => setOpen(false)}
+					to={'contacts'}
+					spy={true}
+					smooth={true}
+					duration={500}
+				>
+					{t('nav.contacts')}
+				</Link>
+			),
+			icon: 'contacts',
+		},
+	]
 
 	const toggleOpen = () => {
 		setOpen(prev => !prev)
@@ -46,7 +112,7 @@ export const SettingsList = React.memo(() => {
 				}`}
 				onClick={toggleOpen}
 			>
-				<Icon width={24} height={24} id={'settings'} />
+				<Icon width={24} height={24} id={isTablet ? 'burger' : 'settings'} />
 			</div>
 
 			<ul
@@ -56,6 +122,13 @@ export const SettingsList = React.memo(() => {
 						: `${styles.header_settings_list}`
 				}
 			>
+				{isTablet &&
+					mobileMenu.map(item => (
+						<li key={item.id}>
+							<SideBarItem item={item} />
+						</li>
+					))}
+
 				<li>
 					<SideBarItem item={themeItem} />
 				</li>

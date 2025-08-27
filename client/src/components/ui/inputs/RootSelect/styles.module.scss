@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .select_head {
 	width: 100%;
@@ -157,7 +157,7 @@
 		width: 100%;
 		background: transparent;
 		color: var(--text);
-		@include font(400, 18rem, 120%);
+		@include mixins.font(400, 18rem, 120%);
 		outline: none;
 		transition: all 0.15s ease-in-out;
 		position: relative;

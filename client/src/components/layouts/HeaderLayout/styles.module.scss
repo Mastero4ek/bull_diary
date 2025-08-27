@@ -1,3 +1,5 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .header_wrapper {
 	width: 100%;
 	padding: 20rem 40rem;
@@ -9,6 +11,12 @@
 	background-color: var(--bgLight);
 	box-shadow: var(--shadowInner);
 	position: relative;
+
+	@include mixins.tablet {
+		height: auto;
+		padding: 16rem;
+		justify-content: space-between;
+	}
 }
 
 .header_logo {
@@ -43,6 +51,12 @@
 	align-items: center;
 	justify-content: center;
 	margin-left: 40rem;
+	position: relative;
+
+	@include mixins.tablet {
+		margin-left: auto;
+		margin-right: 4rem;
+	}
 }
 
 .header_user {
@@ -53,6 +67,9 @@
 	padding: 10rem 40rem;
 
 	div {
+		display: flex;
+		align-items: center;
+
 		span {
 			display: inline-block;
 			max-width: 200rem;
@@ -60,6 +77,27 @@
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+	}
+
+	@include mixins.tablet {
+		padding: 10rem 20rem;
+		gap: 16rem;
+
+		div {
+			span {
+				max-width: 180rem;
+				width: 180rem;
+			}
+		}
+	}
+
+	@include mixins.phone {
+		div {
+			span {
+				max-width: 140rem;
+				width: 140rem;
+			}
 		}
 	}
 }
@@ -80,6 +118,10 @@
 	align-items: center;
 	gap: 32rem;
 	margin-left: auto;
+
+	@include mixins.tablet {
+		gap: 20rem;
+	}
 }
 
 .header_settings_wrap {
@@ -88,21 +130,32 @@
 
 .header_settings_head {
 	overflow: hidden;
-	cursor: pointer;
+
 	transition: all 0.15s ease-in-out;
 
 	svg {
 		pointer-events: none;
-		cursor: pointer;
 		width: 24rem;
 		height: 24rem;
 		transition: all 0.15s ease-in-out;
 		fill: var(--text);
 	}
 
-	&:hover {
+	@include mixins.desktop {
+		cursor: pointer;
+
+		&:hover {
+			svg {
+				cursor: pointer;
+				fill: var(--primaryHov);
+			}
+		}
+	}
+
+	@include mixins.tablet {
 		svg {
-			fill: var(--primaryHov);
+			width: 20rem;
+			height: 20rem;
 		}
 	}
 }
@@ -116,7 +169,7 @@
 .header_settings_list {
 	width: max-content;
 	position: absolute;
-	z-index: 500;
+	z-index: 1000;
 	right: -174rem;
 	top: 57rem;
 	display: flex;
@@ -183,6 +236,18 @@
 			color: var(--text) !important;
 		}
 	}
+
+	@include mixins.tablet {
+		top: 45rem;
+		right: -50%;
+		transform: translateX(50%) rotateX(90deg);
+
+		li {
+			a {
+				cursor: default !important;
+			}
+		}
+	}
 }
 
 .header_settings_list_active {
@@ -191,4 +256,8 @@
 	opacity: 1;
 	visibility: visible;
 	transform: rotateX(0deg);
+
+	@include mixins.tablet {
+		transform: translateX(50%) rotateX(0deg);
+	}
 }

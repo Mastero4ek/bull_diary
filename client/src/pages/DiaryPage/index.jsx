@@ -58,7 +58,7 @@ export const DiaryPage = React.memo(() => {
 	const displayPositions = filteredPositions
 
 	const columns = [
-		{ Header: t('table.symbol'), accessor: 'symbol', width: '100%' },
+		{ Header: t('table.symbol'), accessor: 'symbol' },
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
@@ -69,13 +69,11 @@ export const DiaryPage = React.memo(() => {
 					{value === 'long' ? t('table.buy') : t('table.sell')}
 				</div>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.leverage'),
 			accessor: 'leverage',
 			Cell: ({ cell: { value } }) => <span>{value}X</span>,
-			width: '100%',
 		},
 		{
 			Header: t('table.profit'),
@@ -97,7 +95,6 @@ export const DiaryPage = React.memo(() => {
 					).toFixed(4)}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.actions'),
@@ -122,7 +119,6 @@ export const DiaryPage = React.memo(() => {
 					/>
 				</div>
 			),
-			width: 130,
 		},
 	]
 

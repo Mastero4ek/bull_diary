@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .table_wrapper {
 	display: flex;
@@ -10,6 +10,11 @@
 	overflow: hidden;
 	min-height: 495rem;
 	position: relative;
+
+	@include mixins.tablet {
+		gap: 16rem;
+		min-height: 300rem;
+	}
 }
 
 .table {
@@ -38,7 +43,7 @@
 
 	th {
 		text-align: left;
-		@include font(500, 18rem, 120%);
+		@include mixins.font(500, 18rem, 120%);
 		padding: 10rem 14rem;
 		color: var(--text);
 		cursor: pointer;
@@ -46,9 +51,11 @@
 		transition: all 0.15s ease-in-out;
 		opacity: 0.35;
 
-		&:hover {
-			color: var(--primaryHov);
-			opacity: 0.75;
+		@include mixins.desktop {
+			&:hover {
+				color: var(--primaryHov);
+				opacity: 0.75;
+			}
 		}
 
 		&:last-child {
@@ -73,24 +80,26 @@
 	}
 
 	tbody {
-		&:hover {
-			tr:hover {
-				transform: scale(1.02);
-				opacity: 1;
+		@include mixins.desktop {
+			&:hover {
+				tr:hover {
+					transform: scale(1.02);
+					opacity: 1;
 
-				&::after {
-					height: 2rem;
-					width: 98%;
+					&::after {
+						height: 2rem;
+						width: 98%;
+					}
+
+					td:first-child {
+						color: var(--primaryDef);
+					}
 				}
 
-				td:first-child {
-					color: var(--primaryDef);
+				tr:not(:hover) {
+					opacity: 0.5;
+					transform: scale(0.99);
 				}
-			}
-
-			tr:not(:hover) {
-				opacity: 0.5;
-				transform: scale(0.99);
 			}
 		}
 
@@ -173,8 +182,6 @@
 			}
 
 			span {
-				// display: inline-block;
-				// width: 100%;
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
@@ -184,6 +191,55 @@
 				width: 40rem;
 				height: 40rem;
 				border-radius: 50%;
+			}
+		}
+	}
+
+	@include mixins.tablet {
+		thead {
+			clip: rect(0 0 0 0);
+			height: 1rem;
+			margin: -1rem;
+			overflow: hidden;
+			padding: 0;
+			position: absolute;
+			width: 1rem;
+		}
+
+		tbody {
+			tr {
+				display: block;
+				padding-bottom: 16rem;
+				margin-bottom: 16rem;
+			}
+
+			td {
+				display: flex;
+				justify-content: space-between;
+				width: 100%;
+				gap: 8rem;
+				padding: 8rem 0;
+
+				div {
+					text-align: right;
+					margin: unset !important;
+				}
+
+				&::before {
+					content: attr(data-label);
+					float: left;
+					@include mixins.font(500, 18rem, 120%);
+				}
+
+				&:first-child {
+					div {
+						margin: unset !important;
+					}
+				}
+
+				&:last-child div:nth-of-type(1) {
+					width: auto;
+				}
 			}
 		}
 	}
@@ -203,10 +259,15 @@
 	justify-content: center;
 	gap: 16rem;
 	margin-top: auto;
-	@include font(400, 18rem, 120%);
+	@include mixins.font(400, 18rem, 120%);
 
 	a:hover {
 		color: var(--primaryHov);
+	}
+
+	@include mixins.tablet {
+		gap: 8rem;
+		@include mixins.font(400, 16rem, 120%);
 	}
 }
 
@@ -219,6 +280,11 @@
 	align-items: center;
 	transition: all 0.15s linear;
 	box-shadow: var(--shadowOuter);
+
+	@include mixins.tablet {
+		width: 32rem;
+		height: 32rem;
+	}
 }
 
 .active_page {
@@ -278,6 +344,13 @@
 			transition: all 0.15s linear;
 			border-top: 5rem solid transparent;
 			border-bottom: 5rem solid transparent;
+		}
+	}
+
+	@include mixins.tablet {
+		button {
+			width: 32rem;
+			height: 32rem;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .sidebar_wrapper {
 	display: flex;
@@ -12,6 +12,10 @@
 	border-radius: 0 20rem 20rem 0;
 	background: var(--bgLight);
 	box-shadow: var(--shadowOuter);
+
+	@include mixins.tablet {
+		width: 80rem;
+	}
 }
 
 .sidebar_open {
@@ -21,6 +25,14 @@
 .sidebar_header {
 	width: 100%;
 	padding: 20rem;
+
+	@include mixins.tablet {
+		padding: 26rem 10rem;
+
+		img {
+			margin-right: 0;
+		}
+	}
 }
 
 .sidebar_body {
@@ -39,6 +51,11 @@
 		width: 0;
 		height: 0;
 	}
+
+	@include mixins.tablet {
+		padding: 10rem;
+		margin-bottom: 20rem;
+	}
 }
 
 .sidebar_footer {
@@ -48,4 +65,8 @@
 	flex-direction: column;
 	gap: 16rem;
 	padding: 0 20rem 20rem;
+
+	@include mixins.tablet {
+		padding: 0 10rem 10rem;
+	}
 }

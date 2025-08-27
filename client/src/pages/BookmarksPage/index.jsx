@@ -38,7 +38,9 @@ export const BookmarksPage = React.memo(() => {
 	const syncWarning = useSelector(state => state.sync.warning)
 	const isSynced = useSelector(state => state.sync.isSynced)
 
-	const { mark, color, amount } = useSelector(state => state.settings)
+	const { mark, color, amount, help, isTablet, isMobile } = useSelector(
+		state => state.settings
+	)
 	const { date, limit, search, exchange, tickers } = useSelector(
 		state => state.filters
 	)
@@ -70,7 +72,6 @@ export const BookmarksPage = React.memo(() => {
 					</span>
 				</span>
 			),
-			width: '100%',
 		},
 		{ Header: t('table.symbol'), accessor: 'symbol' },
 		{
@@ -83,7 +84,6 @@ export const BookmarksPage = React.memo(() => {
 					{capitalize(value === 'long' ? t('table.buy') : t('table.sell'))}
 				</div>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.qty'),
@@ -91,7 +91,6 @@ export const BookmarksPage = React.memo(() => {
 			Cell: ({ cell: { value } }) => (
 				<>{amount ? '****' : parseFloat(value).toFixed(4)}</>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.margin'),
@@ -99,7 +98,6 @@ export const BookmarksPage = React.memo(() => {
 			Cell: ({ cell: { value } }) => (
 				<>{amount ? '****' : parseFloat(value).toFixed(2)}</>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.pnl'),
@@ -121,7 +119,6 @@ export const BookmarksPage = React.memo(() => {
 					).toFixed(2)}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.roi'),
@@ -143,7 +140,6 @@ export const BookmarksPage = React.memo(() => {
 					).toFixed(2)}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.actions'),
@@ -171,7 +167,6 @@ export const BookmarksPage = React.memo(() => {
 					</div>
 				</div>
 			),
-			width: 130,
 		},
 	]
 
@@ -356,7 +351,7 @@ export const BookmarksPage = React.memo(() => {
 
 	return (
 		<PageLayout
-			chartWidth={460}
+			chartWidth={help && isTablet && isMobile ? 0 : 460}
 			update={handleClickUpdate}
 			periods={true}
 			calendar={true}
@@ -384,21 +379,25 @@ export const BookmarksPage = React.memo(() => {
 				/>
 			</div>
 
-			<OuterBlock>
-				<DescLayout
-					icon={'mark'}
-					title={
-						<span
-							dangerouslySetInnerHTML={{ __html: t('page.bookmarks.title') }}
-						></span>
-					}
-					description={
-						<span
-							dangerouslySetInnerHTML={{ __html: t('page.bookmarks.subtitle') }}
-						></span>
-					}
-				/>
-			</OuterBlock>
+			{(!help || (!isTablet && !isMobile)) && (
+				<OuterBlock>
+					<DescLayout
+						icon={'mark'}
+						title={
+							<span
+								dangerouslySetInnerHTML={{ __html: t('page.bookmarks.title') }}
+							></span>
+						}
+						description={
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.bookmarks.subtitle'),
+								}}
+							></span>
+						}
+					/>
+				</OuterBlock>
+			)}
 		</PageLayout>
 	)
 })

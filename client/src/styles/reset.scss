@@ -1,5 +1,5 @@
-@import './fonts.scss';
-@import './variables.scss';
+@use './fonts.scss';
+@use './variables.scss';
 
 *,
 *::before,
@@ -21,6 +21,7 @@ html {
 	margin: 0;
 	padding: 0;
 	-webkit-text-size-adjust: 100%;
+	overflow-x: hidden;
 }
 
 @media (max-width: 1920px) {
@@ -44,6 +45,7 @@ body {
 	width: 100%;
 	color: var(--text);
 	background: var(--bgLight);
+	overflow-x: hidden;
 }
 
 a {

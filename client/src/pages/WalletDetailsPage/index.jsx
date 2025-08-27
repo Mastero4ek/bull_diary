@@ -29,7 +29,7 @@ export const WalletDetailsPage = React.memo(() => {
 	const dispatch = useDispatch()
 	const { t } = useTranslation()
 
-	const { mark, color, amount } = useSelector(state => state.settings)
+	const { mark, color, amount, isTablet } = useSelector(state => state.settings)
 	const {
 		transactions,
 		serverStatus,
@@ -81,7 +81,13 @@ export const WalletDetailsPage = React.memo(() => {
 			Header: t('table.closed_time'),
 			accessor: 'transactionTime',
 			Cell: ({ row: { original } }) => (
-				<span>
+				<span
+					style={{
+						display: `${isTablet ? 'flex' : 'inline'}`,
+						gap: '10rem',
+						flexWrap: 'wrap',
+					}}
+				>
 					{moment(original.date).format('DD/MM/YYYY')}
 					<br />
 					<span style={{ fontWeight: '400', opacity: '0.5' }}>
@@ -89,7 +95,6 @@ export const WalletDetailsPage = React.memo(() => {
 					</span>
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.symbol'),
@@ -97,7 +102,6 @@ export const WalletDetailsPage = React.memo(() => {
 			Cell: ({ cell: { value }, row: { original } }) => (
 				<span>{value || original.currency || ''}</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.side'),
@@ -131,7 +135,6 @@ export const WalletDetailsPage = React.memo(() => {
 					</span>
 				</div>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.type'),
@@ -141,7 +144,6 @@ export const WalletDetailsPage = React.memo(() => {
 					{getTransactionTypeLabel(value)}
 				</b>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.funding'),
@@ -163,7 +165,6 @@ export const WalletDetailsPage = React.memo(() => {
 					).toFixed(4)}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.fee'),
@@ -185,7 +186,6 @@ export const WalletDetailsPage = React.memo(() => {
 					).toFixed(4)}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.change'),
@@ -207,7 +207,6 @@ export const WalletDetailsPage = React.memo(() => {
 					).toFixed(4)}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.balance'),
@@ -227,13 +226,16 @@ export const WalletDetailsPage = React.memo(() => {
 						: parseFloat(value).toFixed(4)}
 				</b>
 			),
-			width: '100%',
 		},
 		{
 			Header: '',
 			accessor: 'actions',
 			Cell: ({ row }) => (
 				<div
+					style={{
+						width: '40rem',
+						height: '40rem',
+					}}
 					className={`${styles.info_table_icon} ${
 						row.original.change > 0
 							? styles.info_table_icon_up
@@ -247,7 +249,6 @@ export const WalletDetailsPage = React.memo(() => {
 					)}
 				</div>
 			),
-			width: 130,
 		},
 	]
 

@@ -53,6 +53,7 @@ export const UsersPage = () => {
 		sort,
 	} = useSelector(state => state.users)
 	const { user } = useSelector(state => state.candidate)
+	const { help, isTablet, isMobile } = useSelector(state => state.settings)
 
 	const columns = [
 		{
@@ -70,12 +71,10 @@ export const UsersPage = () => {
 					}}
 				/>
 			),
-			width: 100,
 		},
 		{
 			Header: t('table.name'),
 			accessor: 'name',
-			width: '100%',
 			Cell: ({ cell: { value }, row }) => (
 				<>
 					{value} {row.original.last_name}
@@ -85,7 +84,6 @@ export const UsersPage = () => {
 		{
 			Header: t('table.email'),
 			accessor: 'email',
-			width: '100%',
 		},
 		{
 			Header: t('table.created_at'),
@@ -99,7 +97,6 @@ export const UsersPage = () => {
 					</span>
 				</b>
 			),
-			width: '100%',
 		},
 		// {
 		// 	Header: t('table.updated_at'),
@@ -113,12 +110,10 @@ export const UsersPage = () => {
 		// 			</span>
 		// 		</b>
 		// 	),
-		// 	width: '100%',
 		// },
 		{
 			Header: t('table.active'),
 			accessor: 'inactive',
-			width: '100%',
 			Cell: ({ cell: { value } }) =>
 				value ? <Icon id={'user-inactive'} /> : <Icon id={'user-active'} />,
 		},
@@ -166,7 +161,6 @@ export const UsersPage = () => {
 					</div>
 				</div>
 			),
-			width: 130,
 		},
 	]
 
@@ -361,7 +355,7 @@ export const UsersPage = () => {
 	return (
 		<PageLayout
 			update={handleClickUpdate}
-			chartWidth={400}
+			chartWidth={help && isTablet && isMobile ? 0 : 400}
 			entries={true}
 			periods={true}
 			calendar={true}
@@ -386,29 +380,31 @@ export const UsersPage = () => {
 				/>
 			</div>
 
-			<OuterBlock>
-				<DescLayout
-					icon={'all-users'}
-					title={
-						<span
-							dangerouslySetInnerHTML={{ __html: t('page.users.title') }}
-						></span>
-					}
-					description={
-						<span
-							dangerouslySetInnerHTML={{ __html: t('page.users.subtitle') }}
-						></span>
-					}
-				>
-					{user && user?.role === 'admin' && (
-						<RootButton
-							icon={'sign-up'}
-							text={t('button.create_user')}
-							onClickBtn={() => handleClickAddUser()}
-						/>
-					)}
-				</DescLayout>
-			</OuterBlock>
+			{(!help || (!isTablet && !isMobile)) && (
+				<OuterBlock>
+					<DescLayout
+						icon={'all-users'}
+						title={
+							<span
+								dangerouslySetInnerHTML={{ __html: t('page.users.title') }}
+							></span>
+						}
+						description={
+							<span
+								dangerouslySetInnerHTML={{ __html: t('page.users.subtitle') }}
+							></span>
+						}
+					>
+						{user && user?.role === 'admin' && (
+							<RootButton
+								icon={'sign-up'}
+								text={t('button.create_user')}
+								onClickBtn={() => handleClickAddUser()}
+							/>
+						)}
+					</DescLayout>
+				</OuterBlock>
+			)}
 		</PageLayout>
 	)
 }

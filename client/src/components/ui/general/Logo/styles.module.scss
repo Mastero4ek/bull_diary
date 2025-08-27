@@ -1,3 +1,5 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .logo_wrapper {
 	min-width: max-content;
 	display: flex;
@@ -9,6 +11,20 @@
 		width: 50rem;
 		height: 50rem;
 		margin-right: 20rem;
+	}
+
+	@include mixins.tablet {
+		img {
+			margin-right: 10rem;
+		}
+	}
+
+	@include mixins.phone {
+		padding: 0;
+
+		img {
+			margin-right: unset;
+		}
 	}
 }
 

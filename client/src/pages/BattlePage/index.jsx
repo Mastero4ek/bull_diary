@@ -1,52 +1,41 @@
-import React, {
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useCallback, useEffect } from 'react'
 
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
-import avatarDefault from '@/assets/images/general/default_avatar.png';
+import avatarDefault from '@/assets/images/general/default_avatar.png'
+import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { TableLayout } from '@/components/layouts/TableLayout'
+import { ControlButton } from '@/components/ui/buttons/ControlButton'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { ClosedContent } from '@/components/ui/general/ClosedContent'
+import { CountdownTimer } from '@/components/ui/general/CountdownTimer'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { capitalize, colorizedNum } from '@/helpers/functions'
+import { ConfirmPopup } from '@/popups/ConfirmPopup'
+import { NewTournamentPopup } from '@/popups/NewTournamentPopup'
+import { getUser } from '@/redux/slices/candidateSlice'
+import { setSearch } from '@/redux/slices/filtersSlice'
 import {
-  useNotification,
-} from '@/components/layouts/NotificationLayout/NotificationProvider';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { TableLayout } from '@/components/layouts/TableLayout';
-import { ControlButton } from '@/components/ui/buttons/ControlButton';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { ClosedContent } from '@/components/ui/general/ClosedContent';
-import { CountdownTimer } from '@/components/ui/general/CountdownTimer';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import {
-  capitalize,
-  colorizedNum,
-} from '@/helpers/functions';
-import { ConfirmPopup } from '@/popups/ConfirmPopup';
-import { NewTournamentPopup } from '@/popups/NewTournamentPopup';
-import { getUser } from '@/redux/slices/candidateSlice';
-import { setSearch } from '@/redux/slices/filtersSlice';
-import {
-  addTournamentUser,
-  clearTournaments,
-  clearTournamentUsersList,
-  deleteTournament,
-  getTournaments,
-  getTournamentUsersList,
-  removeTournamentUser,
-  setPage,
-  setSort,
-} from '@/redux/slices/tournamentSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	addTournamentUser,
+	clearTournaments,
+	clearTournamentUsersList,
+	deleteTournament,
+	getTournaments,
+	getTournamentUsersList,
+	removeTournamentUser,
+	setPage,
+	setSort,
+} from '@/redux/slices/tournamentSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const BattlePage = () => {
 	const { t } = useTranslation()
@@ -88,12 +77,10 @@ export const BattlePage = () => {
 					}}
 				/>
 			),
-			width: 100,
 		},
 		{
 			Header: t('table.name'),
 			accessor: 'name',
-			width: '100%',
 			Cell: ({ cell: { value }, row }) => (
 				<>
 					{row.original.name} {row.original.last_name}
@@ -104,13 +91,11 @@ export const BattlePage = () => {
 			Header: t('table.level'),
 			accessor: 'level',
 			Cell: ({ cell: { value } }) => <>{capitalize(value.name)}</>,
-			width: '100%',
 		},
 		{
 			Header: t('table.score'),
 			accessor: 'score',
 			Cell: ({ cell: { value }, row }) => <>{row.original.level?.value}</>,
-			width: '100%',
 		},
 		{
 			Header: t('table.roi'),
@@ -130,7 +115,6 @@ export const BattlePage = () => {
 						: value}
 				</span>
 			),
-			width: '100%',
 		},
 		{
 			Header: t('table.actions'),
@@ -160,7 +144,6 @@ export const BattlePage = () => {
 					)}
 				</div>
 			),
-			width: 130,
 		},
 	]
 

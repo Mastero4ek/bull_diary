@@ -1,47 +1,57 @@
-import './phone_input.scss'
+import './phone_input.scss';
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import PhoneInput from 'react-phone-input-2'
-import ru from 'react-phone-input-2/lang/ru.json'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useParams } from 'react-router-dom'
-
-import avatarDefault from '@/assets/images/general/default_avatar.png'
-import { useNotification } from '@/components/layouts/NotificationLayout'
-import { PageLayout } from '@/components/layouts/PageLayout'
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { AvatarUserPopup } from '@/popups/AvatarUserPopup'
-import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import PhoneInput from 'react-phone-input-2';
+import ru from 'react-phone-input-2/lang/ru.json';
 import {
-	editUser as editUserCandidate,
-	getUser as getUserCandidate,
-	removeCover as removeCoverCandidate,
-	setChangeUser as setChangeUserCandidate,
-	setPhone as setPhoneCandidate,
-} from '@/redux/slices/candidateSlice'
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 import {
-	editUser as editUserUsers,
-	getUser as getUserUsers,
-	removeCover as removeCoverUsers,
-	setChangeUser as setChangeUserUsers,
-	setPhone as setPhoneUsers,
-} from '@/redux/slices/usersSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 
-import { Level } from './Level'
-import styles from './styles.module.scss'
+import avatarDefault from '@/assets/images/general/default_avatar.png';
+import { useNotification } from '@/components/layouts/NotificationLayout';
+import { PageLayout } from '@/components/layouts/PageLayout';
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { Icon } from '@/components/ui/general/Icon';
+import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { AvatarUserPopup } from '@/popups/AvatarUserPopup';
+import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
+import {
+  editUser as editUserCandidate,
+  getUser as getUserCandidate,
+  removeCover as removeCoverCandidate,
+  setChangeUser as setChangeUserCandidate,
+  setPhone as setPhoneCandidate,
+} from '@/redux/slices/candidateSlice';
+import {
+  editUser as editUserUsers,
+  getUser as getUserUsers,
+  removeCover as removeCoverUsers,
+  setChangeUser as setChangeUserUsers,
+  setPhone as setPhoneUsers,
+} from '@/redux/slices/usersSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-export const ProfilePage = React.memo(() => {
+import { Level } from './Level';
+import styles from './styles.module.scss';
+
+export const ProfilePage = () => {
 	const { t } = useTranslation()
 	const [popup, setPopup] = useState(false)
 	const [password, setPassword] = useState('')
@@ -62,6 +72,7 @@ export const ProfilePage = React.memo(() => {
 	const { user, changeUser, serverStatus, errorArray } = useSelector(state =>
 		isAdminContext ? state.users : state.candidate
 	)
+	const { help, isTablet, isMobile } = useSelector(state => state.settings)
 
 	const dispatch = useDispatch()
 
@@ -261,7 +272,7 @@ export const ProfilePage = React.memo(() => {
 
 	return (
 		<PageLayout
-			chartWidth={600}
+			chartWidth={help && isTablet && isMobile ? 0 : 600}
 			filter={false}
 			entries={true}
 			periods={true}
@@ -287,29 +298,33 @@ export const ProfilePage = React.memo(() => {
 									)}
 								</InnerBlock>
 
-								<div className={styles.profile_photo_buttons}>
-									<RootButton
-										onClickBtn={handleRemoveCover}
-										icon={photoFile ? 'cancel' : 'cross'}
-										disabled={
-											serverStatus === 'loading' ||
-											!(changeUser?.cover || photoFile)
-										}
-									/>
+								{!isTablet && !isMobile ? (
+									<div className={styles.profile_photo_buttons}>
+										<RootButton
+											onClickBtn={handleRemoveCover}
+											icon={photoFile ? 'cancel' : 'cross'}
+											disabled={
+												serverStatus === 'loading' ||
+												!(changeUser?.cover || photoFile)
+											}
+										/>
 
-									<RootButton
-										type={'submit'}
-										onClickBtn={handleSubmit(data => submit(data))}
-										text={t('button.save')}
-										icon='save-changes'
-										disabled={
-											serverStatus === 'loading' ||
-											!changeUser ||
-											!user ||
-											!hasChanges()
-										}
-									/>
-								</div>
+										<RootButton
+											type={'submit'}
+											onClickBtn={handleSubmit(data => submit(data))}
+											text={t('button.save')}
+											icon='save-changes'
+											disabled={
+												serverStatus === 'loading' ||
+												!changeUser ||
+												!user ||
+												!hasChanges()
+											}
+										/>
+									</div>
+								) : (
+									<Level />
+								)}
 							</div>
 
 							<form className={styles.profile_info_form}>
@@ -442,41 +457,69 @@ export const ProfilePage = React.memo(() => {
 										value: photoFile || changeUser?.cover || '',
 									})}
 								/>
+
+								{(isTablet || isMobile) && (
+									<div className={styles.profile_photo_buttons}>
+										<RootButton
+											onClickBtn={handleRemoveCover}
+											icon={photoFile ? 'cancel' : 'cross'}
+											disabled={
+												serverStatus === 'loading' ||
+												!(changeUser?.cover || photoFile)
+											}
+										/>
+
+										<RootButton
+											type={'submit'}
+											onClickBtn={handleSubmit(data => submit(data))}
+											text={t('button.save')}
+											icon='save-changes'
+											disabled={
+												serverStatus === 'loading' ||
+												!changeUser ||
+												!user ||
+												!hasChanges()
+											}
+										/>
+									</div>
+								)}
 							</form>
 						</div>
 
-						<Level />
+						{!isTablet && !isMobile && <Level />}
 					</div>
 				</OuterBlock>
 			</div>
 
-			<OuterBlock>
-				<DescLayout
-					icon={'profile'}
-					title={
-						<span
-							dangerouslySetInnerHTML={{
-								__html: t('page.profile.title'),
-							}}
-						></span>
-					}
-					description={
-						<span
-							dangerouslySetInnerHTML={{
-								__html: t('page.profile.subtitle'),
-							}}
-						></span>
-					}
-				>
-					<div className={styles.removeBtn}>
-						<RootButton
-							onClickBtn={handleClickRemove}
-							text={t('button.remove')}
-							icon={'remove'}
-						/>
-					</div>
-				</DescLayout>
-			</OuterBlock>
+			{(!help || (!isTablet && !isMobile)) && (
+				<OuterBlock>
+					<DescLayout
+						icon={'profile'}
+						title={
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.profile.title'),
+								}}
+							></span>
+						}
+						description={
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.profile.subtitle'),
+								}}
+							></span>
+						}
+					>
+						<div className={styles.removeBtn}>
+							<RootButton
+								onClickBtn={handleClickRemove}
+								text={t('button.remove')}
+								icon={'remove'}
+							/>
+						</div>
+					</DescLayout>
+				</OuterBlock>
+			)}
 		</PageLayout>
 	)
-})
+}

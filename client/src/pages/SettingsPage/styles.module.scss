@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .settings_wrapper {
 	display: flex;
@@ -45,6 +45,19 @@
 	form {
 		gap: 20rem;
 	}
+
+	@include mixins.tablet {
+		padding: 20rem;
+
+		ul,
+		form {
+			gap: 20rem;
+		}
+
+		h2 {
+			@include mixins.font(700, 25rem, 125%);
+		}
+	}
 }
 
 .keys_wrapper {
@@ -70,14 +83,20 @@
 .keys_header,
 .tuning_header {
 	cursor: pointer;
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr 40rem;
 	align-items: center;
-	justify-content: space-between;
+	gap: 20rem;
 
 	&:hover {
 		button {
 			background: var(--primaryHov);
 		}
+	}
+
+	div {
+		display: flex;
+		align-items: center;
 	}
 
 	button {
@@ -92,6 +111,18 @@
 			border-right: 7.5rem solid transparent;
 			border-top: 12rem solid var(--white);
 			border-radius: 5rem;
+		}
+	}
+
+	@include mixins.phone {
+		gap: 20rem;
+
+		h2 {
+			@include mixins.font(700, 26rem, 125%);
+		}
+
+		div {
+			width: fit-content;
 		}
 	}
 }
@@ -175,6 +206,12 @@
 			background: var(--red);
 		}
 	}
+
+	@include mixins.tablet {
+		gap: 14rem;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
 }
 
 .keys_selected_icon {
@@ -195,6 +232,7 @@
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 16rem;
+		gap: 20rem;
 
 		.sync_progress_controls {
 			display: flex;
@@ -211,7 +249,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				@include font(400, 16rem, 120%);
+				@include mixins.font(400, 16rem, 120%);
 				padding: 0;
 				border-radius: 50%;
 				transition: background-color 0.2s;
@@ -270,6 +308,19 @@
 			}
 		}
 	}
+
+	@include mixins.tablet {
+		padding: 10rem 20rem;
+
+		.sync_progress_header {
+			margin-bottom: 10rem;
+			gap: 10rem;
+
+			.sync_progress_controls {
+				gap: 5rem;
+			}
+		}
+	}
 }
 
 @keyframes shimmer {
@@ -288,7 +339,7 @@
 	ul {
 		gap: 30rem 120rem;
 		flex-wrap: wrap;
-		max-height: 260rem;
+		max-height: 330rem;
 		padding: 0;
 
 		li {
@@ -312,6 +363,19 @@
 				&::after {
 					display: none;
 				}
+			}
+		}
+	}
+
+	@include mixins.tablet {
+		ul {
+			justify-content: space-between;
+			flex-direction: row;
+			gap: 20rem 60rem;
+			max-height: 100%;
+
+			li {
+				gap: 20rem;
 			}
 		}
 	}
@@ -436,6 +500,30 @@
 			}
 		}
 	}
+
+	@include mixins.tablet {
+		article {
+			div {
+				span {
+					svg {
+						width: 60rem;
+						height: 18rem;
+					}
+				}
+			}
+		}
+
+		ul {
+			li {
+				span {
+					svg {
+						width: 60rem;
+						height: 18rem;
+					}
+				}
+			}
+		}
+	}
 }
 
 .keys_label {
@@ -451,7 +539,7 @@
 		width: 100%;
 		padding: 15rem;
 		padding-right: 40rem;
-		@include font(500, 18rem, 120%);
+		@include mixins.font(500, 18rem, 120%);
 		border-radius: 10rem;
 		border: 1rem solid transparent;
 		transition: all 0.15s ease-in-out;
@@ -505,6 +593,12 @@
 		svg {
 			width: 24rem;
 			height: 24rem;
+		}
+	}
+
+	@include mixins.phone {
+		div {
+			align-items: flex-start;
 		}
 	}
 }

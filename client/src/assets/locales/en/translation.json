@@ -287,7 +287,7 @@
 		},
 		"settings": {
 			"tuning_title": "Application <br /> Settings",
-			"tuning_description": "Customize your trading experience with personalized settings. <br/><br/> <ul><li><strong>Language:</strong> Switch between Russian and&nbsp;English interfaces.</li><li><strong>Dark Theme:</strong> Enable dark mode for&nbsp;comfortable trading in&nbsp;low-light conditions.</li><li><strong>Show Markers:</strong> Display visual indicators for&nbsp;buy/sell positions in&nbsp;trade tables.</li><li><strong>Hide Amounts:</strong> Conceal financial data for&nbsp;privacy and&nbsp;security.</li><li><strong>Text Highlighting:</strong> Color-code positive and&nbsp;negative values for&nbsp;better readability.</li><li><strong>Sidebar Control:</strong> Manage sidebar visibility&nbsp;- keep&nbsp;it&nbsp;open, closed, or&nbsp;unblocked for&nbsp;easy navigation.</li></ul>",
+			"tuning_description": "Customize your trading experience with personalized settings. <br/><br/> <ul><li><strong>Language:</strong> Switch between Russian and&nbsp;English interfaces.</li><li><strong>Dark Theme:</strong> Enable dark mode for&nbsp;comfortable trading in&nbsp;low-light conditions.</li><li><strong>Show Markers:</strong> Display visual indicators for&nbsp;buy/sell positions in&nbsp;trade tables.</li><li><strong>Hide Amounts:</strong> Conceal financial data for&nbsp;privacy and&nbsp;security.</li><li><strong>Text Highlighting:</strong> Color-code positive and&nbsp;negative values for&nbsp;better readability.</li><li><strong>Hide Description:</strong> Hide page descriptions on&nbsp;mobile devices for&nbsp;easier reading.</li><li><strong>Sidebar:</strong> Manage sidebar visibility&nbsp;- keep&nbsp;it&nbsp;open, closed, or&nbsp;unblocked for&nbsp;easy navigation.</li></ul>",
 			"keys_title": "Exchange <br /> Connection",
 			"keys_description": "Connect your cryptocurrency exchange accounts to&nbsp;import trading data. <br/><br/> <ul><li><strong>Supported Exchanges:</strong> Bybit, MEXC, and OKX with futures trading support.</li><li><strong>API Keys:</strong> Securely store your read-only API keys for&nbsp;automatic data synchronization.</li><li><strong>Data Sync:</strong> Import trading history from the&nbsp;last 180&nbsp;days with real-time progress tracking.</li><li><strong>Background Processing:</strong> Synchronization runs automatically without interrupting your workflow.</li><li><strong>Multi-Exchange:</strong> Connect multiple exchanges simultaneously for&nbsp;comprehensive portfolio analysis.</li></ul>",
 			"keys_api_title": "Api keys",
@@ -303,6 +303,7 @@
 			"tuning_shootouts": "Show shootouts",
 			"tuning_amounts": "Hide amounts",
 			"tuning_color": "Highlight text",
+			"tuning_help": "Hide description",
 			"tuning_sidebar": "Side bar",
 			"tuning_accordion_title": "Your settings",
 			"tuning_sidebar_open": "Open",
@@ -361,7 +362,9 @@
 			"chart_income": "Income",
 			"chart_lession": "Lession",
 			"chart_profit": "Profit (ROI%): ",
-			"chart_loss": "Loss (ROI%): "
+			"chart_loss": "Loss (ROI%): ",
+			"orders": "Orders: ",
+			"all_orders": "Total<br/>orders: "
 		},
 		"diary": {
 			"update_success": "Positions updated successfully!",

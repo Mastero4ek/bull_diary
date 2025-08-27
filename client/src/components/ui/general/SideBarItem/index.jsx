@@ -12,6 +12,7 @@ import { Icon } from '@/components/ui/general/Icon'
 import { InnerBlock } from '@/components/ui/general/InnerBlock'
 import { OuterBlock } from '@/components/ui/general/OuterBlock'
 import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch'
+import { usePreloadComponent } from '@/hooks/useLazyComponent'
 import i18n from '@/i18n'
 import { logout } from '@/redux/slices/candidateSlice'
 import {
@@ -24,14 +25,31 @@ import { unwrapResult } from '@reduxjs/toolkit'
 
 import styles from './styles.module.scss'
 
-export const SideBarItem = React.memo(({ item }) => {
+export const SideBarItem = React.memo(({ item, open = false }) => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const location = useLocation()
 	const { t } = useTranslation()
 	const { showSuccess, showError } = useNotification()
 
-	const { language, theme, sideBar } = useSelector(state => state.settings)
+	const routeToComponentMap = {
+		'/wallet': 'WalletPage',
+		'/diary/positions': 'DiaryPage',
+		'/table/positions': 'TablePage',
+		'/bookmarks/positions': 'BookmarksPage',
+		'/battle/users': 'BattlePage',
+		'/all-users': 'UsersPage',
+		'/profile': 'ProfilePage',
+		'/settings': 'SettingsPage',
+		'/contacts': 'ContactsPage',
+	}
+
+	const componentName = routeToComponentMap[item?.link]
+	const { preload } = usePreloadComponent(componentName)
+
+	const { language, sideBar, isTablet, theme } = useSelector(
+		state => state.settings
+	)
 	const { user } = useSelector(state => state.candidate)
 
 	const languageList = ['ru', 'en']
@@ -60,17 +78,6 @@ export const SideBarItem = React.memo(({ item }) => {
 		}
 	}, [dispatch, location, showSuccess, showError])
 
-	const changeTheme = useCallback(() => {
-		const currentTheme = theme === true ? false : true
-
-		dispatch(setIsLoadingTheme(true))
-		dispatch(setTheme(currentTheme))
-
-		setTimeout(() => {
-			dispatch(setIsLoadingTheme(false))
-		}, 2000)
-	}, [theme])
-
 	const changeLanguage = useCallback(
 		value => {
 			dispatch(setIsLoadingLanguage(true))
@@ -88,6 +95,17 @@ export const SideBarItem = React.memo(({ item }) => {
 		[dispatch, language]
 	)
 
+	const changeTheme = useCallback(() => {
+		const currentTheme = theme === true ? false : true
+
+		dispatch(setIsLoadingTheme(true))
+		dispatch(setTheme(currentTheme))
+
+		setTimeout(() => {
+			dispatch(setIsLoadingTheme(false))
+		}, 2000)
+	}, [theme])
+
 	const isActive = location.pathname.includes(item?.icon)
 	const ItemBlock = isActive ? InnerBlock : OuterBlock
 
@@ -103,6 +121,11 @@ export const SideBarItem = React.memo(({ item }) => {
 						? undefined
 						: handleClickItem
 				}
+				onMouseEnter={() => {
+					if (componentName) {
+						preload()
+					}
+				}}
 				className={`${item?.icon === 'theme' ? styles.item_theme : ''} ${
 					styles.sidebar_body_item
 				} ${isActive ? styles.active : ''} ${
@@ -111,8 +134,9 @@ export const SideBarItem = React.memo(({ item }) => {
 			>
 				<Icon id={item?.icon} />
 
-				{(sideBar.open ||
-					sideBar.blocked_value === 'open' ||
+				{(open ||
+					sideBar.open ||
+					(sideBar.blocked_value === 'open' && !isTablet) ||
 					location.pathname.includes('home')) && (
 					<div className={styles.sidebar_item_desc}>
 						<RootDesc>

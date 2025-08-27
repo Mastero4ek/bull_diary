@@ -1,27 +1,36 @@
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
-import { PopupDescLayout } from '@/components/layouts/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { ErrorForm } from '@/components/ui/general/ErrorForm'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { signUp } from '@/redux/slices/candidateSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import {
+  useNotification,
+} from '@/components/layouts/NotificationLayout/NotificationProvider';
+import {
+  PopupDescLayout,
+} from '@/components/layouts/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { signUp } from '@/redux/slices/candidateSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import { SignInPopup } from '../SignInPopup'
-import { SuccessSignUpPopup } from '../SuccessSignUpPopup'
-import styles from './styles.module.scss'
+import { SignInPopup } from '../SignInPopup';
+import { SuccessSignUpPopup } from '../SuccessSignUpPopup';
+import styles from './styles.module.scss';
 
 export const SignUpPopup = React.memo(() => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
+	const { isTablet } = useSelector(state => state.settings)
 
 	const { closePopup, openPopup } = usePopup()
 	const { errorMessage, errorArray } = useSelector(state => state.candidate)
@@ -38,9 +47,9 @@ export const SignUpPopup = React.memo(() => {
 		closePopup()
 
 		setTimeout(() => {
-			openPopup(<SignInPopup />)
+			openPopup(<SignInPopup />, { direction: isTablet ? 'reverse' : '' })
 		}, 150)
-	}, [])
+	}, [isTablet, openPopup])
 
 	const submit = async data => {
 		try {
@@ -179,8 +188,6 @@ export const SignUpPopup = React.memo(() => {
 							icon='sign-up'
 						/>
 					</div>
-
-					<ErrorForm error={errorMessage} bottom={60} />
 				</form>
 			</PopupFormLayout>
 

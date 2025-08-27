@@ -1,9 +1,13 @@
 import React from 'react'
+
 import ReactPaginate from 'react-paginate'
+import { useSelector } from 'react-redux'
 
 import styles from './styles.module.scss'
 
 export const Paginate = ({ page, totalPages, toPage }) => {
+	const { isTablet } = useSelector(state => state.settings)
+
 	return (
 		<ReactPaginate
 			containerClassName={styles.table_controls}
@@ -14,8 +18,8 @@ export const Paginate = ({ page, totalPages, toPage }) => {
 			disabledClassName={styles.disabled_button}
 			renderOnZeroPageCount={null}
 			forcePage={page - 1}
-			pageRangeDisplayed={3}
-			marginPagesDisplayed={3}
+			pageRangeDisplayed={isTablet ? 1 : 3}
+			marginPagesDisplayed={isTablet ? 1 : 3}
 			pageCount={totalPages}
 			onPageChange={item => toPage(item?.selected)}
 			breakLabel='...'

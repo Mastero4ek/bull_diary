@@ -1,8 +1,8 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .small_desc {
 	width: fit-content;
-	@include font(400, 14rem, 120%);
+	@include mixins.font(400, 14rem, 120%);
 
 	b,
 	span {

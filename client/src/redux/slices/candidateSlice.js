@@ -1,4 +1,5 @@
 import { resError } from '@/helpers/functions'
+import $api from '@/http'
 import AuthService from '@/services/AuthService'
 import KeysService from '@/services/KeysService'
 import UserService from '@/services/UserService'
@@ -99,7 +100,6 @@ export const checkAuth = createAsyncThunk(
 	'user/check-auth',
 	async (_, { rejectWithValue }) => {
 		try {
-			const { default: $api } = await import('@/http')
 			const response = await $api.get('/v1/refresh')
 			const processedData = handleTokens(response)
 

@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 
 export const PopupLayout = React.memo(() => {
 	const { popupContent, closePopup } = usePopup()
-	const { shared } = popupContent
+	const { shared, direction } = popupContent
 
 	useEffect(() => {
 		if (popupContent.content) {
@@ -31,7 +31,7 @@ export const PopupLayout = React.memo(() => {
 				<div
 					className={`${styles.popup_wrapper} ${
 						shared && styles.popup_shared_wrapper
-					}`}
+					} ${direction === 'reverse' && styles.popup_reverse_wrapper}`}
 				>
 					<OuterBlock>
 						<div onClick={closePopup} className={styles.popup_close}>

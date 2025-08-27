@@ -1,5 +1,5 @@
 import { fakePnlOrders } from '@/helpers/constants'
-import { resError } from '@/helpers/functions'
+import { calculateFakeTotals, resError } from '@/helpers/functions'
 import OrdersService from '@/services/OrdersService'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
@@ -105,8 +105,8 @@ const initialState = {
 	sort: { type: 'closed_time', value: 'desc' },
 	page: 1,
 	totalPages: 0,
-	totalProfit: 0,
-	totalLoss: 0,
+	totalProfit: { value: 0, count: 0 },
+	totalLoss: { value: 0, count: 0 },
 	serverStatus: '',
 	errorMessage: null,
 }
@@ -150,10 +150,20 @@ const ordersSlice = createSlice({
 				state.errorMessage = null
 
 				if (!action.payload.message) {
-					state.totalLoss = action.payload.total_loss
-					state.totalProfit = action.payload.total_profit
+					state.totalLoss = action.payload.total_loss || { value: 0, count: 0 }
+					state.totalProfit = action.payload.total_profit || {
+						value: 0,
+						count: 0,
+					}
 					state.orders = action.payload.orders
 					state.totalPages = action.payload.total_pages
+				} else {
+					const fakeTotals = calculateFakeTotals(fakePnlOrders)
+
+					state.totalProfit = fakeTotals.totalProfit
+					state.totalLoss = fakeTotals.totalLoss
+					state.orders = fakePnlOrders
+					state.totalPages = 1
 				}
 			})
 			.addCase(getBybitOrdersPnl.rejected, handleOrdersError)

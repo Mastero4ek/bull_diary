@@ -1,36 +1,22 @@
-import { Suspense, useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
 import Cookies from 'js-cookie'
 import moment from 'moment/min/moment-with-locales'
 import { useDispatch, useSelector } from 'react-redux'
-import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { FooterLayout } from '@/components/layouts/FooterLayout'
 import { HeaderLayout } from '@/components/layouts/HeaderLayout'
 import { SideBarLayout } from '@/components/layouts/SideBarLayout'
+import { LazyLoader } from '@/components/ui/general/LazyLoader'
 import { Loader } from '@/components/ui/general/Loader'
+import { RouteRenderer } from '@/components/ui/general/RouteRenderer'
 import { useSyncStatus } from '@/hooks/useSyncStatus'
 import { useWebSocket } from '@/hooks/useWebSocket'
-import { AuthCallback } from '@/pages/AuthCallback'
-import { AuthError } from '@/pages/AuthError'
-import { BattlePage } from '@/pages/BattlePage'
-import { BookmarksPage } from '@/pages/BookmarksPage'
-import { ContactsPage } from '@/pages/ContactsPage'
-import { DiaryPage } from '@/pages/DiaryPage'
-import { HomePage } from '@/pages/HomePage'
-import { NotFoundPage } from '@/pages/NotFoundPage'
-import { PositionPage } from '@/pages/PositionPage'
-import { PrivacyPage } from '@/pages/PrivacyPage'
-import { ProfilePage } from '@/pages/ProfilePage'
-import { SettingsPage } from '@/pages/SettingsPage'
-import { TablePage } from '@/pages/TablePage'
-import { TermsPage } from '@/pages/TermsPage'
-import { UsersPage } from '@/pages/UsersPage'
-import { WalletDetailsPage } from '@/pages/WalletDetailsPage'
-import { WalletPage } from '@/pages/WalletPage'
 import { checkAuth } from '@/redux/slices/candidateSlice'
 import { setScreenParams } from '@/redux/slices/settingsSlice'
+import { createRoutes } from '@/routes/routeConfig.js'
 
+import { BottomBar } from '../layouts/BottomBar'
 import styles from './styles.module.scss'
 
 export const App = () => {
@@ -41,9 +27,11 @@ export const App = () => {
 		theme,
 		mark,
 		amount,
+		help,
 		color,
 		isLoadingTheme,
 		isLoadingLanguage,
+		isMobile,
 	} = useSelector(state => state.settings)
 
 	const dispatch = useDispatch()
@@ -60,7 +48,8 @@ export const App = () => {
 	const handleResize = useCallback(() => {
 		dispatch(
 			setScreenParams({
-				isMobile: window.innerWidth < 768,
+				isMobile: window.innerWidth < 460,
+				isTablet: window.innerWidth < 768,
 				width: window.innerWidth,
 			})
 		)
@@ -84,6 +73,7 @@ export const App = () => {
 		Cookies.set('mark', mark)
 		Cookies.set('amount', amount)
 		Cookies.set('color', color)
+		Cookies.set('help', help)
 
 		const favicon = document.querySelector("link[rel*='icon']")
 
@@ -95,7 +85,7 @@ export const App = () => {
 			window.removeEventListener('resize', handleResize)
 			window.removeEventListener('orientationchange', handleResize)
 		}
-	}, [handleResize, language, theme])
+	}, [handleResize, language, theme, mark, amount, color, help])
 
 	useEffect(() => {
 		dispatch(checkAuth())
@@ -126,60 +116,7 @@ export const App = () => {
 		disconnect,
 	])
 
-	const routes = useMemo(
-		() => (
-			<Routes>
-				<Route
-					path='/'
-					element={
-						<Navigate
-							to={isAuth && user.is_activated ? '/wallet' : '/home'}
-							replace
-						/>
-					}
-				/>
-				<Route
-					path='/home'
-					element={
-						isAuth && user.is_activated ? (
-							<Navigate to='/wallet' replace />
-						) : (
-							<HomePage />
-						)
-					}
-				/>
-
-				<Route path='/auth/success' element={<AuthCallback />} />
-				<Route path='/auth/error' element={<AuthError />} />
-
-				{isAuth && user.is_activated ? (
-					<>
-						<Route path='/wallet' element={<WalletPage />} />
-						<Route path='/wallet/details' element={<WalletDetailsPage />} />
-						<Route path='/diary/positions' element={<DiaryPage />} />
-						{/* <Route path='/diary/position/:id' element={<DiaryPositionPage />} /> */}
-						<Route path='/table/positions' element={<TablePage />} />
-						<Route path='/table/position/:id' element={<PositionPage />} />
-						<Route path='/battle/users' element={<BattlePage />} />
-						<Route path='/bookmarks/positions' element={<BookmarksPage />} />
-						<Route path='/bookmarks/position/:id' element={<PositionPage />} />
-						<Route path='/all-users' element={<UsersPage />} />
-						<Route path='/all-users/:id' element={<ProfilePage />} />
-						<Route path='/profile' element={<ProfilePage />} />
-						<Route path='/settings' element={<SettingsPage />} />
-						<Route path='/contacts' element={<ContactsPage />} />
-					</>
-				) : (
-					<Route path='*' element={<Navigate to='/home' replace />} />
-				)}
-
-				<Route path='/privacy' element={<PrivacyPage />} />
-				<Route path='/terms' element={<TermsPage />} />
-				<Route path='*' element={<NotFoundPage />} />
-			</Routes>
-		),
-		[isAuth]
-	)
+	const routes = useMemo(() => createRoutes(isAuth, user), [isAuth, user])
 
 	return (
 		<div
@@ -187,11 +124,12 @@ export const App = () => {
 				isAuth && user.is_activated ? styles.app_container : styles.container
 			}
 		>
-			<Suspense fallback={<Loader />}>
+			<LazyLoader>
 				{(serverStatus === 'loading' ||
 					isLoadingTheme ||
 					isLoadingLanguage) && <Loader />}
-				{isAuth && user.is_activated && <SideBarLayout />}
+
+				{isAuth && user.is_activated && !isMobile && <SideBarLayout />}
 
 				<div
 					className={
@@ -200,11 +138,13 @@ export const App = () => {
 				>
 					<HeaderLayout />
 
-					{routes}
+					<RouteRenderer routes={routes} />
 
 					{(!isAuth || !user.is_activated) && <FooterLayout />}
 				</div>
-			</Suspense>
+
+				{isAuth && user.is_activated && isMobile && <BottomBar />}
+			</LazyLoader>
 		</div>
 	)
 }

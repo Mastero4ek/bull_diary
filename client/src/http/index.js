@@ -1,5 +1,6 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import axios from 'axios'
+
+import { getLanguage } from '@/helpers/languageHelper'
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -75,18 +76,7 @@ initializeCSRF()
 // Add request interceptor
 $api.interceptors.request.use(
 	async config => {
-		let language = 'en'
-
-		try {
-			// Dynamic import store to avoid circular dependencies
-			const { store } = await import('@/redux/store')
-
-			language =
-				store.getState().settings.language || Cookies.get('language') || 'en'
-		} catch (e) {
-			language = Cookies.get('language') || 'en'
-		}
-
+		const language = getLanguage()
 		config.headers['Accept-Language'] = language
 
 		// If CSRF token is not received, try to get it (except for the token request)

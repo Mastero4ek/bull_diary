@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .react-daterange-picker {
 	margin-right: auto;
@@ -43,7 +43,7 @@
 
 	&__inputGroup {
 		overflow: hidden;
-		@include font(400, 18rem, 100%);
+		@include mixins.font(400, 18rem, 100%);
 
 		&__input {
 			width: 25rem !important;
@@ -141,12 +141,12 @@
 		margin-bottom: 6rem;
 
 		span {
-			@include font(400, 14rem, 100%);
+			@include mixins.font(400, 14rem, 100%);
 		}
 
 		button {
 			padding: 10rem;
-			@include font(400, 18rem, 100%);
+			@include mixins.font(400, 18rem, 100%);
 			transition: all 0.15s ease-in-out;
 
 			&:hover {
@@ -175,7 +175,7 @@
 			text-align: center;
 
 			&__labelText {
-				@include font(400, 18rem, 100%);
+				@include mixins.font(400, 18rem, 100%);
 				transition: all 0.15s ease-in-out;
 
 				&:hover {
@@ -187,7 +187,7 @@
 
 	&__month-view__weekdays {
 		margin-bottom: 20rem;
-		@include font(400, 14rem, 100%);
+		@include mixins.font(400, 14rem, 100%);
 
 		&__weekday {
 			text-align: center;
@@ -196,7 +196,7 @@
 
 	&__month-view__days,
 	&__year-view__months {
-		@include font(400, 18rem, 100%);
+		@include mixins.font(400, 18rem, 100%);
 
 		button {
 			padding-top: 10rem;
@@ -219,7 +219,7 @@
 
 	&__decade-view__years,
 	&__century-view__decades {
-		@include font(400, 14rem, 100%);
+		@include mixins.font(400, 14rem, 100%);
 
 		button {
 			text-align: center;

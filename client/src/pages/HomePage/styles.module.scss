@@ -1,8 +1,13 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .container_wrapper {
 	padding: 0 105rem;
 	margin-top: 40rem;
+
+	@include mixins.tablet {
+		padding: 0 16rem;
+		margin-top: 20rem;
+	}
 }
 
 .intro_wrap {
@@ -10,6 +15,13 @@
 	justify-content: space-between;
 	gap: 80rem;
 	position: relative;
+
+	@include mixins.tablet {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+	}
 }
 
 .intro_content {
@@ -20,17 +32,41 @@
 	max-width: 700rem;
 
 	h1 {
-		font-size: 50rem;
+		@include mixins.font(800, 50rem, 125%);
 		color: var(--primaryDef);
 	}
 
 	span {
-		font-size: 20rem;
+		@include mixins.font(400, 20rem, 125%);
 	}
 
 	button {
 		margin-top: auto;
 		margin-left: 0;
+	}
+
+	@include mixins.tablet {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		h1 {
+			text-align: center;
+			@include mixins.font(800, 38rem, 125%);
+		}
+
+		div {
+			text-align: center;
+		}
+
+		span {
+			text-align: center;
+			@include mixins.font(400, 18rem, 125%);
+		}
+
+		button {
+			margin-right: unset;
+		}
 	}
 }
 
@@ -44,6 +80,15 @@
 	top: -110rem;
 	width: 720rem;
 	height: auto;
+
+	@include mixins.tablet {
+		width: 100%;
+		position: relative;
+		top: auto;
+		right: auto;
+		width: 100%;
+		height: 350rem;
+	}
 }
 
 .counts {
@@ -81,6 +126,35 @@
 			}
 		}
 	}
+
+	@include mixins.tablet {
+		margin-top: 40rem;
+
+		article {
+			max-width: 500rem;
+			margin-left: auto;
+			margin-right: auto;
+
+			ul {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 16rem;
+				padding: 20rem;
+
+				li {
+					article {
+						padding: 16rem;
+
+						h2 {
+							@include mixins.font(400, 30rem, 125%);
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 .manual_wrapper {
@@ -88,12 +162,24 @@
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: 80rem;
+
+	@include mixins.tablet {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+	}
 }
 
 .manual_wrap {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
+
+	@include mixins.tablet {
+		width: 100%;
+		align-items: center;
+	}
 }
 
 .manual_image {
@@ -103,6 +189,11 @@
 	justify-content: center;
 	align-items: center;
 	text-align: center;
+
+	@include mixins.tablet {
+		width: 100%;
+		height: 350rem;
+	}
 }
 
 .manual_content {
@@ -116,6 +207,17 @@
 	span {
 		display: inline-block;
 		text-align: right;
+	}
+
+	@include mixins.tablet {
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		gap: 20rem;
+
+		span {
+			text-align: center;
+		}
 	}
 }
 
@@ -137,7 +239,7 @@
 		}
 
 		h4 {
-			@include font(700, 22rem, 125%);
+			@include mixins.font(700, 22rem, 125%);
 
 			b {
 				color: var(--primaryDef);
@@ -149,12 +251,56 @@
 			grid-column-end: 3;
 
 			h4 {
-				@include font(700, 38rem, 125%);
+				@include mixins.font(700, 38rem, 125%);
 			}
 
 			div:nth-child(2) {
 				span {
-					@include font(400, 18rem, 125%);
+					@include mixins.font(400, 18rem, 125%);
+				}
+			}
+		}
+	}
+
+	@include mixins.tablet {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		width: 100%;
+		gap: 16rem;
+
+		li {
+			display: flex;
+			align-content: stretch;
+			height: auto;
+			max-width: 305rem;
+
+			article {
+				padding: 16rem;
+			}
+
+			h4 {
+				@include mixins.font(700, 20rem, 125%);
+			}
+
+			div:nth-child(2) {
+				span {
+					@include mixins.font(400, 16rem, 125%);
+				}
+			}
+
+			&:first-child {
+				grid-column-start: unset;
+				grid-column-end: unset;
+
+				h4 {
+					@include mixins.font(700, 20rem, 125%);
+				}
+
+				div:nth-child(2) {
+					span {
+						@include mixins.font(400, 16rem, 125%);
+					}
 				}
 			}
 		}
@@ -165,6 +311,21 @@
 	display: flex;
 	flex-direction: column;
 	gap: 30rem;
+
+	@include mixins.tablet {
+		gap: 20rem;
+
+		h1 {
+			text-align: center;
+		}
+
+		article {
+			width: 100%;
+			max-width: 500rem;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
 }
 
 .start_wrap {
@@ -182,7 +343,7 @@
 		text-align: left;
 
 		span {
-			@include font(500, 20rem, 100%);
+			@include mixins.font(500, 20rem, 100%);
 			width: 100rem;
 			margin-right: 0;
 		}
@@ -193,6 +354,36 @@
 			right: 30rem;
 			width: 50rem;
 			height: 50rem;
+		}
+	}
+
+	@include mixins.tablet {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+		padding: 20rem;
+
+		button {
+			align-items: center;
+			justify-content: center;
+			max-width: 300rem;
+			width: 100%;
+			padding: 16rem;
+
+			span {
+				display: inline-block;
+				width: auto;
+				@include mixins.font(500, 16rem, 100%);
+			}
+
+			svg {
+				position: relative;
+				top: unset;
+				right: unset;
+				width: 24rem;
+				height: 24rem;
+			}
 		}
 	}
 }
@@ -223,8 +414,37 @@
 			top: 20rem;
 			right: 30rem;
 			position: absolute;
-			@include font(600, 55rem, 100%);
+			@include mixins.font(600, 55rem, 100%);
 			color: var(--primaryDef);
+		}
+	}
+
+	@include mixins.tablet {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 16rem;
+		width: 100%;
+		margin-right: 0;
+
+		li {
+			width: 100%;
+			max-width: 380rem;
+
+			article {
+				width: 100%;
+				padding: 16rem;
+				padding-right: 16rem;
+			}
+
+			strong {
+				position: relative;
+				top: unset;
+				right: unset;
+				@include mixins.font(600, 30rem, 100%);
+			}
 		}
 	}
 }
@@ -234,6 +454,13 @@
 	justify-content: space-between;
 	gap: 80rem;
 	margin-bottom: 40rem;
+
+	@include mixins.tablet {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+	}
 }
 
 .advantages_content {
@@ -258,6 +485,23 @@
 		display: inline-block;
 		text-align: right;
 	}
+
+	@include mixins.tablet {
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+		width: 100%;
+
+		div {
+			h1 {
+				text-align: center;
+			}
+		}
+
+		span {
+			text-align: center;
+		}
+	}
 }
 
 .advantages_image {
@@ -267,6 +511,11 @@
 	text-align: center;
 	width: auto;
 	height: 500rem;
+
+	@include mixins.tablet {
+		width: 100%;
+		height: 350rem;
+	}
 }
 
 .advantages_list {
@@ -305,6 +554,33 @@
 			stroke: none;
 		}
 	}
+
+	@include mixins.tablet {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 16rem;
+		padding: 20rem;
+
+		li {
+			display: flex;
+			align-content: stretch;
+			height: auto;
+			width: 100%;
+			max-width: 305rem;
+
+			article {
+				width: 100%;
+				padding: 16rem;
+			}
+
+			svg {
+				width: 60rem;
+				height: 60rem;
+			}
+		}
+	}
 }
 
 .benefits_wrapper {
@@ -313,11 +589,24 @@
 	display: flex;
 	justify-content: space-between;
 	gap: 100rem;
+
+	@include mixins.tablet {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+		margin-left: 0;
+		margin-right: 0;
+	}
 }
 
 .benefits_slider {
 	width: 930rem;
 	height: auto;
+
+	@include mixins.tablet {
+		width: 100%;
+	}
 }
 
 .benefits_content {
@@ -331,12 +620,40 @@
 		margin-top: auto;
 		margin-left: 0;
 	}
+
+	@include mixins.tablet {
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+		width: 100%;
+
+		h1 {
+			text-align: center;
+		}
+
+		button {
+			margin-right: unset;
+		}
+	}
+
+	@include mixins.phone {
+		h1 {
+			@include mixins.font(400, 25rem, 125%);
+		}
+	}
 }
 
 .precedence_wrap {
 	display: flex;
 	justify-content: space-between;
 	gap: 80rem;
+
+	@include mixins.tablet {
+		flex-direction: column-reverse;
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+	}
 }
 
 .precedence_content {
@@ -360,6 +677,25 @@
 		display: inline-block;
 		text-align: right;
 	}
+
+	@include mixins.tablet {
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+		width: 100%;
+
+		h1 {
+			text-align: center;
+
+			b {
+				text-align: center;
+			}
+		}
+
+		span {
+			text-align: center;
+		}
+	}
 }
 
 .precedence_image {
@@ -370,6 +706,11 @@
 	position: relative;
 	width: auto;
 	height: 540rem;
+
+	@include mixins.tablet {
+		width: 100%;
+		height: 350rem;
+	}
 }
 
 .question_wrap {
@@ -377,6 +718,13 @@
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: 80rem;
+
+	@include mixins.tablet {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+	}
 }
 
 .question_content {
@@ -385,6 +733,29 @@
 	gap: 30rem;
 	align-items: flex-start;
 	width: 550rem;
+
+	@include mixins.tablet {
+		align-items: center;
+		justify-content: center;
+		gap: 20rem;
+		width: 100%;
+
+		h1 {
+			text-align: center;
+		}
+
+		button {
+			margin-right: unset;
+		}
+
+		div {
+			text-align: center;
+
+			span {
+				text-align: center;
+			}
+		}
+	}
 }
 
 .question_link {
@@ -405,9 +776,27 @@
 		color: var(--white);
 		background: var(--primaryHov);
 	}
+
+	@include mixins.tablet {
+		margin-top: 20rem;
+	}
+}
+
+.question_form_wrapper {
+	@include mixins.tablet {
+		width: 100%;
+		max-width: 500rem;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
 
 .question_form {
 	width: 900rem;
 	padding: 60rem 40rem;
+
+	@include mixins.tablet {
+		width: 100%;
+		padding: 20rem;
+	}
 }

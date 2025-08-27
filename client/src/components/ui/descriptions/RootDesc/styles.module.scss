@@ -1,8 +1,8 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .root_desc {
 	width: fit-content;
-	@include font(400, 18rem, 120%);
+	@include mixins.font(400, 18rem, 120%);
 
 	b,
 	span {
@@ -11,5 +11,9 @@
 
 	b {
 		font-weight: 800;
+	}
+
+	@include mixins.phone {
+		@include mixins.font(400, 16rem, 120%);
 	}
 }

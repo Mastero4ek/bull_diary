@@ -1,6 +1,7 @@
-import React from 'react'
-import styles from './styles.module.scss'
+import React from 'react';
 
-export const InnerBlock = React.memo(({ children }) => {
+import styles from './styles.module.scss';
+
+export const InnerBlock = ({ children }) => {
 	return <article className={styles.inner_block}>{children}</article>
-})
+}

@@ -1,4 +1,4 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .overlay {
 	position: fixed;
@@ -14,6 +14,12 @@
 	padding-bottom: 30rem;
 	backdrop-filter: blur(10rem) grayscale(30%);
 	animation: animate_visible 0.3s ease-in-out;
+
+	@include mixins.tablet {
+		padding-top: 80rem;
+		padding-right: 16rem;
+		padding-left: 16rem;
+	}
 }
 
 .popup_wrapper {
@@ -48,13 +54,48 @@
 		padding: 60rem 40rem 30rem;
 		min-height: 700rem;
 	}
+
+	@include mixins.tablet {
+		width: 100%;
+		max-width: 500rem;
+		margin-left: auto;
+		margin-right: auto;
+
+		&::after {
+			display: none;
+		}
+
+		h1 {
+			text-align: center;
+			@include mixins.font(700, 28rem, 120%);
+		}
+
+		article {
+			display: flex;
+			flex-direction: column;
+			gap: 80rem;
+			padding: 20rem;
+		}
+	}
+}
+
+.popup_reverse_wrapper {
+	article {
+		flex-direction: column-reverse;
+	}
 }
 
 .popup_shared_wrapper {
 	width: fit-content;
 
 	&::after {
-		display: none;
+		display: none !important;
+	}
+
+	.form_wrapper {
+		&::after {
+			display: none !important;
+		}
 	}
 
 	article {
@@ -64,6 +105,13 @@
 		padding: 50rem;
 		padding-bottom: 20rem;
 		min-height: auto;
+	}
+
+	@include mixins.tablet {
+		article {
+			gap: 20rem;
+			padding: 20rem;
+		}
 	}
 }
 
@@ -95,6 +143,21 @@
 			fill: var(--text);
 		}
 	}
+
+	@include mixins.tablet {
+		right: 0rem;
+		top: 0rem;
+
+		article {
+			width: 30rem;
+			height: 30rem;
+
+			svg {
+				width: 16rem;
+				height: 16rem;
+			}
+		}
+	}
 }
 
 .desc_content {
@@ -105,6 +168,10 @@
 
 	div {
 		text-align: center;
+	}
+
+	@include mixins.tablet {
+		gap: 20rem;
 	}
 }
 
@@ -117,6 +184,7 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 20rem;
+	position: relative;
 
 	h1 {
 		text-align: center;
@@ -132,6 +200,25 @@
 	flex-direction: column;
 	gap: 20rem;
 	align-items: center;
+	position: relative;
+
+	@include mixins.tablet {
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: -40rem;
+			left: 0;
+			width: 100%;
+			height: 1rem;
+			background: var(--text);
+			opacity: 0.25;
+		}
+
+		form {
+			width: 100%;
+			max-width: 420rem;
+		}
+	}
 }
 
 .form_socials {
@@ -167,7 +254,7 @@
 
 		span {
 			color: var(--text);
-			@include font(500, 20rem, 125%);
+			@include mixins.font(500, 20rem, 125%);
 			text-transform: uppercase;
 			transition: all 0.15s ease-in-out;
 		}
@@ -177,6 +264,26 @@
 			height: 26rem;
 			fill: var(--text);
 			transition: all 0.15s ease-in-out;
+		}
+	}
+
+	@include mixins.tablet {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 16rem;
+
+		li {
+			padding: 10rem 16rem;
+
+			span {
+				@include mixins.font(500, 18rem, 125%);
+			}
+
+			svg {
+				width: 20rem;
+				height: 20rem;
+			}
 		}
 	}
 }

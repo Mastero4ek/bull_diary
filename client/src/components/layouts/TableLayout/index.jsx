@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-import { useTranslation } from 'react-i18next';
-import { useTable } from 'react-table';
-import { v4 as uuidv4 } from 'uuid';
+import { useTranslation } from 'react-i18next'
+import { useTable } from 'react-table'
+import { v4 as uuidv4 } from 'uuid'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { ErrorTable } from '@/components/ui/general/ErrorTable';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { ErrorTable } from '@/components/ui/general/ErrorTable'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
 
-import { Paginate } from './Paginate';
-import styles from './styles.module.scss';
+import { Paginate } from './Paginate'
+import styles from './styles.module.scss'
 
 export const TableLayout = props => {
 	const { t } = useTranslation()
@@ -114,7 +114,15 @@ export const TableLayout = props => {
 												isFinite(originalValue))
 
 										return (
-											<td {...cell.getCellProps()} key={cell.column.id}>
+											<td
+												{...cell.getCellProps()}
+												key={cell.column.id}
+												data-label={
+													typeof cell.column.Header === 'string'
+														? cell.column.Header
+														: ''
+												}
+											>
 												<RootDesc
 													style={
 														isNumber

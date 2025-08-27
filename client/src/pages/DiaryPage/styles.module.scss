@@ -1,4 +1,58 @@
+@use '@/styles/mixins.scss' as mixins;
+
+.bar_chart_wrapper {
+	display: flex;
+	flex-direction: column;
+	padding: 20rem;
+
+	svg {
+		pointer-events: all !important;
+	}
+}
+
 .bar_chart {
 	width: 100%;
-	padding: 20rem 10rem 10rem;
+	height: 400rem;
+
+	svg {
+		height: 100%;
+	}
+}
+
+.bar_chart_tooltip {
+	background: var(--bgLight);
+	box-shadow: var(--shadowOuter);
+	border-radius: 14rem;
+	padding: 16rem;
+	display: flex;
+	flex-direction: column;
+	gap: 10rem;
+	width: max-content;
+}
+
+.bar_chart_legend {
+	display: flex;
+	align-items: center;
+	gap: 20rem;
+	width: fit-content;
+	margin: 0 auto;
+	margin-bottom: 20rem;
+
+	@include mixins.tablet {
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 14rem;
+	}
+}
+
+.bar_chart_legend_item {
+	display: flex;
+	align-items: center;
+	gap: 8rem;
+
+	label {
+		width: 14rem;
+		height: 14rem;
+		border-radius: 50%;
+	}
 }

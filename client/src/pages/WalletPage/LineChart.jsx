@@ -1,47 +1,59 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from 'react'
 
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Tooltip,
-} from 'chart.js';
-import moment from 'moment/min/moment-with-locales';
-import { Line } from 'react-chartjs-2';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { ResponsiveBar } from '@nivo/bar'
+import { ResponsiveLine } from '@nivo/line'
 
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
-ChartJS.register(
-	LineElement,
-	CategoryScale,
-	LinearScale,
-	PointElement,
-	Legend,
-	Tooltip,
-	Filler,
-	BarElement
-)
-
-export const LineChart = React.memo(({ syncWarning = '' }) => {
+export const LineChart = ({ syncWarning = '' }) => {
 	const navigate = useNavigate()
 	const { t } = useTranslation()
-	const { theme, width, isMobile } = useSelector(state => state.settings)
+	const { theme, width, isTablet, isMobile } = useSelector(
+		state => state.settings
+	)
 	const { transactions, fakeTransactions, serverStatus } = useSelector(
 		state => state.transactions
 	)
 	const { filter } = useSelector(state => state.filters)
 
 	const period = filter?.value?.toLowerCase() || 'week'
+
+	const chartStyles = useMemo(
+		() => ({
+			paddingSmall:
+				width >= 1920
+					? 20
+					: isTablet
+					? 15
+					: isMobile
+					? 10
+					: (width * 1.5) / 100,
+			paddingBig:
+				width >= 1920
+					? 40
+					: isTablet
+					? 30
+					: isMobile
+					? 20
+					: (width * 2.5) / 100,
+			margin:
+				width >= 1920 ? 10 : isTablet ? 8 : isMobile ? 6 : (width * 0.5) / 100,
+			fontSize:
+				width >= 1920 || isTablet ? 16 : isMobile ? 14 : (width * 0.9) / 100,
+			font: "'IBM Plex Sans', sans-serif",
+			lineColor: theme ? '#24eaa4' : '#c270f8',
+			barColor: theme ? 'rgba(128, 128, 128, 1)' : 'rgba(60, 70, 78, 0.5)',
+			gridColor: theme ? 'rgba(128, 128, 128, 0.2)' : 'rgba(60, 70, 78, 0.2)',
+		}),
+		[width, isTablet, fakeTransactions, isMobile]
+	)
 
 	const getTooltipTitle = context => {
 		const now = moment()
@@ -53,7 +65,6 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 			const weekNumber = parseInt(context[0].label)
 			const currentYear = now.year()
 
-			// Находим дату начала недели по номеру недели и году
 			const weekStart = moment().isoWeek(weekNumber).startOf('isoWeek')
 			const weekEnd = weekStart.clone().endOf('isoWeek')
 
@@ -63,6 +74,7 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 		} else if (period === 'month') {
 			const dayOfMonth = parseInt(context[0].label)
 			const currentMonth = now.clone().startOf('month')
+
 			return moment({
 				year: currentMonth.year(),
 				month: currentMonth.month(),
@@ -76,27 +88,6 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 		}
 
 		return context[0].label
-	}
-
-	const getTooltipLabel = context => {
-		if (context.dataset.type === 'line') {
-			const balance = context.dataset.data[context.dataIndex]
-
-			return `USD: ~${
-				typeof balance === 'number' ? balance.toFixed(2) : balance
-			}`
-		} else {
-			const count = context.dataset.data[context.dataIndex]
-
-			return `${t('page.wallet.chart_label_trans')}: ${count || 0}`
-		}
-	}
-
-	const handleAfterDataLimits = scale => {
-		const max = scale.max
-
-		scale.max = max + max * 0.75
-		scale.min = 0
 	}
 
 	const checkIfFuture = (label, index, period) => {
@@ -375,177 +366,194 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 		return { lineChartData, barChartData }
 	}, [groupedData, labels, period])
 
-	const chartStyles = useMemo(
-		() => ({
-			margin: (width * 0.5) / 100,
-			fontSize: (width * 0.9) / 100,
-			border: (width * 0.25) / 100,
-			font: "'IBM Plex Sans', sans-serif",
-			colorDark: 'rgba(185, 200, 215, 1)',
-			colorLight: 'rgba(79, 104, 137, 1)',
-			lineColorLight: '#c270f8',
-			lineColorDark: '#24eaa4',
-			barColorLight: 'rgba(60, 70, 78, 0.5)',
-			barColorDark: 'rgba(128, 128, 128, 1)',
-			tooltipBgDark: 'rgba(38, 46, 54, 0.75)',
-			tooltipBgLight: 'rgba(241, 247, 255, 0.75)',
-			largeScreen: width >= 1920 || isMobile,
-			animationDuration: fakeTransactions ? 0 : 1500,
-		}),
-		[width, isMobile, fakeTransactions]
-	)
+	const lineData = useMemo(() => {
+		if (lineChartData.length === 0) return []
 
-	const data = useMemo(
-		() => ({
-			labels,
-			datasets: [
-				{
-					label: t('page.wallet.chart_label'),
-					data: lineChartData,
-					borderColor: theme
-						? chartStyles.lineColorDark
-						: chartStyles.lineColorLight,
-					pointBackgroundColor: theme
-						? chartStyles.lineColorDark
-						: chartStyles.lineColorLight,
-					fill: false,
-					tension: 0,
-					type: 'line',
-					yAxisID: 'y',
-				},
-				{
-					label: t('page.wallet.chart_label_trans'),
-					data: barChartData,
-					backgroundColor: theme
-						? chartStyles.barColorDark
-						: chartStyles.barColorLight,
-					borderRadius: chartStyles.margin,
-					borderWidth: 0,
-					barPercentage: 0.5,
-					type: 'bar',
-					yAxisID: 'y1',
-				},
-			],
-		}),
-		[labels, lineChartData, barChartData, theme, chartStyles, t]
-	)
-
-	const options = useMemo(
-		() => ({
-			responsive: true,
-			animation: { duration: chartStyles.animationDuration },
-			elements: {
-				line: {
-					borderWidth: chartStyles.largeScreen ? 5 : chartStyles.border,
-				},
-				point: {
-					radius: chartStyles.largeScreen ? 5 : chartStyles.border,
-					borderWidth: 0,
-				},
+		return [
+			{
+				id: t('page.wallet.chart_label'),
+				color: chartStyles.lineColor,
+				data: labels.map((label, index) => ({
+					x: label,
+					y: lineChartData[index] || null,
+				})),
 			},
-			plugins: {
-				legend: {
-					position: 'top',
-					labels: {
-						boxWidth: chartStyles.largeScreen ? 15 : chartStyles.margin,
-						boxHeight: chartStyles.largeScreen ? 15 : chartStyles.margin,
-						usePointStyle: true,
-						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
-						font: {
-							size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
-							family: chartStyles.font,
-						},
-					},
-				},
-				tooltip: {
-					backgroundColor: theme
-						? chartStyles.tooltipBgDark
-						: chartStyles.tooltipBgLight,
-					titleColor: theme ? chartStyles.colorDark : chartStyles.colorLight,
-					bodyColor: theme ? chartStyles.colorDark : chartStyles.colorLight,
-					padding: chartStyles.largeScreen ? 20 : chartStyles.margin,
-					cornerRadius: chartStyles.largeScreen ? 20 : chartStyles.margin,
-					titleFont: {
-						size: chartStyles.largeScreen ? 16 : chartStyles.fontSize,
-						family: chartStyles.font,
-					},
-					bodyFont: {
-						size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
-						family: chartStyles.font,
-					},
-					callbacks: {
-						title: getTooltipTitle,
-						label: getTooltipLabel,
-					},
-				},
-			},
-			scales: {
-				x: {
-					grid: { lineWidth: 0 },
-					ticks: {
-						padding: chartStyles.fontSize,
-						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
-						font: {
-							size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
-							family: chartStyles.font,
-						},
-					},
-				},
-				y: {
-					type: 'linear',
-					display: true,
-					position: 'left',
-					beginAtZero: true,
-					grid: { lineWidth: 0 },
-					ticks: {
-						padding: chartStyles.fontSize,
-						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
-						font: {
-							size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
-							family: chartStyles.font,
-						},
-					},
-					afterDataLimits: handleAfterDataLimits,
-				},
-				y1: {
-					type: 'linear',
-					display: false,
-					position: 'right',
-					beginAtZero: true,
-					grid: { lineWidth: 0 },
-					ticks: {
-						padding: chartStyles.fontSize,
-						color: theme ? chartStyles.colorDark : chartStyles.colorLight,
-						font: {
-							size: chartStyles.largeScreen ? 14 : chartStyles.fontSize,
-							family: chartStyles.font,
-						},
-					},
-					afterDataLimits: handleAfterDataLimits,
-				},
-			},
-		}),
-		[
-			theme,
-			chartStyles,
-			t,
-			period,
-			getTooltipTitle,
-			getTooltipLabel,
-			handleAfterDataLimits,
 		]
-	)
+	}, [labels, lineChartData, chartStyles, t])
+
+	const barData = useMemo(() => {
+		if (barChartData.length === 0) return []
+
+		return labels.map((label, index) => ({
+			label,
+			[t('page.wallet.chart_label_trans')]: barChartData[index] || 0,
+		}))
+	}, [labels, barChartData, t])
+
+	const CustomLegend = () => {
+		return (
+			<div className={styles.line_chart_legend}>
+				<div className={styles.line_chart_legend_item}>
+					<label
+						style={{
+							backgroundColor: chartStyles.lineColor,
+						}}
+					/>
+
+					<RootDesc>
+						<span>{t('page.wallet.chart_label')}</span>
+					</RootDesc>
+				</div>
+
+				<div className={styles.line_chart_legend_item}>
+					<label
+						style={{
+							backgroundColor: chartStyles.barColor,
+						}}
+					/>
+
+					<RootDesc>
+						<span>{t('page.wallet.chart_label_trans')}</span>
+					</RootDesc>
+				</div>
+			</div>
+		)
+	}
+
+	const CustomTooltip = ({ point, data }) => {
+		if (!point && !data) return null
+
+		let label, lineValue, barValue
+
+		if (point) {
+			label = point.data.x
+			lineValue = point.data.y
+			barValue = barChartData[labels.indexOf(label)] || 0
+		} else if (data) {
+			label = data.label
+			barValue = data[t('page.wallet.chart_label_trans')] || 0
+			lineValue = lineChartData[labels.indexOf(label)] || null
+		}
+
+		return (
+			<div className={styles.line_chart_tooltip}>
+				<RootDesc>
+					<label>
+						{getTooltipTitle([{ label, dataIndex: labels.indexOf(label) }])}
+					</label>
+				</RootDesc>
+
+				<RootDesc>
+					<div>
+						<b>USD</b>: ~
+						{typeof lineValue === 'number'
+							? lineValue.toFixed(2)
+							: lineValue || '0.00'}
+					</div>
+
+					<div>
+						<b>{t('page.wallet.chart_label_trans')}</b>: {barValue}
+					</div>
+				</RootDesc>
+			</div>
+		)
+	}
 
 	return (
-		<div
-			className={styles.line_chart}
-			style={{
-				opacity: syncWarning !== '' || serverStatus === 'error' ? '0.2' : '1',
-				pointerEvents:
-					syncWarning !== '' || serverStatus === 'error' ? 'none' : 'auto',
-			}}
-		>
-			<Line data={data} options={options} />
+		<div className={styles.line_chart_wrapper}>
+			<CustomLegend />
+
+			<div
+				className={styles.line_chart}
+				style={{
+					opacity: syncWarning !== '' || serverStatus === 'error' ? '0.2' : '1',
+					pointerEvents:
+						syncWarning !== '' || serverStatus === 'error' ? 'none' : 'auto',
+				}}
+			>
+				<div className={styles.line_chart_bar}>
+					<ResponsiveBar
+						data={barData}
+						keys={[t('page.wallet.chart_label_trans')]}
+						indexBy='label'
+						borderRadius={chartStyles.margin}
+						margin={{
+							top: chartStyles.paddingSmall,
+							bottom: chartStyles.paddingSmall,
+							left: chartStyles.paddingBig,
+						}}
+						padding={0.3}
+						indexScale={{ type: 'band', round: true, nice: true }}
+						enableGridX={false}
+						enableGridY={true}
+						enableLabel={false}
+						theme={{
+							grid: {
+								line: {
+									stroke: chartStyles.gridColor,
+									strokeWidth: 1,
+								},
+							},
+						}}
+						animate={true}
+						motionConfig='wobbly'
+						motionStiffness={90}
+						motionDamping={15}
+						tooltip={CustomTooltip}
+						colors={chartStyles.barColor}
+						axisBottom={null}
+						axisLeft={{
+							format: value => value,
+							renderTick: ({ value, x, y }) => (
+								<text
+									x={x - chartStyles.margin}
+									y={y}
+									textAnchor='end'
+									dominantBaseline='middle'
+									style={{
+										fill: chartStyles.barColor,
+										fontFamily: chartStyles.font,
+										fontSize: chartStyles.fontSize,
+									}}
+								>
+									{value}
+								</text>
+							),
+						}}
+					/>
+
+					<div className={styles.line_chart_line}>
+						<ResponsiveLine
+							data={lineData}
+							margin={{
+								top: chartStyles.paddingSmall,
+								bottom: chartStyles.paddingBig,
+								left: chartStyles.paddingBig,
+							}}
+							curve='monotoneX'
+							axisTop={null}
+							axisRight={null}
+							axisBottom={null}
+							axisLeft={null}
+							enableGridX={false}
+							enableGridY={false}
+							enablePoints={false}
+							useMesh={true}
+							tooltip={CustomTooltip}
+							legends={[]}
+							yScale={{
+								type: 'linear',
+								min: 0,
+								max: 'auto',
+								stacked: false,
+								reverse: false,
+								nice: true,
+							}}
+							colors={chartStyles.lineColor}
+						/>
+					</div>
+				</div>
+			</div>
 
 			<div className={styles.line_chart_details}>
 				<RootButton
@@ -556,4 +564,4 @@ export const LineChart = React.memo(({ syncWarning = '' }) => {
 			</div>
 		</div>
 	)
-})
+}

@@ -27,6 +27,7 @@ export const PositionPage = React.memo(() => {
 	const { showSuccess, showError } = useNotification()
 
 	const { serverStatus, description } = useSelector(state => state.orders)
+	const { isTablet } = useSelector(state => state.settings)
 
 	const { reset, register, handleSubmit } = useForm()
 
@@ -72,7 +73,8 @@ export const PositionPage = React.memo(() => {
 			disabled={true}
 		>
 			{serverStatus === 'loading' && <Loader />}
-			<div style={{ width: '100%' }}>
+
+			<div style={{ width: '100%', order: isTablet ? 2 : 1 }}>
 				<PositionLayout />
 			</div>
 

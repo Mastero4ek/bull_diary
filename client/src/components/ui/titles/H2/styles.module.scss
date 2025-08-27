@@ -1,6 +1,6 @@
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss' as mixins;
 
 .h2 {
 	font-family: 'RAYDIS', 'IBM Plex Sans', sans-serif;
-	@include font(400, 34rem, 125%);
+	@include mixins.font(400, 34rem, 125%);
 }

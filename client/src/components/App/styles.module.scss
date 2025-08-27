@@ -1,9 +1,17 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .container {
 	width: 100%;
 	max-width: 1920rem;
 	display: flex;
 	align-items: flex-start;
 	justify-content: flex-start;
+
+	@include mixins.tablet {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
 }
 
 .app_container {
@@ -12,6 +20,17 @@
 	display: grid;
 	grid-template-columns: auto minmax(1545rem, 1790rem);
 	gap: 30rem;
+
+	@include mixins.tablet {
+		grid-template-columns: auto 1fr;
+		gap: 20rem;
+	}
+
+	@include mixins.phone {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 }
 
 .screen {
@@ -22,6 +41,10 @@
 	min-height: 100vh;
 	width: 100%;
 	background-color: var(--bgLight);
+
+	@include mixins.tablet {
+		gap: 50rem;
+	}
 }
 
 .app_screen {
@@ -32,4 +55,12 @@
 	min-height: 100vh;
 	width: 100%;
 	background-color: var(--bgLight);
+
+	@include mixins.tablet {
+		gap: 20rem;
+	}
+
+	@include mixins.phone {
+		padding-bottom: 100rem;
+	}
 }

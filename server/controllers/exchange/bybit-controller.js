@@ -1,7 +1,7 @@
 const BybitService = require('@services/exchange/bybit/bybit-service')
 const KeysService = require('@services/auth/keys-service')
 const { validationError } = require('@helpers/sanitization-helpers')
-const { capitalize, paginate } = require('@helpers/utility-helpers')
+const { capitalize } = require('@helpers/utility-helpers')
 const DataService = require('@services/exchange/data-service')
 const { ApiError } = require('@exceptions/api-error')
 const moment = require('moment')
@@ -65,11 +65,27 @@ class BybitController {
 				bookmarks
 			)
 
+			const totalStats = await DataService.calculateTotalProfitFromDb(
+				user.id,
+				startMsPnl,
+				endMsPnl,
+				bookmarks,
+				search,
+				'bybit',
+				req.lng
+			)
+
 			return res.json({
 				orders: result.orders,
 				total_pages: result.totalPages,
-				total_profit: +result.totalPnl.profit,
-				total_loss: +result.totalPnl.loss,
+				total_profit: {
+					value: +result.totalPnl.profit,
+					count: totalStats.profitCount || 0,
+				},
+				total_loss: {
+					value: +result.totalPnl.loss,
+					count: totalStats.lossCount || 0,
+				},
 			})
 		} catch (e) {
 			next(e)

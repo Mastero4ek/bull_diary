@@ -4,14 +4,20 @@
 	line-height: $height;
 }
 
-@mixin phone {
+@mixin desktop {
+	@media (min-width: 768px) {
+		@content;
+	}
+}
+
+@mixin tablet {
 	@media (max-width: 767px) {
 		@content;
 	}
 }
 
-@mixin desktop {
-	@media (min-width: 768px) {
+@mixin phone {
+	@media (max-width: 459px) {
 		@content;
 	}
 }

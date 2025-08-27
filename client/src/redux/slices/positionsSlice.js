@@ -1,4 +1,4 @@
-import { fakePositions } from '@/helpers/constants'
+import { fakeOrdersByDay, fakePositions } from '@/helpers/constants'
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
@@ -6,6 +6,7 @@ const initialState = {
 	lastUpdate: null,
 	fakeData: fakePositions,
 	ordersByDay: [],
+	fakeOrdersByDay: fakeOrdersByDay,
 	page: 1,
 	sort: { type: 'unrealisedPnl', value: 'desc' },
 	serverStatus: '',
@@ -28,6 +29,9 @@ const positionsSlice = createSlice({
 		setOrdersByDay: (state, action) => {
 			state.ordersByDay = action.payload
 		},
+		setFakeOrdersByDay: (state, action) => {
+			state.fakeOrdersByDay = action.payload || fakeOrdersByDay
+		},
 		setPage: (state, action) => {
 			state.page = action.payload
 		},
@@ -38,6 +42,7 @@ const positionsSlice = createSlice({
 			state.serverStatus = action.payload
 			if (action.payload === 'loading') {
 				state.fakeData = fakePositions
+				state.fakeOrdersByDay = fakeOrdersByDay
 			}
 		},
 		setErrorMessage: (state, action) => {
@@ -50,6 +55,7 @@ const positionsSlice = createSlice({
 			return {
 				...initialState,
 				fakeData: fakePositions,
+				fakeOrdersByDay: fakeOrdersByDay,
 			}
 		},
 	},
@@ -59,6 +65,7 @@ export const {
 	setPositions,
 	setFakePositions,
 	setOrdersByDay,
+	setFakeOrdersByDay,
 	setPage,
 	setSort,
 	setServerStatus,

@@ -19,14 +19,16 @@ import { SmallDesc } from '@/components/ui/descriptions/SmallDesc';
 import { ClosedContent } from '@/components/ui/general/ClosedContent';
 import { InnerBlock } from '@/components/ui/general/InnerBlock';
 import { OuterBlock } from '@/components/ui/general/OuterBlock';
+import { capitalize } from '@/helpers/functions';
 
 import styles from './styles.module.scss';
 
-export const Level = React.memo(() => {
+export const Level = () => {
 	const location = useLocation()
 
 	const isAdminContext = location.pathname.includes('/all-users')
 
+	const { isTablet, isMobile } = useSelector(state => state.settings)
 	const { user } = useSelector(state =>
 		isAdminContext ? state.users : state.candidate
 	)
@@ -73,7 +75,21 @@ export const Level = React.memo(() => {
 		[]
 	)
 
-	return (
+	const getCurrentLevel = useCallback(() => {
+		const userValue = user?.level?.value || 0
+
+		if (userValue <= 0) return { icon: hamster, tooltip: '0 - 299' }
+		if (userValue < 300) return { icon: hamster, tooltip: '0 - 299' }
+		if (userValue < 1000) return { icon: bear, tooltip: '300 - 999' }
+		if (userValue < 3000) return { icon: bull, tooltip: '1000 - 2999' }
+		if (userValue < 8000) return { icon: shark, tooltip: '3000 - 7999' }
+		if (userValue <= 15000) return { icon: whale, tooltip: '8000 - 15000' }
+		return { icon: whale, tooltip: '8000 - 15000' }
+	}, [user?.level?.value])
+
+	const currentLevel = useMemo(() => getCurrentLevel(), [getCurrentLevel])
+
+	return !isTablet && !isMobile ? (
 		<div className={styles.level_wrapper}>
 			<ul className={styles.level_list}>
 				{levelIconList.map(level => {
@@ -133,5 +149,21 @@ export const Level = React.memo(() => {
 				</div>
 			</div>
 		</div>
+	) : (
+		<div className={styles.level_wrapper}>
+			<InnerBlock>
+				<div className={styles.level_item}>
+					<img src={currentLevel.icon} alt='level-image' />
+
+					<div className={styles.level_item_wrap}>
+						<i>
+							<span>{capitalize(user?.level?.name)}</span>
+
+							<span>{currentLevel.tooltip}</span>
+						</i>
+					</div>
+				</div>
+			</InnerBlock>
+		</div>
 	)
-})
+}

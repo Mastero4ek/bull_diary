@@ -1,7 +1,13 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .contacts_form {
 	padding: 40rem;
 	position: relative;
 	border-radius: 40rem;
+
+	@include mixins.tablet {
+		padding: 20rem;
+	}
 }
 
 .contacts_desc_bottom {
@@ -11,6 +17,10 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: 16rem;
+
+	@include mixins.tablet {
+		flex-wrap: wrap;
+	}
 }
 
 .contacts_desc_link {
@@ -26,8 +36,14 @@
 	color: var(--white);
 	font-weight: 600;
 
-	&:hover {
-		color: var(--white);
-		background: var(--primaryHov);
+	@include mixins.desktop {
+		&:hover {
+			color: var(--white);
+			background: var(--primaryHov);
+		}
+	}
+
+	@include mixins.tablet {
+		padding: 10rem 20rem;
 	}
 }

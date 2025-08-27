@@ -1,3 +1,5 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .switch {
 	width: 60rem;
 
@@ -12,9 +14,7 @@
 		height: 30rem;
 		background: transparent;
 		position: relative;
-		cursor: pointer;
 		border-radius: 20rem;
-
 		background: var(--bgDark);
 		box-shadow: var(--shadowOuter);
 
@@ -68,14 +68,20 @@
 		}
 	}
 
-	input:hover {
-		& ~ label {
-			&::before {
-				background: var(--bgLight);
-			}
+	@include mixins.desktop {
+		label {
+			cursor: pointer;
+		}
 
-			&::after {
-				background: var(--primaryHov);
+		input:hover {
+			& ~ label {
+				&::before {
+					background: var(--bgLight);
+				}
+
+				&::after {
+					background: var(--primaryHov);
+				}
 			}
 		}
 	}
