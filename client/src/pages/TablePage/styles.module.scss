@@ -17,6 +17,10 @@
 	svg {
 		height: 100%;
 	}
+
+	@include mixins.tablet {
+		height: 280rem;
+	}
 }
 
 .doughnut_chart_tooltip {

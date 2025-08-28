@@ -100,7 +100,9 @@ export const WalletDetailsPage = React.memo(() => {
 			Header: t('table.symbol'),
 			accessor: 'symbol',
 			Cell: ({ cell: { value }, row: { original } }) => (
-				<span>{value || original.currency || ''}</span>
+				<span style={{ fontSize: isTablet ? '22rem' : '18rem' }}>
+					{value || original.currency || ''}
+				</span>
 			),
 		},
 		{
@@ -217,6 +219,7 @@ export const WalletDetailsPage = React.memo(() => {
 						display: 'block',
 						textAlign: 'right',
 						color: `var(--${value === 0 ? 'disabled' : 'text'})`,
+						fontSize: isTablet ? '22rem' : '18rem',
 					}}
 				>
 					{amount

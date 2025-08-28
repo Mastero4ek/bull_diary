@@ -87,7 +87,7 @@ export const Platform = () => {
 								pagination={{ clickable: true }}
 								autoplay={{ delay: 2500, disableOnInteraction: false }}
 								modules={[Pagination, Autoplay]}
-								className='mySwiper'
+								className='benefits_slider'
 							>
 								<SwiperSlide>
 									<img src='' alt='DiaryPage-screenshot' />

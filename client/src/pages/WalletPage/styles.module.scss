@@ -134,6 +134,10 @@
 	svg {
 		height: 100%;
 	}
+
+	@include mixins.tablet {
+		height: 280rem;
+	}
 }
 
 .line_chart_tooltip {
@@ -177,6 +181,10 @@
 	position: relative;
 	width: 100%;
 	height: 400rem;
+
+	@include mixins.tablet {
+		height: 280rem;
+	}
 }
 
 .line_chart_line {

@@ -1,55 +1,46 @@
-import './phone_input.scss';
+import './phone_input.scss'
 
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react'
 
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import PhoneInput from 'react-phone-input-2';
-import ru from 'react-phone-input-2/lang/ru.json';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useParams,
-} from 'react-router-dom';
+import moment from 'moment/min/moment-with-locales'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import PhoneInput from 'react-phone-input-2'
+import ru from 'react-phone-input-2/lang/ru.json'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useParams } from 'react-router-dom'
 
-import avatarDefault from '@/assets/images/general/default_avatar.png';
-import { useNotification } from '@/components/layouts/NotificationLayout';
-import { PageLayout } from '@/components/layouts/PageLayout';
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout';
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { RootButton } from '@/components/ui/buttons/RootButton';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Icon } from '@/components/ui/general/Icon';
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
-import { OuterBlock } from '@/components/ui/general/OuterBlock';
-import { RootInput } from '@/components/ui/inputs/RootInput';
-import { AvatarUserPopup } from '@/popups/AvatarUserPopup';
-import { RemoveUserPopup } from '@/popups/RemoveUserPopup';
+import avatarDefault from '@/assets/images/general/default_avatar.png'
+import { useNotification } from '@/components/layouts/NotificationLayout'
+import { PageLayout } from '@/components/layouts/PageLayout'
+import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
+import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
+import { RootButton } from '@/components/ui/buttons/RootButton'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Icon } from '@/components/ui/general/Icon'
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
+import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { RootInput } from '@/components/ui/inputs/RootInput'
+import { AvatarUserPopup } from '@/popups/AvatarUserPopup'
+import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
 import {
-  editUser as editUserCandidate,
-  getUser as getUserCandidate,
-  removeCover as removeCoverCandidate,
-  setChangeUser as setChangeUserCandidate,
-  setPhone as setPhoneCandidate,
-} from '@/redux/slices/candidateSlice';
+	editUser as editUserCandidate,
+	getUser as getUserCandidate,
+	removeCover as removeCoverCandidate,
+	setChangeUser as setChangeUserCandidate,
+	setPhone as setPhoneCandidate,
+} from '@/redux/slices/candidateSlice'
 import {
-  editUser as editUserUsers,
-  getUser as getUserUsers,
-  removeCover as removeCoverUsers,
-  setChangeUser as setChangeUserUsers,
-  setPhone as setPhoneUsers,
-} from '@/redux/slices/usersSlice';
-import { unwrapResult } from '@reduxjs/toolkit';
+	editUser as editUserUsers,
+	getUser as getUserUsers,
+	removeCover as removeCoverUsers,
+	setChangeUser as setChangeUserUsers,
+	setPhone as setPhoneUsers,
+} from '@/redux/slices/usersSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
-import { Level } from './Level';
-import styles from './styles.module.scss';
+import { Level } from './Level'
+import styles from './styles.module.scss'
 
 export const ProfilePage = () => {
 	const { t } = useTranslation()
@@ -271,13 +262,7 @@ export const ProfilePage = () => {
 	}, [dispatch, isAdminContext, params.id, user?.id, getUser])
 
 	return (
-		<PageLayout
-			chartWidth={help && isTablet && isMobile ? 0 : 600}
-			filter={false}
-			entries={true}
-			periods={true}
-			disabled={true}
-		>
+		<PageLayout chartWidth={help && isTablet && isMobile ? 0 : 600}>
 			<div style={{ marginBottom: 'auto' }}>
 				<OuterBlock>
 					<div className={styles.profile_wrapper}>
@@ -450,6 +435,22 @@ export const ProfilePage = () => {
 										/>
 									</>
 								)}
+
+								<label className={styles.profile_form_label}>
+									<RootDesc>
+										<span>{t('form.label.updated_at')}</span>
+									</RootDesc>
+
+									<div className={styles.profile_form_fake_input}>
+										<RootDesc>
+											<span>
+												{moment(changeUser?.updated_at).format(
+													'DD.MM.YYYY - HH:mm'
+												) || ''}
+											</span>
+										</RootDesc>
+									</div>
+								</label>
 
 								<input
 									type='hidden'

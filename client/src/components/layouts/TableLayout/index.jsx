@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { useTable } from 'react-table'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -27,10 +28,17 @@ export const TableLayout = props => {
 		syncWarn = '',
 	} = props
 
+	const { isMobile, isTablet } = useSelector(state => state.settings)
+
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
 		useTable({
 			columns,
-			data: data && data.length > 0 ? data : fakeData,
+			data:
+				data && data.length > 0
+					? data
+					: isMobile || isTablet
+					? fakeData.slice(0, 1)
+					: fakeData,
 		})
 
 	return (

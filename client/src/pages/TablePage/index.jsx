@@ -34,7 +34,7 @@ export const TablePage = () => {
 	const syncWarning = useSelector(state => state.sync.warning)
 	const isSynced = useSelector(state => state.sync.isSynced)
 
-	const { mark, color, amount } = useSelector(state => state.settings)
+	const { mark, color, amount, isTablet } = useSelector(state => state.settings)
 	const { date, limit, search, exchange, tickers } = useSelector(
 		state => state.filters
 	)
@@ -67,7 +67,13 @@ export const TablePage = () => {
 				</span>
 			),
 		},
-		{ Header: t('table.symbol'), accessor: 'symbol' },
+		{
+			Header: t('table.symbol'),
+			accessor: 'symbol',
+			Cell: ({ cell: { value } }) => (
+				<span style={{ fontSize: isTablet ? '22rem' : '18rem' }}>{value}</span>
+			),
+		},
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
@@ -100,6 +106,7 @@ export const TablePage = () => {
 				<span
 					style={{
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+						fontSize: isTablet ? '22rem' : '18rem',
 					}}
 				>
 					{parseFloat(
@@ -121,6 +128,7 @@ export const TablePage = () => {
 				<span
 					style={{
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+						fontSize: isTablet ? '22rem' : '18rem',
 					}}
 				>
 					{parseFloat(

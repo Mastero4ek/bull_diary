@@ -1,3 +1,5 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .error {
 	width: 100% !important;
 	height: 100% !important;
@@ -12,6 +14,7 @@
 	align-items: center;
 	justify-content: center;
 	border-radius: inherit;
+	padding: 40rem 10rem;
 
 	div {
 		max-width: 80%;
@@ -20,5 +23,11 @@
 	span {
 		font-family: 'RAYDIS', sans-serif;
 		font-size: 20rem;
+	}
+
+	@include mixins.phone {
+		span {
+			font-size: 16rem;
+		}
 	}
 }

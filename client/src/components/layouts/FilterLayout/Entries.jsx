@@ -21,6 +21,7 @@ export const Entries = React.memo(() => {
 	return (
 		<div className={styles.entries}>
 			<RootSelect
+				className={styles.entries_select}
 				iconId='entries'
 				placeholder={t('filter.entries.placeholder')}
 				getLabel={item => item.name}

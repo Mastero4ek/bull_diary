@@ -45,7 +45,7 @@ export const BattlePage = () => {
 
 	const { showSuccess, showError } = useNotification()
 
-	const { color, amount } = useSelector(state => state.settings)
+	const { color, amount, isTablet } = useSelector(state => state.settings)
 	const { search, limit } = useSelector(state => state.filters)
 	const { tournamentUsersList } = useSelector(state => state.tournaments)
 	const {
@@ -70,8 +70,8 @@ export const BattlePage = () => {
 					src={value || avatarDefault}
 					alt='avatar'
 					style={{
-						width: '40rem',
-						height: '40rem',
+						width: isTablet ? '50rem' : '40rem',
+						height: isTablet ? '50rem' : '40rem',
 						borderRadius: '50%',
 						objectFit: 'cover',
 					}}
@@ -82,9 +82,9 @@ export const BattlePage = () => {
 			Header: t('table.name'),
 			accessor: 'name',
 			Cell: ({ cell: { value }, row }) => (
-				<>
+				<span style={{ fontSize: isTablet ? '22rem' : '18rem' }}>
 					{row.original.name} {row.original.last_name}
-				</>
+				</span>
 			),
 		},
 		{
@@ -104,6 +104,7 @@ export const BattlePage = () => {
 				<span
 					style={{
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+						fontSize: isTablet ? '22rem' : '18rem',
 					}}
 				>
 					{amount

@@ -132,7 +132,8 @@
 			"start_date": "Start date",
 			"api_key": "Api key",
 			"secret_key": "Secret key",
-			"agreement_key": "I confirm that I use 'read-only' keys"
+			"agreement_key": "I confirm that I use 'read-only' keys",
+			"updated_at": "Last update"
 		},
 		"error": {
 			"name": "Name is required!",
@@ -368,6 +369,7 @@
 		},
 		"diary": {
 			"update_success": "Positions updated successfully!",
+			"chart_empty": "There were no closed positions last week!",
 			"empty": "There were no open transactions now!",
 			"chart_label": "Profit (P&L)"
 		},

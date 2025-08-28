@@ -73,7 +73,13 @@ export const BookmarksPage = React.memo(() => {
 				</span>
 			),
 		},
-		{ Header: t('table.symbol'), accessor: 'symbol' },
+		{
+			Header: t('table.symbol'),
+			accessor: 'symbol',
+			Cell: ({ cell: { value } }) => (
+				<span style={{ fontSize: isTablet ? '22rem' : '18rem' }}>{value}</span>
+			),
+		},
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
@@ -106,6 +112,7 @@ export const BookmarksPage = React.memo(() => {
 				<span
 					style={{
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+						fontSize: isTablet ? '22rem' : '18rem',
 					}}
 				>
 					{parseFloat(
@@ -127,6 +134,7 @@ export const BookmarksPage = React.memo(() => {
 				<span
 					style={{
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+						fontSize: isTablet ? '22rem' : '18rem',
 					}}
 				>
 					{parseFloat(

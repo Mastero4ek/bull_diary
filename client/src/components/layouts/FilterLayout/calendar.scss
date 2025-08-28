@@ -80,17 +80,34 @@
 		transform: rotateX(-90deg);
 		opacity: 0;
 
+		@include mixins.phone {
+			position: fixed !important;
+			top: 212rem !important;
+			left: 50% !important;
+			right: auto !important;
+			width: 320rem !important;
+			transform: rotateX(-90deg) translate(-50%, -50%);
+		}
+
 		&--open {
 			z-index: 10000;
 			transition: all 0.15s ease-in-out;
 			transform: rotateX(0deg);
 			opacity: 1;
+
+			@include mixins.phone {
+				transform: rotateX(0deg) translate(-50%, -50%);
+			}
 		}
 
 		&--close {
 			transition: all 0.15s ease-in-out;
 			transform: rotateX(-90deg);
 			opacity: 0;
+
+			@include mixins.phone {
+				transform: rotateX(-90deg) translate(-50%, -50%);
+			}
 		}
 	}
 

@@ -602,7 +602,7 @@
 
 .benefits_slider {
 	width: 930rem;
-	height: auto;
+	height: 100%;
 
 	@include mixins.tablet {
 		width: 100%;

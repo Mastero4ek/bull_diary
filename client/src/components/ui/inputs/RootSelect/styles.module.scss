@@ -115,6 +115,12 @@
 			text-overflow: ellipsis;
 		}
 	}
+
+	@include mixins.phone {
+		li {
+			padding: 15rem;
+		}
+	}
 }
 
 .select_list_active {

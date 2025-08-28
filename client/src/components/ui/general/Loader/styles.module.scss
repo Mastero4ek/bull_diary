@@ -73,6 +73,21 @@
 			}
 		}
 	}
+
+	@include mixins.phone {
+		div {
+			img {
+				width: 60rem;
+				height: 60rem;
+			}
+		}
+
+		i {
+			span {
+				font-size: 16rem !important;
+			}
+		}
+	}
 }
 
 @keyframes loading {

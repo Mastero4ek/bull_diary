@@ -192,6 +192,18 @@ export const BarChart = React.memo(({ syncWarning = '' }) => {
 						nice: true,
 					}}
 				/>
+
+				{data.length === 0 && (
+					<div className={styles.bar_chart_title}>
+						<RootDesc>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: `${t('page.diary.chart_empty')}`,
+								}}
+							></span>
+						</RootDesc>
+					</div>
+				)}
 			</div>
 		</div>
 	)

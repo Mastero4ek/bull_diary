@@ -32,7 +32,7 @@ export const DiaryPage = React.memo(() => {
 	const { showSuccess } = useNotification()
 
 	const { connect, subscribeToPositions } = useWebSocket()
-	const { mark, color, amount } = useSelector(state => state.settings)
+	const { mark, color, amount, isTablet } = useSelector(state => state.settings)
 	const { exchange, search, limit, tickers } = useSelector(
 		state => state.filters
 	)
@@ -58,7 +58,13 @@ export const DiaryPage = React.memo(() => {
 	const displayPositions = filteredPositions
 
 	const columns = [
-		{ Header: t('table.symbol'), accessor: 'symbol' },
+		{
+			Header: t('table.symbol'),
+			accessor: 'symbol',
+			Cell: ({ cell: { value } }) => (
+				<span style={{ fontSize: isTablet ? '22rem' : '18rem' }}>{value}</span>
+			),
+		},
 		{
 			Header: t('table.direction'),
 			accessor: 'direction',
@@ -82,6 +88,7 @@ export const DiaryPage = React.memo(() => {
 				<span
 					style={{
 						color: `var(--${color ? colorizedNum(value, true) : 'text'})`,
+						fontSize: isTablet ? '22rem' : '18rem',
 					}}
 				>
 					{parseFloat(

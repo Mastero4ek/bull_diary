@@ -28,6 +28,17 @@
 	}
 }
 
+.exchange_mobile_select {
+	width: 100%;
+	max-width: 340rem;
+	margin-right: auto;
+	position: relative;
+
+	ul {
+		width: 100%;
+	}
+}
+
 .page {
 	display: flex;
 	flex-direction: column;

@@ -19,7 +19,7 @@ import styles from './styles.module.scss'
 
 export const PositionLayout = React.memo(() => {
 	const { t } = useTranslation()
-	const { amount, color, mark } = useSelector(state => state.settings)
+	const { amount, color, mark, isTablet } = useSelector(state => state.settings)
 	const position = useLocation()?.state?.item
 	const formatDuration = useFormatDuration()
 
@@ -128,23 +128,22 @@ export const PositionLayout = React.memo(() => {
 											</>
 										) : item?.value === position?.pnl ||
 										  item?.value === position?.roi ? (
-											<>
-												<span
-													style={{
-														color: `var(--${
-															color ? colorizedNum(item?.value, true) : 'text'
-														})`,
-													}}
-												>
-													{amount
-														? '****'
-														: item?.value === 0
-														? '0.0000'
-														: item?.value > 0
-														? `+${item?.value}`
-														: item?.value}
-												</span>
-											</>
+											<span
+												style={{
+													color: `var(--${
+														color ? colorizedNum(item?.value, true) : 'text'
+													})`,
+													fontSize: isTablet ? '22rem' : '18rem',
+												}}
+											>
+												{amount
+													? '****'
+													: item?.value === 0
+													? '0.0000'
+													: item?.value > 0
+													? `+${item?.value}`
+													: item?.value}
+											</span>
 										) : item?.value === position?.open_fee ||
 										  item?.value === position?.closed_fee ? (
 											<>

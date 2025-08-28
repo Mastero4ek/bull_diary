@@ -64,8 +64,8 @@ export const UsersPage = () => {
 					src={value || avatarDefault}
 					alt='avatar'
 					style={{
-						width: '40rem',
-						height: '40rem',
+						width: isTablet ? '50rem' : '40rem',
+						height: isTablet ? '50rem' : '40rem',
 						borderRadius: '50%',
 						objectFit: 'cover',
 					}}
@@ -76,9 +76,9 @@ export const UsersPage = () => {
 			Header: t('table.name'),
 			accessor: 'name',
 			Cell: ({ cell: { value }, row }) => (
-				<>
+				<span style={{ fontSize: isTablet ? '22rem' : '18rem' }}>
 					{value} {row.original.last_name}
-				</>
+				</span>
 			),
 		},
 		{
@@ -115,7 +115,19 @@ export const UsersPage = () => {
 			Header: t('table.active'),
 			accessor: 'inactive',
 			Cell: ({ cell: { value } }) =>
-				value ? <Icon id={'user-inactive'} /> : <Icon id={'user-active'} />,
+				value ? (
+					<Icon
+						width={isTablet ? 32 : 28}
+						height={isTablet ? 32 : 28}
+						id={'user-inactive'}
+					/>
+				) : (
+					<Icon
+						width={isTablet ? 32 : 28}
+						height={isTablet ? 32 : 28}
+						id={'user-active'}
+					/>
+				),
 		},
 		{
 			Header: t('table.actions'),

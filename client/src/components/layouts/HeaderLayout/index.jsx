@@ -1,18 +1,18 @@
-import React from 'react';
+import React from 'react'
 
-import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import { Link } from 'react-scroll';
+import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+import { Link } from 'react-scroll'
 
-import { NotificationLayout } from '@/components/layouts/NotificationLayout';
-import { RootDesc } from '@/components/ui/descriptions/RootDesc';
-import { Logo } from '@/components/ui/general/Logo';
-import { useNavList } from '@/hooks/useNavigation';
+import { NotificationLayout } from '@/components/layouts/NotificationLayout'
+import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import { Logo } from '@/components/ui/general/Logo'
+import { useNavList } from '@/hooks/useNavigation'
 
-import { Exchange } from './Exchange';
-import { SettingsWrapper } from './SettingsWrapper';
-import styles from './styles.module.scss';
-import { UserWrapper } from './UserWrapper';
+import { Exchange } from './Exchange'
+import { SettingsWrapper } from './SettingsWrapper'
+import styles from './styles.module.scss'
+import { UserWrapper } from './UserWrapper'
 
 export const HeaderLayout = React.memo(() => {
 	const location = useLocation()
@@ -34,6 +34,7 @@ export const HeaderLayout = React.memo(() => {
 					isMobile ||
 					isTablet ||
 					(!(
+						location.pathname.includes('all-users') ||
 						location.pathname.includes('profile') ||
 						location.pathname.includes('settings') ||
 						location.pathname.includes('contacts')

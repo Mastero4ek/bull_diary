@@ -1,11 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
-import { InnerBlock } from '@/components/ui/general/InnerBlock';
+import { InnerBlock } from '@/components/ui/general/InnerBlock'
 
-import { FilterLayout } from '../FilterLayout';
-import styles from './styles.module.scss';
+import { FilterLayout } from '../FilterLayout'
+import { ExchangeMobile } from './ExchangeMobile'
+import styles from './styles.module.scss'
 
 export const PageLayout = props => {
 	const {
@@ -27,27 +29,43 @@ export const PageLayout = props => {
 	} = props
 
 	const { isTablet, isMobile } = useSelector(state => state.settings)
+	const location = useLocation()
 
 	return (
 		<div className={styles.page_wrapper}>
 			<InnerBlock>
 				<div className={styles.page}>
-					{!isMobile && !isTablet && filter && (
-						<FilterLayout
-							disabled={disabled}
-							periods={periods}
-							entries={entries}
-							calendar={calendar}
-							search={search}
-							searchOptions={searchOptions}
-							onChange={onChange}
-							total={total}
-							update={update}
-							minDate={minDate}
-							placeholder={placeholder}
-							searchPlaceholder={searchPlaceholder}
-						/>
-					)}
+					{!isMobile &&
+						isTablet &&
+						!(
+							location.pathname.includes('all-users') ||
+							location.pathname.includes('profile') ||
+							location.pathname.includes('settings') ||
+							location.pathname.includes('contacts')
+						) && <ExchangeMobile />}
+
+					<FilterLayout
+						disabled={disabled}
+						periods={periods}
+						entries={entries}
+						calendar={calendar}
+						search={search}
+						searchOptions={searchOptions}
+						onChange={onChange}
+						total={total}
+						update={update}
+						minDate={minDate}
+						placeholder={placeholder}
+						searchPlaceholder={searchPlaceholder}
+					/>
+
+					{isMobile &&
+						!(
+							location.pathname.includes('all-users') ||
+							location.pathname.includes('profile') ||
+							location.pathname.includes('settings') ||
+							location.pathname.includes('contacts')
+						) && <ExchangeMobile />}
 
 					<div
 						className={styles.page_content}

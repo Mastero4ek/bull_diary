@@ -23,7 +23,7 @@ const levelImages = { hamster, bear, bull, shark, whale }
 export const Info = React.memo(({ syncWarning = '' }) => {
 	const { t } = useTranslation()
 	const { user } = useSelector(state => state.candidate)
-	const { color, amount } = useSelector(state => state.settings)
+	const { color, amount, isTablet } = useSelector(state => state.settings)
 	const { wallet, fakeWallet, serverStatus, errorMessage } = useSelector(
 		state => state.wallet
 	)
@@ -131,7 +131,14 @@ export const Info = React.memo(({ syncWarning = '' }) => {
 
 										<RootDesc>
 											{stat?.type === 'balance' || stat?.type === 'pnl' ? (
-												<>
+												<span
+													style={{
+														fontSize:
+															stat?.type === 'balance' && isTablet
+																? '22rem'
+																: '18rem',
+													}}
+												>
 													{stat?.type === 'balance' && <b>~</b>}
 
 													<b
@@ -149,19 +156,23 @@ export const Info = React.memo(({ syncWarning = '' }) => {
 													</b>
 
 													<b>{stat?.type === 'balance' ? 'USD' : 'USDT'}</b>
-												</>
+												</span>
 											) : stat?.type === 'win_trades' ||
 											  stat?.type === 'los_trades' ? (
 												<span>{amount ? '****' : stat?.value}</span>
 											) : stat?.type === 'winrate' ? (
-												<>
+												<span
+													style={{
+														fontSize: isTablet ? '22rem' : '18rem',
+													}}
+												>
 													<span>
 														{amount
 															? '***'
 															: Number(stat?.value || 0).toFixed(2)}{' '}
 													</span>
 													<span>%</span>
-												</>
+												</span>
 											) : (
 												<>
 													<span
