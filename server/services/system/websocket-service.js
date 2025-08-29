@@ -3,6 +3,7 @@ const { Server } = require('socket.io')
 
 const { logError } = require('@configs/logger-config')
 const SyncExecutor = require('@services/core/sync-executor')
+const TournamentService = require('@services/core/tournament-service')
 const BybitWebSocketService = require('@services/exchange/bybit/bybit-websocket')
 
 class WebSocketService {
@@ -214,6 +215,76 @@ class WebSocketService {
 				}
 			})
 
+			socket.on('subscribe_tournaments', async data => {
+				try {
+					const {
+						userId,
+						exchange,
+						page = 1,
+						size = 5,
+						search = null,
+						sort = null,
+						language = 'en',
+					} = data
+
+					if (!userId || !exchange) {
+						logError('Missing userId or exchange for tournaments subscription')
+						socket.emit('error', { message: 'Missing userId or exchange' })
+						return
+					}
+
+					this.tournamentSubscriptions =
+						this.tournamentSubscriptions || new Map()
+					this.tournamentSubscriptions.set(userId, {
+						exchange,
+						page,
+						size,
+						search,
+						sort,
+						language,
+					})
+
+					const tournaments = await TournamentService.getTournaments(
+						exchange,
+						language,
+						page,
+						size,
+						search,
+						sort
+					)
+
+					socket.emit('tournaments_update', { tournaments })
+
+					this.startTournamentUpdates(userId, socket)
+				} catch (error) {
+					logError('Error in subscribe_tournaments:', error)
+					socket.emit('error', {
+						message: 'Failed to subscribe to tournaments',
+					})
+				}
+			})
+
+			socket.on('unsubscribe_tournaments', data => {
+				const { userId } = data
+				if (userId) {
+					this.stopTournamentUpdates(userId)
+					this.tournamentSubscriptions?.delete(userId)
+				}
+			})
+
+			socket.on('update_tournament_subscription', data => {
+				const { userId, page, size, search, sort, language } = data
+				if (userId) {
+					this.updateTournamentSubscription(userId, {
+						page,
+						size,
+						search,
+						sort,
+						language,
+					})
+				}
+			})
+
 			socket.on('get_connection_status', data => {
 				const { userId } = data
 				if (userId) {
@@ -231,6 +302,8 @@ class WebSocketService {
 					this.clientConnections.delete(socket.id)
 					this.userSockets.delete(userId)
 					this.syncProgressCallbacks.delete(userId)
+					this.stopTournamentUpdates(userId)
+					this.tournamentSubscriptions?.delete(userId)
 					BybitWebSocketService.disconnectClient(userId)
 				}
 			})
@@ -330,6 +403,66 @@ class WebSocketService {
 			}
 
 			this.syncProgressCallbacks.delete(userId)
+		}
+	}
+
+	/**
+	 * Запускает периодические обновления турниров для пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {Object} socket - WebSocket сокет
+	 */
+	startTournamentUpdates(userId, socket) {
+		this.stopTournamentUpdates(userId)
+
+		const updateInterval = setInterval(async () => {
+			try {
+				const subscription = this.tournamentSubscriptions?.get(userId)
+				if (!subscription) {
+					this.stopTournamentUpdates(userId)
+					return
+				}
+
+				const { exchange, page, size, search, sort, language } = subscription
+				const tournaments = await TournamentService.getTournaments(
+					exchange,
+					language,
+					page,
+					size,
+					search,
+					sort
+				)
+
+				socket.emit('tournaments_update', { tournaments })
+			} catch (error) {
+				logError(`Error updating tournaments for user ${userId}:`, error)
+			}
+		}, 3000)
+
+		this.tournamentUpdateIntervals = this.tournamentUpdateIntervals || new Map()
+		this.tournamentUpdateIntervals.set(userId, updateInterval)
+	}
+
+	/**
+	 * Останавливает периодические обновления турниров для пользователя
+	 * @param {string} userId - ID пользователя
+	 */
+	stopTournamentUpdates(userId) {
+		const interval = this.tournamentUpdateIntervals?.get(userId)
+		if (interval) {
+			clearInterval(interval)
+			this.tournamentUpdateIntervals.delete(userId)
+		}
+	}
+
+	/**
+	 * Обновляет параметры подписки на турниры для пользователя
+	 * @param {string} userId - ID пользователя
+	 * @param {Object} params - Новые параметры подписки
+	 */
+	updateTournamentSubscription(userId, params) {
+		const subscription = this.tournamentSubscriptions?.get(userId)
+		if (subscription) {
+			Object.assign(subscription, params)
 		}
 	}
 

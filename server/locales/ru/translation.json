@@ -16,7 +16,8 @@
 			"not_found": "Ключи не&nbsp;найдены!"
 		},
 		"tournament": {
-			"not_found": "Соревнование на&nbsp;бирже {{exchange}} не&nbsp;найдено!"
+			"not_found": "Соревнование на&nbsp;бирже {{exchange}} не&nbsp;найдено!",
+			"no_members": "Зарегистрированных пользователей не&nbsp;найдено!"
 		},
 		"file": {
 			"not_found": "Файл не&nbsp;найден!",

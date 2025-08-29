@@ -43,27 +43,6 @@ class TournamentController {
 		}
 	}
 
-	async getTournaments(req, res, next) {
-		try {
-			validationError(req, next)
-
-			const { exchange, page, size, search, sort } = req.query
-
-			const tournament = await TournamentService.getTournaments(
-				exchange,
-				req.lng,
-				page,
-				size,
-				search,
-				sort
-			)
-
-			return res.json(tournament)
-		} catch (e) {
-			next(e)
-		}
-	}
-
 	async addTournamentUser(req, res, next) {
 		try {
 			validationError(req, next)

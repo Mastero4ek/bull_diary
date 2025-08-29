@@ -231,7 +231,7 @@ class TournamentService {
 					tournament,
 					users: [],
 					total: 0,
-					message: i18next.t('errors.no_members', { lng }),
+					message: i18next.t('error.tournament.no_members', { lng }),
 				}
 			}
 
@@ -409,7 +409,7 @@ class TournamentService {
 					tournament,
 					users: [],
 					total: 0,
-					message: i18next.t('errors.no_members', { lng }),
+					message: null,
 				}
 			}
 

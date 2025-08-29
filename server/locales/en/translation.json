@@ -16,7 +16,8 @@
 			"not_found": "Keys not&nbsp;found!"
 		},
 		"tournament": {
-			"not_found": "Tournament on the {{exchange}} exchange not&nbsp;found!"
+			"not_found": "Tournament on the {{exchange}} exchange not&nbsp;found!",
+			"no_members": "No registered users found!"
 		},
 		"file": {
 			"not_found": "File not&nbsp;found!",

@@ -8,13 +8,6 @@ const ValidationSchema = require('@validation/schema')
 
 const router = new Router()
 
-router.get(
-	'/tournaments',
-	authMiddleware,
-	checkSchema(ValidationSchema.getTournaments, ['query']),
-	tournamentController.getTournaments
-)
-
 router.post(
 	'/tournaments/user/:id',
 	authMiddleware,
