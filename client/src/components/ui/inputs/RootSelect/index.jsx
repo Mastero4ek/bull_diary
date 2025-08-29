@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useTranslation } from 'react-i18next'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { Icon } from '@/components/ui/general/Icon'
-import { InnerBlock } from '@/components/ui/general/InnerBlock'
-import { OuterBlock } from '@/components/ui/general/OuterBlock'
+import { InnerBlock } from '@/components/layouts/utils/InnerBlock'
+import { OuterBlock } from '@/components/layouts/utils/OuterBlock'
+import { Icon } from '@/components/ui/media/Icon'
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
 
 import styles from './styles.module.scss'
 

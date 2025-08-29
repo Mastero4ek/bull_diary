@@ -1,24 +1,26 @@
 import { lazy } from 'react'
 
-export const LazyHomePage = lazy(() => import('@/pages/HomePage'))
-export const LazyAuthCallback = lazy(() => import('@/pages/AuthCallback'))
-export const LazyAuthError = lazy(() => import('@/pages/AuthError'))
-export const LazyWalletPage = lazy(() => import('@/pages/WalletPage'))
+export const LazyHomePage = lazy(() => import('@/pages/main/HomePage'))
+export const LazyAuthCallback = lazy(() => import('@/pages/auth/AuthCallback'))
+export const LazyAuthError = lazy(() => import('@/pages/auth/AuthError'))
+export const LazyWalletPage = lazy(() => import('@/pages/main/WalletPage'))
 export const LazyWalletDetailsPage = lazy(() =>
-	import('@/pages/WalletDetailsPage')
+	import('@/pages/main/WalletDetailsPage')
 )
-export const LazyDiaryPage = lazy(() => import('@/pages/DiaryPage'))
-export const LazyTablePage = lazy(() => import('@/pages/TablePage'))
-export const LazyPositionPage = lazy(() => import('@/pages/PositionPage'))
-export const LazyBattlePage = lazy(() => import('@/pages/BattlePage'))
-export const LazyBookmarksPage = lazy(() => import('@/pages/BookmarksPage'))
-export const LazyUsersPage = lazy(() => import('@/pages/UsersPage'))
-export const LazyProfilePage = lazy(() => import('@/pages/ProfilePage'))
-export const LazySettingsPage = lazy(() => import('@/pages/SettingsPage'))
-export const LazyContactsPage = lazy(() => import('@/pages/ContactsPage'))
-export const LazyPrivacyPage = lazy(() => import('@/pages/PrivacyPage'))
-export const LazyTermsPage = lazy(() => import('@/pages/TermsPage'))
-export const LazyNotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
+export const LazyDiaryPage = lazy(() => import('@/pages/main/DiaryPage'))
+export const LazyTablePage = lazy(() => import('@/pages/main/TablePage'))
+export const LazyPositionPage = lazy(() => import('@/pages/main/PositionPage'))
+export const LazyBattlePage = lazy(() => import('@/pages/main/BattlePage'))
+export const LazyBookmarksPage = lazy(() =>
+	import('@/pages/main/BookmarksPage')
+)
+export const LazyUsersPage = lazy(() => import('@/pages/main/UsersPage'))
+export const LazyProfilePage = lazy(() => import('@/pages/main/ProfilePage'))
+export const LazySettingsPage = lazy(() => import('@/pages/main/SettingsPage'))
+export const LazyContactsPage = lazy(() => import('@/pages/info/ContactsPage'))
+export const LazyPrivacyPage = lazy(() => import('@/pages/info/PrivacyPage'))
+export const LazyTermsPage = lazy(() => import('@/pages/info/TermsPage'))
+export const LazyNotFoundPage = lazy(() => import('@/pages/info/NotFoundPage'))
 
 export const lazyComponents = {
 	HomePage: LazyHomePage,

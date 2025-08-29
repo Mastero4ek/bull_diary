@@ -92,7 +92,7 @@ const handleOrdersError = (state, action) => {
 	state.serverStatus = 'error'
 }
 
-const handleOrdersLoading = (state, action) => {
+const handleOrdersLoading = state => {
 	state.serverStatus = 'loading'
 	state.errorMessage = null
 }

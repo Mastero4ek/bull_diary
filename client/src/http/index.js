@@ -32,13 +32,9 @@ const processQueue = (error = null) => {
 
 // Function to handle token refresh
 const refreshTokens = async () => {
-	try {
-		const response = await $api.get('/refresh')
+	const response = await $api.get('/refresh')
 
-		return response.data
-	} catch (error) {
-		throw error
-	}
+	return response.data
 }
 
 // Flag to prevent recursion when getting CSRF token

@@ -30,7 +30,7 @@ const handleWalletError = (state, action) => {
 	state.serverStatus = 'error'
 }
 
-const handleWalletLoading = (state, action) => {
+const handleWalletLoading = state => {
 	state.serverStatus = 'loading'
 	state.errorMessage = null
 }

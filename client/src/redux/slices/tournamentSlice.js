@@ -1,10 +1,7 @@
-import { fakeUsers } from '@/helpers/constants';
-import { resError } from '@/helpers/functions';
-import TournamentService from '@/services/TournamentService';
-import {
-  createAsyncThunk,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { fakeUsers } from '@/helpers/constants'
+import { resError } from '@/helpers/functions'
+import TournamentService from '@/services/TournamentService'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const getTournaments = createAsyncThunk(
 	'get-tournaments',
@@ -101,7 +98,7 @@ const handleTournamentError = (state, action) => {
 	state.serverStatus = 'error'
 }
 
-const handleTournamentLoading = (state, action) => {
+const handleTournamentLoading = state => {
 	state.serverStatus = 'loading'
 	state.errorMessage = null
 }

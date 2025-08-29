@@ -169,7 +169,7 @@ const handleUsersError = (state, action) => {
 	state.errorArray = action?.payload?.errors || null
 }
 
-const handleUsersLoading = (state, action) => {
+const handleUsersLoading = state => {
 	state.serverStatus = 'loading'
 	state.errorMessage = null
 	state.errorArray = null

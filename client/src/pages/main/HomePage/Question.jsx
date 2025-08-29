@@ -1,0 +1,57 @@
+import { useTranslation } from 'react-i18next'
+
+import { InnerBlock } from '@/components/layouts/utils/InnerBlock'
+import { ContactForm } from '@/components/ui/forms/ContactForm'
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
+import { H1 } from '@/components/ui/typography/titles/H1'
+
+import styles from './styles.module.scss'
+
+export const Question = () => {
+	const { t } = useTranslation()
+
+	return (
+		<section id='contacts' className={styles.question}>
+			<div className={styles.container_wrapper}>
+				<div className={styles.question_wrap}>
+					<div className={styles.question_content}>
+						<H1>
+							<b
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.question.title'),
+								}}
+							/>
+						</H1>
+
+						<RootDesc>
+							<span
+								dangerouslySetInnerHTML={{
+									__html: t('page.home.question.subtitle'),
+								}}
+							/>
+						</RootDesc>
+
+						<RootDesc>
+							<a
+								className={styles.question_link}
+								href='mailto:bulldiary@gmail.com'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								bulldiary@gmail.com
+							</a>
+						</RootDesc>
+					</div>
+
+					<div className={styles.question_form_wrapper}>
+						<InnerBlock>
+							<div className={styles.question_form}>
+								<ContactForm />
+							</div>
+						</InnerBlock>
+					</div>
+				</div>
+			</div>
+		</section>
+	)
+}

@@ -40,6 +40,7 @@ const positionsSlice = createSlice({
 		},
 		setServerStatus: (state, action) => {
 			state.serverStatus = action.payload
+
 			if (action.payload === 'loading') {
 				state.fakeData = fakePositions
 				state.fakeOrdersByDay = fakeOrdersByDay
@@ -51,7 +52,7 @@ const positionsSlice = createSlice({
 		clearErrorMessage: state => {
 			state.errorMessage = null
 		},
-		setPositionsReset: state => {
+		setPositionsReset: () => {
 			return {
 				...initialState,
 				fakeData: fakePositions,

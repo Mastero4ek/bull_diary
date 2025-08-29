@@ -1,5 +1,6 @@
-import { Icon } from '@/components/ui/general/Icon'
 import React from 'react'
+
+import { Icon } from '@/components/ui/media/Icon'
 
 import styles from './styles.module.scss'
 

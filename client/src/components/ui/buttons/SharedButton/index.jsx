@@ -1,9 +1,7 @@
-import React from 'react';
+import { usePopup } from '@/components/layouts/popups/PopupLayout/PopupProvider'
+import { ClosedContent } from '@/components/layouts/utils/ClosedContent'
 
-import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider';
-import { ClosedContent } from '@/components/ui/general/ClosedContent';
-
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 export const SharedButton = ({ disabled, popup }) => {
 	const { openPopup } = usePopup()
@@ -17,7 +15,12 @@ export const SharedButton = ({ disabled, popup }) => {
 			disabled={disabled}
 			//onClick={disabled ? undefined : handleClickShared}
 			onClick={undefined}
-			style={{ pointerEvents: 'none', cursor: 'default', background: 'var(--disabled)', opacity: 0.5 }}
+			style={{
+				pointerEvents: 'none',
+				cursor: 'default',
+				background: 'var(--disabled)',
+				opacity: 0.5,
+			}}
 			type='button'
 			className={styles.shared_button}
 			aria-label='shared'

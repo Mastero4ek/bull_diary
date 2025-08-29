@@ -1,5 +1,5 @@
-import moment from 'moment/min/moment-with-locales';
-import { useTranslation } from 'react-i18next';
+import moment from 'moment/min/moment-with-locales'
+import { useTranslation } from 'react-i18next'
 
 export const useFormatDuration = () => {
 	const { t } = useTranslation()

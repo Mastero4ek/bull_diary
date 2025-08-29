@@ -26,7 +26,7 @@ const websocketSlice = createSlice({
 		clearConnectionError: state => {
 			state.error = null
 		},
-		setWebSocketReset: state => {
+		setWebSocketReset: () => {
 			return {
 				...initialState,
 			}

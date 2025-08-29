@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Icon } from '@/components/ui/general/Icon'
+import { Icon } from '@/components/ui/media/Icon'
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
+import { SmallDesc } from '@/components/ui/typography/descriptions/SmallDesc'
 
 import styles from './styles.module.scss'
 

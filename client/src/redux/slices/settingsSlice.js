@@ -1,6 +1,6 @@
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 const getTheme = () => {
 	const theme = Cookies.get('dark_theme') === 'true' ? true : false

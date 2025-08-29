@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
+import { useNotification } from '@/components/layouts/specialized/NotificationLayout/NotificationProvider'
 import { updateKeySyncStatus } from '@/redux/slices/candidateSlice'
 import { setPositions } from '@/redux/slices/positionsSlice'
 import {

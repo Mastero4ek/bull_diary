@@ -1,9 +1,9 @@
 import React from 'react'
 
-import styles from './styles.module.scss'
+import { Icon } from '@/components/ui/media/Icon'
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
 
-import { Icon } from '@/components/ui/general/Icon'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
+import styles from './styles.module.scss'
 
 export const ControlButton = React.memo(
 	({ disabled, onClickBtn, icon, text, animate }) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { Icon } from '@/components/ui/general/Icon'
+import { Icon } from '@/components/ui/media/Icon'
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
 
 import styles from './styles.module.scss'
 

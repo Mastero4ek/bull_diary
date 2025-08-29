@@ -1,13 +1,7 @@
-import { useToBlob } from '@hugocxl/react-to-image'
-import { useScreenshot, createFileName } from 'use-react-screenshot'
-import { Image } from 'image-js'
-import moment from 'moment'
-import React from 'react'
+import { createFileName, useScreenshot } from 'use-react-screenshot'
 
-import { Icon } from '@/components/ui/general/Icon'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/descriptions/SmallDesc'
-import { Loader } from '@/components/ui/general/Loader'
+import { Icon } from '@/components/ui/media/Icon'
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
 
 import styles from './styles.module.scss'
 

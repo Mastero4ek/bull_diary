@@ -39,7 +39,7 @@ const handleTransactionError = (state, action) => {
 	state.serverStatus = 'error'
 }
 
-const handleTransactionLoading = (state, action) => {
+const handleTransactionLoading = state => {
 	state.serverStatus = 'loading'
 	state.errorMessage = null
 }

@@ -13,9 +13,9 @@ import {
 } from 'react-router-dom'
 
 import { App } from '@/components/App'
-import { NotificationProvider } from '@/components/layouts/NotificationLayout'
-import { PopupLayout } from '@/components/layouts/PopupLayout/PopupLayout'
-import { PopupProvider } from '@/components/layouts/PopupLayout/PopupProvider'
+import { NotificationProvider } from '@/components/layouts/specialized/NotificationLayout'
+import { PopupLayout } from '@/components/layouts/popups/PopupLayout/PopupLayout'
+import { PopupProvider } from '@/components/layouts/popups/PopupLayout/PopupProvider'
 import { store } from '@/redux/store'
 
 window.__REDUX_STORE__ = store

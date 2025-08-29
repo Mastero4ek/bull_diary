@@ -38,7 +38,7 @@ const updateUser = (state, action) => {
 			keys,
 			level,
 			tournaments,
-		} = action?.payload
+		} = action.payload
 
 		state.user = {
 			...state.user,
@@ -90,7 +90,7 @@ const handleUserError = (state, action) => {
 	state.errorArray = action?.payload?.errors || null
 }
 
-const handleUserLoading = (state, action) => {
+const handleUserLoading = state => {
 	state.serverStatus = 'loading'
 	state.errorMessage = null
 	state.errorArray = null
@@ -140,7 +140,7 @@ export const signUp = createAsyncThunk(
 
 			return result
 		} catch (e) {
-			if (process.env.NODE_ENV === 'dev') {
+			if (import.meta.env.NODE_ENV === 'dev') {
 				console.log(e)
 			}
 			return rejectWithValue(resError(e))
@@ -161,7 +161,7 @@ export const signIn = createAsyncThunk(
 
 			return result
 		} catch (e) {
-			if (process.env.NODE_ENV === 'dev') {
+			if (import.meta.env.NODE_ENV === 'dev') {
 				console.log(e)
 			}
 			return rejectWithValue(resError(e))
@@ -176,7 +176,7 @@ export const logout = createAsyncThunk(
 			await AuthService.logout()
 			return null
 		} catch (e) {
-			if (process.env.NODE_ENV === 'dev') {
+			if (import.meta.env.NODE_ENV === 'dev') {
 				console.error('Logout error:', e)
 			}
 			return null
