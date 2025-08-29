@@ -1,96 +1,123 @@
-import { useTranslation } from 'react-i18next'
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
-import { usePopup } from '@/components/layouts/popups/PopupLayout/PopupProvider'
-import { InnerBlock } from '@/components/layouts/utils/InnerBlock'
-import { OuterBlock } from '@/components/layouts/utils/OuterBlock'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
-import { H1 } from '@/components/ui/typography/titles/H1'
-import { H4 } from '@/components/ui/typography/titles/H4'
-import { SignUpPopup } from '@/popups/auth/SignUpPopup'
+import {
+  usePopup,
+} from '@/components/layouts/popups/PopupLayout/PopupProvider';
+import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
+import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
+import { H1 } from '@/components/ui/typography/titles/H1';
+import { H4 } from '@/components/ui/typography/titles/H4';
+import { SignUpPopup } from '@/popups/auth/SignUpPopup';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const Start = () => {
-	const { openPopup } = usePopup()
-	const { t } = useTranslation()
+  const { openPopup } = usePopup();
+  const { t } = useTranslation();
 
-	const handleClickSignup = () => {
-		openPopup(<SignUpPopup />)
-	}
+  const handleClickSignup = () => {
+    openPopup(<SignUpPopup />);
+  };
 
-	const stepList = [
-		{
-			id: 0,
-			title: t('page.home.start.step_1.title'),
-			subtitle: t('page.home.start.step_1.subtitle'),
-			step: '01',
-		},
-		{
-			id: 1,
-			title: t('page.home.start.step_2.title'),
-			subtitle: t('page.home.start.step_2.subtitle'),
-			step: '02',
-		},
-		{
-			id: 2,
-			title: t('page.home.start.step_3.title'),
-			subtitle: t('page.home.start.step_3.subtitle'),
-			step: '03',
-		},
-	]
+  const stepList = [
+    {
+      id: 0,
+      title: t('page.home.start.step_1.title'),
+      subtitle: t('page.home.start.step_1.subtitle'),
+      step: '01',
+    },
+    {
+      id: 1,
+      title: t('page.home.start.step_2.title'),
+      subtitle: t('page.home.start.step_2.subtitle'),
+      step: '02',
+    },
+    {
+      id: 2,
+      title: t('page.home.start.step_3.title'),
+      subtitle: t('page.home.start.step_3.subtitle'),
+      step: '03',
+    },
+  ];
 
-	return (
-		<section id='start' className={styles.start}>
-			<div className={styles.container_wrapper}>
-				<div className={styles.start_wrapper}>
-					<div className={styles.start_content}>
-						<H1>
-							<b
-								dangerouslySetInnerHTML={{ __html: t('page.home.start.title') }}
-							/>
-						</H1>
-					</div>
+  const contentVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      filter: 'blur(2rem)',
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0rem)',
+      transition: {
+        duration: 0.6,
+        delay: 0.1,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
 
-					<OuterBlock>
-						<div className={styles.start_wrap}>
-							<ul className={styles.start_list}>
-								{stepList &&
-									stepList.length > 0 &&
-									stepList.map(stepItem => (
-										<li key={stepItem.id}>
-											<InnerBlock>
-												<H4>
-													<span
-														dangerouslySetInnerHTML={{ __html: stepItem.title }}
-													/>
-												</H4>
+  return (
+    <section id="start" className={styles.start}>
+      <div className={styles.container_wrapper}>
+        <div className={styles.start_wrapper}>
+          <motion.div
+            className={styles.start_content}
+            variants={contentVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <H1>
+              <b
+                dangerouslySetInnerHTML={{ __html: t('page.home.start.title') }}
+              />
+            </H1>
+          </motion.div>
 
-												<RootDesc>
-													<span
-														dangerouslySetInnerHTML={{
-															__html: stepItem.subtitle,
-														}}
-													/>
-												</RootDesc>
+          <OuterBlock>
+            <div className={styles.start_wrap}>
+              <ul className={styles.start_list}>
+                {stepList &&
+                  stepList.length > 0 &&
+                  stepList.map((stepItem) => (
+                    <li key={stepItem.id}>
+                      <InnerBlock>
+                        <H4>
+                          <span
+                            dangerouslySetInnerHTML={{ __html: stepItem.title }}
+                          />
+                        </H4>
 
-												<strong
-													dangerouslySetInnerHTML={{ __html: stepItem.step }}
-												/>
-											</InnerBlock>
-										</li>
-									))}
-							</ul>
+                        <RootDesc>
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: stepItem.subtitle,
+                            }}
+                          />
+                        </RootDesc>
 
-							<RootButton
-								onClickBtn={handleClickSignup}
-								text={t('button.sign_up')}
-								icon='sign-up'
-							/>
-						</div>
-					</OuterBlock>
-				</div>
-			</div>
-		</section>
-	)
-}
+                        <strong
+                          dangerouslySetInnerHTML={{ __html: stepItem.step }}
+                        />
+                      </InnerBlock>
+                    </li>
+                  ))}
+              </ul>
+
+              <RootButton
+                onClickBtn={handleClickSignup}
+                text={t('button.sign_up')}
+                icon="sign-up"
+              />
+            </div>
+          </OuterBlock>
+        </div>
+      </div>
+    </section>
+  );
+};

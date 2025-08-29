@@ -3,6 +3,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 import './platform_slider.scss'
 
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next'
 import { Autoplay, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -56,11 +57,35 @@ export const Platform = () => {
 		openPopup(<SignUpPopup />)
 	}
 
+	const contentVariants = {
+		hidden: {
+			opacity: 0,
+			y: 30,
+			filter: 'blur(2rem)',
+		},
+		visible: {
+			opacity: 1,
+			y: 0,
+			filter: 'blur(0rem)',
+			transition: {
+				duration: 0.6,
+				delay: 0.1,
+				ease: [0.25, 0.46, 0.45, 0.94],
+			},
+		},
+	};
+
 	return (
 		<section id='platform' className={styles.benefits}>
 			<div className={styles.container_wrapper}>
 				<div className={styles.benefits_wrapper}>
-					<div className={styles.benefits_content}>
+					<motion.div
+						className={styles.benefits_content}
+						variants={contentVariants}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true, amount: 0.3 }}
+					>
 						<H1>
 							<span
 								dangerouslySetInnerHTML={{
@@ -76,7 +101,7 @@ export const Platform = () => {
 							text={t('button.sign_up')}
 							icon='sign-up'
 						/>
-					</div>
+					</motion.div>
 
 					<InnerBlock>
 						<div className={styles.benefits_slider}>
