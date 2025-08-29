@@ -1,5 +1,5 @@
-const UserService = require('@services/core/user-service')
 const { validationError } = require('@helpers/sanitization-helpers')
+const UserService = require('@services/core/user-service')
 
 class AuthController {
 	async signUp(req, res, next) {

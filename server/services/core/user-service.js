@@ -1,23 +1,26 @@
-const UserModel = require('@models/core/user-model')
-const KeysModel = require('@models/auth/keys-model')
-const LevelModel = require('@models/core/level-model')
-const UserActivityModel = require('@models/core/user-activity-model')
-const bcrypt = require('bcrypt')
-const uuid = require('uuid')
-const tokenService = require('@services/auth/token-service')
-const mailService = require('./mail-service')
-const UserDto = require('@dtos/user-dto')
-const KeysDto = require('@dtos/keys-dto')
-const { ApiError } = require('@exceptions/api-error')
-const i18next = require('i18next')
 const path = require('path')
+
+const bcrypt = require('bcrypt')
+const i18next = require('i18next')
 const moment = require('moment')
+const uuid = require('uuid')
+
+const { logError, logInfo } = require('@configs/logger-config')
+const KeysDto = require('@dtos/keys-dto')
+const UserDto = require('@dtos/user-dto')
+const { ApiError } = require('@exceptions/api-error')
 const {
 	handleDatabaseError,
 	handleTokenError,
 } = require('@helpers/error-helpers')
-const { logError, logInfo } = require('@configs/logger-config')
+const KeysModel = require('@models/auth/keys-model')
+const LevelModel = require('@models/core/level-model')
+const UserActivityModel = require('@models/core/user-activity-model')
+const UserModel = require('@models/core/user-model')
+const tokenService = require('@services/auth/token-service')
+
 const fileService = require('./file-service')
+const mailService = require('./mail-service')
 
 class UserService {
 	/**
@@ -473,8 +476,7 @@ class UserService {
 			if (cover) {
 				await fileService.uploadCover(cover, userId, lng)
 
-				updateData.cover =
-					process.env.API_URL + '/uploads/' + path.basename(cover.path)
+				updateData.cover = `${process.env.API_URL}/uploads/${path.basename(cover.path)}`
 			}
 
 			const updatedUser = await UserModel.findByIdAndUpdate(
@@ -732,7 +734,7 @@ class UserService {
 			const total = await UserModel.countDocuments(filter)
 			const totalPages = Math.ceil(total / limit)
 
-			let sortObj = {}
+			const sortObj = {}
 
 			if (sort && typeof sort === 'object') {
 				sortObj[sort.type || 'created_at'] = sort.value === 'asc' ? 1 : -1
@@ -818,8 +820,7 @@ class UserService {
 					user._id,
 					{
 						$set: {
-							cover:
-								process.env.API_URL + '/uploads/' + path.basename(cover.path),
+							cover: `${process.env.API_URL}/uploads/${path.basename(cover.path)}`,
 						},
 					},
 					{ returnDocument: 'after' }
@@ -938,7 +939,7 @@ class UserService {
 	 */
 	async getUsersList(active) {
 		try {
-			let filter = {}
+			const filter = {}
 
 			if (active !== undefined) {
 				filter.inactive = { $ne: true }

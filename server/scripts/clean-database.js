@@ -1,19 +1,19 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
-const { cleanAllUploads } = require('./clean-uploads')
 
 const connectDB = require('@configs/database-config')
-const User = require('@models/core/user-model')
+const { logInfo, logError } = require('@configs/logger-config')
 const Keys = require('@models/auth/keys-model')
+const Token = require('@models/auth/token-model')
+const Description = require('@models/core/description-model')
+const File = require('@models/core/file-model')
 const Level = require('@models/core/level-model')
 const Order = require('@models/core/order-model')
-const File = require('@models/core/file-model')
-const Token = require('@models/auth/token-model')
 const Tournament = require('@models/core/tournament-model')
 const TournamentUser = require('@models/core/tournament_user-model')
-const Description = require('@models/core/description-model')
+const User = require('@models/core/user-model')
 
-const { logInfo, logError } = require('@configs/logger-config')
+const { cleanAllUploads } = require('./clean-uploads')
 
 async function cleanDatabase() {
 	await connectDB()

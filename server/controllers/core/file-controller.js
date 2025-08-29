@@ -1,5 +1,5 @@
-const fileService = require('@services/core/file-service')
 const { validationError } = require('@helpers/sanitization-helpers')
+const fileService = require('@services/core/file-service')
 
 class FileController {
 	async removeCover(req, res, next) {

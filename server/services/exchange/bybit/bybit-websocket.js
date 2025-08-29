@@ -1,5 +1,6 @@
 const { WebsocketClient } = require('bybit-api')
-const { logInfo, logError } = require('@configs/logger-config')
+
+const { logError } = require('@configs/logger-config')
 const DataService = require('@services/exchange/data-service')
 
 class BybitWebSocketService {

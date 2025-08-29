@@ -1,6 +1,8 @@
-const nodemailer = require('nodemailer')
 const path = require('path')
+
 const ejs = require('ejs')
+const nodemailer = require('nodemailer')
+
 const { handleMailError } = require('@helpers/error-helpers')
 
 class MailService {
@@ -79,8 +81,8 @@ class MailService {
 				to,
 				subject:
 					lng === 'ru'
-						? 'Активация аккаунта на ' + process.env.CLIENT_URL
-						: 'Account activation on ' + process.env.CLIENT_URL,
+						? `Активация аккаунта на ${process.env.CLIENT_URL}`
+						: `Account activation on ${process.env.CLIENT_URL}`,
 				text: '',
 				html: lng === 'ru' ? mailRu : mailEn,
 				attachments: [
@@ -107,12 +109,7 @@ class MailService {
 				],
 			})
 		} catch (error) {
-			handleMailError(
-				error,
-				lng,
-				'sendActivationMail',
-				'Failed to send email'
-			)
+			handleMailError(error, lng, 'sendActivationMail', 'Failed to send email')
 		}
 	}
 }

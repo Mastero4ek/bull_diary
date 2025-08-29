@@ -5,6 +5,10 @@
 	"scripts": {
 		"dev": "nodemon index.js",
 		"start": "node index.js",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
 		"seed:admin": "node scripts/admin-seeder.js",
 		"seed:users": "node scripts/users-seeder.js",
 		"clean:db": "node scripts/clean-database.js",
@@ -71,7 +75,14 @@
 		"xss": "^1.0.15"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"eslint": "^9.33.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-import-resolver-alias": "^1.1.2",
+		"eslint-plugin-import": "^2.32.0",
+		"globals": "^15.15.0",
 		"module-alias": "^2.2.3",
+		"prettier": "^3.4.2",
 		"supertest": "^7.1.4"
 	}
 }

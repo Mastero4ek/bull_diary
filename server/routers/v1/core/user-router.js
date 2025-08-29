@@ -1,12 +1,14 @@
 const express = require('express')
-const userController = require('@controllers/core/user-controller')
-const fileController = require('@controllers/core/file-controller')
-const router = express.Router()
 const { checkSchema } = require('express-validator')
-const authMiddleware = require('@middlewares/auth-middleware')
-const ValidationSchema = require('@validation/schema')
+
 const upload = require('@configs/multer-config')
+const fileController = require('@controllers/core/file-controller')
+const userController = require('@controllers/core/user-controller')
+const authMiddleware = require('@middlewares/auth-middleware')
 const fileMiddleware = require('@middlewares/file-middleware')
+const ValidationSchema = require('@validation/schema')
+
+const router = express.Router()
 
 const profileImageValidation = fileMiddleware({
 	allowedTypes: ['image/jpeg', 'image/png'],

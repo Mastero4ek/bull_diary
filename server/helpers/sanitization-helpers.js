@@ -1,7 +1,8 @@
+const { validationResult } = require('express-validator')
 const validator = require('validator')
 const xss = require('xss')
+
 const { ApiError } = require('@exceptions/api-error')
-const { validationResult } = require('express-validator')
 
 class HelpersSanitization {
 	/**

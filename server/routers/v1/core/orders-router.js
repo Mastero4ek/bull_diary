@@ -1,9 +1,11 @@
 const Router = require('express').Router
-const router = new Router()
-const authMiddleware = require('@middlewares/auth-middleware')
-const ordersController = require('@controllers/core/orders-controller')
 const { checkSchema } = require('express-validator')
+
+const ordersController = require('@controllers/core/orders-controller')
+const authMiddleware = require('@middlewares/auth-middleware')
 const ValidationSchema = require('@validation/schema')
+
+const router = new Router()
 
 router.post(
 	'/order/:id',

@@ -1,10 +1,11 @@
-const Order = require('@models/core/order-model')
-const DescriptionModel = require('@models/core/description-model')
-const { ApiError } = require('@exceptions/api-error')
 const i18next = require('i18next')
+
+const BybitOrderDto = require('@dtos/bybit-order-dto')
+const { ApiError } = require('@exceptions/api-error')
 const { clearOrdersCache } = require('@helpers/cache-helpers')
 const { handleDatabaseError } = require('@helpers/error-helpers')
-const BybitOrderDto = require('@dtos/bybit-order-dto')
+const DescriptionModel = require('@models/core/description-model')
+const Order = require('@models/core/order-model')
 
 class OrdersService {
 	/**
@@ -148,7 +149,7 @@ class OrdersService {
 					{ user: userId, orderId },
 					{
 						$set: {
-							text: text,
+							text,
 						},
 					},
 					{ returnDocument: 'after' }

@@ -1,6 +1,6 @@
 require('dotenv').config()
 const { exec } = require('child_process')
-const path = require('path')
+
 const { logInfo, logError } = require('@configs/logger-config')
 
 const MONGO_URI = process.env.MONGO_URI
@@ -20,7 +20,7 @@ if (!backupDir) {
 	process.exit(1)
 }
 
-const restoreCmd = `mongorestore --uri=\"${MONGO_URI}\" --drop \"${backupDir}\"`
+const restoreCmd = `mongorestore --uri="${MONGO_URI}" --drop "${backupDir}"`
 
 exec(restoreCmd, (error, stdout, stderr) => {
 	if (error) {

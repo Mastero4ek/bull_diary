@@ -1,11 +1,12 @@
 const Router = require('express').Router
 const router = new Router()
 const passport = require('passport')
-const tokenService = require('@services/auth/token-service')
+
+const { logError } = require('@configs/logger-config')
 const UserDto = require('@dtos/user-dto')
 const KeysModel = require('@models/auth/keys-model')
 const LevelModel = require('@models/core/level-model')
-const { logError } = require('@configs/logger-config')
+const tokenService = require('@services/auth/token-service')
 
 router.get(
 	'/google',

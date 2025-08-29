@@ -1,16 +1,20 @@
-const express = require('express')
+const fs = require('fs')
+const path = require('path')
+
 const bodyParser = require('body-parser')
-const methodOverride = require('method-override')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const csrf = require('csurf')
+const express = require('express')
+const rateLimit = require('express-rate-limit')
 const session = require('express-session')
 const helmet = require('helmet')
-const rateLimit = require('express-rate-limit')
-const csrf = require('csurf')
-const path = require('path')
-const fs = require('fs')
-const { requestLogger } = require('./logger-config')
+const methodOverride = require('method-override')
+
+
 const sanitizationMiddleware = require('@middlewares/sanitization-middleware')
+
+const { requestLogger } = require('./logger-config')
 
 const app = express()
 
@@ -35,7 +39,7 @@ app.use(
 					'data:',
 					'blob:',
 					process.env.API_URL,
-					process.env.API_URL + '/uploads/*',
+					`${process.env.API_URL  }/uploads/*`,
 				],
 				'script-src': ["'self'"],
 				'style-src': ["'self'", "'unsafe-inline'"],
@@ -115,9 +119,9 @@ const apiLimiter = rateLimit({
 	handler: (req, res) => {
 		res.status(429).json({
 			message:
-				'Too many requests from this IP, please try again after ' +
-				parseInt(process.env.RATE_LIMIT_MS) / 60000 +
-				' minutes',
+				`Too many requests from this IP, please try again after ${ 
+				parseInt(process.env.RATE_LIMIT_MS) / 60000 
+				} minutes`,
 			code: 429,
 		})
 	},

@@ -1,15 +1,18 @@
+const fs = require('fs')
+const path = require('path')
+
+const i18next = require('i18next')
+
+const { logError } = require('@configs/logger-config')
+const { ApiError } = require('@exceptions/api-error')
+const { handleDatabaseError } = require('@helpers/error-helpers')
+const FileModel = require('@models/core/file-model')
+const LevelModel = require('@models/core/level-model')
 const TournamentModel = require('@models/core/tournament-model')
 const TournamentUserModel = require('@models/core/tournament_user-model')
 const UserModel = require('@models/core/user-model')
-const LevelModel = require('@models/core/level-model')
-const { ApiError } = require('@exceptions/api-error')
-const i18next = require('i18next')
+
 const fileService = require('./file-service')
-const FileModel = require('@models/core/file-model')
-const fs = require('fs')
-const path = require('path')
-const { handleDatabaseError } = require('@helpers/error-helpers')
-const { logError } = require('@configs/logger-config')
 
 class TournamentService {
 	/**
@@ -21,14 +24,9 @@ class TournamentService {
 	 */
 	async createTournament(data, file, lng = 'en') {
 		try {
-			let {
-				name,
-				description,
-				start_date,
-				end_date,
-				registration_date,
-				exchange,
-			} = data
+			const { name, description, start_date, end_date, registration_date } =
+				data
+			let { exchange } = data
 
 			exchange = exchange.toLowerCase()
 
@@ -61,7 +59,7 @@ class TournamentService {
 					lng,
 					tempTournament._id
 				)
-				coverUrl = process.env.API_URL + '/uploads/' + file.filename
+				coverUrl = `${process.env.API_URL}/uploads/${file.filename}`
 				tempTournament.cover = coverUrl
 
 				await tempTournament.save()
@@ -344,7 +342,7 @@ class TournamentService {
 
 			const skip = (parseInt(page) - 1) * parseInt(size)
 			const limit = parseInt(size)
-			let query = { tournament: tournament._id }
+			const query = { tournament: tournament._id }
 
 			if (search) {
 				query.$or = [

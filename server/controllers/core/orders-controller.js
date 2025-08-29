@@ -1,5 +1,5 @@
-const OrdersService = require('@services/core/orders-service')
 const { validationError } = require('@helpers/sanitization-helpers')
+const OrdersService = require('@services/core/orders-service')
 
 class OrdersController {
 	async savedOrder(req, res, next) {

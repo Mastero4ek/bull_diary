@@ -1,9 +1,11 @@
 const Router = require('express').Router
-const router = new Router()
-const authMiddleware = require('@middlewares/auth-middleware')
-const bybitController = require('@controllers/exchange/bybit-controller')
 const { checkSchema } = require('express-validator')
+
+const bybitController = require('@controllers/exchange/bybit-controller')
+const authMiddleware = require('@middlewares/auth-middleware')
 const ValidationSchema = require('@validation/schema')
+
+const router = new Router()
 
 router.get(
 	'/bybit-orders-pnl',

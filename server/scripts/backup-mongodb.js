@@ -1,7 +1,8 @@
 require('dotenv').config()
 const { exec } = require('child_process')
-const path = require('path')
 const fs = require('fs')
+const path = require('path')
+
 const { logInfo, logError } = require('@configs/logger-config')
 
 const BACKUP_DIR = path.join(__dirname, '../backups/mongodb')
@@ -21,7 +22,7 @@ if (!fs.existsSync(BACKUP_DIR)) {
 const date = new Date().toISOString().replace(/[:.]/g, '-')
 const backupPath = path.join(BACKUP_DIR, `backup-${date}`)
 
-const dumpCmd = `mongodump --uri=\"${MONGO_URI}\" --out=\"${backupPath}\"`
+const dumpCmd = `mongodump --uri="${MONGO_URI}" --out="${backupPath}"`
 
 exec(dumpCmd, (error, stdout, stderr) => {
 	if (error) {

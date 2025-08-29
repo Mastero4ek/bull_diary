@@ -1,11 +1,12 @@
-const userService = require('@services/core/user-service')
-const { validationError } = require('@helpers/sanitization-helpers')
-const { ApiError } = require('@exceptions/api-error')
-const UserModel = require('@models/core/user-model')
-const TokenModel = require('@models/auth/token-model')
-const fileService = require('@services/core/file-service')
-const keysService = require('@services/auth/keys-service')
 const i18next = require('i18next')
+
+const { ApiError } = require('@exceptions/api-error')
+const { validationError } = require('@helpers/sanitization-helpers')
+const TokenModel = require('@models/auth/token-model')
+const UserModel = require('@models/core/user-model')
+const keysService = require('@services/auth/keys-service')
+const fileService = require('@services/core/file-service')
+const userService = require('@services/core/user-service')
 
 class UserController {
 	async createUser(req, res, next) {
@@ -104,8 +105,7 @@ class UserController {
 			if (current_user.email !== fill_email) {
 				return next(
 					ApiError.BadRequest(
-						i18next.t('error.validation.email_mismatch', { lng: req.lng }),
-						errors.array()
+						i18next.t('error.validation.email_mismatch', { lng: req.lng })
 					)
 				)
 			}

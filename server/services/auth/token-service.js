@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
-const TokenModel = require('@models/auth/token-model')
-const { handleTokenError } = require('@helpers/error-helpers')
-const i18next = require('i18next')
+
 const { logError } = require('@configs/logger-config')
+const { handleTokenError } = require('@helpers/error-helpers')
+const TokenModel = require('@models/auth/token-model')
 
 class TokenService {
 	/**
@@ -57,7 +57,7 @@ class TokenService {
 
 			const token = await TokenModel.create({
 				user: userId,
-				refresh_token: refresh_token,
+				refresh_token,
 			})
 
 			return token
@@ -78,12 +78,7 @@ class TokenService {
 
 			return tokenData
 		} catch (error) {
-					handleTokenError(
-			error,
-			lng,
-			'removeToken',
-			'Failed to remove token'
-		)
+			handleTokenError(error, lng, 'removeToken', 'Failed to remove token')
 		}
 	}
 

@@ -1,16 +1,17 @@
-const moment = require('moment')
-const { ApiError } = require('@exceptions/api-error')
 const i18next = require('i18next')
-const ClientService = require('@services/integration/client-service')
-const DataService = require('@services/exchange/data-service')
-const Order = require('@models/core/order-model')
-const Transaction = require('@models/core/transaction-model')
+const moment = require('moment')
+
+const { ApiError } = require('@exceptions/api-error')
 const {
 	getFromCache,
 	setToCache,
 	generateCacheKey,
 } = require('@helpers/cache-helpers')
 const { handleApiError } = require('@helpers/error-helpers')
+const Order = require('@models/core/order-model')
+const Transaction = require('@models/core/transaction-model')
+const DataService = require('@services/exchange/data-service')
+const ClientService = require('@services/integration/client-service')
 
 class BybitService {
 	/**
@@ -61,7 +62,7 @@ class BybitService {
 		const client = ClientService.createClient('bybit', keys)
 
 		try {
-			let existingOrders = await Order.find({
+			const existingOrders = await Order.find({
 				user: userId,
 				open_time: { $gte: start_time },
 				closed_time: { $lte: end_time },
@@ -282,7 +283,7 @@ class BybitService {
 				exchangeName: 'Bybit',
 			})
 
-			let wallet = {}
+			const wallet = {}
 
 			if (!result.list || !result.list[0].coin) {
 				throw ApiError.BadRequest(
@@ -383,7 +384,7 @@ class BybitService {
 		const client = ClientService.createClient('bybit', keys)
 
 		try {
-			let existingTransactions = await Transaction.find({
+			const existingTransactions = await Transaction.find({
 				user: userId,
 				transactionTime: {
 					$gte: start_time,

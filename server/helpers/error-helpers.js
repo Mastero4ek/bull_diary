@@ -1,6 +1,7 @@
-const { ApiError } = require('@exceptions/api-error')
 const i18next = require('i18next')
+
 const { logError } = require('@configs/logger-config')
+const { ApiError } = require('@exceptions/api-error')
 
 class HelpersError {
 	/**
@@ -18,7 +19,7 @@ class HelpersError {
 			throw ApiError.BadRequest(
 				i18next.t('error.api.connection_error', {
 					lng: language,
-					exchange: exchange,
+					exchange,
 				})
 			)
 		}
@@ -27,7 +28,7 @@ class HelpersError {
 			throw ApiError.BadRequest(
 				i18next.t('error.api.timeout_error', {
 					lng: language,
-					exchange: exchange,
+					exchange,
 				})
 			)
 		}
@@ -39,7 +40,7 @@ class HelpersError {
 		throw ApiError.BadRequest(
 			i18next.t(errorType, {
 				lng: language,
-				exchange: exchange,
+				exchange,
 			})
 		)
 	}

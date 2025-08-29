@@ -1,11 +1,12 @@
-const Order = require('@models/core/order-model')
-const Transaction = require('@models/core/transaction-model')
+const moment = require('moment')
+const mongoose = require('mongoose')
+
+const { logger } = require('@configs/logger-config')
 const BybitOrderDto = require('@dtos/bybit-order-dto')
 const BybitTransactionDto = require('@dtos/bybit-transaction-dto')
 const { handleApiError } = require('@helpers/error-helpers')
-const { logger } = require('@configs/logger-config')
-const moment = require('moment')
-const mongoose = require('mongoose')
+const Order = require('@models/core/order-model')
+const Transaction = require('@models/core/transaction-model')
 
 class DataService {
 	/**
@@ -178,7 +179,7 @@ class DataService {
 					exchange: exchange.toLowerCase(),
 					bookmark: false,
 					transactionTime: new Date(transactionTime),
-					symbol: symbol,
+					symbol,
 					currency: transactionData.currency || '',
 					category: transactionData.category || '',
 					side: transactionData.side || '',

@@ -1,5 +1,5 @@
-const redis = require('@configs/redis-config')
 const { logError } = require('@configs/logger-config')
+const redis = require('@configs/redis-config')
 
 class HelpersCache {
 	/**

@@ -1,9 +1,10 @@
 const passport = require('passport')
 const GitHubStrategy = require('passport-github2').Strategy
-const UserModel = require('@models/core/user-model')
+const uuid = require('uuid')
+
 const KeysModel = require('@models/auth/keys-model')
 const LevelModel = require('@models/core/level-model')
-const uuid = require('uuid')
+const UserModel = require('@models/core/user-model')
 
 passport.use(
 	new GitHubStrategy(

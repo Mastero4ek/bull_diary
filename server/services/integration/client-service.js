@@ -1,7 +1,8 @@
 const { RestClientV5 } = require('bybit-api')
-const { ApiError } = require('@exceptions/api-error')
-const moment = require('moment')
 const i18next = require('i18next')
+const moment = require('moment')
+
+const { ApiError } = require('@exceptions/api-error')
 const { delayApi } = require('@helpers/utility-helpers')
 const DataService = require('@services/exchange/data-service')
 

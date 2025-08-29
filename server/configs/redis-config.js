@@ -1,11 +1,12 @@
 const Redis = require('ioredis')
+
 const { logInfo, logError } = require('./logger-config')
 
 let redis = null
 
 try {
 	redis = new Redis(process.env.REDIS_URL, {
-		retryStrategy: function (times) {
+		retryStrategy (times) {
 			const delay = Math.min(times * 50, 2000)
 
 			return delay

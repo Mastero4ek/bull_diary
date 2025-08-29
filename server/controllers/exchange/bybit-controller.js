@@ -1,11 +1,12 @@
-const BybitService = require('@services/exchange/bybit/bybit-service')
-const KeysService = require('@services/auth/keys-service')
+const i18next = require('i18next')
+const moment = require('moment')
+
+const { ApiError } = require('@exceptions/api-error')
 const { validationError } = require('@helpers/sanitization-helpers')
 const { capitalize } = require('@helpers/utility-helpers')
+const KeysService = require('@services/auth/keys-service')
+const BybitService = require('@services/exchange/bybit/bybit-service')
 const DataService = require('@services/exchange/data-service')
-const { ApiError } = require('@exceptions/api-error')
-const moment = require('moment')
-const i18next = require('i18next')
 
 class BybitController {
 	async getBybitOrdersPnl(req, res, next) {

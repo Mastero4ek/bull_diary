@@ -1,12 +1,13 @@
-const { ApiError } = require('@exceptions/api-error')
-const { logError, logInfo } = require('@configs/logger-config')
-const KeysModel = require('@models/auth/keys-model')
+const i18next = require('i18next')
+
+const { logError } = require('@configs/logger-config')
 const KeysDto = require('@dtos/keys-dto')
-const EncryptionService = require('@services/system/encryption-service')
+const { ApiError } = require('@exceptions/api-error')
+const { handleDatabaseError } = require('@helpers/error-helpers')
+const KeysModel = require('@models/auth/keys-model')
 const UserModel = require('@models/core/user-model')
 const SyncExecutor = require('@services/core/sync-executor')
-const i18next = require('i18next')
-const { handleDatabaseError } = require('@helpers/error-helpers')
+const EncryptionService = require('@services/system/encryption-service')
 
 class KeysService {
 	/**
@@ -269,12 +270,7 @@ class KeysService {
 					: i18next.t('error.keys_not_found', { lng }),
 			}
 		} catch (error) {
-			handleDatabaseError(
-				error,
-				lng,
-				'removeKeys',
-				'Failed to remove keys'
-			)
+			handleDatabaseError(error, lng, 'removeKeys', 'Failed to remove keys')
 		}
 	}
 }

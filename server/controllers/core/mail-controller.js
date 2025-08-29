@@ -1,7 +1,8 @@
-const MailService = require('@services/core/mail-service')
-const { validationError } = require('@helpers/sanitization-helpers')
-const { ApiError } = require('@exceptions/api-error')
 const i18next = require('i18next')
+
+const { ApiError } = require('@exceptions/api-error')
+const { validationError } = require('@helpers/sanitization-helpers')
+const MailService = require('@services/core/mail-service')
 
 class MailController {
 	async activate(req, res, next) {

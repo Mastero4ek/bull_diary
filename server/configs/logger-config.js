@@ -1,6 +1,7 @@
-const pino = require('pino')
-const path = require('path')
 const fs = require('fs')
+const path = require('path')
+
+const pino = require('pino')
 
 const logsDir = path.join(__dirname, '../logs')
 
@@ -32,7 +33,7 @@ const writeToFile = (level, message, data = {}) => {
 
 	const additionalData =
 		Object.keys(data).length > 0 ? ` ${JSON.stringify(data)}` : ''
-	const fullLogEntry = logEntry + additionalData + '\n'
+	const fullLogEntry = `${logEntry + additionalData  }\n`
 
 	fs.appendFileSync(path.join(logsDir, 'application.log'), fullLogEntry)
 }
@@ -64,7 +65,7 @@ const logger = pino({
 					ignore: 'pid,hostname',
 					messageFormat: '[{time}] {level} ({hostname}): {msg}',
 				},
-		  }
+			}
 		: undefined,
 })
 

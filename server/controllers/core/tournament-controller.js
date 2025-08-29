@@ -1,7 +1,8 @@
-const TournamentService = require('@services/core/tournament-service')
-const { validationError } = require('@helpers/sanitization-helpers')
-const { ApiError } = require('@exceptions/api-error')
 const i18next = require('i18next')
+
+const { ApiError } = require('@exceptions/api-error')
+const { validationError } = require('@helpers/sanitization-helpers')
+const TournamentService = require('@services/core/tournament-service')
 
 class TournamentController {
 	async createTournament(req, res, next) {

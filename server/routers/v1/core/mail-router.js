@@ -1,4 +1,5 @@
 const Router = require('express').Router
+
 const mailController = require('@controllers/core/mail-controller')
 const router = new Router()
 

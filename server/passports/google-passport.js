@@ -1,9 +1,10 @@
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
-const UserModel = require('@models/core/user-model')
+const uuid = require('uuid')
+
 const KeysModel = require('@models/auth/keys-model')
 const LevelModel = require('@models/core/level-model')
-const uuid = require('uuid')
+const UserModel = require('@models/core/user-model')
 
 passport.use(
 	new GoogleStrategy(

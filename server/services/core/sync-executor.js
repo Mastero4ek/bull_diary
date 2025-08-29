@@ -1,10 +1,11 @@
-const cron = require('node-cron')
-const moment = require('moment')
 const i18next = require('i18next')
+const moment = require('moment')
+const cron = require('node-cron')
+
 const { logError } = require('@configs/logger-config')
 const { delayApi } = require('@helpers/utility-helpers')
-const ClientService = require('@services/integration/client-service')
 const DataService = require('@services/exchange/data-service')
+const ClientService = require('@services/integration/client-service')
 
 const syncProgressMap = new Map()
 const cancelledSyncs = new Set()
@@ -187,7 +188,7 @@ class SyncExecutor {
 
 			if (socketEmitter) {
 				const eventName = isAutoSync ? 'auto_sync_error' : 'sync_error'
-				const errorMessage = 'Sync failed: ' + error.message
+				const errorMessage = `Sync failed: ${error.message}`
 
 				socketEmitter(eventName, {
 					message: errorMessage,
@@ -359,27 +360,27 @@ class SyncExecutor {
 			const transformedData = transformData
 				? transformData(allData, userId)
 				: dataType === 'orders'
-				? DataService.transformOrdersToDbFormat(allData, userId, exchange)
-				: DataService.transformTransactionsToDbFormat(allData, userId, exchange)
+					? DataService.transformOrdersToDbFormat(allData, userId, exchange)
+					: DataService.transformTransactionsToDbFormat(
+							allData,
+							userId,
+							exchange
+						)
 
 			let savedData = []
 			if (transformedData.length > 0) {
-				try {
-					if (dataType === 'orders') {
-						savedData = await DataService.saveOrdersToDatabase(
-							transformedData,
-							userId,
-							exchange
-						)
-					} else if (dataType === 'transactions') {
-						savedData = await DataService.saveTransactionsToDatabase(
-							transformedData,
-							userId,
-							exchange
-						)
-					}
-				} catch (error) {
-					throw error
+				if (dataType === 'orders') {
+					savedData = await DataService.saveOrdersToDatabase(
+						transformedData,
+						userId,
+						exchange
+					)
+				} else if (dataType === 'transactions') {
+					savedData = await DataService.saveTransactionsToDatabase(
+						transformedData,
+						userId,
+						exchange
+					)
 				}
 			}
 
@@ -392,7 +393,7 @@ class SyncExecutor {
 				i18next.t('sync.completed', {
 					lng: language,
 					dataType: localizedDataType,
-					exchange: exchange,
+					exchange,
 				}),
 				progressCallback
 			)
@@ -401,7 +402,7 @@ class SyncExecutor {
 				success: true,
 				dataCount: savedData.length,
 				totalDataFromApi: allData.length,
-				dataType: dataType,
+				dataType,
 			}
 		} catch (error) {
 			const localizedDataType = i18next.t(`sync.${dataType}`, { lng: language })
@@ -413,7 +414,7 @@ class SyncExecutor {
 				i18next.t('sync.failed', {
 					lng: language,
 					dataType: localizedDataType,
-					exchange: exchange,
+					exchange,
 				}),
 				progressCallback
 			)

@@ -1,12 +1,14 @@
-const FileModel = require('@models/core/file-model')
-const UserModel = require('@models/core/user-model')
-const TournamentUserModel = require('@models/core/tournament_user-model')
-const path = require('path')
 const fs = require('fs')
+const path = require('path')
+
 const i18next = require('i18next')
+
+const { logError } = require('@configs/logger-config')
 const { ApiError } = require('@exceptions/api-error')
 const { handleFileError } = require('@helpers/error-helpers')
-const { logError } = require('@configs/logger-config')
+const FileModel = require('@models/core/file-model')
+const TournamentUserModel = require('@models/core/tournament_user-model')
+const UserModel = require('@models/core/user-model')
 
 class FileService {
 	/**
@@ -66,8 +68,7 @@ class FileService {
 					userId,
 					{
 						$set: {
-							cover:
-								process.env.API_URL + '/uploads/' + path.basename(cover.path),
+							cover: `${process.env.API_URL}/uploads/${path.basename(cover.path)}`,
 						},
 					},
 					{ returnDocument: 'after' }

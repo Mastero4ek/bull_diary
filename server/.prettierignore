@@ -1,0 +1,11 @@
+node_modules/
+uploads/
+logs/
+backups/
+package-lock.json
+*.min.js
+dist/
+build/
+coverage/
+.env
+.env.*

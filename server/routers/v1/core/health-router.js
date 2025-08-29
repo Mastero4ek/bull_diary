@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+
 const redis = require('@configs/redis-config')
 const SyncExecutor = require('@services/core/sync-executor')
 

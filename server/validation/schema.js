@@ -1,4 +1,5 @@
 const i18next = require('i18next')
+
 const { EXCHANGES, ROLES } = require('@helpers/constant-helpers')
 
 const ValidationSchema = {

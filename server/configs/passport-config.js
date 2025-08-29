@@ -1,4 +1,5 @@
 const passport = require('passport')
+
 const UserModel = require('@models/core/user-model')
 
 passport.initialize()

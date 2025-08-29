@@ -1,5 +1,5 @@
-const keysService = require('@services/auth/keys-service')
 const { validationError } = require('@helpers/sanitization-helpers')
+const keysService = require('@services/auth/keys-service')
 
 class KeysController {
 	async updateKeys(req, res, next) {

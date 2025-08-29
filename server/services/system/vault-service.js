@@ -1,4 +1,5 @@
 const vault = require('node-vault')
+
 const { logError } = require('@configs/logger-config')
 
 class VaultService {

@@ -1,5 +1,5 @@
-const sanitizationHelper = require('@helpers/sanitization-helpers')
 const { logWarn } = require('@configs/logger-config')
+const sanitizationHelper = require('@helpers/sanitization-helpers')
 
 /**
  * Middleware для санитизации входящих данных

@@ -1,4 +1,5 @@
 const CryptoJS = require('crypto-js')
+
 const { logError } = require('@configs/logger-config')
 
 class EncryptionService {

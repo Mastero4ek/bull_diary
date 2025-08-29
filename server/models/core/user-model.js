@@ -1,12 +1,13 @@
 const { Schema, model } = require('mongoose')
 
 const KeysModel = require('../auth/keys-model')
-const LevelModel = require('./level-model')
 const TokenModel = require('../auth/token-model')
-const TournamentUserModel = require('./tournament_user-model')
-const OrderModel = require('./order-model')
-const TransactionModel = require('./transaction-model')
+
 const FileModel = require('./file-model')
+const LevelModel = require('./level-model')
+const OrderModel = require('./order-model')
+const TournamentUserModel = require('./tournament_user-model')
+const TransactionModel = require('./transaction-model')
 
 const UserSchema = new Schema({
 	name: { type: String, required: true },

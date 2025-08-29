@@ -1,8 +1,9 @@
-const { Server } = require('socket.io')
-const BybitWebSocketService = require('@services/exchange/bybit/bybit-websocket')
-const SyncExecutor = require('@services/core/sync-executor')
-const { logError } = require('@configs/logger-config')
 const { t } = require('i18next')
+const { Server } = require('socket.io')
+
+const { logError } = require('@configs/logger-config')
+const SyncExecutor = require('@services/core/sync-executor')
+const BybitWebSocketService = require('@services/exchange/bybit/bybit-websocket')
 
 class WebSocketService {
 	constructor() {
@@ -324,7 +325,7 @@ class WebSocketService {
 			const socket = this.userSockets.get(userId)
 			if (socket) {
 				socket.emit('sync_error', {
-					message: 'Sync failed: ' + error.message,
+					message: `Sync failed: ${error.message}`,
 				})
 			}
 
