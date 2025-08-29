@@ -1,8 +1,9 @@
 name: Auto Fix Vulnerabilities
 
 on:
-  schedule:
-    - cron: '0 6 * * 3'
+  # Temporarily disabled to avoid billing issues
+  # schedule:
+  #   - cron: '0 6 * * 3'
   workflow_dispatch:
 
 jobs:
