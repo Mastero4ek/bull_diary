@@ -73,7 +73,9 @@
 		"starting_sync": "Starting data synchronization in&nbsp;{{exchange}}",
 		"processing": "Processing {{dataType}} in&nbsp;{{exchange}}",
 		"processing_data": "Processing {{dataType}} in&nbsp;{{exchange}}",
-		"data_processed": "{{dataType}} processed successfully in&nbsp;{{exchange}}"
+		"data_processed": "{{dataType}} processed successfully in&nbsp;{{exchange}}",
+		"orders": "orders",
+		"transactions": "transactions"
 	},
 	"validation": {
 		"name": {

@@ -3,7 +3,7 @@ const { exec } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-const { logInfo, logError } = require('@configs/logger-config')
+const { logInfo, logError } = require('../configs/logger-config')
 
 const BACKUP_DIR = path.join(__dirname, '../backups/mongodb')
 const MONGO_URI = process.env.MONGO_URI

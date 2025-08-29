@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const { logInfo, logWarn } = require('@configs/logger-config')
+const { logInfo, logWarn } = require('../configs/logger-config')
 
 const BACKUP_DIR = path.join(__dirname, '../backups/mongodb')
 const DAYS_TO_KEEP = 7

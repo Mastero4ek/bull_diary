@@ -10,7 +10,7 @@ const TournamentSchema = new Schema({
 	end_date: { type: Date, require: true },
 })
 
-TournamentSchema.index({ exchange: 1 })
+// TournamentSchema.index({ exchange: 1 }) // Removed - duplicate with unique constraint
 TournamentSchema.index({ registration_date: -1 })
 TournamentSchema.index({ start_date: -1 })
 TournamentSchema.index({ end_date: -1 })

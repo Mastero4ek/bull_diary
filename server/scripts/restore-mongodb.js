@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { exec } = require('child_process')
 
-const { logInfo, logError } = require('@configs/logger-config')
+const { logInfo, logError } = require('../configs/logger-config')
 
 const MONGO_URI = process.env.MONGO_URI
 const backupDir = process.argv[2]

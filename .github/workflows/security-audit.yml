@@ -1,0 +1,91 @@
+name: Security Audit
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 9 * * 0'
+
+jobs:
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        project: [server, client]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ${{ matrix.project }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.project }}
+        run: npm ci
+
+      - name: Run npm audit
+        working-directory: ${{ matrix.project }}
+        run: |
+          echo "🔍 Running npm audit for ${{ matrix.project }}..."
+          npm audit --audit-level=moderate --json > audit-report.json || true
+
+      - name: Check for high/critical vulnerabilities
+        working-directory: ${{ matrix.project }}
+        run: |
+          if npm audit --audit-level=high; then
+            echo "❌ High or critical vulnerabilities found in ${{ matrix.project }}"
+            exit 1
+          else
+            echo "✅ No high or critical vulnerabilities found in ${{ matrix.project }}"
+          fi
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audit-report-${{ matrix.project }}
+          path: ${{ matrix.project }}/audit-report.json
+          retention-days: 30
+
+      - name: Comment PR with audit results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = `${{ matrix.project }}/audit-report.json`;
+
+            if (fs.existsSync(path)) {
+              const auditData = JSON.parse(fs.readFileSync(path, 'utf8'));
+              const vulnerabilities = auditData.metadata?.vulnerabilities || {};
+              const totalVulns = Object.values(vulnerabilities).reduce((sum, count) => sum + count, 0);
+              
+              const comment = `## Security Audit Results for ${{ matrix.project }}
+              
+              **Vulnerabilities found:**
+              - Critical: ${vulnerabilities.critical || 0}
+              - High: ${vulnerabilities.high || 0}
+              - Moderate: ${vulnerabilities.moderate || 0}
+              - Low: ${vulnerabilities.low || 0}
+              - Total: ${totalVulns}
+              
+              ${totalVulns > 0 ? '⚠️ **Please review and fix vulnerabilities before merging**' : '✅ **No vulnerabilities found**'}
+              
+              [View full audit report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }

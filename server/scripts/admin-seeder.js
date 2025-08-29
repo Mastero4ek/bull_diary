@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const { v4: uuidv4 } = require('uuid')
 
-const connectDB = require('@configs/database-config')
-const { logInfo, logWarn, logError } = require('@configs/logger-config')
-const Keys = require('@models/auth/keys-model')
-const Level = require('@models/core/level-model')
-const User = require('@models/core/user-model')
+const connectDB = require('../configs/database-config')
+const { logInfo, logWarn, logError } = require('../configs/logger-config')
+const Keys = require('../models/auth/keys-model')
+const Level = require('../models/core/level-model')
+const User = require('../models/core/user-model')
 
 async function seedUser() {
 	await connectDB()
@@ -16,7 +16,7 @@ async function seedUser() {
 	const role = 'admin'
 	const password = '123456'
 	const name = 'Admin'
-	const last_name = 'Admin'
+	const last_name = 'Adminovich'
 	const phone = 1234567890
 
 	const existing = await User.findOne({ email })

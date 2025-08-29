@@ -15,7 +15,12 @@
 		"clean:uploads": "node scripts/clean-uploads.js",
 		"clean:db:uploads": "node scripts/clean-database.js --clean-uploads",
 		"backup:db": "node scripts/backup-mongodb.js",
-		"restore:db": "node scripts/restore-mongodb.js"
+		"restore:db": "node scripts/restore-mongodb.js",
+		"security:audit": "npm audit --audit-level=moderate",
+		"security:audit:high": "npm audit --audit-level=high",
+		"security:fix": "npm audit fix",
+		"security:fix:force": "npm audit fix --force",
+		"security:check": "npm audit --audit-level=high && echo '✅ No high/critical vulnerabilities found'"
 	},
 	"keywords": [],
 	"author": "",

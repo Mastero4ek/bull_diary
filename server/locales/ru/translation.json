@@ -73,7 +73,9 @@
 		"starting_sync": "Начало синхронизации данных на&nbsp;бирже {{exchange}}",
 		"processing": "Обработка блока {{dataType}} на&nbsp;бирже {{exchange}}",
 		"processing_data": "Обработка блока {{dataType}} на&nbsp;бирже {{exchange}}",
-		"data_processed": "{{dataType}} успешно обработаны на&nbsp;бирже {{exchange}}"
+		"data_processed": "{{dataType}} успешно обработаны на&nbsp;бирже {{exchange}}",
+		"orders": "ордеров",
+		"transactions": "транзакций"
 	},
 	"validation": {
 		"name": {

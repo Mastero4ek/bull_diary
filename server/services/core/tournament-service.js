@@ -107,7 +107,7 @@ class TournamentService {
 
 			if (!tournament) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.tournament_not_found', { lng })
+					i18next.t('error.tournament.not_found', { lng })
 				)
 			}
 
@@ -169,7 +169,7 @@ class TournamentService {
 
 			if (!tournament) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.tournament_not_found', { lng, exchange })
+					i18next.t('error.tournament.not_found', { lng, exchange })
 				)
 			}
 
@@ -263,7 +263,7 @@ class TournamentService {
 
 			if (!tournament) {
 				throw ApiError.BadRequest(
-					i18next.t('errors.tournament_not_found', { lng })
+					i18next.t('error.tournament.not_found', { lng })
 				)
 			}
 
@@ -336,7 +336,10 @@ class TournamentService {
 					users: [],
 					hasMore: false,
 					nextCursor: null,
-					message: i18next.t('errors.tournament_not_found', { lng }),
+					message: i18next.t('error.tournament.not_found', {
+						lng,
+						exchange,
+					}),
 				}
 			}
 

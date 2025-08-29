@@ -141,7 +141,7 @@ UserSchema.pre('deleteMany', async function (next) {
 
 UserSchema.index({ name: 1 })
 UserSchema.index({ last_name: 1 })
-UserSchema.index({ email: 1 })
+// UserSchema.index({ email: 1 }) // Removed - duplicate with unique constraint
 UserSchema.index({ inactive: 1 })
 UserSchema.index({ created_at: -1 })
 UserSchema.index({ updated_at: -1 })

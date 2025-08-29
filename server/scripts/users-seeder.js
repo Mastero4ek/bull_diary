@@ -4,11 +4,11 @@ const moment = require('moment')
 const mongoose = require('mongoose')
 const { v4: uuidv4 } = require('uuid')
 
-const connectDB = require('@configs/database-config')
-const { logInfo, logWarn, logError } = require('@configs/logger-config')
-const Keys = require('@models/auth/keys-model')
-const Level = require('@models/core/level-model')
-const User = require('@models/core/user-model')
+const connectDB = require('../configs/database-config')
+const { logInfo, logWarn, logError } = require('../configs/logger-config')
+const Keys = require('../models/auth/keys-model')
+const Level = require('../models/core/level-model')
+const User = require('../models/core/user-model')
 
 const fakeUsers = [
 	{

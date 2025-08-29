@@ -112,4 +112,56 @@ coverage/
 .nyc_output/
 
 # Cache
-.cache/ 
+.cache/
+
+# Security and audit files
+security-report-*.txt
+audit-report.json
+npm-audit.json
+*.audit
+vulnerability-report.*
+security-check-*.log
+security_reports/
+
+# Vault and secrets
+.vault/
+secrets/
+*.secret
+*.key
+*.pem
+*.crt
+*.csr
+
+# Backup and restore files
+backups/
+*.backup
+*.bak
+*.old
+*.orig
+
+# Session and temporary files
+sessions/
+*.session
+*.tmp
+
+# Database dumps and exports
+*.dump
+*.export
+*.sql
+*.mongo
+
+# API keys and credentials
+api-keys.txt
+credentials.json
+service-account.json
+*.credentials
+
+# Monitoring and metrics
+metrics/
+monitoring/
+*.metrics
+
+# Local development data
+dev-data/
+test-data/
+local-data/ 

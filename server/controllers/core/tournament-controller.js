@@ -30,7 +30,10 @@ class TournamentController {
 
 			if (!deleted) {
 				throw ApiError.NotFound(
-					i18next.t('error.tournament.not_found', { lng: req.lng })
+					i18next.t('error.tournament.not_found', {
+						lng: req.lng,
+						exchange: req.query.exchange,
+					})
 				)
 			}
 
