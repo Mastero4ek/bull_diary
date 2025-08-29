@@ -329,7 +329,9 @@
 			"success_active": "User activated successfully!",
 			"error_active": "Error activating user! <br/> Please try again.",
 			"success_inactive": "User deactivated successfully!",
-			"error_inactive": "Error deactivating user! <br/> Please try again."
+			"error_inactive": "Error deactivating user! <br/> Please try again.",
+			"activity": "Users: ",
+			"activity_users": "Users activity"
 		},
 		"battle": {
 			"title": "Trading <br /> Championships",

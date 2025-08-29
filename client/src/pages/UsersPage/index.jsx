@@ -8,22 +8,20 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import avatarDefault from '@/assets/images/general/default_avatar.png'
 import { useNotification } from '@/components/layouts/NotificationLayout/NotificationProvider'
 import { PageLayout } from '@/components/layouts/PageLayout'
-import { DescLayout } from '@/components/layouts/PageLayout/DescLayout'
 import { usePopup } from '@/components/layouts/PopupLayout/PopupProvider'
 import { TableLayout } from '@/components/layouts/TableLayout'
 import { ControlButton } from '@/components/ui/buttons/ControlButton'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { Icon } from '@/components/ui/general/Icon'
 import { OuterBlock } from '@/components/ui/general/OuterBlock'
-import { NewUserPopup } from '@/popups/NewUserPopup'
 import { RemoveUserPopup } from '@/popups/RemoveUserPopup'
 import { getUser } from '@/redux/slices/candidateSlice'
 import { setSearch } from '@/redux/slices/filtersSlice'
 import {
 	activeUser,
 	clearUsers,
+	clearUsersCalendarData,
 	clearUsersList,
 	getUsers,
+	getUsersActivity,
 	getUsersList,
 	inactiveUser,
 	setPage,
@@ -31,6 +29,7 @@ import {
 } from '@/redux/slices/usersSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 
+import { CalendarChart } from './CalendarChart'
 import styles from './styles.module.scss'
 
 export const UsersPage = () => {
@@ -53,7 +52,7 @@ export const UsersPage = () => {
 		sort,
 	} = useSelector(state => state.users)
 	const { user } = useSelector(state => state.candidate)
-	const { help, isTablet, isMobile } = useSelector(state => state.settings)
+	const { isTablet } = useSelector(state => state.settings)
 
 	const columns = [
 		{
@@ -111,24 +110,24 @@ export const UsersPage = () => {
 		// 		</b>
 		// 	),
 		// },
-		{
-			Header: t('table.active'),
-			accessor: 'inactive',
-			Cell: ({ cell: { value } }) =>
-				value ? (
-					<Icon
-						width={isTablet ? 32 : 28}
-						height={isTablet ? 32 : 28}
-						id={'user-inactive'}
-					/>
-				) : (
-					<Icon
-						width={isTablet ? 32 : 28}
-						height={isTablet ? 32 : 28}
-						id={'user-active'}
-					/>
-				),
-		},
+		// {
+		// 	Header: t('table.active'),
+		// 	accessor: 'inactive',
+		// 	Cell: ({ cell: { value } }) =>
+		// 		value ? (
+		// 			<Icon
+		// 				width={isTablet ? 32 : 28}
+		// 				height={isTablet ? 32 : 28}
+		// 				id={'user-inactive'}
+		// 			/>
+		// 		) : (
+		// 			<Icon
+		// 				width={isTablet ? 32 : 28}
+		// 				height={isTablet ? 32 : 28}
+		// 				id={'user-active'}
+		// 			/>
+		// 		),
+		// },
 		{
 			Header: t('table.actions'),
 			accessor: 'actions',
@@ -299,10 +298,6 @@ export const UsersPage = () => {
 		[navigate]
 	)
 
-	const handleClickAddUser = useCallback(() => {
-		openPopup(<NewUserPopup />)
-	}, [navigate])
-
 	const handleUserSearch = useCallback(
 		selectedValue => {
 			const selectedUser = usersList.find(user => user.value === selectedValue)
@@ -357,8 +352,10 @@ export const UsersPage = () => {
 
 	useEffect(() => {
 		dispatch(getUsersList())
+		dispatch(getUsersActivity())
 
 		return () => {
+			dispatch(clearUsersCalendarData())
 			dispatch(clearUsersList())
 			dispatch(setSearch(''))
 		}
@@ -367,10 +364,10 @@ export const UsersPage = () => {
 	return (
 		<PageLayout
 			update={handleClickUpdate}
-			chartWidth={help && isTablet && isMobile ? 0 : 400}
+			chartWidth={720}
 			entries={true}
 			periods={true}
-			calendar={true}
+			calendar={false}
 			search={true}
 			searchOptions={usersList}
 			onChange={handleUserSearch}
@@ -392,31 +389,9 @@ export const UsersPage = () => {
 				/>
 			</div>
 
-			{(!help || (!isTablet && !isMobile)) && (
-				<OuterBlock>
-					<DescLayout
-						icon={'all-users'}
-						title={
-							<span
-								dangerouslySetInnerHTML={{ __html: t('page.users.title') }}
-							></span>
-						}
-						description={
-							<span
-								dangerouslySetInnerHTML={{ __html: t('page.users.subtitle') }}
-							></span>
-						}
-					>
-						{user && user?.role === 'admin' && (
-							<RootButton
-								icon={'sign-up'}
-								text={t('button.create_user')}
-								onClickBtn={() => handleClickAddUser()}
-							/>
-						)}
-					</DescLayout>
-				</OuterBlock>
-			)}
+			<OuterBlock>
+				<CalendarChart />
+			</OuterBlock>
 		</PageLayout>
 	)
 }

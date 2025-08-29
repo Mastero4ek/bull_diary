@@ -1,6 +1,7 @@
 const UserModel = require('@models/core/user-model')
 const KeysModel = require('@models/auth/keys-model')
 const LevelModel = require('@models/core/level-model')
+const UserActivityModel = require('@models/core/user-activity-model')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const tokenService = require('@services/auth/token-service')
@@ -932,12 +933,19 @@ class UserService {
 
 	/**
 	 * Получает список пользователей с объединенным именем и фамилией
+	 * @param {string} active - Опциональный параметр для фильтрации активных пользователей
 	 * @returns {Promise<Array>} - Список пользователей с полным именем
 	 */
-	async getUsersList() {
+	async getUsersList(active) {
 		try {
-			const users = await UserModel.find({ inactive: { $ne: true } })
-				.select('_id name last_name email')
+			let filter = {}
+
+			if (active !== undefined) {
+				filter.inactive = { $ne: true }
+			}
+
+			const users = await UserModel.find(filter)
+				.select('_id name last_name email updated_at')
 				.sort({ name: 1, last_name: 1 })
 
 			return users.map(user => ({
@@ -945,9 +953,117 @@ class UserService {
 				value: user._id.toString(),
 				label: `${user.name} ${user.last_name}`.trim(),
 				email: user.email,
+				updated_at: user.updated_at,
 			}))
 		} catch (error) {
 			logError(error, { context: 'getUsersList' })
+			throw error
+		}
+	}
+
+	/**
+	 * Логирует активность пользователя (группирует по дням)
+	 * @param {string} userId - ID пользователя
+	 * @param {string} email - Email пользователя
+	 * @param {string} name - Имя пользователя
+	 * @param {string} last_name - Фамилия пользователя
+	 * @param {string} ipAddress - IP адрес
+	 * @param {string} userAgent - User Agent
+	 * @returns {Promise<void>}
+	 */
+	async logUserActivity(
+		userId,
+		email = null,
+		name = null,
+		last_name = null,
+		ipAddress = null,
+		userAgent = null
+	) {
+		try {
+			const today = moment()
+			const activityDate = today.format('YYYY-MM-DD')
+
+			const existingActivity = await UserActivityModel.findOne({
+				user: userId,
+				activity_date: activityDate,
+			})
+
+			if (existingActivity) {
+				await UserActivityModel.findByIdAndUpdate(existingActivity._id, {
+					email,
+					name,
+					last_name,
+					ip_address: ipAddress,
+					user_agent: userAgent,
+					updated_at: today.toDate(),
+				})
+			} else {
+				await UserActivityModel.create({
+					user: userId,
+					email,
+					name,
+					last_name,
+					ip_address: ipAddress,
+					user_agent: userAgent,
+					activity_date: activityDate,
+				})
+			}
+		} catch (error) {
+			logError(error, {
+				context: 'logUserActivity',
+				userId,
+			})
+		}
+	}
+
+	/**
+	 * Получает количество уникальных пользователей, которые обновлялись по дням за текущий год
+	 * @returns {Promise<Array>} - Массив объектов с полями day и value
+	 */
+	async getUsersActivity() {
+		try {
+			const currentYear = moment().year()
+			const startDate = moment()
+				.year(currentYear)
+				.startOf('year')
+				.format('YYYY-MM-DD')
+			const endDate = moment()
+				.year(currentYear)
+				.endOf('year')
+				.format('YYYY-MM-DD')
+
+			const pipeline = [
+				{
+					$match: {
+						activity_date: {
+							$gte: startDate,
+							$lte: endDate,
+						},
+					},
+				},
+				{
+					$group: {
+						_id: '$activity_date',
+						uniqueUsers: { $sum: 1 },
+					},
+				},
+				{
+					$project: {
+						day: '$_id',
+						value: '$uniqueUsers',
+						_id: 0,
+					},
+				},
+				{
+					$sort: { day: 1 },
+				},
+			]
+
+			const calendarData = await UserActivityModel.aggregate(pipeline)
+
+			return calendarData
+		} catch (error) {
+			logError(error, { context: 'getUsersActivity' })
 			throw error
 		}
 	}

@@ -1,16 +1,16 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 
-import moment from 'moment/min/moment-with-locales'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import moment from 'moment/min/moment-with-locales';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootDesc } from '@/components/ui/descriptions/RootDesc'
-import { ResponsiveBar } from '@nivo/bar'
-import { ResponsiveLine } from '@nivo/line'
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootDesc } from '@/components/ui/descriptions/RootDesc';
+import { ResponsiveBar } from '@nivo/bar';
+import { ResponsiveLine } from '@nivo/line';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
 export const LineChart = ({ syncWarning = '' }) => {
 	const navigate = useNavigate()
@@ -51,6 +51,7 @@ export const LineChart = ({ syncWarning = '' }) => {
 			lineColor: theme ? '#24eaa4' : '#c270f8',
 			barColor: theme ? 'rgba(128, 128, 128, 1)' : 'rgba(60, 70, 78, 0.5)',
 			gridColor: theme ? 'rgba(128, 128, 128, 0.2)' : 'rgba(60, 70, 78, 0.2)',
+			text: theme ? 'rgba(185, 200, 215, 0.5)' : 'rgba(79, 104, 137, 0.5)',
 		}),
 		[width, isTablet, fakeTransactions, isMobile]
 	)
@@ -511,7 +512,7 @@ export const LineChart = ({ syncWarning = '' }) => {
 									textAnchor='end'
 									dominantBaseline='middle'
 									style={{
-										fill: chartStyles.barColor,
+										fill: chartStyles.text,
 										fontFamily: chartStyles.font,
 										fontSize: chartStyles.fontSize,
 									}}

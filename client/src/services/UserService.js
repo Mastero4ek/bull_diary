@@ -88,4 +88,8 @@ export default class UserService {
 	static async getUsersList() {
 		return $api.get('/v1/users/list')
 	}
+
+	static async getUsersActivity() {
+		return $api.get('/v1/users/calendar-data')
+	}
 }

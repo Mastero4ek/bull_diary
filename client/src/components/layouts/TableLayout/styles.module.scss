@@ -172,7 +172,8 @@
 				word-break: break-all;
 
 				span {
-					max-width: 220rem;
+					display: inline-block;
+					max-width: 112rem;
 				}
 
 				&:has(span svg) {

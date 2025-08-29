@@ -45,7 +45,7 @@ export const BarChart = React.memo(({ syncWarning = '' }) => {
 				? 'rgba(255, 55, 55, 1)'
 				: 'rgba(255, 51, 100, 1)',
 			gridColor: theme ? 'rgba(128, 128, 128, 0.2)' : 'rgba(60, 70, 78, 0.2)',
-			textColor: theme ? 'rgba(185, 200, 215, 1)' : 'rgba(79, 104, 137, 1)',
+			text: theme ? 'rgba(185, 200, 215, 0.5)' : 'rgba(79, 104, 137, 0.5)',
 		}),
 		[width, isTablet, isMobile, theme]
 	)
@@ -175,7 +175,7 @@ export const BarChart = React.memo(({ syncWarning = '' }) => {
 								textAnchor='end'
 								dominantBaseline='middle'
 								style={{
-									fill: chartStyles.textColor,
+									fill: chartStyles.text,
 									fontFamily: chartStyles.font,
 									fontSize: chartStyles.fontSize,
 								}}

@@ -150,6 +150,19 @@ export const getUsersList = createAsyncThunk(
 	}
 )
 
+export const getUsersActivity = createAsyncThunk(
+	'users/get-users-calendar-data',
+	async (_, { rejectWithValue }) => {
+		try {
+			const response = await UserService.getUsersActivity()
+
+			return response?.data
+		} catch (e) {
+			return rejectWithValue(resError(e))
+		}
+	}
+)
+
 const handleUsersError = (state, action) => {
 	state.errorMessage = action?.payload?.message
 	state.serverStatus = 'error'
@@ -168,6 +181,7 @@ const initialState = {
 	fakeUsers: fakeUsers,
 	users: [],
 	usersList: [],
+	usersCalendarData: [],
 	page: 1,
 	sort: { type: 'created_at', value: 'desc' },
 	totalPages: 0,
@@ -213,7 +227,12 @@ const usersSlice = createSlice({
 		setTotalPages(state, action) {
 			state.totalPages = action.payload
 		},
-
+		setUsersCalendarData(state, action) {
+			state.usersCalendarData = action.payload
+		},
+		clearUsersCalendarData(state) {
+			return { ...initialState, usersCalendarData: [] }
+		},
 		clearUser() {
 			return { ...initialState, fakeUsers: fakeUsers }
 		},
@@ -323,6 +342,19 @@ const usersSlice = createSlice({
 				}
 			})
 			.addCase(getUsersList.rejected, handleUsersError)
+
+			// get users calendar data
+			.addCase(getUsersActivity.pending, state => handleUsersLoading(state))
+			.addCase(getUsersActivity.fulfilled, (state, action) => {
+				state.serverStatus = 'success'
+				state.errorMessage = action.payload.message || null
+				state.errorArray = null
+
+				if (!action.payload.message) {
+					state.usersCalendarData = action.payload
+				}
+			})
+			.addCase(getUsersActivity.rejected, handleUsersError)
 	},
 })
 
@@ -340,6 +372,7 @@ export const {
 	setServerStatus,
 	clearUser,
 	clearUsersList,
+	clearUsersCalendarData,
 } = usersSlice.actions
 
 export default usersSlice.reducer

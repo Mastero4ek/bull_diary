@@ -52,6 +52,12 @@ router.get(
 
 router.get('/users/list', authMiddleware, userController.getUsersList)
 
+router.get(
+	'/users/calendar-data',
+	authMiddleware,
+	userController.getUsersActivity
+)
+
 router.post(
 	'/user',
 	authMiddleware,

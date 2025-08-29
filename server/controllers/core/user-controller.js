@@ -97,9 +97,7 @@ class UserController {
 
 			if (!current_user) {
 				return next(
-					ApiError.NotFound(
-						i18next.t('error.user.not_found', { lng: req.lng })
-					)
+					ApiError.NotFound(i18next.t('error.user.not_found', { lng: req.lng }))
 				)
 			}
 
@@ -203,9 +201,21 @@ class UserController {
 
 	async getUsersList(req, res, next) {
 		try {
-			const users = await userService.getUsersList()
+			const { active } = req.query
+
+			const users = await userService.getUsersList(active)
 
 			return res.json(users)
+		} catch (e) {
+			next(e)
+		}
+	}
+
+	async getUsersActivity(req, res, next) {
+		try {
+			const calendarData = await userService.getUsersActivity()
+
+			return res.json(calendarData)
 		} catch (e) {
 			next(e)
 		}

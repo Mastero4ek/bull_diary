@@ -1,6 +1,7 @@
 const { ApiError } = require('@exceptions/api-error')
 const tokenService = require('@services/auth/token-service')
 const UserModel = require('@models/core/user-model')
+const userService = require('@services/core/user-service')
 const { logError } = require('@configs/logger-config')
 
 /**
@@ -75,6 +76,35 @@ const authMiddleware = (req, res, next) => {
 					method: req.method,
 				})
 			})
+
+			UserModel.findById(userData.id)
+				.select('email name last_name')
+				.lean()
+				.then(user => {
+					if (user) {
+						userService
+							.logUserActivity(
+								userData.id,
+								user.email,
+								user.name,
+								user.last_name,
+								req.ip,
+								req.get('User-Agent')
+							)
+							.catch(error => {
+								logError(error, {
+									context: 'auth-middleware - log user activity',
+									userId: userData.id,
+								})
+							})
+					}
+				})
+				.catch(error => {
+					logError(error, {
+						context: 'auth-middleware - get user data for logging',
+						userId: userData.id,
+					})
+				})
 		}
 
 		next()
