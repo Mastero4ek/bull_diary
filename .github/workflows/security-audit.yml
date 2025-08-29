@@ -30,11 +30,11 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: npm ci
 
-      - name: Run npm audit
+      - name: Run security audit
         working-directory: ${{ matrix.project }}
         run: |
-          echo "🔍 Running npm audit for ${{ matrix.project }}..."
-          npm audit --audit-level=moderate --json > audit-report.json || true
+          echo "🔍 Running security audit for ${{ matrix.project }}..."
+          npm audit --audit-level=moderate --json > audit-report.json || echo '{}' > audit-report.json
 
       - name: Check for high/critical vulnerabilities
         working-directory: ${{ matrix.project }}

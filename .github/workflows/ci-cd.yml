@@ -7,8 +7,8 @@ on:
     branches: [main, develop]
 
 jobs:
-  security-audit:
-    name: Security Audit
+  security-and-lint:
+    name: Security Audit & Lint
     runs-on: ubuntu-latest
 
     strategy:
@@ -34,6 +34,18 @@ jobs:
           echo "🔍 Running security audit for ${{ matrix.project }}..."
           npm run security:check
 
+      - name: Run linting
+        working-directory: ${{ matrix.project }}
+        run: |
+          echo "🔍 Running linting for ${{ matrix.project }}..."
+          npm run lint
+
+      - name: Check formatting
+        working-directory: ${{ matrix.project }}
+        run: |
+          echo "🔍 Checking formatting for ${{ matrix.project }}..."
+          npm run format:check
+
       - name: Generate audit report
         working-directory: ${{ matrix.project }}
         if: always()
@@ -48,14 +60,10 @@ jobs:
           path: ${{ matrix.project }}/audit-report.json
           retention-days: 30
 
-  lint:
-    name: Lint and Format
+  build:
+    name: Build Applications
     runs-on: ubuntu-latest
-    needs: security-audit
-
-    strategy:
-      matrix:
-        project: [server, client]
+    needs: security-and-lint
 
     steps:
       - name: Checkout code
@@ -65,66 +73,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Install dependencies
-        working-directory: ${{ matrix.project }}
-        run: npm ci
-
-      - name: Run ESLint
-        working-directory: ${{ matrix.project }}
-        run: npm run lint
-
-      - name: Check code formatting
-        working-directory: ${{ matrix.project }}
-        run: npm run format:check
-
-  build-server:
-    name: Build Server
-    runs-on: ubuntu-latest
-    needs: [security-audit, lint]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        working-directory: server
-        run: npm ci
 
       - name: Build server
         working-directory: server
         run: |
           echo "🏗️ Building server..."
+          npm ci
           echo "✅ Server build completed"
-
-  build-client:
-    name: Build Client
-    runs-on: ubuntu-latest
-    needs: [security-audit, lint]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        working-directory: client
-        run: npm ci
 
       - name: Build client
         working-directory: client
-        run: npm run build
+        run: |
+          echo "🏗️ Building client..."
+          npm ci
+          npm run build
+          echo "✅ Client build completed"
 
-      - name: Upload build artifacts
+      - name: Upload client build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: client-build
@@ -134,7 +99,7 @@ jobs:
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
-    needs: [security-audit, lint, build-server, build-client]
+    needs: [security-and-lint, build]
     if: always()
 
     steps:
