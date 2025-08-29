@@ -123,7 +123,14 @@ export const createRoutes = (isAuth, user) => {
 
 	publicRoutes.forEach(route => {
 		if (route.component) {
-			routes.push(route)
+			if (route.path === '/home' && isAuth && user?.is_activated) {
+				routes.push({
+					path: '/home',
+					redirect: '/wallet',
+				})
+			} else {
+				routes.push(route)
+			}
 		}
 	})
 
@@ -134,9 +141,11 @@ export const createRoutes = (isAuth, user) => {
 			}
 		})
 	} else {
-		routes.push({
-			path: '*',
-			redirect: '/home',
+		protectedRoutes.forEach(route => {
+			routes.push({
+				path: route.path,
+				redirect: '/home',
+			})
 		})
 	}
 
