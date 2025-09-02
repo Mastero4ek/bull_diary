@@ -26,44 +26,9 @@ const AnimatedCard = ({ card, index }) => {
       rotateX: 0,
       filter: 'blur(0rem)',
       transition: {
-        duration: 0.7,
-        delay: index * 0.15,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-    hover: {
-      y: -12,
-      scale: 1.03,
-      rotateY: 2,
-      transition: {
-        duration: 0.4,
-        ease: 'easeOut',
-      },
-    },
-  };
-
-  const numberVariants = {
-    hidden: {
-      scale: 0,
-      rotate: -180,
-      opacity: 0,
-    },
-    visible: {
-      scale: 1,
-      rotate: 0,
-      opacity: 1,
-      transition: {
         duration: 0.5,
-        delay: index * 0.15 + 0.3,
-        ease: 'backOut',
-      },
-    },
-    hover: {
-      scale: 1.2,
-      rotate: 5,
-      transition: {
-        duration: 0.3,
-        ease: 'easeOut',
+        delay: index * 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
   };
@@ -74,14 +39,12 @@ const AnimatedCard = ({ card, index }) => {
       initial="hidden"
       whileInView="visible"
       whileHover="hover"
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 1 }}
     >
       <OuterBlock>
         <H4>
           <span>
-            <motion.b variants={numberVariants} whileHover="hover">
-              {card.id + 1}.
-            </motion.b>{' '}
+            <b>{card.id + 1}.</b>{' '}
             <span
               dangerouslySetInnerHTML={{
                 __html: t(`page.home.manual.step_${card.id + 1}.title`),
@@ -185,8 +148,8 @@ export const Manual = () => {
       y: 0,
       filter: 'blur(0rem)',
       transition: {
-        duration: 0.6,
-        delay: 0.1,
+        duration: 0.5,
+        delay: 0.75,
         ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
@@ -206,7 +169,7 @@ export const Manual = () => {
               variants={contentVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 1 }}
             >
               <H1>
                 <b

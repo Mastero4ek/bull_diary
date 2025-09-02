@@ -44,8 +44,8 @@ export const Precedence = () => {
       y: 0,
       filter: 'blur(0rem)',
       transition: {
-        duration: 0.6,
-        delay: 0.1,
+        duration: 0.5,
+        delay: 0.75,
         ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
@@ -64,7 +64,7 @@ export const Precedence = () => {
             variants={contentVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 1 }}
           >
             <H1>
               <b

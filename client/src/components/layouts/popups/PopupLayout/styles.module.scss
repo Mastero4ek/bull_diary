@@ -1,309 +1,309 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .overlay {
-	position: fixed;
-	inset: 0;
-	overflow-x: hidden;
-	overflow-y: auto;
-	display: flex;
-	flex-flow: column nowrap;
-	align-items: flex-start;
-	justify-content: flex-start;
-	z-index: 5000;
-	padding-top: 120rem;
-	padding-bottom: 30rem;
-	backdrop-filter: blur(10rem) grayscale(30%);
-	animation: animate_visible 0.3s ease-in-out;
+  position: fixed;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  z-index: 5000;
+  padding-top: 120rem;
+  padding-bottom: 30rem;
+  backdrop-filter: blur(10rem) grayscale(30%);
+  // animation: animate_visible 0.3s ease-in-out;
 
-	@include mixins.tablet {
-		padding-top: 80rem;
-		padding-right: 16rem;
-		padding-left: 16rem;
-	}
+  @include mixins.tablet {
+    padding-top: 80rem;
+    padding-right: 16rem;
+    padding-left: 16rem;
+  }
 }
 
 .popup_wrapper {
-	width: 1200rem;
-	position: relative;
-	margin: 0 auto;
-	animation: animate_top 0.3s ease-in-out;
-	background: var(--bgLight);
-	border-radius: 20rem;
+  width: 1200rem;
+  position: relative;
+  margin: 0 auto;
+  // animation: animate_top 0.3s ease-in-out;
+  background: var(--bgLight);
+  border-radius: 20rem;
 
-	&::after {
-		position: absolute;
-		content: '';
-		height: 100%;
-		width: 1rem;
-		background: var(--text);
-		opacity: 0.25;
-		top: 0;
-		left: 50%;
-		transform: translateX(-50%);
-	}
+  &::after {
+    position: absolute;
+    content: '';
+    height: 100%;
+    width: 1rem;
+    background: var(--text);
+    opacity: 0.25;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-	h1 {
-		margin-bottom: 20rem;
-	}
+  h1 {
+    margin-bottom: 20rem;
+  }
 
-	article {
-		position: relative;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 80rem;
-		padding: 60rem 40rem 30rem;
-		min-height: 700rem;
-	}
+  article {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 80rem;
+    padding: 60rem 40rem 30rem;
+    min-height: 700rem;
+  }
 
-	@include mixins.tablet {
-		width: 100%;
-		max-width: 500rem;
-		margin-left: auto;
-		margin-right: auto;
+  @include mixins.tablet {
+    width: 100%;
+    max-width: 500rem;
+    margin-left: auto;
+    margin-right: auto;
 
-		&::after {
-			display: none;
-		}
+    &::after {
+      display: none;
+    }
 
-		h1 {
-			text-align: center;
-			@include mixins.font(700, 28rem, 120%);
-		}
+    h1 {
+      text-align: center;
+      @include mixins.font(700, 28rem, 120%);
+    }
 
-		article {
-			display: flex;
-			flex-direction: column;
-			gap: 80rem;
-			padding: 20rem;
-		}
-	}
+    article {
+      display: flex;
+      flex-direction: column;
+      gap: 80rem;
+      padding: 20rem;
+    }
+  }
 }
 
 .popup_reverse_wrapper {
-	article {
-		flex-direction: column-reverse;
-	}
+  article {
+    flex-direction: column-reverse;
+  }
 }
 
 .popup_shared_wrapper {
-	width: fit-content;
+  width: fit-content;
 
-	&::after {
-		display: none !important;
-	}
+  &::after {
+    display: none !important;
+  }
 
-	.form_wrapper {
-		&::after {
-			display: none !important;
-		}
-	}
+  .form_wrapper {
+    &::after {
+      display: none !important;
+    }
+  }
 
-	article {
-		display: flex;
-		flex-direction: column;
-		gap: 40rem;
-		padding: 50rem;
-		padding-bottom: 20rem;
-		min-height: auto;
-	}
+  article {
+    display: flex;
+    flex-direction: column;
+    gap: 40rem;
+    padding: 50rem;
+    padding-bottom: 20rem;
+    min-height: auto;
+  }
 
-	@include mixins.tablet {
-		article {
-			gap: 20rem;
-			padding: 20rem;
-		}
-	}
+  @include mixins.tablet {
+    article {
+      gap: 20rem;
+      padding: 20rem;
+    }
+  }
 }
 
 .popup_close {
-	position: absolute;
-	right: 10rem;
-	top: 10rem;
-	cursor: pointer;
+  position: absolute;
+  right: 10rem;
+  top: 10rem;
+  cursor: pointer;
 
-	&:hover {
-		svg {
-			fill: var(--primaryHov);
-		}
-	}
+  &:hover {
+    svg {
+      fill: var(--primaryHov);
+    }
+  }
 
-	article {
-		min-height: auto;
-		padding: 0;
-		border-radius: 50%;
-		width: 40rem;
-		height: 40rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+  article {
+    min-height: auto;
+    padding: 0;
+    border-radius: 50%;
+    width: 40rem;
+    height: 40rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-		svg {
-			width: 24rem;
-			height: 24rem;
-			fill: var(--text);
-		}
-	}
+    svg {
+      width: 24rem;
+      height: 24rem;
+      fill: var(--text);
+    }
+  }
 
-	@include mixins.tablet {
-		right: 0rem;
-		top: 0rem;
+  @include mixins.tablet {
+    right: 0rem;
+    top: 0rem;
 
-		article {
-			width: 30rem;
-			height: 30rem;
+    article {
+      width: 30rem;
+      height: 30rem;
 
-			svg {
-				width: 16rem;
-				height: 16rem;
-			}
-		}
-	}
+      svg {
+        width: 16rem;
+        height: 16rem;
+      }
+    }
+  }
 }
 
 .desc_content {
-	display: flex;
-	flex-direction: column;
-	gap: 30rem;
-	align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 30rem;
+  align-items: center;
 
-	div {
-		text-align: center;
-	}
+  div {
+    text-align: center;
+  }
 
-	@include mixins.tablet {
-		gap: 20rem;
-	}
+  @include mixins.tablet {
+    gap: 20rem;
+  }
 }
 
 .desc_text {
-	width: 100%;
+  width: 100%;
 }
 
 .desc_layout {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 20rem;
-	position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rem;
+  position: relative;
 
-	h1 {
-		text-align: center;
-	}
+  h1 {
+    text-align: center;
+  }
 
-	button {
-		margin-top: auto;
-	}
+  button {
+    margin-top: auto;
+  }
 }
 
 .form_wrapper {
-	display: flex;
-	flex-direction: column;
-	gap: 20rem;
-	align-items: center;
-	position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20rem;
+  align-items: center;
+  position: relative;
 
-	@include mixins.tablet {
-		&::after {
-			content: '';
-			position: absolute;
-			bottom: -40rem;
-			left: 0;
-			width: 100%;
-			height: 1rem;
-			background: var(--text);
-			opacity: 0.25;
-		}
+  @include mixins.tablet {
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -40rem;
+      left: 0;
+      width: 100%;
+      height: 1rem;
+      background: var(--text);
+      opacity: 0.25;
+    }
 
-		form {
-			width: 100%;
-			max-width: 420rem;
-		}
-	}
+    form {
+      width: 100%;
+      max-width: 420rem;
+    }
+  }
 }
 
 .form_socials {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	width: 100%;
-	gap: 16rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  gap: 16rem;
 
-	li {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 16rem;
-		background: var(--bgLight);
-		box-shadow: var(--shadowOuter);
-		padding: 12rem 20rem;
-		border-radius: 20rem;
-		cursor: pointer;
-		transition: all 0.15s ease-in-out;
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16rem;
+    background: var(--bgLight);
+    box-shadow: var(--shadowOuter);
+    padding: 12rem 20rem;
+    border-radius: 20rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
 
-		&:hover {
-			background: var(--text);
-			box-shadow: none;
+    &:hover {
+      background: var(--text);
+      box-shadow: none;
 
-			span {
-				color: var(--bgLight);
-			}
+      span {
+        color: var(--bgLight);
+      }
 
-			svg {
-				fill: var(--bgLight);
-			}
-		}
+      svg {
+        fill: var(--bgLight);
+      }
+    }
 
-		span {
-			color: var(--text);
-			@include mixins.font(500, 20rem, 125%);
-			text-transform: uppercase;
-			transition: all 0.15s ease-in-out;
-		}
+    span {
+      color: var(--text);
+      @include mixins.font(500, 20rem, 125%);
+      text-transform: uppercase;
+      transition: all 0.15s ease-in-out;
+    }
 
-		svg {
-			width: 26rem;
-			height: 26rem;
-			fill: var(--text);
-			transition: all 0.15s ease-in-out;
-		}
-	}
+    svg {
+      width: 26rem;
+      height: 26rem;
+      fill: var(--text);
+      transition: all 0.15s ease-in-out;
+    }
+  }
 
-	@include mixins.tablet {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 16rem;
+  @include mixins.tablet {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16rem;
 
-		li {
-			padding: 10rem 16rem;
+    li {
+      padding: 10rem 16rem;
 
-			span {
-				@include mixins.font(500, 18rem, 125%);
-			}
+      span {
+        @include mixins.font(500, 18rem, 125%);
+      }
 
-			svg {
-				width: 20rem;
-				height: 20rem;
-			}
-		}
-	}
+      svg {
+        width: 20rem;
+        height: 20rem;
+      }
+    }
+  }
 }
 
-@keyframes animate_visible {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
+// @keyframes animate_visible {
+//   0% {
+//     opacity: 0;
+//   }
+//   100% {
+//     opacity: 1;
+//   }
+// }
 
-@keyframes animate_top {
-	0% {
-		top: -300rem;
-		opacity: 0;
-	}
-	100% {
-		top: 0;
-		opacity: 1;
-	}
-}
+// @keyframes animate_top {
+//   0% {
+//     top: -300rem;
+//     opacity: 0;
+//   }
+//   100% {
+//     top: 0;
+//     opacity: 1;
+//   }
+// }

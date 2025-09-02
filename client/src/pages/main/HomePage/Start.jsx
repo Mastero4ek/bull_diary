@@ -14,6 +14,50 @@ import { SignUpPopup } from '@/popups/auth/SignUpPopup';
 
 import styles from './styles.module.scss';
 
+const AnimatedCard = ({ card, index }) => {
+  const cardVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.85,
+      y: 25,
+      filter: 'blur(4rem)',
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      filter: 'blur(0rem)',
+      transition: {
+        duration: 0.5,
+        delay: index * 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  };
+
+  return (
+    <motion.li
+      key={card.id}
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 1 }}
+    >
+      <InnerBlock>
+        <H4>
+          <span dangerouslySetInnerHTML={{ __html: card.title }} />
+        </H4>
+
+        <RootDesc>
+          <span dangerouslySetInnerHTML={{ __html: card.subtitle }} />
+        </RootDesc>
+
+        <strong dangerouslySetInnerHTML={{ __html: card.step }} />
+      </InnerBlock>
+    </motion.li>
+  );
+};
+
 export const Start = () => {
   const { openPopup } = usePopup();
   const { t } = useTranslation();
@@ -54,8 +98,8 @@ export const Start = () => {
       y: 0,
       filter: 'blur(0rem)',
       transition: {
-        duration: 0.6,
-        delay: 0.1,
+        duration: 0.5,
+        delay: 0.75,
         ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
@@ -70,7 +114,7 @@ export const Start = () => {
             variants={contentVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 1 }}
           >
             <H1>
               <b
@@ -84,28 +128,12 @@ export const Start = () => {
               <ul className={styles.start_list}>
                 {stepList &&
                   stepList.length > 0 &&
-                  stepList.map((stepItem) => (
-                    <li key={stepItem.id}>
-                      <InnerBlock>
-                        <H4>
-                          <span
-                            dangerouslySetInnerHTML={{ __html: stepItem.title }}
-                          />
-                        </H4>
-
-                        <RootDesc>
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: stepItem.subtitle,
-                            }}
-                          />
-                        </RootDesc>
-
-                        <strong
-                          dangerouslySetInnerHTML={{ __html: stepItem.step }}
-                        />
-                      </InnerBlock>
-                    </li>
+                  stepList.map((stepItem, index) => (
+                    <AnimatedCard
+                      key={stepItem.id}
+                      card={stepItem}
+                      index={index}
+                    />
                   ))}
               </ul>
 

@@ -1,187 +1,181 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .select_head {
-	width: 100%;
-	padding: 0 15rem;
-	padding-right: 8rem;
-	height: 50rem;
-	border-radius: 20rem;
-	display: flex;
-	justify-content: space-between;
-	overflow: hidden;
-	gap: 12rem;
-	align-items: center;
-	cursor: pointer;
-	transition: all 0.15s ease-in-out;
+  width: 100%;
+  padding: 0 15rem;
+  padding-right: 8rem;
+  height: 50rem;
+  border-radius: 20rem;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  gap: 12rem;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
 
-	i {
-		display: block;
-		width: 0;
-		height: 0;
-		border-left: 5rem solid transparent;
-		border-right: 5rem solid transparent;
-		border-top: 9rem solid var(--disabled);
-		margin-right: 5rem;
-		transition: all 0.15s ease-in-out;
-	}
+  i {
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 5rem solid transparent;
+    border-right: 5rem solid transparent;
+    border-top: 9rem solid var(--disabled);
+    margin-right: 5rem;
+    transition: all 0.15s ease-in-out;
+  }
 
-	svg {
-		pointer-events: none;
-		cursor: pointer;
-		width: 24rem;
-		height: 24rem;
-		transition: all 0.15s ease-in-out;
-		stroke: var(--text);
-		stroke-width: 2rem;
-	}
+  svg {
+    pointer-events: none;
+    cursor: pointer;
+    width: 24rem;
+    height: 24rem;
+    transition: all 0.15s ease-in-out;
+    stroke: var(--text);
+    stroke-width: 2rem;
+  }
 
-	div {
-		width: 100%;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+  div {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-	span {
-		display: inline-block;
-		transition: all 0.15s ease-in-out;
-	}
+  span {
+    display: inline-block;
+    transition: all 0.15s ease-in-out;
+  }
 
-	&:hover {
-		svg {
-			fill: var(--primaryHov);
-		}
+  &:hover {
+    svg {
+      fill: var(--primaryHov);
+    }
 
-		span {
-			color: var(--primaryHov);
-		}
+    span {
+      color: var(--primaryHov);
+    }
 
-		div {
-			svg {
-				fill: var(--green);
-			}
-		}
-	}
+    div {
+      svg {
+        fill: var(--green);
+      }
+    }
+  }
 }
 
 .select_list {
-	width: fit-content;
-	position: absolute;
-	z-index: 500;
-	left: 50%;
-	top: 70rem;
-	display: flex !important;
-	flex-direction: column !important;
-	padding: 20rem 10rem !important;
-	border-radius: 20rem !important;
-	transition: all 0.15s ease-in-out !important;
-	height: 0 !important;
-	overflow: hidden !important;
-	transform-origin: 0 0 !important;
-	transform: translateX(-50%) rotateX(-90deg) !important;
-	visibility: hidden !important;
-	opacity: 0 !important;
-	background: var(--bgLight);
-	box-shadow: var(--shadowOuter);
-	max-height: 295rem;
+  width: fit-content;
+  position: absolute;
+  z-index: 500;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 70rem;
+  display: flex !important;
+  flex-direction: column !important;
+  padding-left: 10rem;
+  padding-right: 10rem;
+  border-radius: 20rem !important;
+  background: var(--bgLight);
+  box-shadow: var(--shadowOuter);
+  max-height: 300rem;
+  scrollbar-width: none !important;
 
-	li {
-		width: 100%;
-		padding: 10rem 15rem;
-		display: flex;
-		align-items: center;
-		text-align: center;
-		border-radius: 10rem;
-		justify-content: space-between;
-		transition: all 0.15s ease-in-out;
-		cursor: pointer;
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
 
-		&:hover {
-			background-color: var(--bgDark);
-			box-shadow: var(--shadowInner);
-			color: var(--primaryHov);
-		}
+  li {
+    width: 100%;
+    padding: 10rem 15rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    border-radius: 10rem;
+    justify-content: space-between;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
 
-		div {
-			width: 100%;
-			text-align: left;
-		}
+    &:hover {
+      background-color: var(--bgDark);
+      box-shadow: var(--shadowInner);
+      color: var(--primaryHov);
+    }
 
-		span {
-			text-align: left;
-			display: block;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-	}
+    div {
+      width: 100%;
+      text-align: left;
+    }
 
-	@include mixins.phone {
-		li {
-			padding: 15rem;
-		}
-	}
-}
+    span {
+      text-align: left;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-.select_list_active {
-	height: auto !important;
-	transition: all 0.15s ease-in-out !important;
-	opacity: 1 !important;
-	visibility: visible !important;
-	transform: translateX(-50%) rotateX(0deg) !important;
-	overflow-y: scroll !important;
-	scrollbar-width: none !important;
+    &:first-child {
+      margin-top: 10rem;
+    }
 
-	&::-webkit-scrollbar {
-		display: none !important;
-	}
+    &:last-child {
+      margin-bottom: 20rem;
+    }
+  }
+
+  @include mixins.phone {
+    li {
+      padding: 15rem;
+    }
+  }
 }
 
 .search_item {
-	cursor: default !important;
+  cursor: default !important;
 
-	&:hover {
-		background-color: transparent !important;
-		box-shadow: none !important;
-		color: inherit !important;
-	}
+  &:hover {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: inherit !important;
+  }
 }
 
 .search_input {
-	display: flex;
-	align-items: center;
-	gap: 14rem;
+  display: flex;
+  align-items: center;
+  gap: 14rem;
 
-	svg {
-		stroke: var(--disabled);
-		stroke-width: 2rem;
-		width: 20rem;
-		height: 20rem;
-	}
+  svg {
+    stroke: var(--disabled);
+    stroke-width: 2rem;
+    width: 20rem;
+    height: 20rem;
+  }
 
-	input {
-		width: 100%;
-		background: transparent;
-		color: var(--text);
-		@include mixins.font(400, 18rem, 120%);
-		outline: none;
-		transition: all 0.15s ease-in-out;
-		position: relative;
+  input {
+    width: 100%;
+    background: transparent;
+    color: var(--text);
+    @include mixins.font(400, 18rem, 120%);
+    outline: none;
+    transition: all 0.15s ease-in-out;
+    position: relative;
 
-		&::placeholder {
-			color: var(--disabled);
-		}
-	}
+    &::placeholder {
+      color: var(--disabled);
+    }
+  }
 }
 
 .no_results {
-	cursor: default !important;
-	color: var(--disabled) !important;
-	font-style: italic;
+  cursor: default !important;
+  color: var(--disabled) !important;
+  font-style: italic;
 
-	&:hover {
-		background-color: transparent !important;
-		box-shadow: none !important;
-		color: var(--disabled) !important;
-	}
+  &:hover {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: var(--disabled) !important;
+  }
 }
