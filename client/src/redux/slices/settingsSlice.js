@@ -46,7 +46,7 @@ export const settingsSlice = createSlice({
 	initialState,
 	reducers: {
 		setSideBar(state, action) {
-			state.sideBar = action.payload
+			state.sideBar = { ...state.sideBar, ...action.payload }
 		},
 		setIsTablet(state, action) {
 			state.isTablet = action.payload

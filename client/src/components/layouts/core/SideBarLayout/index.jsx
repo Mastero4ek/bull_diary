@@ -59,9 +59,21 @@ export const SideBarLayout = React.memo(() => {
 
   useEffect(() => {
     if (!isTablet && sideBar.blocked_value === 'unblock') {
-      dispatch(setSideBar({ ...sideBar, open: false }));
+      dispatch(setSideBar({ open: false }));
     }
-  }, []);
+  }, [dispatch, isTablet, sideBar.blocked_value]);
+
+  const handleMouseEnter = () => {
+    if (!isTablet && sideBar.blocked_value === 'unblock') {
+      dispatch(setSideBar({ open: true }));
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!isTablet && sideBar.blocked_value === 'unblock') {
+      dispatch(setSideBar({ open: false }));
+    }
+  };
 
   const shouldShowBackButton = (item) => {
     return (
@@ -85,16 +97,8 @@ export const SideBarLayout = React.memo(() => {
               ? '80rem'
               : '100rem',
       }}
-      onMouseEnter={() =>
-        !isTablet &&
-        sideBar.blocked_value === 'unblock' &&
-        dispatch(setSideBar({ ...sideBar, open: true }))
-      }
-      onMouseLeave={() =>
-        !isTablet &&
-        sideBar.blocked_value === 'unblock' &&
-        dispatch(setSideBar({ ...sideBar, open: false }))
-      }
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className={styles.sidebar_header}>
         <Logo

@@ -152,20 +152,17 @@ export const useWebSocket = () => {
     [dispatch, exchange?.name]
   );
 
-  const handleSyncCancelled = useCallback(
-    (data) => {
-      dispatch(setSyncCancelled());
-      dispatch(setConnectionStatus(false));
-      dispatch(setSubscriptionStatus(false));
+  const handleSyncCancelled = useCallback(() => {
+    dispatch(setSyncCancelled());
+    dispatch(setConnectionStatus(false));
+    dispatch(setSubscriptionStatus(false));
 
-      if (exchange?.name) {
-        dispatch(
-          updateKeySyncStatus({ exchange: exchange.name, syncStatus: false })
-        );
-      }
-    },
-    [dispatch, exchange?.name]
-  );
+    if (exchange?.name) {
+      dispatch(
+        updateKeySyncStatus({ exchange: exchange.name, syncStatus: false })
+      );
+    }
+  }, [dispatch, exchange?.name]);
 
   const handleTournamentsUpdate = useCallback(
     (data) => {

@@ -95,7 +95,7 @@ export const BattlePage = () => {
     {
       Header: t('table.name'),
       accessor: 'name',
-      Cell: ({ cell: { value }, row }) => (
+      Cell: ({ row }) => (
         <span style={{ fontSize: isTablet ? '22rem' : '18rem' }}>
           {row.original.name} {row.original.last_name}
         </span>
@@ -109,7 +109,7 @@ export const BattlePage = () => {
     {
       Header: t('table.score'),
       accessor: 'score',
-      Cell: ({ cell: { value }, row }) => <>{row.original.level?.value}</>,
+      Cell: ({ row }) => <>{row.original.level?.value}</>,
     },
     {
       Header: t('table.roi'),
@@ -234,7 +234,6 @@ export const BattlePage = () => {
     [
       dispatch,
       tournament,
-      exchange.name,
       page,
       limit,
       search,

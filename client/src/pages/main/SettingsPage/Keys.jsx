@@ -233,7 +233,16 @@ export const Keys = React.memo(
           showError(t('page.settings.keys_error_updating'));
         }
       },
-      [dispatch, showError, showSuccess, reset, t, selectedExchange]
+      [
+        dispatch,
+        showError,
+        showSuccess,
+        t,
+        selectedExchange,
+        startDataSync,
+        endDate,
+        startDate,
+      ]
     );
 
     useEffect(() => {
@@ -301,7 +310,7 @@ export const Keys = React.memo(
               animate={{
                 height: isOpen ? 'auto' : '0',
                 opacity: isOpen ? 1 : 0,
-                filter: isOpen ? 'unset' : 'blur(10rem)',
+                filter: isOpen ? 'blur(0)' : 'blur(10rem)',
                 overflow: isOpen ? 'visible' : 'hidden',
               }}
             >

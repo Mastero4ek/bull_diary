@@ -1,160 +1,168 @@
-import React, { useCallback } from 'react'
+import React, { useCallback } from 'react';
 
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { PopupDescLayout } from '@/components/layouts/popups/PopupLayout/PopupDescLayout'
-import { PopupFormLayout } from '@/components/layouts/popups/PopupLayout/PopupFormLayout'
-import { usePopup } from '@/components/layouts/popups/PopupLayout/PopupProvider'
-import { useNotification } from '@/components/layouts/specialized/NotificationLayout/NotificationProvider'
-import { RootButton } from '@/components/ui/buttons/RootButton'
-import { RootInput } from '@/components/ui/inputs/RootInput'
-import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
-import { signIn } from '@/redux/slices/candidateSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
+import {
+  PopupDescLayout,
+} from '@/components/layouts/popups/PopupLayout/PopupDescLayout';
+import {
+  PopupFormLayout,
+} from '@/components/layouts/popups/PopupLayout/PopupFormLayout';
+import {
+  usePopup,
+} from '@/components/layouts/popups/PopupLayout/PopupProvider';
+import {
+  useNotification,
+} from '@/components/layouts/specialized/NotificationLayout/NotificationProvider';
+import { RootButton } from '@/components/ui/buttons/RootButton';
+import { RootInput } from '@/components/ui/inputs/RootInput';
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
+import { signIn } from '@/redux/slices/candidateSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
-import { ForgotPopup } from '../ForgotPopup'
-import { SignUpPopup } from '../SignUpPopup'
-import styles from './styles.module.scss'
+import { ForgotPopup } from '../ForgotPopup';
+import { SignUpPopup } from '../SignUpPopup';
+import styles from './styles.module.scss';
 
 export const SignInPopup = React.memo(() => {
-	const { t } = useTranslation()
-	const navigate = useNavigate()
-	const dispatch = useDispatch()
-	const { closePopup, openPopup } = usePopup()
-	const { showError, showSuccess } = useNotification()
-	const { errorArray } = useSelector(state => state.candidate)
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { closePopup, openPopup } = usePopup();
+  const { showError, showSuccess } = useNotification();
+  const { errorArray } = useSelector((state) => state.candidate);
 
-	const {
-		reset,
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm()
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-	const handleSignUp = useCallback(() => {
-		closePopup()
+  const handleSignUp = useCallback(() => {
+    closePopup();
 
-		setTimeout(() => {
-			openPopup(<SignUpPopup />)
-		}, 150)
-	}, [])
+    setTimeout(() => {
+      openPopup(<SignUpPopup />);
+    }, 500);
+  }, [closePopup, openPopup]);
 
-	const handleClickForgot = useCallback(() => {
-		closePopup()
+  const handleClickForgot = useCallback(() => {
+    closePopup();
 
-		setTimeout(() => {
-			openPopup(<ForgotPopup />, { shared: true })
-		}, 150)
-	}, [])
+    setTimeout(() => {
+      openPopup(<ForgotPopup />, { shared: true });
+    }, 500);
+  }, [closePopup, openPopup]);
 
-	const submit = async data => {
-		try {
-			const { email, password } = data
+  const submit = async (data) => {
+    try {
+      const { email, password } = data;
 
-			const resultAction = await dispatch(signIn({ email, password }))
-			const originalPromiseResult = unwrapResult(resultAction)
+      const resultAction = await dispatch(signIn({ email, password }));
+      const originalPromiseResult = unwrapResult(resultAction);
 
-			if (originalPromiseResult) {
-				reset()
-				navigate('/wallet')
-				closePopup()
-				showSuccess(t('popup.signin.success'))
-			} else {
-				showError(t('popup.signin.error'))
-			}
-		} catch (e) {
-			showError(t('popup.signin.error'))
-			if (import.meta.env.NODE_ENV === 'dev') {
-				console.log(e)
-			}
-		}
-	}
+      if (originalPromiseResult) {
+        reset();
+        navigate('/wallet');
+        closePopup();
+        showSuccess(t('popup.signin.success'));
+      } else {
+        showError(t('popup.signin.error'));
+      }
+    } catch (e) {
+      showError(t('popup.signin.error'));
+    }
+  };
 
-	return (
-		<>
-			<PopupDescLayout
-				title={
-					<span
-						dangerouslySetInnerHTML={{ __html: t('popup.signin.title_signup') }}
-					/>
-				}
-				text={
-					<span
-						dangerouslySetInnerHTML={{
-							__html: t('popup.signin.subtitle_signup'),
-						}}
-					/>
-				}
-			>
-				<RootButton
-					onClickBtn={handleSignUp}
-					text={t('button.sign_up')}
-					icon='sign-up'
-				/>
-			</PopupDescLayout>
+  return (
+    <>
+      <PopupDescLayout
+        title={
+          <span
+            dangerouslySetInnerHTML={{ __html: t('popup.signin.title_signup') }}
+          />
+        }
+        text={
+          <span
+            dangerouslySetInnerHTML={{
+              __html: t('popup.signin.subtitle_signup'),
+            }}
+          />
+        }
+      >
+        <RootButton
+          onClickBtn={handleSignUp}
+          text={t('button.sign_up')}
+          icon="sign-up"
+        />
+      </PopupDescLayout>
 
-			<PopupFormLayout
-				title={
-					<span dangerouslySetInnerHTML={{ __html: t('popup.signin.title') }} />
-				}
-				socials={true}
-				subtitle={
-					<span
-						dangerouslySetInnerHTML={{ __html: t('popup.signin.subtitle') }}
-					/>
-				}
-			>
-				<form
-					className={styles.signin_form_wrapper}
-					onSubmit={handleSubmit(data => submit(data))}
-				>
-					<RootInput
-						name='email'
-						label={t('form.label.email')}
-						errorMessage={t('form.error.email')}
-						errorArray={errorArray}
-						errors={errors}
-						type='email'
-						register={{
-							...register('email', {
-								required: true,
-								pattern: {
-									value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
-									message: t('form.error.email'),
-								},
-							}),
-						}}
-					/>
+      <PopupFormLayout
+        title={
+          <span dangerouslySetInnerHTML={{ __html: t('popup.signin.title') }} />
+        }
+        socials={true}
+        subtitle={
+          <span
+            dangerouslySetInnerHTML={{ __html: t('popup.signin.subtitle') }}
+          />
+        }
+      >
+        <form
+          className={styles.signin_form_wrapper}
+          onSubmit={handleSubmit((data) => submit(data))}
+        >
+          <RootInput
+            name="email"
+            label={t('form.label.email')}
+            errorMessage={t('form.error.email')}
+            errorArray={errorArray}
+            errors={errors}
+            type="email"
+            register={{
+              ...register('email', {
+                required: true,
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/i,
+                  message: t('form.error.email'),
+                },
+              }),
+            }}
+          />
 
-					<RootInput
-						name='password'
-						label={t('form.label.password')}
-						errorMessage={t('form.error.password')}
-						errorArray={errorArray}
-						errors={errors}
-						type='password'
-						register={{
-							...register('password', {
-								required: true,
-							}),
-						}}
-					/>
+          <RootInput
+            name="password"
+            label={t('form.label.password')}
+            errorMessage={t('form.error.password')}
+            errorArray={errorArray}
+            errors={errors}
+            type="password"
+            register={{
+              ...register('password', {
+                required: true,
+              }),
+            }}
+          />
 
-					<RootDesc>
-						<b onClick={handleClickForgot}>{t('popup.signin.forgot')}</b>
-					</RootDesc>
+          <RootDesc>
+            <b onClick={handleClickForgot}>{t('popup.signin.forgot')}</b>
+          </RootDesc>
 
-					<RootButton
-						type={'submit'}
-						onClickBtn={() => console.log('')}
-						text={t('button.sign_in')}
-						icon='sign-in'
-					/>
-				</form>
-			</PopupFormLayout>
-		</>
-	)
-})
+          <RootButton
+            type={'submit'}
+            onClickBtn={() => console.log('')}
+            text={t('button.sign_in')}
+            icon="sign-in"
+          />
+        </form>
+      </PopupFormLayout>
+    </>
+  );
+});

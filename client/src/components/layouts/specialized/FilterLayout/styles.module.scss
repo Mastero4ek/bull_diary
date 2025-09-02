@@ -1,377 +1,375 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .filter_layout {
-	position: relative;
+  position: relative;
 }
 
 .filter_mask {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	width: 60rem;
-	pointer-events: none;
-	transition: opacity 0.3s ease-in-out;
-	height: 100%;
-	z-index: 10;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60rem;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+  height: 100%;
+  z-index: 10;
 }
 
 .filter_mask_left {
-	left: 0;
-	background: linear-gradient(
-		to right,
-		var(--bgLight) 0%,
-		rgba(0, 0, 0, 0) 100%
-	);
+  left: 0;
+  background: linear-gradient(
+    to right,
+    var(--bgLight) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .filter_mask_right {
-	right: 0;
-	background: linear-gradient(
-		to left,
-		var(--bgLight) 0%,
-		rgba(0, 0, 0, 0) 100%
-	);
+  right: 0;
+  background: linear-gradient(
+    to left,
+    var(--bgLight) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .filter_wrapper {
-	width: 100%;
-	display: grid;
-	grid-template-columns: 500rem 300rem 200rem 140rem 1fr;
-	gap: 40rem;
-	position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 500rem 300rem 200rem 140rem 1fr;
+  gap: 40rem;
+  position: relative;
 
-	@include mixins.tablet {
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		flex-wrap: wrap;
-		gap: 15rem;
-		max-width: 100%;
-	}
+  @include mixins.tablet {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 15rem;
+    max-width: 100%;
+  }
 
-	@include mixins.phone {
-		gap: 10rem;
-		flex-wrap: nowrap;
-		overflow: auto;
-		width: 100%;
-		padding: 20rem 0;
-		margin: -20rem 0;
-		scrollbar-width: none;
+  @include mixins.phone {
+    gap: 10rem;
+    flex-wrap: nowrap;
+    overflow: auto;
+    width: 100%;
+    padding: 20rem 0;
+    margin: -20rem 0;
+    scrollbar-width: none;
 
-		&::-webkit-scrollbar {
-			display: none;
-		}
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
-		> * {
-			flex-shrink: 0;
-		}
-	}
+    > * {
+      flex-shrink: 0;
+    }
+  }
 }
 
 .filter_wrapper_dis {
-	opacity: 0.5;
+  opacity: 0.5;
 
-	&::after {
-		z-index: 100;
-		position: absolute;
-		content: '';
-		width: 100%;
-		height: 100%;
-		backdrop-filter: grayscale(100%);
-	}
+  &::after {
+    z-index: 100;
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    backdrop-filter: grayscale(100%);
+  }
 }
 
 .filter_buttons {
-	width: 100%;
-	border-radius: 20rem;
-	display: flex;
-	justify-content: space-between;
-	gap: 15rem;
-	grid-column-start: 5;
-	grid-column-end: 6;
+  width: 100%;
+  border-radius: 20rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 15rem;
+  grid-column-start: 5;
+  grid-column-end: 6;
 
-	button {
-		margin: 0;
-		width: 100%;
-		padding: 12rem;
+  button {
+    margin: 0;
+    width: 100%;
+    padding: 12rem;
 
-		svg {
-			stroke-width: 3rem;
-		}
+    svg {
+      stroke-width: 3rem;
+    }
 
-		&:nth-child(1):not(:disabled) {
-			background: var(--red);
-		}
-	}
+    &:nth-child(1):not(:disabled) {
+      background: var(--red);
+    }
+  }
 
-	@include mixins.tablet {
-		grid-column-start: unset;
-		grid-column-end: unset;
-		flex-wrap: wrap;
-		gap: 15rem;
-		width: fit-content;
-		margin-left: auto;
+  @include mixins.tablet {
+    grid-column-start: unset;
+    grid-column-end: unset;
+    flex-wrap: wrap;
+    gap: 15rem;
+    width: fit-content;
+    margin-left: auto;
 
-		button {
-			width: fit-content;
-		}
-	}
+    button {
+      width: fit-content;
+    }
+  }
 
-	@include mixins.phone {
-		flex-wrap: nowrap;
-		width: 105rem;
-	}
+  @include mixins.phone {
+    flex-wrap: nowrap;
+    width: 105rem;
+  }
 }
 
 .periods {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	grid-column-start: 1;
-	grid-column-end: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-column-start: 1;
+  grid-column-end: 2;
 
-	@include mixins.tablet {
-		grid-column-start: unset;
-		grid-column-end: unset;
-		justify-content: flex-start;
-		flex-wrap: wrap;
-		gap: 10rem;
-	}
+  @include mixins.tablet {
+    grid-column-start: unset;
+    grid-column-end: unset;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10rem;
+  }
 
-	@include mixins.phone {
-		flex-wrap: nowrap;
-		width: 290rem;
-	}
+  @include mixins.phone {
+    flex-wrap: nowrap;
+    width: 290rem;
+  }
 }
 
 .periods_item {
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 14rem 0 14rem 0;
-	width: 115rem;
-	height: 50rem;
-	border-radius: 20rem;
-	text-align: center;
-	transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14rem 0 14rem 0;
+  width: 115rem;
+  height: 50rem;
+  border-radius: 20rem;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
 
-	&:hover {
-		color: var(--primaryHov);
-	}
+  &:hover {
+    color: var(--primaryHov);
+  }
 
-	@include mixins.tablet {
-		padding: 12rem 16rem;
-		height: auto;
-		width: fit-content;
-	}
+  @include mixins.tablet {
+    padding: 12rem 16rem;
+    height: auto;
+    width: fit-content;
+  }
 
-	@include mixins.phone {
-		padding: 12rem;
-		width: 65rem;
+  @include mixins.phone {
+    padding: 12rem;
+    width: 65rem;
 
-		span {
-			font-size: 14rem !important;
-		}
-	}
+    span {
+      font-size: 14rem !important;
+    }
+  }
 }
 
 .entries {
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	grid-column-start: 4;
-	grid-column-end: 5;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column-start: 4;
+  grid-column-end: 5;
 
-	article {
-		width: 100%;
-	}
+  article {
+    width: 100%;
+  }
 
-	@include mixins.tablet {
-		grid-column-start: unset;
-		grid-column-end: unset;
-	}
+  @include mixins.tablet {
+    grid-column-start: unset;
+    grid-column-end: unset;
+  }
 
-	@include mixins.phone {
-		width: 125rem;
-	}
+  @include mixins.phone {
+    width: 125rem;
+  }
 }
 
 .entries_select {
-	@include mixins.phone {
-		ul {
-			width: 320rem !important;
-			position: fixed !important;
-			top: 212rem !important;
-			left: 50% !important;
-			right: auto !important;
-			transform: rotateX(-90deg) translate(-50%, -50%);
-		}
-	}
+  @include mixins.phone {
+    ul {
+      width: 320rem !important;
+      position: fixed !important;
+      top: 212rem !important;
+      left: 50% !important;
+      right: auto !important;
+    }
+  }
 }
 
 .entries_list {
-	width: 150rem !important;
+  width: 150rem !important;
 }
 
 .calendar {
-	grid-column-start: 2;
-	grid-column-end: 3;
+  grid-column-start: 2;
+  grid-column-end: 3;
 
-	@include mixins.phone {
-		width: 300rem;
-	}
+  @include mixins.phone {
+    width: 300rem;
+  }
 }
 
 .search {
-	position: relative;
-	grid-column-start: 3;
-	grid-column-end: 4;
+  position: relative;
+  grid-column-start: 3;
+  grid-column-end: 4;
 
-	@include mixins.tablet {
-		grid-column-start: unset;
-		grid-column-end: unset;
-	}
+  @include mixins.tablet {
+    grid-column-start: unset;
+    grid-column-end: unset;
+  }
 
-	@include mixins.phone {
-		width: 200rem;
-	}
+  @include mixins.phone {
+    width: 200rem;
+  }
 }
 
 .search_select {
-	ul {
-		width: 250rem !important;
-	}
+  ul {
+    width: 250rem !important;
+  }
 
-	@include mixins.phone {
-		ul {
-			width: 320rem !important;
-			position: fixed !important;
-			top: 212rem !important;
-			left: 50% !important;
-			right: auto !important;
-			transform: rotateX(-90deg) translate(-50%, -50%);
-		}
-	}
+  @include mixins.phone {
+    ul {
+      width: 320rem !important;
+      position: fixed !important;
+      top: 212rem !important;
+      left: 50% !important;
+      right: auto !important;
+    }
+  }
 }
 
 .total_wrapper {
-	grid-column-start: 1;
-	grid-column-end: 3;
-	position: relative;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  position: relative;
 
-	article {
-		height: 100%;
-		width: 100%;
-		display: flex;
-		align-items: center;
-	}
+  article {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
 
-	&::after {
-		position: absolute;
-		content: '';
-		width: 2rem;
-		height: 40rem;
-		background-color: var(--text);
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		opacity: 0.15;
-	}
+  &::after {
+    position: absolute;
+    content: '';
+    width: 2rem;
+    height: 40rem;
+    background-color: var(--text);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.15;
+  }
 
-	@include mixins.tablet {
-		grid-column-start: unset;
-		grid-column-end: unset;
-		width: 100%;
-		max-width: fit-content;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-wrap: wrap;
+  @include mixins.tablet {
+    grid-column-start: unset;
+    grid-column-end: unset;
+    width: 100%;
+    max-width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 
-		&::after {
-			display: none;
-		}
-	}
+    &::after {
+      display: none;
+    }
+  }
 
-	@include mixins.phone {
-		width: 240rem !important;
-		max-width: 240rem !important;
-		height: 50rem;
+  @include mixins.phone {
+    width: 240rem !important;
+    max-width: 240rem !important;
+    height: 50rem;
 
-		&::after {
-			display: none;
-		}
-	}
+    &::after {
+      display: none;
+    }
+  }
 }
 
 .total {
-	width: 100%;
-	padding: 0 25rem;
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 40rem;
+  width: 100%;
+  padding: 0 25rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40rem;
 
-	@include mixins.tablet {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 14rem;
-		padding: 15rem;
-	}
+  @include mixins.tablet {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14rem;
+    padding: 15rem;
+  }
 
-	@include mixins.phone {
-		flex-direction: column;
-		gap: 0rem;
-		padding: 0 20rem;
+  @include mixins.phone {
+    flex-direction: column;
+    gap: 0rem;
+    padding: 0 20rem;
 
-		span,
-		b {
-			font-size: 14rem !important;
-		}
-	}
+    span,
+    b {
+      font-size: 14rem !important;
+    }
+  }
 }
 
 .unrealized {
-	display: flex;
-	justify-content: space-between;
-	gap: 10rem;
-	align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 10rem;
+  align-items: center;
 
-	div:nth-of-type(1) {
-		display: inline-block;
-		margin-right: auto;
-	}
+  div:nth-of-type(1) {
+    display: inline-block;
+    margin-right: auto;
+  }
 
-	span,
-	strong {
-		display: inline-block;
-	}
+  span,
+  strong {
+    display: inline-block;
+  }
 
-	@include mixins.tablet {
-		width: 100%;
-		justify-content: space-between;
-	}
+  @include mixins.tablet {
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
 .realized {
-	display: flex;
-	justify-content: space-between;
-	gap: 10rem;
-	align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 10rem;
+  align-items: center;
 
-	div:nth-of-type(1) {
-		display: inline-block;
-		margin-right: auto;
-	}
+  div:nth-of-type(1) {
+    display: inline-block;
+    margin-right: auto;
+  }
 
-	span,
-	strong {
-		display: inline-block;
-	}
+  span,
+  strong {
+    display: inline-block;
+  }
 
-	@include mixins.tablet {
-		width: 100%;
-		justify-content: space-between;
-	}
+  @include mixins.tablet {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

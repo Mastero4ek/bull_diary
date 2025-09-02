@@ -251,8 +251,7 @@
 
   @include mixins.tablet {
     top: 45rem;
-    right: -50%;
-    transform: translateX(50%) rotateX(90deg);
+    right: -140rem;
 
     li {
       a {

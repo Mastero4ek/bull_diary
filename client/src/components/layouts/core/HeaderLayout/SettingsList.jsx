@@ -122,7 +122,7 @@ export const SettingsList = React.memo(() => {
         animate={{
           height: open ? 'auto' : '0',
           opacity: open ? 1 : 0,
-          filter: open ? 'unset' : 'blur(10rem)',
+          filter: open ? 'none' : 'blur(10rem)',
         }}
       >
         {isTablet &&

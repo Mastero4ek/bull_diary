@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 import moment from 'moment/min/moment-with-locales';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import {
   usePopup,
@@ -20,7 +19,6 @@ import { ResponsiveCalendar } from '@nivo/calendar';
 import styles from './styles.module.scss';
 
 export const CalendarChart = () => {
-  const navigate = useNavigate();
   const { openPopup } = usePopup();
   const { t } = useTranslation();
   const { usersCalendarData } = useSelector((state) => state.users);
@@ -119,7 +117,7 @@ export const CalendarChart = () => {
 
   const handleClickAddUser = useCallback(() => {
     openPopup(<NewUserPopup />);
-  }, [navigate]);
+  }, [openPopup]);
 
   return (
     <>
@@ -144,7 +142,7 @@ export const CalendarChart = () => {
             }}
             yearSpacing={0}
             yearLegendOffset={chartStyles.margin}
-            monthLegend={(year, month, date) => {
+            monthLegend={(year, month) => {
               const monthDate = moment().year(year).month(month);
 
               return monthDate.format('MMM');

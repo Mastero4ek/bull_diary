@@ -1,6 +1,8 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
+  useMemo,
   useState,
 } from 'react';
 
@@ -15,42 +17,59 @@ export const usePopup = () => {
 };
 
 export const PopupProvider = React.memo(({ children }) => {
-  const [popupContent, setPopupContent] = useState({
-    isOpen: false,
-    content: null,
-    closeButton: true,
-    shared: false,
-    direction: '',
-  });
+  const [isOpen, setIsOpen] = useState(false);
+  const [content, setContent] = useState(null);
+  const [closeButton, setCloseButton] = useState(true);
+  const [shared, setShared] = useState(false);
+  const [direction, setDirection] = useState('');
 
   const dispatch = useDispatch();
 
-  const openPopup = (
-    content,
-    options = { closeButton: true, shared: false, direction: '' }
-  ) => {
-    setPopupContent({
-      isOpen: true,
-      content,
-      closeButton: options.closeButton,
-      shared: options.shared,
-      direction: options.direction,
-    });
-  };
+  const openPopup = useCallback(
+    (
+      newContent,
+      options = { closeButton: true, shared: false, direction: '' }
+    ) => {
+      setContent(newContent);
+      setCloseButton(options.closeButton);
+      setShared(options.shared);
+      setDirection(options.direction);
+      setIsOpen(true);
+    },
+    []
+  );
 
-  const closePopup = () => {
+  const closePopup = useCallback(() => {
     dispatch(setErrorMessage(''));
-    setPopupContent({
-      isOpen: false,
-      content: null,
-      closeButton: true,
-      shared: false,
-      direction: '',
-    });
-  };
+    setIsOpen(false);
+    setContent(null);
+    setCloseButton(true);
+    setShared(false);
+    setDirection('');
+  }, [dispatch]);
+
+  const popupContent = useMemo(
+    () => ({
+      isOpen,
+      content,
+      closeButton,
+      shared,
+      direction,
+    }),
+    [isOpen, content, closeButton, shared, direction]
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      popupContent,
+      openPopup,
+      closePopup,
+    }),
+    [popupContent, openPopup, closePopup]
+  );
 
   return (
-    <PopupContext.Provider value={{ popupContent, openPopup, closePopup }}>
+    <PopupContext.Provider value={contextValue}>
       {children}
     </PopupContext.Provider>
   );

@@ -1,262 +1,280 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .tournament_form_wrapper {
-	width: 80%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 20rem;
-	height: 100%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rem;
+  height: 100%;
 
-	button {
-		margin-top: auto;
-	}
+  button {
+    margin-top: auto;
+  }
 
-	b {
-		transition: all 0.15s ease-in-out;
-		opacity: 0.5;
-		cursor: pointer;
+  b {
+    transition: all 0.15s ease-in-out;
+    opacity: 0.5;
+    cursor: pointer;
 
-		&:hover {
-			opacity: 1;
-			color: var(--primaryHov);
-		}
-	}
+    &:hover {
+      opacity: 1;
+      color: var(--primaryHov);
+    }
+  }
 
-	textarea {
-		height: 200rem;
-	}
+  textarea {
+    height: 200rem;
+  }
 }
 
 .tournament_form_label {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 8rem;
-	position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8rem;
+  position: relative;
 
-	input {
-		resize: none;
-		width: 100%;
-		padding: 15rem;
-		padding-right: 40rem;
-		@include mixins.font(500, 18rem, 120%);
-		border-radius: 10rem;
-		border: 1rem solid transparent;
-		transition: all 0.15s ease-in-out;
-		color: var(--text);
-		box-shadow: var(--shadowOuter);
-		background: var(--bgDark);
+  input {
+    resize: none;
+    width: 100%;
+    padding: 15rem;
+    padding-right: 40rem;
+    @include mixins.font(500, 18rem, 120%);
+    border-radius: 10rem;
+    border: 1rem solid transparent;
+    transition: all 0.15s ease-in-out;
+    color: var(--text);
+    box-shadow: var(--shadowOuter);
+    background: var(--bgDark);
 
-		&:focus {
-			background: var(--bgLight);
-			box-shadow: var(--shadowInner);
-		}
+    &:focus {
+      background: var(--bgLight);
+      box-shadow: var(--shadowInner);
+    }
 
-		&:disabled {
-			cursor: default;
-			pointer-events: none;
-			opacity: 0.5;
+    &:disabled {
+      cursor: default;
+      pointer-events: none;
+      opacity: 0.5;
 
-			~ svg {
-				opacity: 0.5;
-				cursor: default;
-				pointer-events: none;
-			}
-		}
-	}
+      ~ svg {
+        opacity: 0.5;
+        cursor: default;
+        pointer-events: none;
+      }
+    }
+  }
 
-	p {
-		color: var(--red);
-	}
+  p {
+    color: var(--red);
+  }
 
-	span {
-		opacity: 0.5;
-	}
+  span {
+    opacity: 0.5;
+  }
 }
 
 .tournament_form_control {
-	width: 100%;
-	gap: 8rem;
-	display: flex;
-	align-items: flex-start;
-	flex-direction: column;
-	justify-content: space-between;
+  width: 100%;
+  gap: 8rem;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .error {
-	position: relative;
+  position: relative;
 
-	input,
-	article {
-		border: 1rem solid var(--red) !important;
-	}
+  input,
+  article {
+    border: 1rem solid var(--red) !important;
+  }
 
-	svg {
-		width: 28rem;
-		height: 28rem;
-		position: absolute;
-		right: 15rem;
-		top: 40rem;
-	}
+  svg {
+    width: 28rem;
+    height: 28rem;
+    position: absolute;
+    right: 15rem;
+    top: 40rem;
+  }
 }
 
 .calendar_wrapper {
-	width: 100%;
+  width: 100%;
 }
 
 .tournament_upload_wrapper {
-	article {
-		width: 100%;
-		min-height: auto;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
+  article {
+    width: 100%;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .tournament_form_select {
-	position: relative;
-	width: 100%;
+  position: relative;
+  width: 100%;
 
-	svg {
-		top: 10rem !important;
-	}
+  svg {
+    top: 10rem !important;
+  }
 
-	article {
-		min-height: auto;
-		padding: 0;
-		width: 100%;
-		border-radius: 10rem;
-		display: block;
-		border: 1rem solid transparent;
+  article {
+    min-height: auto;
+    padding: 0;
+    width: 100%;
+    border-radius: 10rem;
+    display: block;
+    border: 1rem solid transparent;
 
-		div {
-			span {
-				display: flex;
-				align-items: center;
-				gap: 15rem;
-				opacity: 1;
+    div {
+      span {
+        display: flex;
+        align-items: center;
+        gap: 15rem;
+        opacity: 1;
 
-				svg {
-					width: 80rem;
-					height: 24rem;
-				}
-			}
-		}
-	}
+        svg {
+          width: 80rem;
+          height: 24rem;
+        }
+      }
+    }
+  }
 
-	ul {
-		width: 100%;
+  ul {
+    width: 100%;
 
-		li {
-			span {
-				display: flex;
-				align-items: center;
-				gap: 15rem;
-				opacity: 1;
+    li {
+      span {
+        display: flex;
+        align-items: center;
+        gap: 15rem;
+        opacity: 1;
 
-				svg {
-					position: relative;
-					top: unset !important;
-					bottom: unset !important;
-					right: unset !important;
-					left: unset !important;
-					transform: unset !important;
+        svg {
+          position: relative;
+          top: unset !important;
+          bottom: unset !important;
+          right: unset !important;
+          left: unset !important;
+          transform: unset !important;
 
-					width: 80rem;
-					height: 24rem;
-				}
-			}
-		}
-	}
+          width: 80rem;
+          height: 24rem;
+        }
+      }
+    }
+  }
 }
 
 .tournament_photo {
-	display: flex;
-	flex-direction: column;
-	gap: 20rem;
-	align-items: center;
-	width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20rem;
+  align-items: center;
+  width: 100%;
 
-	button {
-		background-color: var(--red);
+  button {
+    background-color: var(--red);
 
-		&:hover {
-			background-color: var(--red);
-		}
+    &:hover {
+      background-color: var(--red);
+    }
 
-		span {
-			opacity: 1;
-		}
-	}
+    span {
+      opacity: 1;
+    }
+  }
 
-	article {
-		width: 100%;
-		position: relative;
-		border-radius: 15rem;
-		padding: 20rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-height: auto;
+  article {
+    width: 100%;
+    position: relative;
+    border-radius: 15rem;
+    padding: 20rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: auto;
 
-		svg {
-			pointer-events: all;
-			width: 60rem;
-			height: 60rem;
-			fill: var(--text);
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			cursor: pointer;
-			transition: all 0.15s ease-in-out;
+    svg {
+      pointer-events: all;
+      width: 60rem;
+      height: 60rem;
+      fill: var(--text);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
 
-			&:hover {
-				fill: var(--primaryHov);
-			}
-		}
-	}
+      &:hover {
+        fill: var(--primaryHov);
+      }
+    }
+  }
 
-	label {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		cursor: pointer;
-	}
+  label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
 
-	img {
-		border-radius: 10rem;
-		width: 460rem;
-		height: 230rem;
-		object-fit: cover;
-		opacity: 0.5;
-	}
+  img {
+    border-radius: 10rem;
+    width: 460rem;
+    height: 230rem;
+    object-fit: cover;
+    opacity: 0.5;
+  }
+
+  @include mixins.tablet {
+    img {
+      width: 100%;
+      max-width: 500rem;
+      height: 200rem;
+    }
+  }
 }
 
 .error {
-	position: relative;
+  position: relative;
 
-	p {
-		right: 0;
-		top: -27rem;
-		position: absolute;
-	}
+  p {
+    right: 0;
+    top: -27rem;
+    position: absolute;
+  }
 
-	input {
-		border: 1rem solid var(--red);
-	}
+  input {
+    border: 1rem solid var(--red);
+  }
 
-	svg {
-		width: 28rem;
-		height: 28rem;
-		position: absolute;
-		right: 15rem;
-		top: 40rem;
-	}
+  svg {
+    width: 28rem;
+    height: 28rem;
+    position: absolute;
+    right: 15rem;
+    top: 40rem;
+  }
+
+  // @include mixins.tablet {
+  //   svg {
+  //     width: 20rem;
+  //     height: 20rem;
+  //     right: 10rem;
+  //     top: unset;
+  //     bottom: 14rem;
+  //   }
+  // }
 }

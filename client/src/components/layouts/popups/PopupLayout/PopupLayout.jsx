@@ -19,17 +19,39 @@ export const PopupLayout = React.memo(() => {
     visible: {
       opacity: 1,
       transition: {
-        when: 'beforeChildren',
-        duration: 0.3,
-        delayChildren: 0.4,
+        duration: 0.5,
+        ease: 'easeOut',
       },
     },
     hidden: {
       opacity: 0,
       transition: {
-        when: 'afterChildren',
-        duration: 0.3,
-        delay: 0.4,
+        duration: 0.5,
+        ease: 'easeIn',
+      },
+    },
+  };
+
+  const popupVariants = {
+    visible: {
+      transform: 'translateY(0)',
+      transition: {
+        duration: 0.35,
+        ease: 'easeOut',
+      },
+    },
+    hidden: {
+      transform: 'translateY(-100vh)',
+      transition: {
+        duration: 0.35,
+        ease: 'easeIn',
+      },
+    },
+    exit: {
+      transform: 'translateY(100vh)',
+      transition: {
+        duration: 0.35,
+        ease: 'easeIn',
       },
     },
   };
@@ -47,12 +69,16 @@ export const PopupLayout = React.memo(() => {
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
     };
-  }, [popupContent.content]);
+  }, [
+    popupContent.isOpen,
+    popupContent.content ? 'has-content' : 'no-content',
+  ]);
 
   return (
-    popupContent.isOpen && (
-      <AnimatePresence>
+    <AnimatePresence mode="wait">
+      {popupContent.isOpen && (
         <motion.div
+          key="popup-overlay"
           className={styles.overlay}
           id="popup"
           initial="hidden"
@@ -64,10 +90,10 @@ export const PopupLayout = React.memo(() => {
             className={`${styles.popup_wrapper} ${
               shared && styles.popup_shared_wrapper
             } ${direction === 'reverse' && styles.popup_reverse_wrapper}`}
-            initial={{ transform: 'scale(0.5) translateY(-100vh)' }}
-            animate={{ transform: 'scale(1) translateY(0)' }}
-            exit={{ transform: 'scale(0.5) translateY(100vh)' }}
-            transition={{ duration: 0.3 }}
+            variants={popupVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
           >
             <OuterBlock>
               <div onClick={closePopup} className={styles.popup_close}>
@@ -80,7 +106,7 @@ export const PopupLayout = React.memo(() => {
             </OuterBlock>
           </motion.div>
         </motion.div>
-      </AnimatePresence>
-    )
+      )}
+    </AnimatePresence>
   );
 });

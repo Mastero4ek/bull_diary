@@ -1,4 +1,5 @@
 {
+  "loading": "Loading",
   "logo": {
     "analyze_earn": "analyze & earn"
   },
@@ -334,7 +335,7 @@
       "activity_users": "Users activity"
     },
     "battle": {
-      "title": "Trading <br /> Championships",
+      "title": "Trading <br /> Battles",
       "subtitle": "Compete with the&nbsp;best traders in&nbsp;exciting tournaments. <br/><br/> Test your skills, strategies, and&nbsp;market intuition against other professionals. <br/> Join tournaments to&nbsp;prove your trading mastery and&nbsp;climb the&nbsp;leaderboard.",
       "remove_user_success": "User removed from tournament!",
       "remove_user_error": "Error removing user from tournament! <br/> Please try again.",
