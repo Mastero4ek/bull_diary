@@ -1,263 +1,263 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .header_wrapper {
-	width: 100%;
-	padding: 20rem 40rem;
-	display: flex;
-	align-items: center;
-	height: 110rem;
-	justify-content: flex-end;
-	border-radius: 0 0 20rem 20rem;
-	background-color: var(--bgLight);
-	box-shadow: var(--shadowInner);
-	position: relative;
+  width: 100%;
+  padding: 20rem 40rem;
+  display: flex;
+  align-items: center;
+  height: 110rem;
+  justify-content: flex-end;
+  border-radius: 0 0 20rem 20rem;
+  background-color: var(--bgLight);
+  box-shadow: var(--shadowInner);
+  position: relative;
 
-	@include mixins.tablet {
-		height: auto;
-		padding: 16rem;
-		justify-content: space-between;
-	}
+  @include mixins.tablet {
+    height: auto;
+    padding: 16rem;
+    justify-content: space-between;
+  }
 }
 
 .header_logo {
-	div {
-		padding: 0;
-	}
+  div {
+    padding: 0;
+  }
 }
 
 .header_nav {
-	margin: 0 auto;
+  margin: 0 auto;
 
-	ul {
-		display: flex;
-		align-items: center;
-		gap: 80rem;
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 80rem;
 
-		li {
-			a {
-				text-decoration: none;
+    li {
+      a {
+        text-decoration: none;
 
-				&:hover {
-					color: var(--primaryHov);
-				}
-			}
-		}
-	}
+        &:hover {
+          color: var(--primaryHov);
+        }
+      }
+    }
+  }
 }
 
 .header_user_wrapper {
-	height: 70rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-left: 40rem;
-	position: relative;
+  height: 70rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 40rem;
+  position: relative;
 
-	@include mixins.tablet {
-		margin-left: auto;
-		margin-right: 4rem;
-	}
+  @include mixins.tablet {
+    margin-left: auto;
+    margin-right: 4rem;
+  }
 }
 
 .header_user {
-	margin-left: auto;
-	display: flex;
-	align-items: center;
-	gap: 24rem;
-	padding: 10rem 40rem;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 24rem;
+  padding: 10rem 40rem;
 
-	div {
-		display: flex;
-		align-items: center;
+  div {
+    display: flex;
+    align-items: center;
 
-		span {
-			display: inline-block;
-			max-width: 200rem;
-			width: 200rem;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-	}
+    span {
+      display: inline-block;
+      max-width: 200rem;
+      width: 200rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 
-	@include mixins.tablet {
-		padding: 10rem 20rem;
-		gap: 16rem;
+  @include mixins.tablet {
+    padding: 10rem 20rem;
+    gap: 16rem;
 
-		div {
-			span {
-				max-width: 180rem;
-				width: 180rem;
-			}
-		}
-	}
+    div {
+      span {
+        max-width: 180rem;
+        width: 180rem;
+      }
+    }
+  }
 
-	@include mixins.phone {
-		div {
-			span {
-				max-width: 140rem;
-				width: 140rem;
-			}
-		}
-	}
+  @include mixins.phone {
+    div {
+      span {
+        max-width: 140rem;
+        width: 140rem;
+      }
+    }
+  }
 }
 
 .header_avatar {
-	border-radius: 50%;
-	overflow: hidden;
-	width: 48rem;
-	height: 48rem;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 48rem;
+  height: 48rem;
 
-	img {
-		object-fit: cover;
-	}
+  img {
+    object-fit: cover;
+  }
 }
 
 .header_settings {
-	display: flex;
-	align-items: center;
-	gap: 32rem;
-	margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 32rem;
+  margin-left: auto;
 
-	@include mixins.tablet {
-		gap: 20rem;
-	}
+  @include mixins.tablet {
+    gap: 20rem;
+  }
 }
 
 .header_settings_wrap {
-	position: relative;
+  position: relative;
 }
 
 .header_settings_head {
-	overflow: hidden;
+  overflow: hidden;
 
-	transition: all 0.15s ease-in-out;
+  transition: all 0.15s ease-in-out;
 
-	svg {
-		pointer-events: none;
-		width: 24rem;
-		height: 24rem;
-		transition: all 0.15s ease-in-out;
-		fill: var(--text);
-	}
+  svg {
+    pointer-events: none;
+    width: 24rem;
+    height: 24rem;
+    transition: all 0.15s ease-in-out;
+    fill: var(--text);
+  }
 
-	@include mixins.desktop {
-		cursor: pointer;
+  @include mixins.desktop {
+    cursor: pointer;
 
-		&:hover {
-			svg {
-				cursor: pointer;
-				fill: var(--primaryHov);
-			}
-		}
-	}
+    &:hover {
+      svg {
+        cursor: pointer;
+        fill: var(--primaryHov);
+      }
+    }
+  }
 
-	@include mixins.tablet {
-		svg {
-			width: 20rem;
-			height: 20rem;
-		}
-	}
+  @include mixins.tablet {
+    svg {
+      width: 20rem;
+      height: 20rem;
+    }
+  }
 }
 
 .header_settings_head_active {
-	svg {
-		fill: var(--primaryHov);
-	}
+  svg {
+    fill: var(--primaryHov);
+  }
 }
 
 .header_settings_list {
-	width: max-content;
-	position: absolute;
-	z-index: 1000;
-	right: -174rem;
-	top: 57rem;
-	display: flex;
-	gap: 15rem;
-	flex-direction: column;
-	padding: 20rem 10rem;
-	border-radius: 20rem;
-	transition: all 0.15s ease-in-out;
-	height: 0;
-	overflow: hidden;
-	transform-origin: 0 0;
-	transform: rotateX(-90deg);
-	visibility: hidden;
-	opacity: 0;
-	background: var(--bgLight);
-	box-shadow: var(--shadowOuter);
+  width: max-content;
+  position: absolute;
+  z-index: 1000;
+  right: -174rem;
+  top: 57rem;
+  display: flex;
+  gap: 15rem;
+  flex-direction: column;
+  padding-left: 10rem;
+  padding-right: 10rem;
+  border-radius: 20rem;
+  background: var(--bgLight);
+  box-shadow: var(--shadowOuter);
 
-	li {
-		width: 100%;
-		transition: all 0.15s ease-in-out;
-		cursor: default !important;
+  li {
+    width: 100%;
+    transition: all 0.15s ease-in-out;
+    cursor: default !important;
 
-		article {
-			background: var(--bgDark);
-			box-shadow: var(--shadowInner);
-			cursor: default !important;
+    article {
+      background: var(--bgDark);
+      box-shadow: var(--shadowInner);
+      cursor: default !important;
 
-			div {
-				cursor: default !important;
+      div {
+        cursor: default !important;
 
-				div {
-					width: 100%;
+        div {
+          width: 100%;
 
-					div {
-						box-shadow: none;
-						background: transparent;
-						overflow: visible;
+          div {
+            box-shadow: none;
+            background: transparent;
+            overflow: visible;
 
-						&:nth-child(1) {
-							width: 100%;
-						}
+            &:nth-child(1) {
+              width: 100%;
+            }
 
-						&:nth-child(2) {
-							width: auto;
-						}
+            &:nth-child(2) {
+              width: auto;
+            }
 
-						article {
-							background: var(--bgLight);
-							box-shadow: var(--shadowOuter);
-						}
-					}
-				}
-			}
-		}
+            article {
+              background: var(--bgLight);
+              box-shadow: var(--shadowOuter);
+            }
+          }
+        }
+      }
+    }
 
-		svg {
-			stroke-width: 1.5rem;
-			stroke: var(--text);
-			transform: scale(1) !important;
-		}
+    svg {
+      stroke-width: 1.5rem;
+      stroke: var(--text);
+      transform: scale(1) !important;
+    }
 
-		span {
-			letter-spacing: 0 !important;
-			color: var(--text) !important;
-		}
-	}
+    span {
+      letter-spacing: 0 !important;
+      color: var(--text) !important;
+    }
 
-	@include mixins.tablet {
-		top: 45rem;
-		right: -50%;
-		transform: translateX(50%) rotateX(90deg);
+    &:first-child {
+      margin-top: 20rem;
+    }
 
-		li {
-			a {
-				cursor: default !important;
-			}
-		}
-	}
-}
+    &:last-child {
+      margin-bottom: 20rem;
+    }
 
-.header_settings_list_active {
-	height: auto;
-	transition: all 0.15s ease-in-out;
-	opacity: 1;
-	visibility: visible;
-	transform: rotateX(0deg);
+    ul {
+      li {
+        &:first-child,
+        &:last-child {
+          margin-top: unset !important;
+          margin-bottom: unset !important;
+        }
+      }
+    }
+  }
 
-	@include mixins.tablet {
-		transform: translateX(50%) rotateX(0deg);
-	}
+  @include mixins.tablet {
+    top: 45rem;
+    right: -50%;
+    transform: translateX(50%) rotateX(90deg);
+
+    li {
+      a {
+        cursor: default !important;
+      }
+    }
+  }
 }
