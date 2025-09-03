@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { Icon } from '@/components/ui/media/Icon';
@@ -47,24 +47,6 @@ export const Advantages = () => {
     },
   ];
 
-  const contentVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      filter: 'blur(2rem)',
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0rem)',
-      transition: {
-        duration: 0.5,
-        delay: 0.75,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
   return (
     <section id="advantages" className={styles.advantages}>
       <div className={styles.container_wrapper}>
@@ -73,12 +55,9 @@ export const Advantages = () => {
             <img src="" alt="Advantages-background-image" />
           </div>
 
-          <motion.div
+          <AnimatedShowBlock
             className={styles.advantages_content}
-            variants={contentVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 1 }}
+            direction="right"
           >
             <H1>
               <b
@@ -95,7 +74,7 @@ export const Advantages = () => {
                 }}
               />
             </RootDesc>
-          </motion.div>
+          </AnimatedShowBlock>
         </div>
 
         <OuterBlock>

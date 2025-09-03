@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
+import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { H1 } from '@/components/ui/typography/titles/H1';
@@ -85,24 +85,6 @@ export const Manual = () => {
     },
   ];
 
-  const contentVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      filter: 'blur(2rem)',
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0rem)',
-      transition: {
-        duration: 0.5,
-        delay: 0.75,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
   return (
     <section id="manual" className={styles.manual}>
       <div className={styles.container_wrapper}>
@@ -112,12 +94,9 @@ export const Manual = () => {
           </div>
 
           <div className={styles.manual_wrap}>
-            <motion.div
+            <AnimatedShowBlock
               className={styles.manual_content}
-              variants={contentVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 1 }}
+              direction="right"
             >
               <H1>
                 <b
@@ -134,7 +113,7 @@ export const Manual = () => {
                   }}
                 />
               </RootDesc>
-            </motion.div>
+            </AnimatedShowBlock>
 
             <ul className={styles.manual_list}>
               {manualList &&

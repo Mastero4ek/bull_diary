@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { ContactForm } from '@/components/ui/forms/ContactForm';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
@@ -11,50 +11,28 @@ import styles from './styles.module.scss';
 export const Question = () => {
   const { t } = useTranslation();
 
-  const contentVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      filter: 'blur(2rem)',
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0rem)',
-      transition: {
-        duration: 0.5,
-        delay: 0.75,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
   return (
     <section id="contacts" className={styles.question}>
       <div className={styles.container_wrapper}>
         <div className={styles.question_wrap}>
-          <motion.div
-            className={styles.question_content}
-            variants={contentVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 1 }}
-          >
-            <H1>
-              <b
-                dangerouslySetInnerHTML={{
-                  __html: t('page.home.question.title'),
-                }}
-              />
-            </H1>
+          <div className={styles.question_content}>
+            <AnimatedShowBlock>
+              <H1>
+                <b
+                  dangerouslySetInnerHTML={{
+                    __html: t('page.home.question.title'),
+                  }}
+                />
+              </H1>
 
-            <RootDesc>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: t('page.home.question.subtitle'),
-                }}
-              />
-            </RootDesc>
+              <RootDesc>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: t('page.home.question.subtitle'),
+                  }}
+                />
+              </RootDesc>
+            </AnimatedShowBlock>
 
             <RootDesc>
               <a
@@ -66,7 +44,7 @@ export const Question = () => {
                 bulldiary@gmail.com
               </a>
             </RootDesc>
-          </motion.div>
+          </div>
 
           <div className={styles.question_form_wrapper}>
             <InnerBlock>

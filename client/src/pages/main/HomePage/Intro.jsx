@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import {
   AnimatedTypewritter,
 } from '@/components/animations/AnimatedTypewritter';
@@ -31,13 +32,15 @@ export const Intro = () => {
               <AnimatedTypewritter text={t('page.home.intro.title')} />
             </H1>
 
-            <RootDesc>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: t('page.home.intro.description'),
-                }}
-              />
-            </RootDesc>
+            <AnimatedShowBlock>
+              <RootDesc>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: t('page.home.intro.description'),
+                  }}
+                />
+              </RootDesc>
+            </AnimatedShowBlock>
 
             <RootButton
               onClickBtn={handleClickSignup}

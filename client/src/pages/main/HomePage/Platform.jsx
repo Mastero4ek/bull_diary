@@ -3,7 +3,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import './platform_slider.scss';
 
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
   Autoplay,
@@ -14,6 +13,7 @@ import {
   SwiperSlide,
 } from 'swiper/react';
 
+import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import {
   usePopup,
 } from '@/components/layouts/popups/PopupLayout/PopupProvider';
@@ -65,42 +65,20 @@ export const Platform = () => {
     openPopup(<SignUpPopup />);
   };
 
-  const contentVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      filter: 'blur(2rem)',
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0rem)',
-      transition: {
-        duration: 0.5,
-        delay: 0.75,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
   return (
     <section id="platform" className={styles.benefits}>
       <div className={styles.container_wrapper}>
         <div className={styles.benefits_wrapper}>
-          <motion.div
-            className={styles.benefits_content}
-            variants={contentVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 1 }}
-          >
-            <H1>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: t('page.home.platform.title'),
-                }}
-              />
-            </H1>
+          <div className={styles.benefits_content}>
+            <AnimatedShowBlock>
+              <H1>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: t('page.home.platform.title'),
+                  }}
+                />
+              </H1>
+            </AnimatedShowBlock>
 
             <DotList listArr={platformList} />
 
@@ -109,7 +87,7 @@ export const Platform = () => {
               text={t('button.sign_up')}
               icon="sign-up"
             />
-          </motion.div>
+          </div>
 
           <InnerBlock>
             <div className={styles.benefits_slider}>

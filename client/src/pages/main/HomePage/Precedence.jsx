@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { DotList } from '@/components/ui/data/DotList';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { H1 } from '@/components/ui/typography/titles/H1';
@@ -33,24 +33,6 @@ export const Precedence = () => {
     },
   ];
 
-  const contentVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      filter: 'blur(2rem)',
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0rem)',
-      transition: {
-        duration: 0.5,
-        delay: 0.75,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
   return (
     <section id="tournament" className={styles.precedence}>
       <div className={styles.container_wrapper}>
@@ -59,31 +41,27 @@ export const Precedence = () => {
             <img src="" alt="Championship-banner" />
           </div>
 
-          <motion.div
-            className={styles.precedence_content}
-            variants={contentVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 1 }}
-          >
-            <H1>
-              <b
-                dangerouslySetInnerHTML={{
-                  __html: t('page.home.precedence.title'),
-                }}
-              />
-            </H1>
+          <div className={styles.precedence_content}>
+            <AnimatedShowBlock direction="right">
+              <H1>
+                <b
+                  dangerouslySetInnerHTML={{
+                    __html: t('page.home.precedence.title'),
+                  }}
+                />
+              </H1>
 
-            <RootDesc>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: t('page.home.precedence.subtitle'),
-                }}
-              />
-            </RootDesc>
+              <RootDesc>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: t('page.home.precedence.subtitle'),
+                  }}
+                />
+              </RootDesc>
+            </AnimatedShowBlock>
 
             <DotList listArr={precedenceList} direction="right" />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

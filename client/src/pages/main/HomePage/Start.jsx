@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
+import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import {
   usePopup,
 } from '@/components/layouts/popups/PopupLayout/PopupProvider';
@@ -44,41 +44,17 @@ export const Start = () => {
     },
   ];
 
-  const contentVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      filter: 'blur(2rem)',
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0rem)',
-      transition: {
-        duration: 0.5,
-        delay: 0.75,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
   return (
     <section id="start" className={styles.start}>
       <div className={styles.container_wrapper}>
         <div className={styles.start_wrapper}>
-          <motion.div
-            className={styles.start_content}
-            variants={contentVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 1 }}
-          >
+          <AnimatedShowBlock className={styles.start_content}>
             <H1>
               <b
                 dangerouslySetInnerHTML={{ __html: t('page.home.start.title') }}
               />
             </H1>
-          </motion.div>
+          </AnimatedShowBlock>
 
           <OuterBlock>
             <div className={styles.start_wrap}>
