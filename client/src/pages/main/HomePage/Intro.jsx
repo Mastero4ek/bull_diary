@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedButton } from '@/components/animations/AnimatedButton';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import {
   AnimatedTypewritter,
@@ -42,11 +43,13 @@ export const Intro = () => {
               </RootDesc>
             </AnimatedShowBlock>
 
-            <RootButton
-              onClickBtn={handleClickSignup}
-              text={t('button.sign_up')}
-              icon="sign-up"
-            />
+            <AnimatedButton>
+              <RootButton
+                onClickBtn={handleClickSignup}
+                text={t('button.sign_up')}
+                icon="sign-up"
+              />
+            </AnimatedButton>
           </div>
 
           <div className={styles.intro_image}>

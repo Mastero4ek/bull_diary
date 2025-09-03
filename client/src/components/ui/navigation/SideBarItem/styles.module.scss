@@ -1,149 +1,134 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .sidebar_body_item {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	gap: 20rem;
-	width: 100%;
-	min-width: max-content;
-	padding: 8rem 15rem;
-	cursor: pointer;
-	overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20rem;
+  width: 100%;
+  min-width: max-content;
+  padding: 8rem 15rem;
+  cursor: pointer;
+  overflow: visible;
 
-	svg {
-		width: 30rem;
-		height: 30rem;
-		fill: var(--text);
-		transition: all 0.15s ease-in-out;
-		stroke-width: 2rem;
-	}
+  svg {
+    width: 30rem;
+    height: 30rem;
+    fill: var(--text);
+    transition: all 0.15s ease-in-out;
+    stroke-width: 2rem;
+  }
 
-	@include mixins.desktop {
-		&:hover {
-			svg {
-				transform: scale(1.2);
-				fill: var(--primaryHov);
-			}
+  @include mixins.desktop {
+    &:hover {
+      svg {
+        transform: scale(1.2);
+        fill: var(--primaryHov);
+      }
 
-			span {
-				letter-spacing: 1rem;
-				color: var(--primaryHov);
-			}
-		}
-	}
+      span {
+        letter-spacing: 1rem;
+        color: var(--primaryHov);
+      }
+    }
+  }
 }
 
 .sidebar_back_button {
-	background-color: var(--primaryDef);
-	border-radius: inherit;
+  background-color: var(--primaryDef);
+  border-radius: inherit;
 
-	svg {
-		fill: var(--white) !important;
-	}
+  svg {
+    fill: var(--white) !important;
+  }
 
-	span {
-		color: var(--white) !important;
-	}
+  span {
+    color: var(--white) !important;
+  }
 
-	&:hover {
-		svg {
-			fill: var(--white) !important;
-		}
+  &:hover {
+    svg {
+      fill: var(--white) !important;
+    }
 
-		span {
-			color: var(--white) !important;
-		}
-	}
+    span {
+      color: var(--white) !important;
+    }
+  }
 }
 
 .sidebar_item_desc {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 20rem;
-	position: relative;
-	animation: visible 0.4s ease-in-out forwards;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rem;
+  position: relative;
 
-	a {
-		text-decoration: none;
-	}
-}
-
-@keyframes visible {
-	0% {
-		left: -100rem;
-		opacity: 0;
-	}
-	40% {
-		opacity: 0;
-	}
-	100% {
-		left: 0;
-		opacity: 1;
-	}
+  a {
+    text-decoration: none;
+  }
 }
 
 .item_theme {
-	pointer-events: none;
+  pointer-events: none;
 
-	article {
-		border-radius: 20rem;
-		pointer-events: all;
-	}
+  article {
+    border-radius: 20rem;
+    pointer-events: all;
+  }
 
-	@include mixins.desktop {
-		&:hover {
-			svg {
-				transform: scale(1);
-				fill: var(--text);
-			}
+  @include mixins.desktop {
+    &:hover {
+      svg {
+        transform: scale(1);
+        fill: var(--text);
+      }
 
-			span {
-				letter-spacing: normal;
-				color: var(--text);
-			}
-		}
-	}
+      span {
+        letter-spacing: normal;
+        color: var(--text);
+      }
+    }
+  }
 }
 
 .item_language {
-	display: flex;
-	align-items: center;
-	gap: 10rem;
+  display: flex;
+  align-items: center;
+  gap: 10rem;
 
-	li {
-		b {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			width: 30rem;
-			height: 30rem;
-			text-transform: uppercase;
-		}
-	}
+  li {
+    b {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30rem;
+      height: 30rem;
+      text-transform: uppercase;
+    }
+  }
 
-	@include mixins.desktop {
-		li {
-			b {
-				cursor: pointer;
+  @include mixins.desktop {
+    li {
+      b {
+        cursor: pointer;
 
-				&:hover {
-					color: var(--primaryHov);
-				}
-			}
-		}
-	}
+        &:hover {
+          color: var(--primaryHov);
+        }
+      }
+    }
+  }
 }
 
 .active {
-	pointer-events: none;
+  pointer-events: none;
 
-	svg {
-		fill: var(--primaryDef);
-	}
+  svg {
+    fill: var(--primaryDef);
+  }
 
-	span {
-		color: var(--primaryDef);
-	}
+  span {
+    color: var(--primaryDef);
+  }
 }

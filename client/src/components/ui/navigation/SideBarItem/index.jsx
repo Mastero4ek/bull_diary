@@ -12,6 +12,9 @@ import {
 } from 'react-router-dom';
 
 import {
+  AnimatedSidebarLink,
+} from '@/components/animations/AnimatedSidebarLink';
+import {
   useNotification,
 } from '@/components/layouts/specialized/NotificationLayout/NotificationProvider';
 import { ClosedContent } from '@/components/layouts/utils/ClosedContent';
@@ -138,59 +141,61 @@ export const SideBarItem = React.memo(({ item, open = false }) => {
       >
         <Icon id={item?.icon} />
 
-        {(open ||
-          sideBar.open ||
-          (sideBar.blocked_value === 'open' && !isTablet) ||
-          location.pathname.includes('home')) && (
-          <div className={styles.sidebar_item_desc}>
-            <RootDesc>
-              <span>{item?.name}</span>
-            </RootDesc>
+        <AnimatedSidebarLink
+          open={
+            open ||
+            sideBar.open ||
+            (sideBar.blocked_value === 'open' && !isTablet) ||
+            location.pathname.includes('home')
+          }
+          className={styles.sidebar_item_desc}
+        >
+          <RootDesc>
+            <span>{item?.name}</span>
+          </RootDesc>
 
-            {item?.icon === 'theme' && (
-              <div style={{ marginLeft: 'auto' }}>
-                <CheckboxSwitch
-                  name={'theme'}
-                  onSwitch={changeTheme}
-                  checked={theme}
-                />
-              </div>
-            )}
+          {item?.icon === 'theme' && (
+            <div style={{ marginLeft: 'auto' }}>
+              <CheckboxSwitch
+                name={'theme'}
+                onSwitch={changeTheme}
+                checked={theme}
+              />
+            </div>
+          )}
 
-            {item?.icon === 'language' && (
-              <ul className={styles.item_language}>
-                {languageList &&
-                  languageList.length > 0 &&
-                  languageList.map((lang) => {
-                    const ItemBlock =
-                      language === lang ? InnerBlock : OuterBlock;
+          {item?.icon === 'language' && (
+            <ul className={styles.item_language}>
+              {languageList &&
+                languageList.length > 0 &&
+                languageList.map((lang) => {
+                  const ItemBlock = language === lang ? InnerBlock : OuterBlock;
 
-                    return (
-                      <li key={lang}>
-                        <RootDesc>
-                          <ItemBlock>
-                            <b
-                              onClick={() => changeLanguage(lang)}
-                              style={
-                                language === lang
-                                  ? {
-                                      color: 'var(--primaryDef)',
-                                      pointerEvents: 'none',
-                                    }
-                                  : {}
-                              }
-                            >
-                              {lang}
-                            </b>
-                          </ItemBlock>
-                        </RootDesc>
-                      </li>
-                    );
-                  })}
-              </ul>
-            )}
-          </div>
-        )}
+                  return (
+                    <li key={lang}>
+                      <RootDesc>
+                        <ItemBlock>
+                          <b
+                            onClick={() => changeLanguage(lang)}
+                            style={
+                              language === lang
+                                ? {
+                                    color: 'var(--primaryDef)',
+                                    pointerEvents: 'none',
+                                  }
+                                : {}
+                            }
+                          >
+                            {lang}
+                          </b>
+                        </ItemBlock>
+                      </RootDesc>
+                    </li>
+                  );
+                })}
+            </ul>
+          )}
+        </AnimatedSidebarLink>
       </div>
     </ItemBlock>
   );

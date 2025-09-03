@@ -13,6 +13,7 @@ import {
   SwiperSlide,
 } from 'swiper/react';
 
+import { AnimatedButton } from '@/components/animations/AnimatedButton';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import {
   usePopup,
@@ -82,11 +83,13 @@ export const Platform = () => {
 
             <DotList listArr={platformList} />
 
-            <RootButton
-              onClickBtn={handleClickSignup}
-              text={t('button.sign_up')}
-              icon="sign-up"
-            />
+            <AnimatedButton>
+              <RootButton
+                onClickBtn={handleClickSignup}
+                text={t('button.sign_up')}
+                icon="sign-up"
+              />
+            </AnimatedButton>
           </div>
 
           <InnerBlock>

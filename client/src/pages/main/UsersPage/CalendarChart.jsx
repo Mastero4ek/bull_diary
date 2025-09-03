@@ -44,10 +44,6 @@ const CustomLegend = React.memo(({ chartStyles, t }) => {
   return (
     <div className={styles.calendar_chart_legend}>
       <div className={styles.calendar_chart_legend_item}>
-        <RootDesc>
-          <span>{t('page.users.activity_users')}</span>
-        </RootDesc>
-
         <div className={styles.calendar_chart_legend_colors}>
           <label
             style={{
@@ -79,6 +75,10 @@ const CustomLegend = React.memo(({ chartStyles, t }) => {
             }}
           />
         </div>
+
+        <RootDesc>
+          <span>{t('page.users.activity_users')}</span>
+        </RootDesc>
       </div>
     </div>
   );

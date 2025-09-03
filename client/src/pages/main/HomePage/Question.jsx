@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedButton } from '@/components/animations/AnimatedButton';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { ContactForm } from '@/components/ui/forms/ContactForm';
@@ -34,16 +35,18 @@ export const Question = () => {
               </RootDesc>
             </AnimatedShowBlock>
 
-            <RootDesc>
-              <a
-                className={styles.question_link}
-                href="mailto:bulldiary@gmail.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                bulldiary@gmail.com
-              </a>
-            </RootDesc>
+            <AnimatedButton>
+              <RootDesc>
+                <a
+                  className={styles.question_link}
+                  href="mailto:bulldiary@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  bulldiary@gmail.com
+                </a>
+              </RootDesc>
+            </AnimatedButton>
           </div>
 
           <div className={styles.question_form_wrapper}>

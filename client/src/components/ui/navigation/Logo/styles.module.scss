@@ -1,48 +1,47 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .logo_wrapper {
-	min-width: max-content;
-	display: flex;
-	align-items: center;
-	justify-self: flex-start;
-	padding: 0 5rem;
+  min-width: max-content;
+  display: flex;
+  align-items: center;
+  justify-self: flex-start;
+  padding: 0 5rem;
 
-	img {
-		width: 50rem;
-		height: 50rem;
-		margin-right: 20rem;
-	}
+  img {
+    width: 50rem;
+    height: 50rem;
+    margin-right: 20rem;
+  }
 
-	@include mixins.tablet {
-		img {
-			margin-right: 10rem;
-		}
-	}
+  @include mixins.tablet {
+    img {
+      margin-right: 10rem;
+    }
+  }
 
-	@include mixins.phone {
-		padding: 0;
+  @include mixins.phone {
+    padding: 0;
 
-		img {
-			margin-right: unset;
-		}
-	}
+    img {
+      margin-right: unset;
+    }
+  }
 }
 
 .logo_desc {
-	position: relative;
-	animation: visible 0.4s ease-in-out forwards;
+  position: relative;
+  animation: visible 0.3s ease-in-out forwards;
 }
 
 @keyframes visible {
-	0% {
-		left: -100rem;
-		opacity: 0;
-	}
-	35% {
-		opacity: 0;
-	}
-	100% {
-		left: 0;
-		opacity: 1;
-	}
+  0% {
+    opacity: 0;
+    x: -50rem;
+    filter: 'blur(2rem)';
+  }
+  100% {
+    opacity: 1;
+    x: 0;
+    filter: 'blur(0rem)';
+  }
 }
