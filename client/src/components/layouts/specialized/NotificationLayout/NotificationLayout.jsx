@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {
-  AnimatePresence,
-  motion,
-} from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
+import {
+  AnimatedNotification,
+} from '@/components/animations/AnimatedNotification';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { Icon } from '@/components/ui/media/Icon';
 import { SmallDesc } from '@/components/ui/typography/descriptions/SmallDesc';
@@ -38,43 +38,15 @@ export const NotificationLayout = React.memo(() => {
     removeNotification(id);
   };
 
-  const notificationVariants = {
-    initial: {
-      opacity: 0,
-      y: 50,
-      scale: 0.3,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.3,
-        ease: 'easeOut',
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.5,
-      transition: {
-        duration: 0.2,
-        ease: 'easeIn',
-      },
-    },
-  };
-
   return (
     <div className={styles.notifications_container}>
       <AnimatePresence initial={false} mode="popLayout">
         {notifications &&
           notifications.length > 0 &&
-          notifications.map((notification) => (
-            <motion.div
+          notifications.map((notification, index) => (
+            <AnimatedNotification
               key={notification.id}
-              variants={notificationVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              index={index}
               className={`${styles.notification} ${
                 styles[`notification_${notification.type}`]
               }`}
@@ -103,7 +75,7 @@ export const NotificationLayout = React.memo(() => {
                   </OuterBlock>
                 </div>
               </div>
-            </motion.div>
+            </AnimatedNotification>
           ))}
       </AnimatePresence>
     </div>

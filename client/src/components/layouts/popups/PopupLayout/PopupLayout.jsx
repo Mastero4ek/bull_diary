@@ -1,10 +1,8 @@
 import React from 'react';
 
-import {
-  AnimatePresence,
-  motion,
-} from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
+import { AnimatedPopup } from '@/components/animations/AnimatedPopup';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { Icon } from '@/components/ui/media/Icon';
 
@@ -15,79 +13,26 @@ export const PopupLayout = React.memo(() => {
   const { popupContent, closePopup } = usePopup();
   const { shared, direction } = popupContent;
 
-  const overlayVariants = {
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut',
-      },
-    },
-    hidden: {
-      opacity: 0,
-      transition: {
-        duration: 0.5,
-        ease: 'easeIn',
-      },
-    },
-  };
-
-  const popupVariants = {
-    visible: {
-      transform: 'translateY(0)',
-      transition: {
-        duration: 0.35,
-        ease: 'easeOut',
-      },
-    },
-    hidden: {
-      transform: 'translateY(-100vh)',
-      transition: {
-        duration: 0.35,
-        ease: 'easeIn',
-      },
-    },
-    exit: {
-      transform: 'translateY(100vh)',
-      transition: {
-        duration: 0.35,
-        ease: 'easeIn',
-      },
-    },
-  };
-
   return (
     <AnimatePresence mode="wait">
       {popupContent.isOpen && (
-        <motion.div
+        <AnimatedPopup
           key="popup-overlay"
-          className={styles.overlay}
-          id="popup"
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          variants={overlayVariants}
+          overlayClass={styles.overlay}
+          popupClass={`${styles.popup_wrapper} ${
+            shared && styles.popup_shared_wrapper
+          } ${direction === 'reverse' && styles.popup_reverse_wrapper}`}
         >
-          <motion.div
-            className={`${styles.popup_wrapper} ${
-              shared && styles.popup_shared_wrapper
-            } ${direction === 'reverse' && styles.popup_reverse_wrapper}`}
-            variants={popupVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-          >
-            <OuterBlock>
-              <div onClick={closePopup} className={styles.popup_close}>
-                <OuterBlock>
-                  <Icon id="remove" />
-                </OuterBlock>
-              </div>
+          <OuterBlock>
+            <div onClick={closePopup} className={styles.popup_close}>
+              <OuterBlock>
+                <Icon id="remove" />
+              </OuterBlock>
+            </div>
 
-              {popupContent.content}
-            </OuterBlock>
-          </motion.div>
-        </motion.div>
+            {popupContent.content}
+          </OuterBlock>
+        </AnimatedPopup>
       )}
     </AnimatePresence>
   );
