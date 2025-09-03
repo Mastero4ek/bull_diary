@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
   useDispatch,
@@ -8,6 +7,7 @@ import {
 } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
+import { AnimatedSidebar } from '@/components/animations/AnimatedSidebar';
 import { Logo } from '@/components/ui/navigation/Logo';
 import { SideBarItem } from '@/components/ui/navigation/SideBarItem';
 import { setSideBar } from '@/redux/slices/settingsSlice';
@@ -86,19 +86,10 @@ export const SideBarLayout = React.memo(() => {
   };
 
   return (
-    <motion.aside
+    <AnimatedSidebar
       className={`${styles.sidebar_wrapper}`}
-      transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-      animate={{
-        width:
-          !isTablet && (sideBar.open || sideBar.blocked_value === 'open')
-            ? '300rem'
-            : isTablet
-              ? '80rem'
-              : '100rem',
-      }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      handleMouseEnter={handleMouseEnter}
+      handleMouseLeave={handleMouseLeave}
     >
       <div className={styles.sidebar_header}>
         <Logo
@@ -136,6 +127,6 @@ export const SideBarLayout = React.memo(() => {
       <div className={styles.sidebar_footer}>
         <SideBarItem item={logoutItem} />
       </div>
-    </motion.aside>
+    </AnimatedSidebar>
   );
 });

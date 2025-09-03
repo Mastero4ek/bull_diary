@@ -15,6 +15,7 @@ import {
 import { BottomBar } from '@/components/layouts/core/BottomBar';
 import { FooterLayout } from '@/components/layouts/core/FooterLayout';
 import { HeaderLayout } from '@/components/layouts/core/HeaderLayout';
+import { SideBarFakeLayout } from '@/components/layouts/core/SideBarFakeLayout';
 import { SideBarLayout } from '@/components/layouts/core/SideBarLayout';
 import { LazyLoader } from '@/components/layouts/utils/LazyLoader';
 import { RouteRenderer } from '@/components/layouts/utils/RouteRenderer';
@@ -165,7 +166,12 @@ export const App = () => {
             isLoadingTheme ||
             isLoadingLanguage) && <Loader />}
 
-          {isAuth && user.is_activated && !isMobile && <SideBarLayout />}
+          {isAuth && user.is_activated && !isMobile && (
+            <>
+              <SideBarLayout />
+              <SideBarFakeLayout />
+            </>
+          )}
 
           <div
             className={

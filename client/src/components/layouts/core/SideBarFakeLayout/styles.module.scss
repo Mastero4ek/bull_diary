@@ -1,0 +1,10 @@
+@use '@/styles/mixins.scss' as mixins;
+
+.sidebar_fake_wrapper {
+  height: 100%;
+  width: 100rem;
+
+  @include mixins.tablet {
+    width: 80rem;
+  }
+}
