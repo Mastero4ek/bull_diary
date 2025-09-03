@@ -4,7 +4,6 @@ import React, {
   useState,
 } from 'react';
 
-import { motion } from 'framer-motion';
 import moment from 'moment/min/moment-with-locales';
 import {
   Controller,
@@ -16,6 +15,9 @@ import {
   useSelector,
 } from 'react-redux';
 
+import {
+  AnimatedDropdownList,
+} from '@/components/animations/AnimatedDropdownList';
 import {
   usePopup,
 } from '@/components/layouts/popups/PopupLayout/PopupProvider';
@@ -65,7 +67,6 @@ export const Keys = React.memo(
       register,
       handleSubmit,
       setValue,
-      reset,
       control,
       watch,
       formState: { errors },
@@ -303,175 +304,174 @@ export const Keys = React.memo(
               <ControlButton text={<i></i>} />
             </label>
 
-            <motion.form
-              className={styles.keys_form}
-              onSubmit={handleSubmit(submit)}
-              transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-              animate={{
-                height: isOpen ? 'auto' : '0',
-                opacity: isOpen ? 1 : 0,
-                filter: isOpen ? 'blur(0)' : 'blur(10rem)',
-                overflow: isOpen ? 'visible' : 'hidden',
-              }}
+            <AnimatedDropdownList
+              isScrollable={false}
+              isOpen={isOpen}
+              className={styles.keys_dropdown}
             >
-              <div className={styles.keys_warning}>
-                <SmallDesc>
-                  <Icon id="warning-icon" />
+              <form
+                className={styles.keys_form}
+                onSubmit={handleSubmit(submit)}
+              >
+                <div className={styles.keys_warning}>
+                  <SmallDesc>
+                    <Icon id="warning-icon" />
 
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: t('page.settings.keys_warning'),
-                    }}
-                    style={{ color: 'var(--orange)' }}
-                  ></span>
-                </SmallDesc>
-              </div>
-
-              <label htmlFor="exchange" className={styles.keys_label}>
-                <div className={styles.keys_control}>
-                  <RootDesc>
-                    <span>{t('form.label.exchange')}</span>
-                  </RootDesc>
-
-                  <Controller
-                    name="exchange"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field, fieldState }) => (
-                      <RootSelect
-                        arrow={!fieldState.error}
-                        className={`${styles.keys_select} ${
-                          fieldState.error ? styles.error : ''
-                        }`}
-                        options={EXCHANGE_OPTIONS}
-                        value={field.value}
-                        onChange={field.onChange}
-                        getLabel={(item) => item.name}
-                        getValue={(item) => item.value}
-                        disabled={isSyncing}
-                      >
-                        {fieldState.error && (
-                          <>
-                            <SmallDesc>
-                              <p>{t('form.error.exchange')}</p>
-                            </SmallDesc>
-
-                            <Icon id="error-icon" />
-                          </>
-                        )}
-                      </RootSelect>
-                    )}
-                  />
-                </div>
-              </label>
-
-              <RootInput
-                label={t('form.label.api_key')}
-                name={`api-key`}
-                errorMessage={t('form.error.api_key')}
-                errorArray={errorArray}
-                errors={errors}
-                type="text"
-                register={register(`api-key`, { required: hasNoKeys })}
-                placeholder={hasKeys ? selectedExchange?.api || '' : ''}
-                value={hasKeys ? '' : undefined}
-                disabled={isSyncing || !hasNoKeys}
-              />
-
-              <RootInput
-                label={t('form.label.secret_key')}
-                name={`secret-key`}
-                errorMessage={t('form.error.secret_key')}
-                errors={errors}
-                errorArray={errorArray}
-                type="text"
-                register={register(`secret-key`, {
-                  required: hasNoKeys,
-                })}
-                placeholder={hasKeys ? selectedExchange?.secret || '' : ''}
-                value={hasKeys ? '' : undefined}
-                disabled={isSyncing || !hasNoKeys}
-              />
-
-              <RootInput
-                name="agreement-key"
-                errorMessage={t('form.error.agreement_key')}
-                errorArray={errorArray}
-                errors={errors}
-                type="checkbox"
-                label={
-                  <span style={{ opacity: '0.75' }}>
-                    {t('form.label.agreement_key')}
-                  </span>
-                }
-                register={{
-                  ...register('agreement-key', {
-                    required: hasNoKeys,
-                  }),
-                }}
-                disabled={isSyncing || !hasNoKeys}
-              />
-
-              {status === 'loading' && (
-                <div className={styles.sync_progress}>
-                  <div className={styles.sync_progress_header}>
-                    <SmallDesc>
-                      <b dangerouslySetInnerHTML={{ __html: message }}></b>
-                    </SmallDesc>
-
-                    <div className={styles.sync_progress_controls}>
-                      <SmallDesc>
-                        <b>{Math.round(progress || 0)}%</b>
-                      </SmallDesc>
-
-                      <button
-                        onClick={handleCancelSync}
-                        title={t('button.cancel_sync')}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className={styles.sync_progress_bar}>
-                    <div
-                      className={`${styles.sync_progress_fill} ${
-                        status === 'loading'
-                          ? styles.loading
-                          : status === 'success'
-                            ? styles.success
-                            : ''
-                      }`}
-                      style={{
-                        width: `${Math.max(0, Math.min(100, progress || 0))}%`,
-                        transition:
-                          status === 'loading'
-                            ? 'width 0.3s ease-in-out'
-                            : 'none',
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: t('page.settings.keys_warning'),
                       }}
+                      style={{ color: 'var(--orange)' }}
+                    ></span>
+                  </SmallDesc>
+                </div>
+
+                <label htmlFor="exchange" className={styles.keys_label}>
+                  <div className={styles.keys_control}>
+                    <RootDesc>
+                      <span>{t('form.label.exchange')}</span>
+                    </RootDesc>
+
+                    <Controller
+                      name="exchange"
+                      control={control}
+                      rules={{ required: true }}
+                      render={({ field, fieldState }) => (
+                        <RootSelect
+                          arrow={!fieldState.error}
+                          className={`${styles.keys_select} ${
+                            fieldState.error ? styles.error : ''
+                          }`}
+                          options={EXCHANGE_OPTIONS}
+                          value={field.value}
+                          onChange={field.onChange}
+                          getLabel={(item) => item.name}
+                          getValue={(item) => item.value}
+                          disabled={isSyncing}
+                        >
+                          {fieldState.error && (
+                            <>
+                              <SmallDesc>
+                                <p>{t('form.error.exchange')}</p>
+                              </SmallDesc>
+
+                              <Icon id="error-icon" />
+                            </>
+                          )}
+                        </RootSelect>
+                      )}
                     />
                   </div>
-                </div>
-              )}
+                </label>
 
-              <div className={styles.keys_inputs_btns}>
-                <RootButton
-                  disabled={status === 'loading' || hasNoKeys || isSyncing}
-                  text={t('button.remove')}
-                  icon="remove"
-                  onClickBtn={() =>
-                    hasNoKeys || isSyncing ? undefined : handleClickRemove()
+                <RootInput
+                  label={t('form.label.api_key')}
+                  name={`api-key`}
+                  errorMessage={t('form.error.api_key')}
+                  errorArray={errorArray}
+                  errors={errors}
+                  type="text"
+                  register={register(`api-key`, { required: hasNoKeys })}
+                  placeholder={hasKeys ? selectedExchange?.api || '' : ''}
+                  value={hasKeys ? '' : undefined}
+                  disabled={isSyncing || !hasNoKeys}
+                />
+
+                <RootInput
+                  label={t('form.label.secret_key')}
+                  name={`secret-key`}
+                  errorMessage={t('form.error.secret_key')}
+                  errors={errors}
+                  errorArray={errorArray}
+                  type="text"
+                  register={register(`secret-key`, {
+                    required: hasNoKeys,
+                  })}
+                  placeholder={hasKeys ? selectedExchange?.secret || '' : ''}
+                  value={hasKeys ? '' : undefined}
+                  disabled={isSyncing || !hasNoKeys}
+                />
+
+                <RootInput
+                  name="agreement-key"
+                  errorMessage={t('form.error.agreement_key')}
+                  errorArray={errorArray}
+                  errors={errors}
+                  type="checkbox"
+                  label={
+                    <span style={{ opacity: '0.75' }}>
+                      {t('form.label.agreement_key')}
+                    </span>
                   }
+                  register={{
+                    ...register('agreement-key', {
+                      required: hasNoKeys,
+                    }),
+                  }}
+                  disabled={isSyncing || !hasNoKeys}
                 />
 
-                <RootButton
-                  disabled={status === 'loading' || hasKeys || isSyncing}
-                  text={t('button.save')}
-                  icon="update"
-                  type="submit"
-                />
-              </div>
-            </motion.form>
+                {status === 'loading' && (
+                  <div className={styles.sync_progress}>
+                    <div className={styles.sync_progress_header}>
+                      <SmallDesc>
+                        <b dangerouslySetInnerHTML={{ __html: message }}></b>
+                      </SmallDesc>
+
+                      <div className={styles.sync_progress_controls}>
+                        <SmallDesc>
+                          <b>{Math.round(progress || 0)}%</b>
+                        </SmallDesc>
+
+                        <button
+                          onClick={handleCancelSync}
+                          title={t('button.cancel_sync')}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className={styles.sync_progress_bar}>
+                      <div
+                        className={`${styles.sync_progress_fill} ${
+                          status === 'loading'
+                            ? styles.loading
+                            : status === 'success'
+                              ? styles.success
+                              : ''
+                        }`}
+                        style={{
+                          width: `${Math.max(0, Math.min(100, progress || 0))}%`,
+                          transition:
+                            status === 'loading'
+                              ? 'width 0.3s ease-in-out'
+                              : 'none',
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className={styles.keys_inputs_btns}>
+                  <RootButton
+                    disabled={status === 'loading' || hasNoKeys || isSyncing}
+                    text={t('button.remove')}
+                    icon="remove"
+                    onClickBtn={() =>
+                      hasNoKeys || isSyncing ? undefined : handleClickRemove()
+                    }
+                  />
+
+                  <RootButton
+                    disabled={status === 'loading' || hasKeys || isSyncing}
+                    text={t('button.save')}
+                    icon="update"
+                    type="submit"
+                  />
+                </div>
+              </form>
+            </AnimatedDropdownList>
           </div>
         </OuterBlock>
       </>

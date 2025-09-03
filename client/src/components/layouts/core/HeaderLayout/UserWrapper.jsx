@@ -5,12 +5,14 @@ import React, {
   useState,
 } from 'react';
 
-import { motion } from 'framer-motion';
 import moment from 'moment/min/moment-with-locales';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import avatarDefault from '@/assets/images/general/default_avatar.png';
+import {
+  AnimatedDropdownList,
+} from '@/components/animations/AnimatedDropdownList';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { Logo } from '@/components/ui/navigation/Logo';
 import { SideBarItem } from '@/components/ui/navigation/SideBarItem';
@@ -130,7 +132,9 @@ export const UserWrapper = React.memo(() => {
         </OuterBlock>
 
         {isMobile && (
-          <motion.ul
+          <AnimatedDropdownList
+            isOpen={open}
+            isScrollable={false}
             style={{
               left: 'auto',
               right: '0',
@@ -138,12 +142,6 @@ export const UserWrapper = React.memo(() => {
               width: '100%',
             }}
             className={`${styles.header_settings_list}`}
-            transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-            animate={{
-              height: open ? 'auto' : '0',
-              opacity: open ? 1 : 0,
-              filter: open ? 'none' : 'blur(10rem)',
-            }}
           >
             {isTablet &&
               userMenu.map((item) => (
@@ -151,7 +149,7 @@ export const UserWrapper = React.memo(() => {
                   <SideBarItem open={true} item={item} />
                 </li>
               ))}
-          </motion.ul>
+          </AnimatedDropdownList>
         )}
       </div>
     </>

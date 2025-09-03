@@ -5,11 +5,13 @@ import React, {
   useState,
 } from 'react';
 
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-scroll';
 
+import {
+  AnimatedDropdownList,
+} from '@/components/animations/AnimatedDropdownList';
 import { Icon } from '@/components/ui/media/Icon';
 import { SideBarItem } from '@/components/ui/navigation/SideBarItem';
 
@@ -116,14 +118,10 @@ export const SettingsList = React.memo(() => {
         <Icon width={24} height={24} id={isTablet ? 'burger' : 'settings'} />
       </div>
 
-      <motion.ul
+      <AnimatedDropdownList
         className={`${styles.header_settings_list}`}
-        transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-        animate={{
-          height: open ? 'auto' : '0',
-          opacity: open ? 1 : 0,
-          filter: open ? 'none' : 'blur(10rem)',
-        }}
+        isOpen={open}
+        isScrollable={false}
       >
         {isTablet &&
           mobileMenu.map((item) => (
@@ -139,7 +137,7 @@ export const SettingsList = React.memo(() => {
         <li>
           <SideBarItem item={languageItem} />
         </li>
-      </motion.ul>
+      </AnimatedDropdownList>
     </div>
   );
 });

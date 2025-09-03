@@ -5,9 +5,11 @@ import React, {
   useState,
 } from 'react';
 
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
+import {
+  AnimatedDropdownList,
+} from '@/components/animations/AnimatedDropdownList';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { Icon } from '@/components/ui/media/Icon';
@@ -118,15 +120,9 @@ export const RootSelect = React.memo(
           </div>
         </ItemBlock>
 
-        <motion.ul
+        <AnimatedDropdownList
           className={`${styles.select_list} ${dropdownClassName ? dropdownClassName : ''}`}
-          transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-          animate={{
-            height: open ? 'auto' : '0',
-            opacity: open ? 1 : 0,
-            filter: open ? 'none' : 'blur(10rem)',
-            overflowY: open ? 'scroll' : 'hidden',
-          }}
+          isOpen={open}
         >
           {search && open && (
             <li className={styles.search_item}>
@@ -164,7 +160,7 @@ export const RootSelect = React.memo(
               </RootDesc>
             </li>
           )}
-        </motion.ul>
+        </AnimatedDropdownList>
 
         {children && children}
       </div>

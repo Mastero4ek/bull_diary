@@ -3,7 +3,6 @@ import React, {
   useMemo,
 } from 'react';
 
-import { motion } from 'framer-motion';
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
 import {
@@ -11,6 +10,9 @@ import {
   useSelector,
 } from 'react-redux';
 
+import {
+  AnimatedDropdownList,
+} from '@/components/animations/AnimatedDropdownList';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { ControlButton } from '@/components/ui/buttons/ControlButton';
@@ -225,15 +227,10 @@ export const Tuning = React.memo(
             <ControlButton text={<i></i>} />
           </label>
 
-          <motion.ul
+          <AnimatedDropdownList
+            isOpen={isOpen}
             className={styles.tuning_list}
-            transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-            animate={{
-              height: isOpen ? 'auto' : '0',
-              opacity: isOpen ? 1 : 0,
-              filter: isOpen ? 'blur(0)' : 'blur(10rem)',
-              overflow: isOpen ? 'visible' : 'hidden',
-            }}
+            isScrollable={false}
           >
             {tuningList &&
               tuningList.length > 0 &&
@@ -307,7 +304,7 @@ export const Tuning = React.memo(
                   )}
                 </li>
               ))}
-          </motion.ul>
+          </AnimatedDropdownList>
         </div>
       </OuterBlock>
     );
