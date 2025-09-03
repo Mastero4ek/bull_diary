@@ -128,15 +128,13 @@ export const TablePage = () => {
             fontSize: isTablet ? '22rem' : '18rem',
           }}
         >
-          {parseFloat(
-            amount
-              ? '****'
-              : value === 0
-                ? '0.0000'
-                : value > 0
-                  ? `+${value}`
-                  : value
-          ).toFixed(2)}
+          {amount
+            ? '****'
+            : value === 0
+              ? '0.0000'
+              : value > 0
+                ? `+${parseFloat(value).toFixed(2)}`
+                : parseFloat(value).toFixed(2)}
         </span>
       ),
     },
@@ -150,15 +148,13 @@ export const TablePage = () => {
             fontSize: isTablet ? '22rem' : '18rem',
           }}
         >
-          {parseFloat(
-            amount
-              ? '****'
-              : value === 0
-                ? '0.0000'
-                : value > 0
-                  ? `+${value}`
-                  : value
-          ).toFixed(2)}
+          {amount
+            ? '****'
+            : value === 0
+              ? '0.0000'
+              : value > 0
+                ? `+${parseFloat(value).toFixed(2)}`
+                : parseFloat(value).toFixed(2)}
         </span>
       ),
     },
