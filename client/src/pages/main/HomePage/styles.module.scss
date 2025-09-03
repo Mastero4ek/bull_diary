@@ -230,6 +230,16 @@
   height: auto;
   left: 100rem;
   top: -100rem;
+
+  @include mixins.tablet {
+    width: 700rem;
+    left: 150rem;
+    top: 300rem;
+  }
+
+  @include mixins.phone {
+    left: 50rem;
+  }
 }
 
 .manual_content {
@@ -595,6 +605,16 @@
   height: auto;
   right: 0;
   top: -200rem;
+
+  @include mixins.tablet {
+    width: 700rem;
+    right: 200rem;
+    top: 350rem;
+  }
+
+  @include mixins.phone {
+    right: 100rem;
+  }
 }
 
 .advantages_image {
@@ -720,6 +740,16 @@
   height: auto;
   left: 120rem;
   top: 50rem;
+
+  @include mixins.tablet {
+    width: 700rem;
+    left: 150rem;
+    top: -250rem;
+  }
+
+  @include mixins.phone {
+    left: 50rem;
+  }
 }
 
 .benefits_content {
@@ -826,6 +856,17 @@
   height: auto;
   right: 0;
   top: -200rem;
+
+  @include mixins.tablet {
+    width: 400rem;
+    right: 200rem;
+    top: -50rem;
+  }
+
+  @include mixins.phone {
+    top: 0rem;
+    right: 100rem;
+  }
 }
 
 .precedence_image {
