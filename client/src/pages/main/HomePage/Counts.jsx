@@ -1,58 +1,12 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
-
-import {
-  animate,
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-} from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedCounts } from '@/components/animations/AnimatedCounts';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { H2 } from '@/components/ui/typography/titles/H2';
 
 import styles from './styles.module.scss';
-
-const AnimatedNumber = ({ value, duration = 2 }) => {
-  const count = useMotionValue(0);
-  const [displayValue, setDisplayValue] = useState(0);
-
-  useMotionValueEvent(count, 'change', (latest) => {
-    setDisplayValue(Math.round(latest));
-  });
-
-  useEffect(() => {
-    const controls = animate(count, value, { duration });
-
-    return controls.stop;
-  }, [count, value, duration]);
-
-  const numberString = displayValue.toString();
-  const digits = numberString.split('');
-
-  return (
-    <>
-      {digits.map((digit, index) => (
-        <motion.span
-          key={index}
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            duration: 0.5,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-        >
-          {digit}
-        </motion.span>
-      ))}
-    </>
-  );
-};
 
 export const Counts = () => {
   const { t } = useTranslation();
@@ -89,7 +43,7 @@ export const Counts = () => {
             <li key={count.id}>
               <InnerBlock>
                 <H2>
-                  <AnimatedNumber value={count.countEnd} duration={15} />+
+                  <AnimatedCounts value={count.countEnd} duration={15} />+
                 </H2>
 
                 <RootDesc>
