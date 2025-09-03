@@ -1,65 +1,13 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { H1 } from '@/components/ui/typography/titles/H1';
 import { H4 } from '@/components/ui/typography/titles/H4';
 
 import styles from './styles.module.scss';
-
-const AnimatedCard = ({ card, index }) => {
-  const { t } = useTranslation();
-
-  const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 60,
-      scale: 0.85,
-      rotateX: -20,
-      filter: 'blur(4rem)',
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      rotateX: 0,
-      filter: 'blur(0rem)',
-      transition: {
-        duration: 0.5,
-        delay: index * 0.5,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
-  return (
-    <motion.li
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      whileHover="hover"
-      viewport={{ once: true, amount: 1 }}
-    >
-      <OuterBlock>
-        <H4>
-          <span>
-            <b>{card.id + 1}.</b>{' '}
-            <span
-              dangerouslySetInnerHTML={{
-                __html: t(`page.home.manual.step_${card.id + 1}.title`),
-              }}
-            />
-          </span>
-        </H4>
-
-        <RootDesc>
-          <span dangerouslySetInnerHTML={{ __html: card.subtitle }} />
-        </RootDesc>
-      </OuterBlock>
-    </motion.li>
-  );
-};
 
 export const Manual = () => {
   const { t } = useTranslation();
@@ -192,7 +140,19 @@ export const Manual = () => {
               {manualList &&
                 manualList.length > 0 &&
                 manualList.map((card, index) => (
-                  <AnimatedCard key={card.id} card={card} index={index} />
+                  <AnimatedCard key={card.id} index={index}>
+                    <OuterBlock>
+                      <H4>
+                        <span>{card.title}</span>
+                      </H4>
+
+                      <RootDesc>
+                        <span
+                          dangerouslySetInnerHTML={{ __html: card.subtitle }}
+                        />
+                      </RootDesc>
+                    </OuterBlock>
+                  </AnimatedCard>
                 ))}
             </ul>
           </div>

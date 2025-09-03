@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import {
   usePopup,
 } from '@/components/layouts/popups/PopupLayout/PopupProvider';
@@ -13,50 +14,6 @@ import { H4 } from '@/components/ui/typography/titles/H4';
 import { SignUpPopup } from '@/popups/auth/SignUpPopup';
 
 import styles from './styles.module.scss';
-
-const AnimatedCard = ({ card, index }) => {
-  const cardVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.85,
-      y: 25,
-      filter: 'blur(4rem)',
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      filter: 'blur(0rem)',
-      transition: {
-        duration: 0.5,
-        delay: index * 0.5,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
-    },
-  };
-
-  return (
-    <motion.li
-      key={card.id}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 1 }}
-    >
-      <InnerBlock>
-        <H4>
-          <span dangerouslySetInnerHTML={{ __html: card.title }} />
-        </H4>
-
-        <RootDesc>
-          <span dangerouslySetInnerHTML={{ __html: card.subtitle }} />
-        </RootDesc>
-
-        <strong dangerouslySetInnerHTML={{ __html: card.step }} />
-      </InnerBlock>
-    </motion.li>
-  );
-};
 
 export const Start = () => {
   const { openPopup } = usePopup();
@@ -129,19 +86,41 @@ export const Start = () => {
                 {stepList &&
                   stepList.length > 0 &&
                   stepList.map((stepItem, index) => (
-                    <AnimatedCard
-                      key={stepItem.id}
-                      card={stepItem}
-                      index={index}
-                    />
+                    <AnimatedCard y={15} key={stepItem.id} index={index}>
+                      <InnerBlock>
+                        <H4>
+                          <span
+                            dangerouslySetInnerHTML={{ __html: stepItem.title }}
+                          />
+                        </H4>
+
+                        <RootDesc>
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: stepItem.subtitle,
+                            }}
+                          />
+                        </RootDesc>
+
+                        <strong
+                          dangerouslySetInnerHTML={{ __html: stepItem.step }}
+                        />
+                      </InnerBlock>
+                    </AnimatedCard>
                   ))}
               </ul>
 
-              <RootButton
-                onClickBtn={handleClickSignup}
-                text={t('button.sign_up')}
-                icon="sign-up"
-              />
+              <AnimatedCard
+                y={15}
+                index={stepList.length}
+                key={stepList.length}
+              >
+                <RootButton
+                  onClickBtn={handleClickSignup}
+                  text={t('button.sign_up')}
+                  icon="sign-up"
+                />
+              </AnimatedCard>
             </div>
           </OuterBlock>
         </div>

@@ -370,27 +370,30 @@
   width: 100%;
   padding: 20rem 40rem;
 
-  button {
-    padding: 20rem 30rem;
-    width: 350rem;
-    height: auto;
-    position: relative;
-    align-items: flex-end;
-    justify-content: flex-start;
-    text-align: left;
+  li {
+    button {
+      padding: 20rem 30rem;
+      width: 350rem;
+      height: auto;
+      position: relative;
+      align-items: flex-end;
+      justify-content: flex-start;
+      text-align: left;
+      height: 100%;
 
-    span {
-      @include mixins.font(500, 20rem, 100%);
-      width: 100rem;
-      margin-right: 0;
-    }
+      span {
+        @include mixins.font(500, 20rem, 100%);
+        width: 100rem;
+        margin-right: 0;
+      }
 
-    svg {
-      position: absolute;
-      top: 20rem;
-      right: 30rem;
-      width: 50rem;
-      height: 50rem;
+      svg {
+        position: absolute;
+        top: 20rem;
+        right: 30rem;
+        width: 50rem;
+        height: 50rem;
+      }
     }
   }
 
@@ -401,25 +404,27 @@
     gap: 20rem;
     padding: 20rem;
 
-    button {
-      align-items: center;
-      justify-content: center;
-      max-width: 300rem;
-      width: 100%;
-      padding: 16rem;
+    li {
+      button {
+        align-items: center;
+        justify-content: center;
+        max-width: 300rem;
+        width: 100%;
+        padding: 16rem;
 
-      span {
-        display: inline-block;
-        width: auto;
-        @include mixins.font(500, 16rem, 100%);
-      }
+        span {
+          display: inline-block;
+          width: auto;
+          @include mixins.font(500, 16rem, 100%);
+        }
 
-      svg {
-        position: relative;
-        top: unset;
-        right: unset;
-        width: 24rem;
-        height: 24rem;
+        svg {
+          position: relative;
+          top: unset;
+          right: unset;
+          width: 24rem;
+          height: 24rem;
+        }
       }
     }
   }
