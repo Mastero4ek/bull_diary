@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import battleImage from '@/assets/images/home/battle-bg.png';
+import blobDark from '@/assets/images/home/blob-3-dark.png';
+import blobLight from '@/assets/images/home/blob-3-light.png';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { DotList } from '@/components/ui/data/DotList';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
@@ -10,6 +13,8 @@ import styles from './styles.module.scss';
 
 export const Precedence = () => {
   const { t } = useTranslation();
+
+  const { theme } = useSelector((state) => state.settings);
 
   const precedenceList = [
     {
@@ -38,6 +43,10 @@ export const Precedence = () => {
     <section id="tournament" className={styles.precedence}>
       <div className={styles.container_wrapper}>
         <div className={styles.precedence_wrap}>
+          <div className={styles.precedence_blob}>
+            <img src={theme ? blobDark : blobLight} alt="blob-image" />
+          </div>
+
           <div className={styles.precedence_image}>
             <img src={battleImage} alt="Championship-banner" />
           </div>

@@ -4,6 +4,7 @@ import 'swiper/css/navigation';
 import './platform_slider.scss';
 
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import {
   Autoplay,
   Pagination,
@@ -13,6 +14,8 @@ import {
   SwiperSlide,
 } from 'swiper/react';
 
+import blobDark from '@/assets/images/home/blob-4-dark.png';
+import blobLight from '@/assets/images/home/blob-4-light.png';
 import platformSlide1 from '@/assets/images/home/platform-slide-1.png';
 import platformSlide2 from '@/assets/images/home/platform-slide-2.png';
 import platformSlide3 from '@/assets/images/home/platform-slide-3.png';
@@ -31,6 +34,8 @@ import styles from './styles.module.scss';
 
 export const Platform = () => {
   const { t } = useTranslation();
+
+  const { theme } = useSelector((state) => state.settings);
 
   const platformList = [
     {
@@ -73,6 +78,10 @@ export const Platform = () => {
     <section id="platform" className={styles.benefits}>
       <div className={styles.container_wrapper}>
         <div className={styles.benefits_wrapper}>
+          <div className={styles.benefits_blob}>
+            <img src={theme ? blobDark : blobLight} alt="blob-image" />
+          </div>
+
           <div className={styles.benefits_content}>
             <AnimatedShowBlock>
               <H1>

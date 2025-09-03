@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
+import blobDark from '@/assets/images/home/blob-2-dark.png';
+import blobLight from '@/assets/images/home/blob-2-light.png';
 import manualImage from '@/assets/images/home/manual-bg.png';
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
@@ -12,6 +15,8 @@ import styles from './styles.module.scss';
 
 export const Manual = () => {
   const { t } = useTranslation();
+
+  const { theme } = useSelector((state) => state.settings);
 
   const manualList = [
     {
@@ -132,6 +137,10 @@ export const Manual = () => {
 
           <div className={styles.manual_image}>
             <img src={manualImage} alt="Manual-background-image" />
+          </div>
+
+          <div className={styles.manual_blob}>
+            <img src={theme ? blobDark : blobLight} alt="blob-image" />
           </div>
         </div>
       </div>

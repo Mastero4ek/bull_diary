@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import advantagesImage from '@/assets/images/home/advantages-bg.png';
+import blobDark from '@/assets/images/home/blob-1-dark.png';
+import blobLight from '@/assets/images/home/blob-1-light.png';
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
@@ -15,6 +18,7 @@ import styles from './styles.module.scss';
 
 export const Advantages = () => {
   const { t } = useTranslation();
+  const { theme } = useSelector((state) => state.settings);
 
   const advantagesList = [
     {
@@ -53,6 +57,10 @@ export const Advantages = () => {
     <section id="advantages" className={styles.advantages}>
       <div className={styles.container_wrapper}>
         <div className={styles.advantages_wrap}>
+          <div className={styles.advantages_blob}>
+            <img src={theme ? blobDark : blobLight} alt="blob-image" />
+          </div>
+
           <div className={styles.advantages_image}>
             <img src={advantagesImage} alt="Advantages-background-image" />
           </div>

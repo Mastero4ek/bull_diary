@@ -224,7 +224,17 @@
   }
 }
 
+.manual_blob {
+  position: absolute;
+  width: 900rem;
+  height: auto;
+  left: 100rem;
+  top: -100rem;
+}
+
 .manual_content {
+  position: relative;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -393,6 +403,8 @@
   display: flex;
   width: 100%;
   padding: 20rem 40rem;
+  position: relative;
+  z-index: 10;
 
   li {
     button {
@@ -540,6 +552,8 @@
   gap: 30rem;
   align-items: flex-end;
   width: 700rem;
+  position: relative;
+  z-index: 10;
 
   div {
     h1 {
@@ -575,6 +589,14 @@
   }
 }
 
+.advantages_blob {
+  position: absolute;
+  width: 900rem;
+  height: auto;
+  right: 0;
+  top: -200rem;
+}
+
 .advantages_image {
   display: flex;
   align-items: center;
@@ -585,6 +607,7 @@
   position: absolute;
   left: 0;
   top: -350rem;
+  z-index: 5;
 
   @include mixins.tablet {
     width: 100%;
@@ -668,6 +691,7 @@
   display: flex;
   justify-content: space-between;
   gap: 100rem;
+  position: relative;
 
   @include mixins.tablet {
     flex-direction: column;
@@ -682,10 +706,20 @@
 .benefits_slider {
   width: 930rem;
   height: 100%;
+  position: relative;
+  z-index: 10;
 
   @include mixins.tablet {
     width: 100%;
   }
+}
+
+.benefits_blob {
+  position: absolute;
+  width: 700rem;
+  height: auto;
+  left: 120rem;
+  top: 50rem;
 }
 
 .benefits_content {
@@ -694,6 +728,8 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 30rem;
+  position: relative;
+  z-index: 10;
 
   button {
     margin-top: auto;
@@ -746,6 +782,8 @@
   flex-direction: column;
   gap: 30rem;
   align-items: flex-end;
+  position: relative;
+  z-index: 10;
 
   h1 {
     width: 100%;
@@ -780,6 +818,14 @@
       text-align: center;
     }
   }
+}
+
+.precedence_blob {
+  position: absolute;
+  width: 700rem;
+  height: auto;
+  right: 0;
+  top: -200rem;
 }
 
 .precedence_image {
