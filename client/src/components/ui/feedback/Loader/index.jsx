@@ -38,9 +38,10 @@ export const Loader = React.memo(({ logo = true }) => {
       {logo && <Logo desc={false} />}
 
       <i>
-        {loaderText.split('').map((letter, index) => (
-          <span key={index}>{letter}</span>
-        ))}
+        {loaderText &&
+          loaderText
+            .split('')
+            .map((letter, index) => <span key={index}>{letter}</span>)}
       </i>
     </i>
   );
