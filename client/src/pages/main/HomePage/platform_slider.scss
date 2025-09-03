@@ -1,56 +1,63 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .swiper {
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
+  border-radius: 20rem;
+  overflow: hidden;
 }
 
 .swiper-slide {
-	width: 100% !important;
-	height: 540rem;
-	border-radius: 20rem;
-	overflow: hidden;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 20rem;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-	@include mixins.tablet {
-		max-width: 500rem;
-		height: 350rem;
-	}
+  img {
+    border-radius: inherit;
+    overflow: hidden;
+  }
+
+  @include mixins.tablet {
+    max-width: 500rem;
+    height: 350rem;
+  }
 }
 
 .swiper {
-	margin-left: 0;
-	margin-right: 0;
+  margin-left: 0;
+  margin-right: 0;
 
-	.swiper-pagination {
-		bottom: 10rem !important;
+  .swiper-pagination {
+    bottom: 10rem !important;
 
-		span {
-			margin: 0 !important;
-			margin-right: 0 !important;
-			width: 12rem !important;
-			height: 12rem !important;
-			background: var(--primaryDef);
+    span {
+      margin: 0 !important;
+      margin-right: 0 !important;
+      width: 12rem !important;
+      height: 12rem !important;
+      background: var(--primaryDef);
 
-			&:not(:last-child) {
-				margin-right: 20rem !important;
-			}
+      &:not(:last-child) {
+        margin-right: 20rem !important;
+      }
 
-			&:hover {
-				transform: scale(1.1);
-			}
-		}
-	}
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
 
-	@include mixins.tablet {
-		.swiper-pagination {
-			span {
-				width: 10rem !important;
-				height: 10rem !important;
-			}
-		}
-	}
+  @include mixins.tablet {
+    .swiper-pagination {
+      span {
+        width: 10rem !important;
+        height: 10rem !important;
+      }
+    }
+  }
 }

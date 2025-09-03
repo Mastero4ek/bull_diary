@@ -31,9 +31,9 @@ export const HomePage = () => {
     <>
       <Intro />
       <Manual />
-      <Start />
       <Advantages />
       <Platform />
+      <Start />
       <Precedence />
       <Question />
     </>

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import battleImage from '@/assets/images/home/battle-bg.png';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { DotList } from '@/components/ui/data/DotList';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
@@ -38,7 +39,7 @@ export const Precedence = () => {
       <div className={styles.container_wrapper}>
         <div className={styles.precedence_wrap}>
           <div className={styles.precedence_image}>
-            <img src="" alt="Championship-banner" />
+            <img src={battleImage} alt="Championship-banner" />
           </div>
 
           <div className={styles.precedence_content}>

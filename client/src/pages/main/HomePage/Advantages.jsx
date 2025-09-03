@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import advantagesImage from '@/assets/images/home/advantages-bg.png';
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
@@ -53,7 +54,7 @@ export const Advantages = () => {
       <div className={styles.container_wrapper}>
         <div className={styles.advantages_wrap}>
           <div className={styles.advantages_image}>
-            <img src="" alt="Advantages-background-image" />
+            <img src={advantagesImage} alt="Advantages-background-image" />
           </div>
 
           <AnimatedShowBlock

@@ -12,64 +12,75 @@
 
 .intro_wrap {
   display: flex;
-  justify-content: space-between;
-  gap: 80rem;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   position: relative;
+  margin-top: -80rem;
 
   @include mixins.tablet {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20rem;
+    gap: 15rem;
+    margin-top: 0;
   }
 }
 
 .intro_content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 40rem;
-  max-width: 700rem;
+  align-items: center;
+  text-align: center;
+  gap: 30rem;
+  position: relative;
+  z-index: 10;
 
   h1 {
     b,
     span {
-      @include mixins.font(800, 50rem, 125%);
+      @include mixins.font(800, 75rem, 125%);
     }
 
     color: var(--primaryDef);
   }
 
   span {
-    @include mixins.font(400, 20rem, 125%);
+    @include mixins.font(400, 26rem, 125%);
   }
 
   button {
-    margin-top: auto;
+    margin-top: 80rem;
     margin-left: 0;
+
+    span {
+      @include mixins.font(400, 18rem, 125%);
+    }
   }
 
   @include mixins.tablet {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
     h1 {
-      text-align: center;
-      @include mixins.font(800, 38rem, 125%);
-    }
-
-    div {
-      text-align: center;
+      b,
+      span {
+        @include mixins.font(800, 38rem, 125%);
+      }
     }
 
     span {
-      text-align: center;
       @include mixins.font(400, 18rem, 125%);
     }
 
     button {
       margin-right: unset;
+    }
+  }
+
+  @include mixins.phone {
+    h1 {
+      b,
+      span {
+        @include mixins.font(800, 30rem, 125%);
+      }
     }
   }
 }
@@ -80,26 +91,31 @@
   align-items: center;
   text-align: center;
   position: absolute;
-  right: 0rem;
-  top: -110rem;
-  width: 720rem;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -255rem;
+  width: 1300rem;
   height: auto;
 
   @include mixins.tablet {
     width: 100%;
-    position: relative;
-    top: auto;
-    right: auto;
-    width: 100%;
+    bottom: -30%;
     height: 350rem;
+  }
+
+  @include mixins.phone {
+    bottom: -30%;
   }
 }
 
 .counts {
-  margin-top: 100rem;
+  margin-top: 140rem;
+  position: relative;
+  z-index: 10;
 
   article {
     width: 100%;
+    background: var(--bgLight);
 
     ul {
       display: grid;
@@ -170,9 +186,10 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 80rem;
+  position: relative;
 
   @include mixins.tablet {
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: center;
     justify-content: center;
     gap: 20rem;
@@ -182,7 +199,7 @@
 .manual_wrap {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 
   @include mixins.tablet {
     width: 100%;
@@ -191,35 +208,38 @@
 }
 
 .manual_image {
-  width: 100%;
+  width: 850rem;
   height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  margin-top: auto;
+  position: absolute;
+  right: -95rem;
+  top: -20rem;
 
   @include mixins.tablet {
+    position: relative;
     width: 100%;
     height: 350rem;
+    right: -20rem;
+    top: auto;
   }
 }
 
 .manual_content {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 30rem;
   width: 100%;
   margin-bottom: 40rem;
 
   span {
     display: inline-block;
-    text-align: right;
+    text-align: left;
   }
 
   @include mixins.tablet {
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
     gap: 20rem;
 
@@ -234,6 +254,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20rem;
+  position: relative;
+  z-index: 10;
 
   li {
     transform-style: preserve-3d;
@@ -250,6 +272,7 @@
       backface-visibility: hidden;
       transform: translateZ(0);
       will-change: transform;
+      background: var(--bgLight);
     }
 
     h4 {
@@ -347,14 +370,15 @@
 .start_wrapper {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 30rem;
+
+  h1 {
+    text-align: center;
+  }
 
   @include mixins.tablet {
     gap: 20rem;
-
-    h1 {
-      text-align: center;
-    }
 
     article {
       width: 100%;
@@ -495,15 +519,18 @@
 
 .advantages_wrap {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 80rem;
   margin-bottom: 40rem;
+  margin-top: 300rem;
+  position: relative;
 
   @include mixins.tablet {
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 20rem;
+    margin-top: 0;
   }
 }
 
@@ -553,12 +580,18 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: auto;
-  height: 500rem;
+  width: 800rem;
+  height: auto;
+  position: absolute;
+  left: 0;
+  top: -350rem;
 
   @include mixins.tablet {
     width: 100%;
     height: 350rem;
+    position: relative;
+    top: auto;
+    left: auto;
   }
 }
 
@@ -569,6 +602,8 @@
   grid-template-columns: repeat(5, 1fr);
   gap: 20rem;
   padding: 20rem 70rem;
+  background: var(--bgLight);
+  border-radius: inherit;
 
   li {
     display: flex;
@@ -689,14 +724,19 @@
 
 .precedence_wrap {
   display: flex;
-  justify-content: space-between;
-  gap: 80rem;
+  justify-content: flex-end;
+  gap: 40rem;
+  position: relative;
+  margin-top: 100rem;
+  margin-bottom: 100rem;
 
   @include mixins.tablet {
     flex-direction: column-reverse;
     align-items: center;
     justify-content: center;
     gap: 20rem;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
@@ -748,12 +788,18 @@
   align-items: center;
   text-align: center;
   position: relative;
-  width: auto;
-  height: 540rem;
+  width: 1000rem;
+  height: auto;
+  bottom: -200rem;
+  left: 0rem;
+  position: absolute;
 
   @include mixins.tablet {
+    bottom: auto;
+    left: 20rem;
     width: 100%;
     height: 350rem;
+    position: relative;
   }
 }
 
@@ -762,6 +808,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 80rem;
+  position: relative;
 
   @include mixins.tablet {
     flex-direction: column;
@@ -769,6 +816,18 @@
     justify-content: center;
     gap: 20rem;
   }
+}
+
+.question_image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 600rem;
+  height: auto;
+  position: absolute;
+  left: 250rem;
+  bottom: -150rem;
 }
 
 .question_content {

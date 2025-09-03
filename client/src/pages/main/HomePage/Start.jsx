@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
-import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
+import {
+  AnimatedTypewritter,
+} from '@/components/animations/AnimatedTypewritter';
 import {
   usePopup,
 } from '@/components/layouts/popups/PopupLayout/PopupProvider';
@@ -48,13 +50,9 @@ export const Start = () => {
     <section id="start" className={styles.start}>
       <div className={styles.container_wrapper}>
         <div className={styles.start_wrapper}>
-          <AnimatedShowBlock className={styles.start_content}>
-            <H1>
-              <b
-                dangerouslySetInnerHTML={{ __html: t('page.home.start.title') }}
-              />
-            </H1>
-          </AnimatedShowBlock>
+          <H1>
+            <AnimatedTypewritter text={t('page.home.start.title')} />
+          </H1>
 
           <OuterBlock>
             <div className={styles.start_wrap}>

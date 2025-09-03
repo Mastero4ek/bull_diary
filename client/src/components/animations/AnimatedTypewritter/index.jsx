@@ -1,15 +1,16 @@
-import {
+import React, {
   useEffect,
   useState,
 } from 'react';
 
 import { motion } from 'framer-motion';
 
-export const AnimatedTypewritter = (props) => {
+export const AnimatedTypewritter = React.memo((props) => {
   const { text, speed = 100 } = props;
 
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isInView, setIsInView] = useState(false);
 
   const variants = {
     hidden: {
@@ -27,12 +28,14 @@ export const AnimatedTypewritter = (props) => {
   };
 
   useEffect(() => {
-    setDisplayText('');
-    setCurrentIndex(0);
-  }, [text]);
+    if (isInView) {
+      setDisplayText('');
+      setCurrentIndex(0);
+    }
+  }, [text, isInView]);
 
   useEffect(() => {
-    if (currentIndex < text.length) {
+    if (isInView && currentIndex < text.length) {
       const timer = setTimeout(() => {
         setDisplayText((prev) => prev + text[currentIndex]);
         setCurrentIndex((prev) => prev + 1);
@@ -40,10 +43,17 @@ export const AnimatedTypewritter = (props) => {
 
       return () => clearTimeout(timer);
     }
-  }, [currentIndex, text, speed]);
+  }, [currentIndex, text, speed, isInView]);
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={variants}>
+    <motion.div
+      initial="hidden"
+      variants={variants}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      onViewportEnter={() => setIsInView(true)}
+      onViewportLeave={() => setIsInView(false)}
+    >
       <b dangerouslySetInnerHTML={{ __html: displayText }}></b>
 
       {currentIndex < text.length && (
@@ -58,4 +68,4 @@ export const AnimatedTypewritter = (props) => {
       )}
     </motion.div>
   );
-};
+});

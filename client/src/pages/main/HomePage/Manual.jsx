@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import manualImage from '@/assets/images/home/manual-bg.png';
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
@@ -89,15 +90,8 @@ export const Manual = () => {
     <section id="manual" className={styles.manual}>
       <div className={styles.container_wrapper}>
         <div className={styles.manual_wrapper}>
-          <div className={styles.manual_image}>
-            <img src="" alt="Manual-background-image" />
-          </div>
-
           <div className={styles.manual_wrap}>
-            <AnimatedShowBlock
-              className={styles.manual_content}
-              direction="right"
-            >
+            <AnimatedShowBlock className={styles.manual_content}>
               <H1>
                 <b
                   dangerouslySetInnerHTML={{
@@ -134,6 +128,10 @@ export const Manual = () => {
                   </AnimatedCard>
                 ))}
             </ul>
+          </div>
+
+          <div className={styles.manual_image}>
+            <img src={manualImage} alt="Manual-background-image" />
           </div>
         </div>
       </div>

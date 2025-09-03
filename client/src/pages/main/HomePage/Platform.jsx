@@ -13,12 +13,15 @@ import {
   SwiperSlide,
 } from 'swiper/react';
 
+import platformSlide1 from '@/assets/images/home/platform-slide-1.png';
+import platformSlide2 from '@/assets/images/home/platform-slide-2.png';
+import platformSlide3 from '@/assets/images/home/platform-slide-3.png';
+import platformSlide4 from '@/assets/images/home/platform-slide-4.png';
 import { AnimatedButton } from '@/components/animations/AnimatedButton';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import {
   usePopup,
 } from '@/components/layouts/popups/PopupLayout/PopupProvider';
-import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { RootButton } from '@/components/ui/buttons/RootButton';
 import { DotList } from '@/components/ui/data/DotList';
 import { H1 } from '@/components/ui/typography/titles/H1';
@@ -92,35 +95,33 @@ export const Platform = () => {
             </AnimatedButton>
           </div>
 
-          <InnerBlock>
-            <div className={styles.benefits_slider}>
-              <Swiper
-                slidesPerView={1}
-                spaceBetween={20}
-                loop={true}
-                pagination={{ clickable: true }}
-                autoplay={{ delay: 2500, disableOnInteraction: false }}
-                modules={[Pagination, Autoplay]}
-                className="benefits_slider"
-              >
-                <SwiperSlide>
-                  <img src="" alt="DiaryPage-screenshot" />
-                </SwiperSlide>
+          <div className={styles.benefits_slider}>
+            <Swiper
+              slidesPerView={1}
+              spaceBetween={20}
+              loop={true}
+              pagination={{ clickable: true }}
+              autoplay={{ delay: 2500, disableOnInteraction: false }}
+              modules={[Pagination, Autoplay]}
+              className="benefits_slider"
+            >
+              <SwiperSlide>
+                <img src={platformSlide1} alt="platform-slide-1" />
+              </SwiperSlide>
 
-                <SwiperSlide>
-                  <img src="" alt="TablePage-screenshot" />
-                </SwiperSlide>
+              <SwiperSlide>
+                <img src={platformSlide2} alt="platform-slide-2" />
+              </SwiperSlide>
 
-                <SwiperSlide>
-                  <img src="" alt="BattlePage-screenshot" />
-                </SwiperSlide>
+              <SwiperSlide>
+                <img src={platformSlide3} alt="platform-slide-3" />
+              </SwiperSlide>
 
-                <SwiperSlide>
-                  <img src="" alt="ProfilePage-screenshot" />
-                </SwiperSlide>
-              </Swiper>
-            </div>
-          </InnerBlock>
+              <SwiperSlide>
+                <img src={platformSlide4} alt="platform-slide-4" />
+              </SwiperSlide>
+            </Swiper>
+          </div>
         </div>
       </div>
     </section>

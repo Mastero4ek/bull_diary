@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
+import introImage from '@/assets/images/home/intro-bg.png';
 import { AnimatedButton } from '@/components/animations/AnimatedButton';
-import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import {
   AnimatedTypewritter,
 } from '@/components/animations/AnimatedTypewritter';
@@ -33,15 +33,13 @@ export const Intro = () => {
               <AnimatedTypewritter text={t('page.home.intro.title')} />
             </H1>
 
-            <AnimatedShowBlock>
-              <RootDesc>
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: t('page.home.intro.description'),
-                  }}
-                />
-              </RootDesc>
-            </AnimatedShowBlock>
+            <RootDesc>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: t('page.home.intro.description'),
+                }}
+              />
+            </RootDesc>
 
             <AnimatedButton>
               <RootButton
@@ -53,7 +51,7 @@ export const Intro = () => {
           </div>
 
           <div className={styles.intro_image}>
-            <img src="" alt="intro-background-image" />
+            <img src={introImage} alt="intro-background-image" />
           </div>
         </div>
 
