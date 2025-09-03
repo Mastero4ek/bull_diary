@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
@@ -81,8 +82,8 @@ export const Advantages = () => {
           <ul className={styles.advantages_list}>
             {advantagesList &&
               advantagesList.length > 0 &&
-              advantagesList.map((card) => (
-                <li key={card.id}>
+              advantagesList.map((card, index) => (
+                <AnimatedCard key={card.id} y={15} index={index}>
                   <InnerBlock>
                     <Icon id={card.iconId} />
 
@@ -100,7 +101,7 @@ export const Advantages = () => {
                       </SmallDesc>
                     </div>
                   </InnerBlock>
-                </li>
+                </AnimatedCard>
               ))}
           </ul>
         </OuterBlock>

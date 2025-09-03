@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import { AnimatedCounts } from '@/components/animations/AnimatedCounts';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
@@ -39,8 +40,8 @@ export const Counts = () => {
       <ul className={styles.counts}>
         {countsList &&
           countsList.length > 0 &&
-          countsList.map((count) => (
-            <li key={count.id}>
+          countsList.map((count, index) => (
+            <AnimatedCard key={count.id} y={15} index={index}>
               <InnerBlock>
                 <H2>
                   <AnimatedCounts value={count.countEnd} duration={15} />+
@@ -50,10 +51,10 @@ export const Counts = () => {
                   <span>{count.text}</span>
                 </RootDesc>
               </InnerBlock>
-            </li>
+            </AnimatedCard>
           ))}
 
-        <li>
+        <AnimatedCard y={15} index={countsList.length}>
           <InnerBlock>
             <H2>24/7</H2>
 
@@ -61,7 +62,7 @@ export const Counts = () => {
               <span>{t('page.home.counts.client_support')}</span>
             </RootDesc>
           </InnerBlock>
-        </li>
+        </AnimatedCard>
       </ul>
     </OuterBlock>
   );
