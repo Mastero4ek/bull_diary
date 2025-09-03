@@ -1,14 +1,52 @@
 import React, { useMemo } from 'react';
 
-import { motion } from 'framer-motion';
 import moment from 'moment/min/moment-with-locales';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import {
+  AnimatedChartTooltip,
+} from '@/components/animations/AnimatedChartTooltip';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { ResponsiveBar } from '@nivo/bar';
 
 import styles from './styles.module.scss';
+
+const CustomTooltip = React.memo(({ data, t, getTooltipTitle }) => {
+  if (!data) return null;
+
+  return (
+    <AnimatedChartTooltip className={styles.bar_chart_tooltip}>
+      <RootDesc>
+        <label>{getTooltipTitle(data.day)}</label>
+      </RootDesc>
+
+      <RootDesc>
+        <div>
+          <b>{t('page.diary.chart_label')}</b>:{' '}
+          {data[t('page.diary.chart_label')]}
+        </div>
+      </RootDesc>
+    </AnimatedChartTooltip>
+  );
+});
+
+const CustomLegend = React.memo(({ chartStyles, t }) => {
+  return (
+    <div className={styles.bar_chart_legend}>
+      <div className={styles.bar_chart_legend_item}>
+        <label
+          style={{
+            backgroundColor: chartStyles.barColorPositive,
+          }}
+        />
+        <RootDesc>
+          <span>{t('page.diary.chart_label')}</span>
+        </RootDesc>
+      </div>
+    </div>
+  );
+});
 
 export const BarChart = React.memo(({ syncWarning = '' }) => {
   const { t } = useTranslation();
@@ -75,7 +113,7 @@ export const BarChart = React.memo(({ syncWarning = '' }) => {
   const data = useMemo(() => {
     const dataSource = syncWarning !== '' ? fakeOrdersByDay : ordersByDay;
 
-    return dataSource.map((order, index) => ({
+    return dataSource.map((order) => ({
       day: order.day,
       [t('page.diary.chart_label')]: order.net_profit,
       color:
@@ -85,50 +123,9 @@ export const BarChart = React.memo(({ syncWarning = '' }) => {
     }));
   }, [syncWarning, fakeOrdersByDay, ordersByDay, chartStyles, t]);
 
-  const CustomTooltip = ({ data }) => {
-    if (!data) return null;
-
-    return (
-      <motion.div
-        className={styles.bar_chart_tooltip}
-        initial={{ opacity: 0, scale: 0.7, filter: 'blur(10rem)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'blur(0rem)' }}
-        transition={{ duration: 0.25 }}
-      >
-        <RootDesc>
-          <label>{getTooltipTitle(data.day)}</label>
-        </RootDesc>
-
-        <RootDesc>
-          <div>
-            <b>{t('page.diary.chart_label')}</b>:{' '}
-            {data[t('page.diary.chart_label')]}
-          </div>
-        </RootDesc>
-      </motion.div>
-    );
-  };
-
-  const CustomLegend = () => {
-    return (
-      <div className={styles.bar_chart_legend}>
-        <div className={styles.bar_chart_legend_item}>
-          <label
-            style={{
-              backgroundColor: chartStyles.barColorPositive,
-            }}
-          />
-          <RootDesc>
-            <span>{t('page.diary.chart_label')}</span>
-          </RootDesc>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className={styles.bar_chart_wrapper}>
-      <CustomLegend />
+      <CustomLegend chartStyles={chartStyles} t={t} />
 
       <div
         className={styles.bar_chart}
@@ -165,7 +162,13 @@ export const BarChart = React.memo(({ syncWarning = '' }) => {
           motionConfig="wobbly"
           motionStiffness={90}
           motionDamping={15}
-          tooltip={CustomTooltip}
+          tooltip={({ data }) => (
+            <CustomTooltip
+              data={data}
+              t={t}
+              getTooltipTitle={getTooltipTitle}
+            />
+          )}
           colors={({ data }) => data.color}
           axisBottom={null}
           axisLeft={{

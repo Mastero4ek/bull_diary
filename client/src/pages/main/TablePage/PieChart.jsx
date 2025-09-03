@@ -1,9 +1,11 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import {
+  AnimatedChartTooltip,
+} from '@/components/animations/AnimatedChartTooltip';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import {
   calculateFakeTotals,
@@ -12,6 +14,54 @@ import {
 import { ResponsivePie } from '@nivo/pie';
 
 import styles from './styles.module.scss';
+
+const CustomLegend = React.memo(({ chartStyles, t }) => {
+  return (
+    <div className={styles.doughnut_chart_legend}>
+      <div className={styles.doughnut_chart_legend_item}>
+        <label
+          style={{
+            backgroundColor: chartStyles.pieColorPositive,
+          }}
+        />
+        <RootDesc>
+          <span>{t('page.table.chart_income')}</span>
+        </RootDesc>
+      </div>
+
+      <div className={styles.doughnut_chart_legend_item}>
+        <label
+          style={{
+            backgroundColor: chartStyles.pieColorNegative,
+          }}
+        />
+        <RootDesc>
+          <span>{t('page.table.chart_lession')}</span>
+        </RootDesc>
+      </div>
+    </div>
+  );
+});
+
+const CustomTooltip = React.memo(({ datum, currentCounts, t }) => {
+  if (!datum) return null;
+
+  const orderCount =
+    datum.label === t('page.table.chart_income')
+      ? currentCounts.profitCount
+      : currentCounts.lossCount;
+
+  return (
+    <AnimatedChartTooltip className={styles.doughnut_chart_tooltip}>
+      <RootDesc>
+        <label>
+          <b>{t('page.table.orders')}</b>
+          {orderCount}
+        </label>
+      </RootDesc>
+    </AnimatedChartTooltip>
+  );
+});
 
 export const PieChart = ({ syncWarning = '' }) => {
   const { t } = useTranslation();
@@ -112,62 +162,9 @@ export const PieChart = ({ syncWarning = '' }) => {
     return chartData.filter((item) => item.value > 0);
   }, [currentData, chartStyles, t]);
 
-  const CustomTooltip = ({ datum }) => {
-    if (!datum) return null;
-
-    const orderCount =
-      datum.label === t('page.table.chart_income')
-        ? currentCounts.profitCount
-        : currentCounts.lossCount;
-
-    return (
-      <motion.div
-        className={styles.doughnut_chart_tooltip}
-        initial={{ opacity: 0, scale: 0.7, filter: 'blur(10rem)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'blur(0rem)' }}
-        transition={{ duration: 0.25 }}
-      >
-        <RootDesc>
-          <label>
-            <b>{t('page.table.orders')}</b>
-            {orderCount}
-          </label>
-        </RootDesc>
-      </motion.div>
-    );
-  };
-
-  const CustomLegend = () => {
-    return (
-      <div className={styles.doughnut_chart_legend}>
-        <div className={styles.doughnut_chart_legend_item}>
-          <label
-            style={{
-              backgroundColor: chartStyles.pieColorPositive,
-            }}
-          />
-          <RootDesc>
-            <span>{t('page.table.chart_income')}</span>
-          </RootDesc>
-        </div>
-
-        <div className={styles.doughnut_chart_legend_item}>
-          <label
-            style={{
-              backgroundColor: chartStyles.pieColorNegative,
-            }}
-          />
-          <RootDesc>
-            <span>{t('page.table.chart_lession')}</span>
-          </RootDesc>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className={styles.doughnut_chart_wrapper}>
-      <CustomLegend />
+      <CustomLegend chartStyles={chartStyles} t={t} />
 
       <div
         className={styles.doughnut_chart}
@@ -187,7 +184,9 @@ export const PieChart = ({ syncWarning = '' }) => {
           enableArcLabels={false}
           enableArcLinkLabels={false}
           colors={({ data }) => data.color}
-          tooltip={CustomTooltip}
+          tooltip={({ datum }) => (
+            <CustomTooltip datum={datum} currentCounts={currentCounts} t={t} />
+          )}
           legends={[]}
           animate={true}
           motionConfig="wobbly"

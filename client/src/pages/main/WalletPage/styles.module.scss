@@ -1,226 +1,225 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .info_wrapper {
-	display: flex;
-	align-items: flex-start;
-	gap: 40rem;
-	justify-content: space-between;
-	padding: 40rem;
-	border-radius: 20rem;
-	background: var(--bgLight);
-	position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 40rem;
+  justify-content: space-between;
+  padding: 40rem;
+  border-radius: 20rem;
+  background: var(--bgLight);
+  position: relative;
 
-	@include mixins.tablet {
-		flex-direction: column-reverse;
-		align-items: center;
-		gap: 20rem;
-		padding: 20rem;
-	}
+  @include mixins.tablet {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 20rem;
+    padding: 20rem;
+  }
 }
 
 .info_level {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 20rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20rem;
 
-	button {
-		svg {
-			stroke: var(--white);
-			stroke-width: 2rem;
-		}
-	}
+  button {
+    svg {
+      stroke: var(--white);
+      stroke-width: 2rem;
+    }
+  }
 
-	article {
-		border-radius: 50%;
-		padding: 25rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+  article {
+    border-radius: 50%;
+    padding: 25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-	img {
-		width: 230rem;
-		height: 230rem;
-	}
+  img {
+    width: 230rem;
+    height: 230rem;
+  }
 
-	@include mixins.tablet {
-		article {
-			padding: 15rem;
-		}
+  @include mixins.tablet {
+    article {
+      padding: 15rem;
+    }
 
-		img {
-			width: 160rem;
-			height: 160rem;
-		}
-	}
+    img {
+      width: 160rem;
+      height: 160rem;
+    }
+  }
 }
 
 .info_stats {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 40rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40rem;
 
-	h4 {
-		@include mixins.font(700, 18rem, 125%);
-	}
+  h4 {
+    @include mixins.font(700, 18rem, 125%);
+  }
 
-	ul {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 30rem;
+  ul {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30rem;
 
-		li {
-			position: relative;
-			width: 100%;
-			display: flex;
-			align-items: center;
-			gap: 30rem;
+    li {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 30rem;
 
-			&:not(:last-child) {
-				&::after {
-					content: '';
-					position: absolute;
-					width: 100%;
-					height: 1rem;
-					background: var(--text);
-					opacity: 0.25;
-					bottom: -15rem;
-				}
-			}
+      &:not(:last-child) {
+        &::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 1rem;
+          background: var(--text);
+          opacity: 0.25;
+          bottom: -15rem;
+        }
+      }
 
-			div:nth-child(2) {
-				margin-left: auto;
-			}
-		}
-	}
+      div:nth-child(2) {
+        margin-left: auto;
+      }
+    }
+  }
 }
 
 .info_stats_head {
-	display: grid;
-	grid-template-columns: 1fr 40rem;
-	gap: 20rem;
+  display: grid;
+  grid-template-columns: 1fr 40rem;
+  gap: 20rem;
 
-	h2 {
-		@include mixins.font(700, 30rem, 125%);
-	}
+  h2 {
+    @include mixins.font(700, 30rem, 125%);
+  }
 
-	button {
-		margin: 0;
-	}
+  button {
+    margin: 0;
+  }
 }
 
 .line_chart_wrapper {
-	display: flex;
-	flex-direction: column;
-	padding: 30rem 20rem 20rem;
+  display: flex;
+  flex-direction: column;
+  padding: 30rem 20rem 20rem;
 
-	svg {
-		pointer-events: all !important;
-	}
+  svg {
+    pointer-events: all !important;
+  }
 
-	@include mixins.tablet {
-		gap: 20rem;
-		padding: 20rem;
-	}
+  @include mixins.tablet {
+    gap: 20rem;
+    padding: 20rem;
+  }
 }
 
 .line_chart {
-	width: 100%;
-	height: 400rem;
+  width: 100%;
+  height: 400rem;
 
-	svg {
-		height: 100%;
-	}
+  svg {
+    height: 100%;
+  }
 
-	@include mixins.tablet {
-		height: 280rem;
-	}
+  @include mixins.tablet {
+    height: 280rem;
+  }
 }
 
 .line_chart_tooltip {
-	background: var(--bgLight);
-	box-shadow: var(--shadowOuter);
-	border-radius: 14rem;
-	padding: 16rem;
-	display: flex;
-	flex-direction: column;
-	gap: 10rem;
-	width: max-content;
+  background: var(--bgLight);
+  box-shadow: var(--shadowOuter);
+  border-radius: 14rem;
+  padding: 16rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10rem;
+  width: max-content;
 }
 
 .line_chart_legend {
-	display: flex;
-	align-items: center;
-	gap: 20rem;
-	width: fit-content;
-	margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20rem;
+  width: fit-content;
+  margin: 0 auto;
 
-	@include mixins.tablet {
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 14rem;
-	}
+  @include mixins.tablet {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14rem;
+  }
 }
 
 .line_chart_legend_item {
-	display: flex;
-	align-items: center;
-	gap: 8rem;
+  display: flex;
+  align-items: center;
+  gap: 8rem;
 
-	label {
-		width: 14rem;
-		height: 14rem;
-		border-radius: 50%;
-	}
+  label {
+    width: 14rem;
+    height: 14rem;
+  }
 }
 
 .line_chart_bar {
-	position: relative;
-	width: 100%;
-	height: 400rem;
+  position: relative;
+  width: 100%;
+  height: 400rem;
 
-	@include mixins.tablet {
-		height: 280rem;
-	}
+  @include mixins.tablet {
+    height: 280rem;
+  }
 }
 
 .line_chart_line {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .line_chart_details {
-	display: flex;
-	align-items: center;
-	gap: 20rem;
-	width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20rem;
+  width: 100%;
 
-	button {
-		margin: 0;
-		margin-left: auto;
+  button {
+    margin: 0;
+    margin-left: auto;
 
-		svg {
-			stroke: var(--white);
-			stroke-width: 2rem;
-		}
-	}
+    svg {
+      stroke: var(--white);
+      stroke-width: 2rem;
+    }
+  }
 }
 
 .line_chart_details_warning {
-	div {
-		display: flex;
-		align-items: center;
-		gap: 10rem;
+  div {
+    display: flex;
+    align-items: center;
+    gap: 10rem;
 
-		svg {
-			width: 20rem;
-			height: 20rem;
-		}
-	}
+    svg {
+      width: 20rem;
+      height: 20rem;
+    }
+  }
 }

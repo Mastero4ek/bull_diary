@@ -1,17 +1,100 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
-import { motion } from 'framer-motion';
 import moment from 'moment/min/moment-with-locales';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import {
+  AnimatedChartTooltip,
+} from '@/components/animations/AnimatedChartTooltip';
 import { RootButton } from '@/components/ui/buttons/RootButton';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsiveLine } from '@nivo/line';
 
 import styles from './styles.module.scss';
+
+const CustomLegend = React.memo(({ chartStyles, t }) => {
+  return (
+    <div className={styles.line_chart_legend}>
+      <div className={styles.line_chart_legend_item}>
+        <label
+          style={{
+            backgroundColor: chartStyles.lineColor,
+            height: '3rem',
+          }}
+        />
+
+        <RootDesc>
+          <span>{t('page.wallet.chart_label')}</span>
+        </RootDesc>
+      </div>
+
+      <div className={styles.line_chart_legend_item}>
+        <label
+          style={{
+            backgroundColor: chartStyles.barColor,
+            borderRadius: '5rem 5rem 0 0',
+          }}
+        />
+
+        <RootDesc>
+          <span>{t('page.wallet.chart_label_trans')}</span>
+        </RootDesc>
+      </div>
+    </div>
+  );
+});
+
+const CustomTooltip = React.memo(
+  ({
+    point,
+    data,
+    lineChartData,
+    barChartData,
+    labels,
+    t,
+    getTooltipTitle,
+  }) => {
+    if (!point && !data) return null;
+
+    let label, lineValue, barValue;
+
+    if (point) {
+      label = point.data.x;
+      lineValue = point.data.y;
+      barValue = barChartData[labels.indexOf(label)] || 0;
+    } else if (data) {
+      label = data.label;
+      barValue = data[t('page.wallet.chart_label_trans')] || 0;
+      lineValue = lineChartData[labels.indexOf(label)] || null;
+    }
+
+    return (
+      <AnimatedChartTooltip className={styles.line_chart_tooltip}>
+        <RootDesc>
+          <label>
+            {getTooltipTitle([{ label, dataIndex: labels.indexOf(label) }])}
+          </label>
+        </RootDesc>
+
+        <RootDesc>
+          <div>
+            <b>USD</b>: ~
+            {typeof lineValue === 'number'
+              ? lineValue.toFixed(2)
+              : lineValue || '0.00'}
+          </div>
+
+          <div>
+            <b>{t('page.wallet.chart_label_trans')}</b>: {barValue}
+          </div>
+        </RootDesc>
+      </AnimatedChartTooltip>
+    );
+  }
+);
 
 export const LineChart = ({ syncWarning = '' }) => {
   const navigate = useNavigate();
@@ -183,7 +266,7 @@ export const LineChart = ({ syncWarning = '' }) => {
     return Object.values(grouped).sort((a, b) =>
       moment(a.date).diff(moment(b.date))
     );
-  }, [transactions, fakeTransactions]);
+  }, [transactions, fakeTransactions, syncWarning]);
 
   const labels = useMemo(() => {
     const now = moment();
@@ -406,83 +489,9 @@ export const LineChart = ({ syncWarning = '' }) => {
     }));
   }, [labels, barChartData, t]);
 
-  const CustomLegend = () => {
-    return (
-      <div className={styles.line_chart_legend}>
-        <div className={styles.line_chart_legend_item}>
-          <label
-            style={{
-              backgroundColor: chartStyles.lineColor,
-            }}
-          />
-
-          <RootDesc>
-            <span>{t('page.wallet.chart_label')}</span>
-          </RootDesc>
-        </div>
-
-        <div className={styles.line_chart_legend_item}>
-          <label
-            style={{
-              backgroundColor: chartStyles.barColor,
-            }}
-          />
-
-          <RootDesc>
-            <span>{t('page.wallet.chart_label_trans')}</span>
-          </RootDesc>
-        </div>
-      </div>
-    );
-  };
-
-  const CustomTooltip = ({ point, data }) => {
-    if (!point && !data) return null;
-
-    let label, lineValue, barValue;
-
-    if (point) {
-      label = point.data.x;
-      lineValue = point.data.y;
-      barValue = barChartData[labels.indexOf(label)] || 0;
-    } else if (data) {
-      label = data.label;
-      barValue = data[t('page.wallet.chart_label_trans')] || 0;
-      lineValue = lineChartData[labels.indexOf(label)] || null;
-    }
-
-    return (
-      <motion.div
-        className={styles.line_chart_tooltip}
-        initial={{ opacity: 0, scale: 0.7, filter: 'blur(10rem)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'blur(0rem)' }}
-        transition={{ duration: 0.25 }}
-      >
-        <RootDesc>
-          <label>
-            {getTooltipTitle([{ label, dataIndex: labels.indexOf(label) }])}
-          </label>
-        </RootDesc>
-
-        <RootDesc>
-          <div>
-            <b>USD</b>: ~
-            {typeof lineValue === 'number'
-              ? lineValue.toFixed(2)
-              : lineValue || '0.00'}
-          </div>
-
-          <div>
-            <b>{t('page.wallet.chart_label_trans')}</b>: {barValue}
-          </div>
-        </RootDesc>
-      </motion.div>
-    );
-  };
-
   return (
     <div className={styles.line_chart_wrapper}>
-      <CustomLegend />
+      <CustomLegend chartStyles={chartStyles} t={t} />
 
       <div
         className={styles.line_chart}
@@ -520,7 +529,17 @@ export const LineChart = ({ syncWarning = '' }) => {
             motionConfig="wobbly"
             motionStiffness={90}
             motionDamping={15}
-            tooltip={CustomTooltip}
+            tooltip={({ point, data }) => (
+              <CustomTooltip
+                point={point}
+                data={data}
+                lineChartData={lineChartData}
+                barChartData={barChartData}
+                labels={labels}
+                t={t}
+                getTooltipTitle={getTooltipTitle}
+              />
+            )}
             colors={chartStyles.barColor}
             axisBottom={null}
             axisLeft={{
@@ -560,7 +579,17 @@ export const LineChart = ({ syncWarning = '' }) => {
               enableGridY={false}
               enablePoints={false}
               useMesh={true}
-              tooltip={CustomTooltip}
+              tooltip={({ point, data }) => (
+                <CustomTooltip
+                  point={point}
+                  data={data}
+                  lineChartData={lineChartData}
+                  barChartData={barChartData}
+                  labels={labels}
+                  t={t}
+                  getTooltipTitle={getTooltipTitle}
+                />
+              )}
               legends={[]}
               yScale={{
                 type: 'linear',

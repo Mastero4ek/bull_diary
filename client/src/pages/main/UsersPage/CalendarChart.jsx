@@ -1,13 +1,15 @@
-import {
+import React, {
   useCallback,
   useMemo,
 } from 'react';
 
-import { motion } from 'framer-motion';
 import moment from 'moment/min/moment-with-locales';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import {
+  AnimatedChartTooltip,
+} from '@/components/animations/AnimatedChartTooltip';
 import {
   usePopup,
 } from '@/components/layouts/popups/PopupLayout/PopupProvider';
@@ -17,6 +19,70 @@ import { NewUserPopup } from '@/popups/user/NewUserPopup';
 import { ResponsiveCalendar } from '@nivo/calendar';
 
 import styles from './styles.module.scss';
+
+const CustomTooltip = React.memo(({ day, value, t }) => {
+  if (!day || value === undefined) return null;
+
+  const date = moment(day).format('DD.MM.YYYY');
+
+  return (
+    <AnimatedChartTooltip className={styles.calendar_chart_tooltip}>
+      <RootDesc>
+        <label>{date}</label>
+      </RootDesc>
+
+      <RootDesc>
+        <div>
+          <b>{t('page.users.activity')}</b> {value}
+        </div>
+      </RootDesc>
+    </AnimatedChartTooltip>
+  );
+});
+
+const CustomLegend = React.memo(({ chartStyles, t }) => {
+  return (
+    <div className={styles.calendar_chart_legend}>
+      <div className={styles.calendar_chart_legend_item}>
+        <RootDesc>
+          <span>{t('page.users.activity_users')}</span>
+        </RootDesc>
+
+        <div className={styles.calendar_chart_legend_colors}>
+          <label
+            style={{
+              backgroundColor: chartStyles.color_extra_low,
+            }}
+          />
+
+          <label
+            style={{
+              backgroundColor: chartStyles.color_low,
+            }}
+          />
+
+          <label
+            style={{
+              backgroundColor: chartStyles.color_medium,
+            }}
+          />
+
+          <label
+            style={{
+              backgroundColor: chartStyles.color_high,
+            }}
+          />
+
+          <label
+            style={{
+              backgroundColor: chartStyles.color_extra_high,
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+});
 
 export const CalendarChart = () => {
   const { openPopup } = usePopup();
@@ -72,49 +138,6 @@ export const CalendarChart = () => {
     [width, isTablet, isMobile, theme]
   );
 
-  const CustomTooltip = ({ day, value }) => {
-    if (!day || value === undefined) return null;
-
-    const date = moment(day).format('DD.MM.YYYY');
-
-    return (
-      <motion.div
-        className={styles.calendar_chart_tooltip}
-        initial={{ opacity: 0, scale: 0.7, filter: 'blur(10rem)' }}
-        animate={{ opacity: 1, scale: 1, filter: 'blur(0rem)' }}
-        transition={{ duration: 0.25 }}
-      >
-        <RootDesc>
-          <label>{date}</label>
-        </RootDesc>
-
-        <RootDesc>
-          <div>
-            <b>{t('page.users.activity')}</b> {value}
-          </div>
-        </RootDesc>
-      </motion.div>
-    );
-  };
-
-  const CustomLegend = () => {
-    return (
-      <div className={styles.calendar_chart_legend}>
-        <div className={styles.calendar_chart_legend_item}>
-          <label
-            style={{
-              backgroundColor: chartStyles.calendarColor,
-            }}
-          />
-
-          <RootDesc>
-            <span>{t('page.users.activity_users')}</span>
-          </RootDesc>
-        </div>
-      </div>
-    );
-  };
-
   const handleClickAddUser = useCallback(() => {
     openPopup(<NewUserPopup />);
   }, [openPopup]);
@@ -122,7 +145,7 @@ export const CalendarChart = () => {
   return (
     <>
       <div className={styles.calendar_chart_wrapper}>
-        <CustomLegend />
+        <CustomLegend chartStyles={chartStyles} t={t} />
 
         <div className={styles.calendar_chart}>
           <ResponsiveCalendar
@@ -161,7 +184,9 @@ export const CalendarChart = () => {
               chartStyles.color_extra_high,
             ]}
             legends={[]}
-            tooltip={CustomTooltip}
+            tooltip={({ day, value }) => (
+              <CustomTooltip day={day} value={value} t={t} />
+            )}
             theme={{
               text: {
                 fontFamily: chartStyles.font,

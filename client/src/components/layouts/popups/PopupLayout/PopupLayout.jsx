@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import {
   AnimatePresence,
@@ -55,24 +55,6 @@ export const PopupLayout = React.memo(() => {
       },
     },
   };
-
-  useEffect(() => {
-    if (popupContent.content) {
-      const scrollBarWidth =
-        window.innerWidth - document.documentElement.clientWidth;
-
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = `${scrollBarWidth}rem`;
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    };
-  }, [
-    popupContent.isOpen,
-    popupContent.content ? 'has-content' : 'no-content',
-  ]);
 
   return (
     <AnimatePresence mode="wait">
