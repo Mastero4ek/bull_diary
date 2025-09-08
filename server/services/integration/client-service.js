@@ -157,7 +157,7 @@ class ClientService {
 		apiParams = {},
 		lng,
 		exchangeName = 'Bybit',
-		maxDays = 7,
+		maxDays = 6,
 		cursorField = 'nextPageCursor',
 		listField = 'list',
 	}) {

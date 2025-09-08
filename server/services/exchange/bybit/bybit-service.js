@@ -80,7 +80,7 @@ class BybitService {
 					apiParams: { category: 'linear' },
 					lng,
 					exchangeName: 'Bybit',
-					maxDays: 7,
+					maxDays: 6,
 				})
 
 				const transformedOrders = DataService.transformOrdersToDbFormat(
@@ -144,7 +144,7 @@ class BybitService {
 						apiParams: { category: 'linear' },
 						lng,
 						exchangeName: 'Bybit',
-						maxDays: 7,
+						maxDays: 6,
 					})
 
 					if (allNewOrders.length > 0) {
@@ -405,7 +405,7 @@ class BybitService {
 					apiParams: { accountType: 'UNIFIED' },
 					lng,
 					exchangeName: 'Bybit',
-					maxDays: 7,
+					maxDays: 6,
 				})
 
 				const transformedTransactions =
@@ -455,7 +455,7 @@ class BybitService {
 						apiParams: { accountType: 'UNIFIED' },
 						lng,
 						exchangeName: 'Bybit',
-						maxDays: 7,
+						maxDays: 6,
 					})
 
 					if (allNewTransactions.length > 0) {
