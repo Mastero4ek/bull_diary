@@ -1,12 +1,16 @@
+@use '@/styles/mixins.scss' as mixins;
+
 .bookmarks_delete_button {
-	width: fit-content !important;
-	margin: 0 !important;
+  width: fit-content !important;
+  margin: 0 !important;
 
-	button {
-		background-color: var(--red);
+  button {
+    background-color: var(--red);
 
-		&:hover {
-			background-color: var(--red);
-		}
-	}
+    @include mixins.desktop {
+      &:hover:not(:disabled) {
+        background: var(--red);
+      }
+    }
+  }
 }

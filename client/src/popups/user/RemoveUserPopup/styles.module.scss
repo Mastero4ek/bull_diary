@@ -29,8 +29,10 @@
 		margin-top: 30rem;
 		background: var(--red);
 
-		&:hover {
-			background: var(--red);
+		@include mixins.desktop {
+			&:hover:not(:disabled) {
+				background: var(--red);
+			}
 		}
 
 		span {

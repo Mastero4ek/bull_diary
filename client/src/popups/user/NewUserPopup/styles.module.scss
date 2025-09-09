@@ -166,8 +166,10 @@
 	button {
 		background-color: var(--red);
 
-		&:hover {
-			background-color: var(--red);
+		@include mixins.desktop {
+			&:hover:not(:disabled) {
+				background: var(--red);
+			}
 		}
 
 		span {
