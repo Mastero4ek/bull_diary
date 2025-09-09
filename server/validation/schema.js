@@ -755,10 +755,13 @@ const ValidationSchema = {
 				errorMessage: (value, { req }) =>
 					i18next.t('validation.role.string', { lng: req.lng }),
 			},
-			isIn: {
-				options: ROLES,
-				errorMessage: (value, { req }) =>
-					i18next.t('validation.role.invalid', { lng: req.lng }),
+			custom: {
+				options: (value, { req }) => {
+					return ROLES?.includes(value) || false
+				},
+				errorMessage: (value, { req }) => {
+					return i18next.t('validation.role.invalid', { lng: req.lng })
+				},
 			},
 		},
 	},
