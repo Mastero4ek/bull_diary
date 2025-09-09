@@ -30,6 +30,7 @@ import {
   capitalize,
   colorizedNum,
 } from '@/helpers/functions';
+import { useTableActions } from '@/hooks/useTableActions';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { NewTournamentPopup } from '@/popups/data/NewTournamentPopup';
 import { ConfirmPopup } from '@/popups/system/ConfirmPopup';
@@ -73,6 +74,8 @@ export const BattlePage = () => {
   } = useSelector((state) => state.tournaments);
   const { user } = useSelector((state) => state.candidate);
   const { exchange } = useSelector((state) => state.filters);
+
+  const { goToPage, sortBy } = useTableActions(setPage, setSort, sort);
 
   const columns = [
     {
@@ -160,25 +163,6 @@ export const BattlePage = () => {
       ),
     },
   ];
-
-  const goToPage = (pageIndex) => {
-    const newPage = pageIndex + 1;
-    dispatch(setPage(newPage));
-  };
-
-  const sortBy = (column) => {
-    let newSort;
-    if (sort && sort.type === column.id) {
-      newSort = {
-        type: column.id,
-        value: sort.value === 'asc' ? 'desc' : 'asc',
-      };
-    } else {
-      newSort = { type: column.id, value: 'desc' };
-    }
-
-    dispatch(setSort(newSort));
-  };
 
   const removeUser = useCallback(
     async (item) => {

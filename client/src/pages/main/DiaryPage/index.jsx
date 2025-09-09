@@ -22,6 +22,7 @@ import { Mark } from '@/components/ui/data/Mark';
 import { Loader } from '@/components/ui/feedback/Loader';
 import { colorizedNum } from '@/helpers/functions';
 import { useClientFiltering } from '@/hooks/useClientFiltering';
+import { useTableActions } from '@/hooks/useTableActions';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { SharedPositionPopup } from '@/popups/data/SharedPositionPopup';
 import {
@@ -55,6 +56,8 @@ export const DiaryPage = React.memo(() => {
   const { page, sort, serverStatus, errorMessage } = useSelector(
     (state) => state.positions
   );
+
+  const { goToPage, sortBy } = useTableActions(setPage, setSort, sort);
 
   const tickerOptions = tickers.map((ticker) => ({
     value: ticker.symbol,
@@ -140,23 +143,6 @@ export const DiaryPage = React.memo(() => {
     },
   ];
 
-  const goToPage = (pageIndex) => {
-    dispatch(setPage(pageIndex + 1));
-  };
-
-  const sortBy = (column) => {
-    if (sort.type === column.id) {
-      dispatch(
-        setSort({
-          type: column.id,
-          value: sort.value === 'asc' ? 'desc' : 'asc',
-        })
-      );
-    } else {
-      dispatch(setSort({ type: column.id, value: 'desc' }));
-    }
-  };
-
   const handleClickUpdate = async () => {
     try {
       dispatch(setServerStatus('loading'));
@@ -165,7 +151,7 @@ export const DiaryPage = React.memo(() => {
 
       subscribeToPositions();
       showSuccess(t('page.diary.update_success'));
-    } catch (error) {
+    } catch {
       dispatch(setServerStatus('error'));
     } finally {
       dispatch(setServerStatus('success'));
@@ -192,7 +178,7 @@ export const DiaryPage = React.memo(() => {
     if (page !== 1) {
       dispatch(setPage(1));
     }
-  }, [search, limit, dispatch]);
+  }, [search, limit, dispatch, page]);
 
   useEffect(() => {
     dispatch(getBybitTickers({ exchange: exchange.name }));

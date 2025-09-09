@@ -25,6 +25,7 @@ import {
 import { TableLayout } from '@/components/layouts/specialized/TableLayout';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { ControlButton } from '@/components/ui/buttons/ControlButton';
+import { useTableActions } from '@/hooks/useTableActions';
 import { RemoveUserPopup } from '@/popups/user/RemoveUserPopup';
 import { getUser } from '@/redux/slices/candidateSlice';
 import { setSearch } from '@/redux/slices/filtersSlice';
@@ -66,6 +67,8 @@ export const UsersPage = () => {
   } = useSelector((state) => state.users);
   const { user } = useSelector((state) => state.candidate);
   const { isTablet } = useSelector((state) => state.settings);
+
+  const { goToPage, sortBy } = useTableActions(setPage, setSort, sort);
 
   const columns = [
     {
@@ -187,23 +190,6 @@ export const UsersPage = () => {
       ),
     },
   ];
-
-  const goToPage = (pageIndex) => {
-    dispatch(setPage(pageIndex + 1));
-  };
-
-  const sortBy = (column) => {
-    if (sort.type === column.id) {
-      dispatch(
-        setSort({
-          type: column.id,
-          value: sort.value === 'asc' ? 'desc' : 'asc',
-        })
-      );
-    } else {
-      dispatch(setSort({ type: column.id, value: 'desc' }));
-    }
-  };
 
   const handleClickRemove = useCallback(
     async (item) => {

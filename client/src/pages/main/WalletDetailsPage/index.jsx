@@ -19,6 +19,7 @@ import { Mark } from '@/components/ui/data/Mark';
 import { Loader } from '@/components/ui/feedback/Loader';
 import { Icon } from '@/components/ui/media/Icon';
 import { colorizedNum } from '@/helpers/functions';
+import { useTableActions } from '@/hooks/useTableActions';
 import {
   clearTickers,
   getBybitTickers,
@@ -55,6 +56,8 @@ export const WalletDetailsPage = React.memo(() => {
   const { showSuccess, showError } = useNotification();
   const syncWarning = useSelector((state) => state.sync.warning);
   const isSynced = useSelector((state) => state.sync.isSynced);
+
+  const { goToPage, sortBy } = useTableActions(setPage, setSort, sort);
 
   const tickerOptions = tickers.map((ticker) => ({
     value: ticker.symbol,
@@ -259,10 +262,6 @@ export const WalletDetailsPage = React.memo(() => {
     },
   ];
 
-  const goToPage = (pageIndex) => {
-    dispatch(setPage(pageIndex + 1));
-  };
-
   const handleClickUpdate = async () => {
     if (!isSynced) {
       showError(t('page.table.sync_required_error'));
@@ -292,19 +291,6 @@ export const WalletDetailsPage = React.memo(() => {
     } catch (e) {
       showError(t('page.wallet_details.update_error'));
       console.log(e);
-    }
-  };
-
-  const sortBy = (column) => {
-    if (sort.type === column.id) {
-      dispatch(
-        setSort({
-          type: column.id,
-          value: sort.value === 'asc' ? 'desc' : 'asc',
-        })
-      );
-    } else {
-      dispatch(setSort({ type: column.id, value: 'desc' }));
     }
   };
 

@@ -31,6 +31,7 @@ import {
   capitalize,
   colorizedNum,
 } from '@/helpers/functions';
+import { useTableActions } from '@/hooks/useTableActions';
 import { ConfirmPopup } from '@/popups/system/ConfirmPopup';
 import {
   clearTickers,
@@ -72,6 +73,8 @@ export const BookmarksPage = React.memo(() => {
     errorMessage,
     serverStatus,
   } = useSelector((state) => state.orders);
+
+  const { goToPage, sortBy } = useTableActions(setPage, setSort, sort);
 
   const tickerOptions = tickers.map((ticker) => ({
     value: ticker.symbol,
@@ -192,23 +195,6 @@ export const BookmarksPage = React.memo(() => {
       ),
     },
   ];
-
-  const goToPage = (pageIndex) => {
-    dispatch(setPage(pageIndex + 1));
-  };
-
-  const sortBy = (column) => {
-    if (sort.type === column.id) {
-      dispatch(
-        setSort({
-          type: column.id,
-          value: sort.value === 'asc' ? 'desc' : 'asc',
-        })
-      );
-    } else {
-      dispatch(setSort({ type: column.id, value: 'desc' }));
-    }
-  };
 
   const handleClickUpdate = async () => {
     if (!isSynced) {

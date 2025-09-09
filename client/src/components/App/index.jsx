@@ -11,6 +11,7 @@ import {
   useDispatch,
   useSelector,
 } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import { BottomBar } from '@/components/layouts/core/BottomBar';
 import { FooterLayout } from '@/components/layouts/core/FooterLayout';
@@ -23,6 +24,7 @@ import { Loader } from '@/components/ui/feedback/Loader';
 import { useSyncStatus } from '@/hooks/useSyncStatus';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { checkAuth } from '@/redux/slices/candidateSlice';
+import { setSearch } from '@/redux/slices/filtersSlice';
 import { setScreenParams } from '@/redux/slices/settingsSlice';
 import { createRoutes } from '@/routes/routeConfig.js';
 import { unwrapResult } from '@reduxjs/toolkit';
@@ -49,6 +51,7 @@ export const App = () => {
   } = useSelector((state) => state.settings);
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const {
     connect,
@@ -149,6 +152,10 @@ export const App = () => {
     unsubscribeFromTournaments,
     disconnect,
   ]);
+
+  useEffect(() => {
+    dispatch(setSearch(''));
+  }, [location, dispatch]);
 
   const routes = useMemo(() => createRoutes(isAuth, user), [isAuth, user]);
 
