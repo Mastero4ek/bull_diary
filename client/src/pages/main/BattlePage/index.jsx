@@ -9,7 +9,6 @@ import {
   useDispatch,
   useSelector,
 } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 
 import avatarDefault from '@/assets/images/general/default_avatar.png';
 import { PageLayout } from '@/components/layouts/core/PageLayout';
@@ -53,9 +52,9 @@ import styles from './styles.module.scss';
 export const BattlePage = () => {
   const { t } = useTranslation();
   const { openPopup } = usePopup();
-  const location = useLocation();
   const dispatch = useDispatch();
-  const { updateTournamentSubscription } = useWebSocket();
+  const { updateTournamentSubscription, subscribeToTournaments } =
+    useWebSocket();
 
   const { showSuccess, showError } = useNotification();
 
@@ -165,13 +164,6 @@ export const BattlePage = () => {
   const goToPage = (pageIndex) => {
     const newPage = pageIndex + 1;
     dispatch(setPage(newPage));
-
-    updateTournamentSubscription({
-      page: newPage,
-      size: limit,
-      search,
-      sort,
-    });
   };
 
   const sortBy = (column) => {
@@ -186,13 +178,6 @@ export const BattlePage = () => {
     }
 
     dispatch(setSort(newSort));
-
-    updateTournamentSubscription({
-      page,
-      size: limit,
-      search,
-      sort: newSort,
-    });
   };
 
   const removeUser = useCallback(
@@ -333,22 +318,16 @@ export const BattlePage = () => {
       const searchTerm = selectedUser ? selectedUser.label : selectedValue;
 
       dispatch(setSearch(searchTerm));
+      dispatch(setPage(1));
 
       updateTournamentSubscription({
-        page,
+        page: 1,
         size: limit,
         search: searchTerm,
         sort,
       });
     },
-    [
-      tournamentUsersList,
-      dispatch,
-      page,
-      limit,
-      sort,
-      updateTournamentSubscription,
-    ]
+    [tournamentUsersList, dispatch, limit, sort, updateTournamentSubscription]
   );
 
   const removeTournament = useCallback(async () => {
@@ -405,6 +384,8 @@ export const BattlePage = () => {
     if (exchange?.name) {
       dispatch(setPage(1));
 
+      subscribeToTournaments();
+
       updateTournamentSubscription({
         page: 1,
         size: limit,
@@ -417,8 +398,8 @@ export const BattlePage = () => {
     dispatch,
     sort,
     exchange?.name,
-    search,
     updateTournamentSubscription,
+    subscribeToTournaments,
   ]);
 
   useEffect(() => {
@@ -440,7 +421,7 @@ export const BattlePage = () => {
         dispatch(getUser(user.id));
       }
     };
-  }, [location, dispatch, user?.id]);
+  }, [dispatch, user?.id]);
 
   useEffect(() => {
     if (tournament?._id) {
@@ -449,7 +430,6 @@ export const BattlePage = () => {
 
     return () => {
       dispatch(clearTournamentUsersList());
-      dispatch(setSearch(''));
     };
   }, [dispatch, tournament?._id]);
 
@@ -458,9 +438,19 @@ export const BattlePage = () => {
   );
 
   const alreadyJoined =
-    users &&
-    users.length > 0 &&
-    users.some((participant) => participant.id === user.id);
+    user?.tournaments &&
+    user.tournaments.length > 0 &&
+    user.tournaments.some((userTournament) => {
+      const userTournamentId = userTournament.id;
+      const currentTournamentId = tournament?._id;
+
+      const stringMatch =
+        String(userTournamentId) === String(currentTournamentId);
+
+      return stringMatch;
+    });
+
+  const buttonDisabled = alreadyJoined || registrationClosed;
 
   return (
     <PageLayout
@@ -551,12 +541,12 @@ export const BattlePage = () => {
 
             {tournament?.registration_date && (
               <RootButton
-                disabled={alreadyJoined || registrationClosed}
+                disabled={buttonDisabled}
                 onClickBtn={handleClickJoin}
                 text={t('button.join')}
                 icon={'join'}
               >
-                {(alreadyJoined || registrationClosed) && (
+                {buttonDisabled && (
                   <ClosedContent
                     title={
                       alreadyJoined

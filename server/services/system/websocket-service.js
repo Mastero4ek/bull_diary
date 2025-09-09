@@ -3,6 +3,7 @@ const { Server } = require('socket.io')
 
 const { logError } = require('@configs/logger-config')
 const SyncExecutor = require('@services/core/sync-executor')
+const TournamentChangeStreamService = require('@services/core/tournament-change-stream')
 const TournamentService = require('@services/core/tournament-service')
 const BybitWebSocketService = require('@services/exchange/bybit/bybit-websocket')
 
@@ -13,6 +14,8 @@ class WebSocketService {
 		this.userSockets = new Map()
 		this.syncProgressCallbacks = new Map()
 		this.keysService = null
+		this.tournamentSubscriptions = new Map()
+		this.tournamentUpdateIntervals = new Map()
 	}
 
 	/**
@@ -27,7 +30,7 @@ class WebSocketService {
 	 * Инициализирует WebSocket сервер и настраивает обработчики событий
 	 * @param {import('http').Server} server - HTTP сервер для привязки WebSocket
 	 */
-	initialize(server) {
+	async initialize(server) {
 		this.io = new Server(server, {
 			path: '/api/v1/socket.io',
 			cors: {
@@ -35,6 +38,12 @@ class WebSocketService {
 				methods: ['GET', 'POST'],
 			},
 		})
+
+		try {
+			await TournamentChangeStreamService.initialize()
+		} catch (error) {
+			logError('Failed to initialize Tournament Change Streams:', error)
+		}
 
 		this.io.on('connection', socket => {
 			socket.on('subscribe_positions', async data => {
@@ -233,16 +242,18 @@ class WebSocketService {
 						return
 					}
 
-					this.tournamentSubscriptions =
-						this.tournamentSubscriptions || new Map()
-					this.tournamentSubscriptions.set(userId, {
+					TournamentChangeStreamService.addSubscriber(
+						userId,
 						exchange,
-						page,
-						size,
-						search,
-						sort,
-						language,
-					})
+						socket,
+						{
+							page,
+							size,
+							search,
+							sort,
+							language,
+						}
+					)
 
 					const tournaments = await TournamentService.getTournaments(
 						exchange,
@@ -254,8 +265,6 @@ class WebSocketService {
 					)
 
 					socket.emit('tournaments_update', { tournaments })
-
-					this.startTournamentUpdates(userId, socket)
 				} catch (error) {
 					logError('Error in subscribe_tournaments:', error)
 					socket.emit('error', {
@@ -267,20 +276,42 @@ class WebSocketService {
 			socket.on('unsubscribe_tournaments', data => {
 				const { userId } = data
 				if (userId) {
-					this.stopTournamentUpdates(userId)
-					this.tournamentSubscriptions?.delete(userId)
+					TournamentChangeStreamService.removeSubscriber(userId)
 				}
 			})
 
-			socket.on('update_tournament_subscription', data => {
-				const { userId, page, size, search, sort, language } = data
-				if (userId) {
-					this.updateTournamentSubscription(userId, {
-						page,
-						size,
-						search,
-						sort,
-						language,
+			socket.on('update_tournament_subscription', async data => {
+				try {
+					const { userId, page, size, search, sort, language } = data
+
+					if (userId) {
+						TournamentChangeStreamService.updateSubscriber(userId, {
+							page,
+							size,
+							search,
+							sort,
+							language,
+						})
+
+						const subscriber =
+							TournamentChangeStreamService.getSubscriber(userId)
+						if (subscriber && subscriber.exchange) {
+							const tournaments = await TournamentService.getTournaments(
+								subscriber.exchange,
+								language || 'en',
+								page || 1,
+								size || 5,
+								search,
+								sort || null
+							)
+
+							socket.emit('tournaments_update', { tournaments })
+						}
+					}
+				} catch (error) {
+					logError('Error in update_tournament_subscription:', error)
+					socket.emit('error', {
+						message: 'Failed to update tournament subscription',
 					})
 				}
 			})
@@ -302,8 +333,7 @@ class WebSocketService {
 					this.clientConnections.delete(socket.id)
 					this.userSockets.delete(userId)
 					this.syncProgressCallbacks.delete(userId)
-					this.stopTournamentUpdates(userId)
-					this.tournamentSubscriptions?.delete(userId)
+					TournamentChangeStreamService.removeSubscriber(userId)
 					BybitWebSocketService.disconnectClient(userId)
 				}
 			})
@@ -407,66 +437,6 @@ class WebSocketService {
 	}
 
 	/**
-	 * Запускает периодические обновления турниров для пользователя
-	 * @param {string} userId - ID пользователя
-	 * @param {Object} socket - WebSocket сокет
-	 */
-	startTournamentUpdates(userId, socket) {
-		this.stopTournamentUpdates(userId)
-
-		const updateInterval = setInterval(async () => {
-			try {
-				const subscription = this.tournamentSubscriptions?.get(userId)
-				if (!subscription) {
-					this.stopTournamentUpdates(userId)
-					return
-				}
-
-				const { exchange, page, size, search, sort, language } = subscription
-				const tournaments = await TournamentService.getTournaments(
-					exchange,
-					language,
-					page,
-					size,
-					search,
-					sort
-				)
-
-				socket.emit('tournaments_update', { tournaments })
-			} catch (error) {
-				logError(`Error updating tournaments for user ${userId}:`, error)
-			}
-		}, 3000)
-
-		this.tournamentUpdateIntervals = this.tournamentUpdateIntervals || new Map()
-		this.tournamentUpdateIntervals.set(userId, updateInterval)
-	}
-
-	/**
-	 * Останавливает периодические обновления турниров для пользователя
-	 * @param {string} userId - ID пользователя
-	 */
-	stopTournamentUpdates(userId) {
-		const interval = this.tournamentUpdateIntervals?.get(userId)
-		if (interval) {
-			clearInterval(interval)
-			this.tournamentUpdateIntervals.delete(userId)
-		}
-	}
-
-	/**
-	 * Обновляет параметры подписки на турниры для пользователя
-	 * @param {string} userId - ID пользователя
-	 * @param {Object} params - Новые параметры подписки
-	 */
-	updateTournamentSubscription(userId, params) {
-		const subscription = this.tournamentSubscriptions?.get(userId)
-		if (subscription) {
-			Object.assign(subscription, params)
-		}
-	}
-
-	/**
 	 * Получает количество подключенных клиентов
 	 * @returns {number} Количество активных WebSocket подключений
 	 */
@@ -480,12 +450,17 @@ class WebSocketService {
 	 * @returns {number} returns.clientConnections - Количество WebSocket подключений
 	 * @returns {number} returns.bybitConnections - Количество активных подключений к Bybit
 	 * @returns {Array} returns.connectedUsers - Список подключенных пользователей
+	 * @returns {number} returns.tournamentSubscribers - Количество подписчиков на турниры
+	 * @returns {Array} returns.tournamentSubscribersList - Список подписчиков на турниры
 	 */
 	getStats() {
 		return {
 			clientConnections: this.clientConnections.size,
 			bybitConnections: BybitWebSocketService.getActiveConnectionsCount(),
 			connectedUsers: BybitWebSocketService.getConnectedUsers(),
+			tournamentSubscribers:
+				TournamentChangeStreamService.getSubscribersCount(),
+			tournamentSubscribersList: TournamentChangeStreamService.getSubscribers(),
 		}
 	}
 }

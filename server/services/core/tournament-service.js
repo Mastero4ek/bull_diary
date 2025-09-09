@@ -39,7 +39,6 @@ class TournamentService {
 			}
 
 			let coverUrl = null
-			let fileDoc = null
 			let tempTournament = null
 
 			if (file) {
@@ -53,12 +52,7 @@ class TournamentService {
 					exchange,
 				})
 
-				fileDoc = await fileService.uploadCover(
-					file,
-					null,
-					lng,
-					tempTournament._id
-				)
+				await fileService.uploadCover(file, null, lng, tempTournament._id)
 				coverUrl = `${process.env.API_URL}/uploads/${file.filename}`
 				tempTournament.cover = coverUrl
 
@@ -373,7 +367,7 @@ class TournamentService {
 				if (typeof sort === 'string') {
 					try {
 						sortObj = JSON.parse(sort)
-					} catch (e) {
+					} catch {
 						sortQuery = { _id: 1 }
 						return
 					}
@@ -449,6 +443,41 @@ class TournamentService {
 			}))
 		} catch (error) {
 			logError(error, { context: 'getTournamentUsersList' })
+			throw error
+		}
+	}
+
+	/**
+	 * Обновляет данные пользователя во всех турнирах
+	 * @param {string} userId - ID пользователя
+	 * @param {string} name - Имя пользователя
+	 * @param {string} last_name - Фамилия пользователя
+	 * @param {string} cover - Обложка пользователя
+	 * @returns {Promise<Object>} - Результат обновления
+	 */
+	async updateTournamentUserData(userId, name, last_name, cover) {
+		try {
+			const updateData = {
+				name,
+				last_name: last_name || '',
+				updated_at: new Date(),
+			}
+
+			if (cover) {
+				updateData.cover = cover
+			}
+
+			const result = await TournamentUserModel.updateMany(
+				{ id: userId },
+				updateData
+			)
+
+			return {
+				matchedCount: result.matchedCount,
+				modifiedCount: result.modifiedCount,
+			}
+		} catch (error) {
+			logError('Error updating tournament user data:', error)
 			throw error
 		}
 	}

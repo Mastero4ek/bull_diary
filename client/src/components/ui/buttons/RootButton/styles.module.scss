@@ -1,63 +1,63 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .root_button {
-	margin: 0 auto;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 16rem;
-	padding: 12rem 25rem;
-	border-radius: 20rem;
-	text-align: center;
-	transition: all 0.15s ease-in-out;
-	background: var(--primaryDef);
-	position: relative;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rem;
+  padding: 12rem 25rem;
+  border-radius: 20rem;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+  background: var(--primaryDef);
+  position: relative;
 
-	span {
-		color: var(--white);
-		transition: all 0.15s ease-in-out;
-		animation: visible 0.15s ease-in-out;
-		display: inline-block;
-	}
+  span {
+    color: var(--white);
+    transition: all 0.15s ease-in-out;
+    animation: visible 0.15s ease-in-out;
+    display: inline-block;
+  }
 
-	svg {
-		width: 24rem;
-		height: 24rem;
-		fill: var(--white);
-	}
+  svg {
+    width: 24rem;
+    height: 24rem;
+    fill: var(--white);
+  }
 
-	&:disabled {
-		pointer-events: none;
-		background: var(--disabled);
-		opacity: 0.5;
-	}
+  &:disabled {
+    pointer-events: none;
+    background: var(--disabled);
+    opacity: 0.5;
+  }
 
-	&:active {
-		transform: scale(0.9);
-	}
+  &:active:not(:disabled) {
+    transform: scale(0.9);
+  }
 
-	@include mixins.desktop {
-		&:hover {
-			background: var(--primaryHov);
-		}
-	}
+  @include mixins.desktop {
+    &:hover:not(:disabled) {
+      background: var(--primaryHov);
+    }
+  }
 
-	@include mixins.phone {
-		padding: 10rem 20rem;
-		gap: 12rem;
+  @include mixins.phone {
+    padding: 10rem 20rem;
+    gap: 12rem;
 
-		svg {
-			width: 20rem;
-			height: 20rem;
-		}
-	}
+    svg {
+      width: 20rem;
+      height: 20rem;
+    }
+  }
 }
 
 @keyframes visible {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

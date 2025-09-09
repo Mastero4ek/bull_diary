@@ -1,38 +1,38 @@
 .control_button {
-	width: 40rem;
-	height: 40rem;
-	margin: 0 auto;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
-	transition: all 0.15s ease-in-out;
-	background: var(--primaryDef);
+  width: 40rem;
+  height: 40rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.15s ease-in-out;
+  background: var(--primaryDef);
 
-	svg {
-		width: 18rem;
-		height: 18rem;
-		fill: none;
-		transition: all 0.15s ease-in-out;
-	}
+  svg {
+    width: 18rem;
+    height: 18rem;
+    fill: none;
+    transition: all 0.15s ease-in-out;
+  }
 
-	&:hover {
-		background: var(--primaryHov);
-	}
+  &:hover:not(:disabled) {
+    background: var(--primaryHov);
+  }
 
-	&:disabled {
-		pointer-events: none;
-		background: var(--disabled);
-		opacity: 0.5;
-	}
+  &:disabled {
+    pointer-events: none;
+    background: var(--disabled);
+    opacity: 0.5;
+  }
 
-	&:active {
-		transform: scale(0.9);
-	}
+  &:active:not(:disabled) {
+    transform: scale(0.9);
+  }
 }
 
 .control_button_animate {
-	svg {
-		fill: var(--white);
-	}
+  svg {
+    fill: var(--white);
+  }
 }

@@ -18,6 +18,7 @@ const LevelModel = require('@models/core/level-model')
 const UserActivityModel = require('@models/core/user-activity-model')
 const UserModel = require('@models/core/user-model')
 const tokenService = require('@services/auth/token-service')
+const TournamentService = require('@services/core/tournament-service')
 
 const fileService = require('./file-service')
 const mailService = require('./mail-service')
@@ -511,6 +512,17 @@ class UserService {
 				result.level = null
 			}
 
+			try {
+				await TournamentService.updateTournamentUserData(
+					userId,
+					name,
+					last_name,
+					updateData.cover || null
+				)
+			} catch (tournamentError) {
+				logError('Failed to update tournament user data:', tournamentError)
+			}
+
 			return {
 				user: result,
 			}
@@ -946,8 +958,14 @@ class UserService {
 			}
 
 			const users = await UserModel.find(filter)
-				.select('_id name last_name email updated_at')
+				.select('_id name last_name email updated_at cover')
 				.sort({ name: 1, last_name: 1 })
+
+			try {
+				await this.syncUsersDataInTournaments(users)
+			} catch (syncError) {
+				logError('Failed to sync users data in tournaments:', syncError)
+			}
 
 			return users.map(user => ({
 				id: user._id,
@@ -958,6 +976,34 @@ class UserService {
 			}))
 		} catch (error) {
 			logError(error, { context: 'getUsersList' })
+			throw error
+		}
+	}
+
+	/**
+	 * Синхронизирует данные пользователей в турнирах
+	 * @param {Array} users - Массив пользователей из основной таблицы
+	 * @returns {Promise<void>}
+	 */
+	async syncUsersDataInTournaments(users) {
+		try {
+			const syncPromises = users.map(async user => {
+				try {
+					await TournamentService.updateTournamentUserData(
+						user._id,
+						user.name,
+						user.last_name,
+						user.cover
+					)
+				} catch (userError) {
+					logError(`Failed to sync user ${user._id} in tournaments:`, userError)
+				}
+			})
+
+			await Promise.all(syncPromises)
+			logError(`Synced ${users.length} users data in tournaments`)
+		} catch (error) {
+			logError('Error in syncUsersDataInTournaments:', error)
 			throw error
 		}
 	}

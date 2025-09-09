@@ -1,23 +1,16 @@
 require('module-alias/register')
 require('dotenv').config()
 
-
 process.on('uncaughtException', error => {
-	console.error('Uncaught Exception:', error.message)
-	console.error('Stack:', error.stack)
 	logError(error, { context: 'Uncaught Exception' })
 	process.exit(1)
 })
 
 process.on('unhandledRejection', (reason, promise) => {
-	console.error('Unhandled Rejection at:', promise, 'reason:', reason)
 	const error = reason instanceof Error ? reason : new Error(String(reason))
 	logError(error, { context: 'Unhandled Rejection' })
 	process.exit(1)
 })
-
-
-
 
 const initCronJobs = require('./configs/cron-config')
 const connectDB = require('./configs/database-config')
@@ -46,7 +39,6 @@ const WebSocketService = require('./services/system/websocket-service')
 
 const PORT = process.env.PORT
 
-// Инициализация i18next будет выполнена в start()
 app.use(langMiddleware)
 
 app.use('/', routerHealthV1)
@@ -68,11 +60,11 @@ const start = async () => {
 		await initI18next()
 		await initCronJobs()
 
-		const server = app.listen(PORT, () => {
+		const server = app.listen(PORT, async () => {
 			logInfo(`Successfully started server`, { port: Number(PORT) })
 		})
 
-		WebSocketService.initialize(server)
+		await WebSocketService.initialize(server)
 		WebSocketService.setKeysService(KeysService)
 
 		SyncExecutor.setDependencies(WebSocketService, KeysService)

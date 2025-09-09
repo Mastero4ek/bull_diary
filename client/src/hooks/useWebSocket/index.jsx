@@ -116,28 +116,24 @@ export const useWebSocket = () => {
     [dispatch, exchange?.name, showSuccess, t]
   );
 
-  const handleAutoSyncStarted = useCallback((data) => {
-    console.log('Auto sync started:', data);
+  const handleAutoSyncStarted = useCallback(() => {
+    // Auto sync started
   }, []);
 
-  const handleAutoSyncProgress = useCallback((data) => {
-    console.log('Auto sync progress:', data);
+  const handleAutoSyncProgress = useCallback(() => {
+    // Auto sync progress
   }, []);
 
-  const handleAutoSyncCompleted = useCallback((data) => {
-    console.log('Auto sync completed:', data);
+  const handleAutoSyncCompleted = useCallback(() => {
+    // Auto sync completed
   }, []);
 
-  const handleAutoSyncError = useCallback(
-    (data) => {
-      console.log('Auto sync error:', data);
-      showError(t('sync.error'));
-    },
-    [showError, t]
-  );
+  const handleAutoSyncError = useCallback(() => {
+    showError(t('sync.error'));
+  }, [showError, t]);
 
-  const handleSyncScheduled = useCallback((data) => {
-    console.log('Sync scheduled:', data);
+  const handleSyncScheduled = useCallback(() => {
+    // Sync scheduled
   }, []);
 
   const handleSyncError = useCallback(

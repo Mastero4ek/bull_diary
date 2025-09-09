@@ -152,8 +152,18 @@ const tournamentSlice = createSlice({
         state.errorMessage = null;
         state.serverStatus = 'success';
         state.tournament = tournaments.tournament;
-        state.fakeUsers = tournaments.users.length === 0 ? fakeUsers : null;
-        state.users = tournaments.users;
+
+        if (tournaments.users && tournaments.users.length > 0) {
+          state.fakeUsers = null;
+          state.users = tournaments.users;
+        } else if (tournaments.message) {
+          state.fakeUsers = null;
+          state.users = [];
+        } else {
+          state.fakeUsers = fakeUsers;
+          state.users = [];
+        }
+
         state.totalPages = tournaments.total
           ? Math.ceil(tournaments.total / state.size)
           : state.totalPages;
@@ -206,9 +216,17 @@ const tournamentSlice = createSlice({
       .addCase(deleteTournament.rejected, handleTournamentError)
 
       //remove-tournament-user
-      .addCase(removeTournamentUser.fulfilled, (state) => {
+      .addCase(removeTournamentUser.fulfilled, (state, action) => {
         state.serverStatus = 'success';
         state.errorMessage = null;
+
+        if (action.meta?.arg?.userId && state.users) {
+          state.users = state.users.filter(
+            (user) => user.id !== action.meta.arg.userId
+          );
+          state.totalPages = Math.ceil(state.users.length / state.size);
+        }
+
         if (!state.users) {
           state.users = [];
         }
