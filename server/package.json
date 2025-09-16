@@ -40,7 +40,7 @@
 		"@passports": "./passports",
 		"@routers": "./routers",
 		"@services": "./services",
-		"@validation": "./validation"
+		"@validations": "./validations"
 	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",

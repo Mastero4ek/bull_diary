@@ -1,23 +1,23 @@
+const CoreValidation = require('@validations/core-validation')
 const Router = require('express').Router
 const { checkSchema } = require('express-validator')
 
 const ordersController = require('@controllers/core/orders-controller')
 const authMiddleware = require('@middlewares/auth-middleware')
-const ValidationSchema = require('@validation/schema')
 
 const router = new Router()
 
 router.post(
 	'/order/:id',
 	authMiddleware,
-	checkSchema(ValidationSchema.savedOrder),
+	checkSchema(CoreValidation.savedOrder),
 	ordersController.savedOrder
 )
 
 router.delete(
 	'/order/:id',
 	authMiddleware,
-	checkSchema(ValidationSchema.removedOrder),
+	checkSchema(CoreValidation.removedOrder),
 	ordersController.removedOrder
 )
 

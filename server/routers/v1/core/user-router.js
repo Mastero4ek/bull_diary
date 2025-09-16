@@ -1,3 +1,4 @@
+const CoreValidation = require('@validations/core-validation')
 const express = require('express')
 const { checkSchema } = require('express-validator')
 
@@ -6,7 +7,6 @@ const fileController = require('@controllers/core/file-controller')
 const userController = require('@controllers/core/user-controller')
 const authMiddleware = require('@middlewares/auth-middleware')
 const fileMiddleware = require('@middlewares/file-middleware')
-const ValidationSchema = require('@validation/schema')
 
 const router = express.Router()
 
@@ -18,7 +18,7 @@ const profileImageValidation = fileMiddleware({
 
 router.get(
 	'/user/:id',
-	checkSchema(ValidationSchema.getUser, ['params']),
+	checkSchema(CoreValidation.getUser, ['params']),
 	userController.getUser
 )
 
@@ -27,28 +27,28 @@ router.patch(
 	authMiddleware,
 	upload.single('cover'),
 	profileImageValidation,
-	checkSchema(ValidationSchema.editUser),
+	checkSchema(CoreValidation.editUser),
 	userController.editUser
 )
 
 router.delete(
 	'/cover/:filename/:userId?',
 	authMiddleware,
-	checkSchema(ValidationSchema.removeCover, ['params']),
+	checkSchema(CoreValidation.removeCover, ['params']),
 	fileController.removeCover
 )
 
 router.delete(
 	'/user/:id',
 	authMiddleware,
-	checkSchema(ValidationSchema.removeUser),
+	checkSchema(CoreValidation.removeUser),
 	userController.removeUser
 )
 
 router.get(
 	'/users',
 	authMiddleware,
-	checkSchema(ValidationSchema.getUsers, ['query']),
+	checkSchema(CoreValidation.getUsers, ['query']),
 	userController.getUsers
 )
 
@@ -65,21 +65,21 @@ router.post(
 	authMiddleware,
 	upload.single('cover'),
 	profileImageValidation,
-	checkSchema(ValidationSchema.createUser),
+	checkSchema(CoreValidation.createUser),
 	userController.createUser
 )
 
 router.patch(
 	'/user/:id/activate',
 	authMiddleware,
-	checkSchema(ValidationSchema.getUser, ['params']),
+	checkSchema(CoreValidation.getUser, ['params']),
 	userController.activeUser
 )
 
 router.patch(
 	'/user/:id/deactivate',
 	authMiddleware,
-	checkSchema(ValidationSchema.getUser, ['params']),
+	checkSchema(CoreValidation.getUser, ['params']),
 	userController.inactiveUser
 )
 

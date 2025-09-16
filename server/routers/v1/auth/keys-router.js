@@ -1,15 +1,15 @@
+const AuthValidation = require('@validations/auth-validation')
 const Router = require('express').Router
 const { checkSchema } = require('express-validator')
 
 const keysController = require('@controllers/auth/keys-controller')
-const router = new Router()
 const authMiddleware = require('@middlewares/auth-middleware')
-const ValidationSchema = require('@validation/schema')
+const router = new Router()
 
 router.patch(
 	'/api-keys',
 	authMiddleware,
-	checkSchema(ValidationSchema.updateKeys),
+	checkSchema(AuthValidation.updateKeys),
 	keysController.updateKeys
 )
 
