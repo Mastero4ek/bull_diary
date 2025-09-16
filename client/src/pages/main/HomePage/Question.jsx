@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import questionsImage from '@/assets/images/home/questions-bg.png';
+import questionsImageDark from '@/assets/images/home/questions-bg-dark.png';
+import questionsImageLight from '@/assets/images/home/questions-bg-light.png';
 import { AnimatedButton } from '@/components/animations/AnimatedButton';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
@@ -13,7 +14,7 @@ import styles from './styles.module.scss';
 
 export const Question = () => {
   const { t } = useTranslation();
-  const { isTablet, isMobile } = useSelector((state) => state.settings);
+  const { isTablet, isMobile, theme } = useSelector((state) => state.settings);
 
   return (
     <section id="contacts" className={styles.question}>
@@ -21,7 +22,10 @@ export const Question = () => {
         <div className={styles.question_wrap}>
           {!isTablet && !isMobile && (
             <div className={styles.question_image}>
-              <img src={questionsImage} alt="Questions-background-image" />
+              <img
+                src={theme ? questionsImageDark : questionsImageLight}
+                alt="Questions-background-image"
+              />
             </div>
           )}
 

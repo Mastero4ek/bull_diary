@@ -766,6 +766,15 @@
     margin-left: 0;
   }
 
+  article {
+    overflow: hidden;
+
+    ul {
+      padding: 20rem;
+      background: var(--bgLight);
+    }
+  }
+
   @include mixins.tablet {
     align-items: center;
     justify-content: center;
@@ -828,6 +837,15 @@
   span {
     display: inline-block;
     text-align: right;
+  }
+
+  article {
+    overflow: hidden;
+
+    ul {
+      background: var(--bgLight);
+      padding: 20rem;
+    }
   }
 
   @include mixins.tablet {

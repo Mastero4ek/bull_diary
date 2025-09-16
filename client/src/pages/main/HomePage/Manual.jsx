@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 
 import blobDark from '@/assets/images/home/blob-2-dark.png';
 import blobLight from '@/assets/images/home/blob-2-light.png';
-import manualImage from '@/assets/images/home/manual-bg.png';
+import manualImageDark from '@/assets/images/home/manual-bg-dark.png';
+import manualImageLight from '@/assets/images/home/manual-bg-light.png';
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
@@ -136,7 +137,10 @@ export const Manual = () => {
           </div>
 
           <div className={styles.manual_image}>
-            <img src={manualImage} alt="Manual-background-image" />
+            <img
+              src={theme ? manualImageDark : manualImageLight}
+              alt="Manual-background-image"
+            />
           </div>
 
           <div className={styles.manual_blob}>

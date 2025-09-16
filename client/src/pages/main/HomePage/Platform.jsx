@@ -5,14 +5,8 @@ import './platform_slider.scss';
 
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import {
-  Autoplay,
-  Pagination,
-} from 'swiper/modules';
-import {
-  Swiper,
-  SwiperSlide,
-} from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 import blobDark from '@/assets/images/home/blob-4-dark.png';
 import blobLight from '@/assets/images/home/blob-4-light.png';
@@ -22,9 +16,8 @@ import platformSlide3 from '@/assets/images/home/platform-slide-3.png';
 import platformSlide4 from '@/assets/images/home/platform-slide-4.png';
 import { AnimatedButton } from '@/components/animations/AnimatedButton';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
-import {
-  usePopup,
-} from '@/components/layouts/popups/PopupLayout/PopupProvider';
+import { usePopup } from '@/components/layouts/popups/PopupLayout/PopupProvider';
+import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { RootButton } from '@/components/ui/buttons/RootButton';
 import { DotList } from '@/components/ui/data/DotList';
 import { H1 } from '@/components/ui/typography/titles/H1';
@@ -93,7 +86,9 @@ export const Platform = () => {
               </H1>
             </AnimatedShowBlock>
 
-            <DotList listArr={platformList} />
+            <OuterBlock>
+              <DotList listArr={platformList} />
+            </OuterBlock>
 
             <AnimatedButton>
               <RootButton

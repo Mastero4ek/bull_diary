@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import battleImage from '@/assets/images/home/battle-bg.png';
+import battleImageDark from '@/assets/images/home/battle-bg-dark.png';
+import battleImageLight from '@/assets/images/home/battle-bg-light.png';
 import blobDark from '@/assets/images/home/blob-3-dark.png';
 import blobLight from '@/assets/images/home/blob-3-light.png';
 import { AnimatedShowBlock } from '@/components/animations/AnimatedShowBlock';
+import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { DotList } from '@/components/ui/data/DotList';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { H1 } from '@/components/ui/typography/titles/H1';
@@ -48,7 +50,10 @@ export const Precedence = () => {
           </div>
 
           <div className={styles.precedence_image}>
-            <img src={battleImage} alt="Championship-banner" />
+            <img
+              src={theme ? battleImageDark : battleImageLight}
+              alt="Championship-banner"
+            />
           </div>
 
           <div className={styles.precedence_content}>
@@ -70,7 +75,9 @@ export const Precedence = () => {
               </RootDesc>
             </AnimatedShowBlock>
 
-            <DotList listArr={precedenceList} direction="right" />
+            <OuterBlock>
+              <DotList listArr={precedenceList} direction="right" />
+            </OuterBlock>
           </div>
         </div>
       </div>

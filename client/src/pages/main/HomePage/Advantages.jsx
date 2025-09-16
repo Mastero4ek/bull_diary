@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import advantagesImage from '@/assets/images/home/advantages-bg.png';
+import advantagesImageDark from '@/assets/images/home/advantages-bg-dark.png';
+import advantagesImageLight from '@/assets/images/home/advantages-bg-light.png';
 import blobDark from '@/assets/images/home/blob-1-dark.png';
 import blobLight from '@/assets/images/home/blob-1-light.png';
 import { AnimatedCard } from '@/components/animations/AnimatedCard';
@@ -62,7 +63,10 @@ export const Advantages = () => {
           </div>
 
           <div className={styles.advantages_image}>
-            <img src={advantagesImage} alt="Advantages-background-image" />
+            <img
+              src={theme ? advantagesImageDark : advantagesImageLight}
+              alt="Advantages-background-image"
+            />
           </div>
 
           <AnimatedShowBlock
