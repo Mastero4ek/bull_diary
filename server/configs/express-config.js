@@ -11,7 +11,6 @@ const session = require('express-session')
 const helmet = require('helmet')
 const methodOverride = require('method-override')
 
-
 const sanitizationMiddleware = require('@middlewares/sanitization-middleware')
 
 const { requestLogger } = require('./logger-config')
@@ -39,7 +38,7 @@ app.use(
 					'data:',
 					'blob:',
 					process.env.API_URL,
-					`${process.env.API_URL  }/uploads/*`,
+					`${process.env.API_URL}/uploads/*`,
 				],
 				'script-src': ["'self'"],
 				'style-src': ["'self'", "'unsafe-inline'"],
@@ -81,7 +80,7 @@ app.use((req, res, next) => {
 	)
 
 	if (req.path === '/api/v1/logout') {
-		res.setHeader('Clear-Site-Data', '"cache", "cookies", "storage"')
+		res.setHeader('Clear-Site-Data', '"cache", "storage"')
 	}
 
 	next()
@@ -118,10 +117,9 @@ const apiLimiter = rateLimit({
 	max: parseInt(process.env.RATE_LIMIT_MAX) || 1000,
 	handler: (req, res) => {
 		res.status(429).json({
-			message:
-				`Too many requests from this IP, please try again after ${ 
-				parseInt(process.env.RATE_LIMIT_MS) / 60000 
-				} minutes`,
+			message: `Too many requests from this IP, please try again after ${
+				parseInt(process.env.RATE_LIMIT_MS) / 60000
+			} minutes`,
 			code: 429,
 		})
 	},

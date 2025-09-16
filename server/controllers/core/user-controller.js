@@ -119,14 +119,26 @@ class UserController {
 			await userService.removeUser(current_email, refresh_token, req.lng)
 
 			if (isCurrentSession) {
+				res.clearCookie('refresh_token', {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'prod',
+					sameSite: 'strict',
+					path: '/',
+				})
+				res.clearCookie('access_token', {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'prod',
+					sameSite: 'strict',
+					path: '/',
+				})
+
 				req.session.destroy(err => {
 					if (err) {
 						return next(err)
 					}
-
-					res.clearCookie('refresh_token')
-					res.clearCookie('access_token')
 				})
+
+				res.setHeader('Clear-Site-Data', '"cache", "storage"')
 			}
 
 			return res.json({ message: 'User removed out successfully' })

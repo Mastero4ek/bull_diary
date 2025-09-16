@@ -60,26 +60,28 @@ class AuthController {
 
 			await UserService.logout(refresh_token, req.lng)
 
+			res.clearCookie('refresh_token', {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === 'prod',
+				sameSite: 'strict',
+				path: '/',
+			})
+			res.clearCookie('access_token', {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === 'prod',
+				sameSite: 'strict',
+				path: '/',
+			})
+
 			req.session.destroy(err => {
 				if (err) {
 					return next(err)
 				}
-
-				res.clearCookie('refresh_token', {
-					httpOnly: true,
-					secure: process.env.NODE_ENV === 'prod',
-					sameSite: 'strict',
-					path: '/',
-				})
-				res.clearCookie('access_token', {
-					httpOnly: true,
-					secure: process.env.NODE_ENV === 'prod',
-					sameSite: 'strict',
-					path: '/',
-				})
-
-				return res.json({ message: 'Logged out successfully' })
 			})
+
+			res.setHeader('Clear-Site-Data', '"cache", "storage"')
+
+			return res.json({ message: 'Logged out successfully' })
 		} catch (e) {
 			next(e)
 		}
@@ -132,7 +134,7 @@ class AuthController {
 				path: '/',
 			})
 
-			const { access_token, refresh_token, ...user_data_safe } = user_data
+			const { ...user_data_safe } = user_data
 
 			return res.json(user_data_safe)
 		} catch (e) {

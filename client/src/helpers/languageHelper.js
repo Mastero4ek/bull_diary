@@ -9,7 +9,7 @@ export const getLanguage = () => {
         store.getState().settings.language || Cookies.get('language') || 'en'
       );
     }
-  } catch (e) {
+  } catch {
     //
   }
 
@@ -22,7 +22,7 @@ export const setLanguage = (language) => {
     if (store) {
       store.dispatch({ type: 'settings/setLanguage', payload: language });
     }
-  } catch (e) {
+  } catch {
     //
   }
 
