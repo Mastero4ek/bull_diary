@@ -1,0 +1,143 @@
+@use '@/styles/mixins.scss' as mixins;
+
+.not_found_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  h1 {
+    @include mixins.font(700, 180rem, 125%);
+  }
+
+  @include mixins.tablet {
+    h1 {
+      @include mixins.font(700, 120rem, 125%);
+    }
+  }
+
+  @include mixins.phone {
+    padding: 0 20rem;
+  }
+}
+
+.not_found_wrap {
+  display: flex;
+  align-items: center;
+  gap: 40rem;
+  margin-bottom: 30rem;
+
+  @include mixins.tablet {
+    gap: 20rem;
+    flex-direction: column;
+  }
+}
+
+.not_found_card {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350rem;
+  padding: 20rem 40rem;
+  gap: 15rem;
+
+  h4 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    @include mixins.font(700, 18rem, 125%);
+  }
+
+  span {
+    @include mixins.font(400, 18rem, 125%);
+  }
+
+  @include mixins.tablet {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.not_found_card_reverse {
+  padding: 0;
+  align-items: flex-end;
+  gap: 10rem;
+
+  h2 {
+    @include mixins.font(700, 30rem, 125%);
+  }
+
+  div {
+    text-align: right;
+  }
+
+  span {
+    @include mixins.font(400, 20rem, 125%);
+  }
+
+  @include mixins.tablet {
+    align-items: center;
+    text-align: center;
+
+    div {
+      text-align: center;
+    }
+  }
+}
+
+.not_found_card_head {
+  display: flex;
+  align-items: center;
+  gap: 10rem;
+
+  svg {
+    width: 28rem;
+    height: 28rem;
+  }
+}
+
+.not_found_chart {
+  width: 600rem;
+  height: 250rem;
+  position: relative;
+  margin-top: 40rem;
+  opacity: 0.5;
+
+  @include mixins.tablet {
+    width: 100%;
+    max-width: 500rem;
+    height: 250rem;
+  }
+}
+
+.not_found_chart_bar {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.not_found_chart_line {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.not_found_buttons {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40rem;
+
+  button {
+    flex-direction: row-reverse;
+  }
+}

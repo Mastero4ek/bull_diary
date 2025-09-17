@@ -160,6 +160,15 @@
     "name": "User_name"
   },
   "page": {
+    "not_found": {
+      "title": "Page not&nbsp;found",
+      "description": "It looks like you&nbsp;tried to&nbsp;access a&nbsp;page that doesn't exist.",
+      "card": {
+        "title": "Error log",
+        "description": "Error&nbsp;404: Resource not&nbsp;found in&nbsp;database"
+      },
+      "button": "Go back"
+    },
     "home": {
       "intro": {
         "title": "Master Your Trading Journey",

@@ -21,6 +21,7 @@ import { SideBarLayout } from '@/components/layouts/core/SideBarLayout';
 import { LazyLoader } from '@/components/layouts/utils/LazyLoader';
 import { RouteRenderer } from '@/components/layouts/utils/RouteRenderer';
 import { Loader } from '@/components/ui/feedback/Loader';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
 import { useSyncStatus } from '@/hooks/useSyncStatus';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { checkAuth } from '@/redux/slices/candidateSlice';
@@ -52,7 +53,7 @@ export const App = () => {
 
   const dispatch = useDispatch();
   const location = useLocation();
-
+  const { isPathValid } = useRouteValidation();
   const {
     connect,
     disconnect,
@@ -161,6 +162,7 @@ export const App = () => {
 
   return (
     <div
+      style={!isPathValid ? { padding: 0 } : {}}
       className={
         isAuth && user.is_activated ? styles.app_container : styles.container
       }
@@ -181,6 +183,11 @@ export const App = () => {
           )}
 
           <div
+            style={
+              !isPathValid
+                ? { height: 'auto', minHeight: 'auto', gap: '60rem' }
+                : {}
+            }
             className={
               isAuth && user.is_activated ? styles.app_screen : styles.screen
             }

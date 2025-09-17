@@ -32,7 +32,9 @@ export const HeaderLayout = React.memo(() => {
       style={
         isAuth && user.is_activated
           ? { paddingRight: isMobile ? '0' : isTablet ? '16rem' : '40rem' }
-          : { position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000 }
+          : isPathValid
+            ? { position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000 }
+            : { position: 'relative' }
       }
     >
       <div className={styles.header_wrapper}>
