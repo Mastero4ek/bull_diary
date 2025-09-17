@@ -1,81 +1,80 @@
 @use '@/styles/mixins.scss' as mixins;
 
 .bottom_bar_wrapper {
-	position: fixed;
-	bottom: 0;
-	left: auto;
-	right: auto;
-	z-index: 1000;
-	width: 100%;
-	background-color: var(--bgLight);
-	box-shadow: var(--shadowOuter);
-	border-radius: 20rem 20rem 0 0;
-	overflow: hidden;
-	max-width: 360rem;
+  position: fixed;
+  bottom: 0;
+  left: auto;
+  right: auto;
+  z-index: 1000;
+  width: 100%;
+  background-color: var(--bgLight);
+  box-shadow: var(--shadowOuter);
+  border-radius: 20rem 20rem 0 0;
+  overflow: hidden;
+  max-width: 360rem;
 
-	article {
-		border-radius: 20rem 20rem 0 0;
-	}
+  article {
+    border-radius: inherit;
+  }
 }
 
 .bottom_bar_list {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	justify-content: space-between;
-	align-items: center;
-	gap: 0;
-	padding: 10rem 16rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  justify-content: space-between;
+  align-items: center;
+  gap: 0;
+  padding: 10rem 16rem;
 
-	transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
 
-	a {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		text-decoration: none;
-		gap: 3rem;
-		position: relative;
-		transition: all 0.25s ease-in-out;
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.25s ease-in-out;
 
-		svg {
-			width: 24rem;
-			height: 24rem;
-			fill: var(--text);
-			transition: all 0.25s ease-in-out;
-		}
+    svg {
+      width: 24rem;
+      height: 24rem;
+      fill: var(--text);
+      transition: all 0.25s ease-in-out;
+    }
 
-		div {
-			span {
-				position: absolute;
-				left: 50%;
-				transform: translateX(-50%);
-				visibility: hidden;
-				opacity: 0;
-				@include mixins.font(400, 10rem, 100%);
-				transition: all 0.25s ease-in-out;
-			}
-		}
-	}
+    div {
+      span {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        visibility: hidden;
+        opacity: 0;
+        @include mixins.font(400, 10rem, 80%);
+        transition: all 0.25s ease-in-out;
+      }
+    }
+  }
 }
 
 .active {
-	a {
-		svg {
-			width: 20rem;
-			height: 20rem;
-			fill: var(--primaryDef);
-		}
+  a {
+    svg {
+      width: 20rem;
+      height: 20rem;
+      fill: var(--primaryDef);
+    }
 
-		div {
-			span {
-				position: relative;
-				left: unset;
-				transform: translateX(unset);
-				visibility: visible;
-				color: var(--primaryDef);
-				opacity: 1;
-			}
-		}
-	}
+    div {
+      span {
+        position: relative;
+        left: unset;
+        transform: translateX(unset);
+        visibility: visible;
+        color: var(--primaryDef);
+        opacity: 1;
+      }
+    }
+  }
 }

@@ -94,13 +94,7 @@ export const WalletDetailsPage = React.memo(() => {
       Header: t('table.closed_time'),
       accessor: 'transactionTime',
       Cell: ({ row: { original } }) => (
-        <span
-          style={{
-            display: `${isTablet ? 'flex' : 'inline'}`,
-            gap: '10rem',
-            flexWrap: 'wrap',
-          }}
-        >
+        <span>
           {moment(original.date).format('DD/MM/YYYY')}
           <br />
           <span style={{ fontWeight: '400', opacity: '0.5' }}>

@@ -55,6 +55,10 @@
       color: var(--white) !important;
     }
   }
+
+  @include mixins.tablet {
+    background-color: transparent;
+  }
 }
 
 .sidebar_item_desc {

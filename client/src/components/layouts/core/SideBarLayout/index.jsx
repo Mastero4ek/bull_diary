@@ -57,6 +57,8 @@ export const SideBarLayout = React.memo(() => {
     { id: 8, name: t('sidebar.contacts'), link: '/contacts', icon: 'contacts' },
   ];
 
+  const backButton = { id: 777, link: 'back', icon: 'back-arrow' };
+
   useEffect(() => {
     if (!isTablet && sideBar.blocked_value === 'unblock') {
       dispatch(setSideBar({ open: false }));
@@ -105,9 +107,7 @@ export const SideBarLayout = React.memo(() => {
                 {shouldShowBackButton(item) ? (
                   <SideBarItem
                     item={{
-                      id: 0,
-                      link: 'back',
-                      icon: 'back-arrow',
+                      ...backButton,
                       name:
                         sideBar.open || sideBar.blocked_value === 'open'
                           ? `${t('sidebar.back_to')} ${

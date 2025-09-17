@@ -8,6 +8,12 @@ export const AnimatedDropdownList = (props) => {
       style={style}
       className={className}
       transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+      initial={{
+        height: '0',
+        opacity: 0,
+        filter: 'blur(10rem)',
+        overflowY: 'hidden',
+      }}
       animate={{
         height: isOpen ? 'auto' : '0',
         opacity: isOpen ? 1 : 0,
