@@ -188,10 +188,12 @@ export const NotFoundPage = React.memo(() => {
         <span>
           <motion.b
             style={{ display: 'inline-block' }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
             animate={{
               scale: [0.85, 1, 0.85],
               opacity: [0.5, 1, 0.5],
+              x: [0, -10, 0],
+              y: [0, -10, 0],
             }}
           >
             4
@@ -208,10 +210,12 @@ export const NotFoundPage = React.memo(() => {
           </motion.b>
           <motion.b
             style={{ display: 'inline-block' }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             animate={{
               scale: [0.85, 1, 0.85],
               opacity: [0.5, 1, 0.5],
+              x: [-10, 0, -10],
+              y: [10, 0, 10],
             }}
           >
             4
@@ -290,7 +294,7 @@ export const NotFoundPage = React.memo(() => {
             enableGridY={true}
             enableLabel={false}
             animate={true}
-            motionConfig="wobbly"
+            motionConfig="molasses"
             motionStiffness={90}
             motionDamping={15}
             tooltip={false}
@@ -315,6 +319,10 @@ export const NotFoundPage = React.memo(() => {
             data={lineData}
             colors={chartStyles.lineColor}
             curve="monotoneX"
+            animate={true}
+            motionConfig="molasses"
+            motionStiffness={90}
+            motionDamping={15}
             axisTop={null}
             axisRight={null}
             axisBottom={null}
@@ -325,20 +333,6 @@ export const NotFoundPage = React.memo(() => {
             useMesh={true}
             tooltip={false}
             legends={[]}
-            yScale={{
-              type: 'linear',
-              min: 0,
-              max: 'auto',
-              stacked: false,
-              reverse: false,
-              nice: true,
-            }}
-            margin={{
-              top: chartStyles.paddingBig,
-              bottom: chartStyles.paddingBig,
-              left: chartStyles.paddingBig,
-              right: chartStyles.paddingBig,
-            }}
           />
         </div>
       </div>
