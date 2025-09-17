@@ -28,6 +28,7 @@
 .footer_logo {
   margin-bottom: auto;
 
+  a,
   div {
     padding: 0;
     display: flex;
@@ -43,6 +44,7 @@
   }
 
   @include mixins.tablet {
+    a,
     div {
       img {
         width: 60rem;

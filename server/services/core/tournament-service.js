@@ -481,6 +481,21 @@ class TournamentService {
 			throw error
 		}
 	}
+
+	/**
+	 * Получает количество турниров
+	 * @returns {Promise<number>} - Количество турниров
+	 */
+	async getTournamentsCount() {
+		try {
+			const tournamentsCount = await TournamentModel.countDocuments()
+
+			return tournamentsCount
+		} catch (error) {
+			logError(error, { context: 'getTournamentsCount' })
+			throw error
+		}
+	}
 }
 
 module.exports = new TournamentService()

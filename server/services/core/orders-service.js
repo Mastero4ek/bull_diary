@@ -173,6 +173,27 @@ class OrdersService {
 			)
 		}
 	}
+
+	/**
+	 * Получает количество ордеров в закладках
+	 * @returns {Promise<number>} - Количество ордеров в закладках
+	 */
+	async getOrdersCount() {
+		try {
+			const ordersCount = await Order.countDocuments({
+				bookmark: true,
+			})
+
+			return ordersCount
+		} catch (error) {
+			handleDatabaseError(
+				error,
+				'en',
+				'getOrdersCount',
+				'Failed to get orders count in bookmarks'
+			)
+		}
+	}
 }
 
 module.exports = new OrdersService()

@@ -1114,6 +1114,38 @@ class UserService {
 			throw error
 		}
 	}
+
+	/**
+	 * Получает количество пользователей
+	 * @returns {Promise<number>} - Количество пользователей
+	 */
+	async getUsersCount() {
+		try {
+			const usersCount = await UserModel.countDocuments()
+
+			return usersCount
+		} catch (error) {
+			logError(error, { context: 'getUsersCount' })
+			throw error
+		}
+	}
+
+	/**
+	 * Получает количество активных пользователей
+	 * @returns {Promise<number>} - Количество активных пользователей
+	 */
+	async getUsersActiveCount() {
+		try {
+			const usersActiveCount = await UserModel.countDocuments({
+				inactive: { $ne: true },
+			})
+
+			return usersActiveCount
+		} catch (error) {
+			logError(error, { context: 'getUsersActiveCount' })
+			throw error
+		}
+	}
 }
 
 module.exports = new UserService()

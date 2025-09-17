@@ -36,4 +36,8 @@ export default class TournamentService {
   static async getTournamentUsersList(id) {
     return $api.get(`/v1/tournaments/users/${id}`);
   }
+
+  static async getTournamentsCount() {
+    return $api.get('/v1/tournaments/count');
+  }
 }

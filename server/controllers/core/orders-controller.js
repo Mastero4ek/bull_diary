@@ -75,6 +75,16 @@ class OrdersController {
 			next(e)
 		}
 	}
+
+	async getOrdersCount(req, res, next) {
+		try {
+			const ordersCount = await OrdersService.getOrdersCount()
+
+			return res.json(ordersCount)
+		} catch (e) {
+			next(e)
+		}
+	}
 }
 
 module.exports = new OrdersController()

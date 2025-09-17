@@ -1,48 +1,106 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { Link } from 'react-scroll';
 
-import logoDark from '@/assets/images/logo-dark.svg'
-import logoLight from '@/assets/images/logo-light.svg'
-import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc'
-import { SmallDesc } from '@/components/ui/typography/descriptions/SmallDesc'
+import logoDark from '@/assets/images/logo-dark.svg';
+import logoLight from '@/assets/images/logo-light.svg';
+import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
+import { SmallDesc } from '@/components/ui/typography/descriptions/SmallDesc';
 
-import styles from './styles.module.scss'
+import styles from './styles.module.scss';
 
-export const Logo = React.memo(props => {
-	const { desc = true } = props
-	const { theme } = useSelector(state => state.settings)
+export const Logo = React.memo((props) => {
+  const location = useLocation();
 
-	const logoSrc = useMemo(() => (theme ? logoDark : logoLight), [theme])
+  const { desc = true } = props;
+  const { theme, isLoadingTheme, isLoadingLanguage } = useSelector(
+    (state) => state.settings
+  );
+  const { user, isAuth } = useSelector((state) => state.candidate);
 
-	const { t } = useTranslation()
+  const logoSrc = useMemo(() => (theme ? logoDark : logoLight), [theme]);
 
-	return (
-		<div
-			style={!desc ? { borderRadius: '50%' } : {}}
-			className={styles.logo_wrapper}
-		>
-			<img src={logoSrc} alt='logo' />
+  const { t } = useTranslation();
 
-			{desc && (
-				<div className={styles.logo_desc}>
-					<RootDesc>
-						<span>
-							<b>Bull</b> <span className={styles.lightWeight}>Diary</span>
-						</span>
-					</RootDesc>
+  const isScrollLink = useMemo(() => {
+    return (
+      location.pathname === '/home' &&
+      !isAuth &&
+      !user.is_activated &&
+      !isLoadingTheme &&
+      !isLoadingLanguage
+    );
+  }, [
+    location.pathname,
+    isAuth,
+    user.is_activated,
+    isLoadingTheme,
+    isLoadingLanguage,
+  ]);
 
-					<SmallDesc>
-						<span>
-							<i
-								className={styles.opacity}
-								dangerouslySetInnerHTML={{ __html: t('logo.analyze_earn') }}
-							/>
-						</span>
-					</SmallDesc>
-				</div>
-			)}
-		</div>
-	)
-})
+  if (isScrollLink) {
+    return (
+      <Link
+        style={!desc ? { borderRadius: '50%' } : {}}
+        className={styles.logo_wrapper}
+        to={'intro'}
+        spy={true}
+        smooth={true}
+        duration={500}
+        offset={-210}
+      >
+        <img src={logoSrc} alt="logo" />
+
+        {desc && (
+          <div className={styles.logo_desc}>
+            <RootDesc>
+              <span>
+                <b>Bull</b> <span className={styles.lightWeight}>Diary</span>
+              </span>
+            </RootDesc>
+
+            <SmallDesc>
+              <span>
+                <i
+                  className={styles.opacity}
+                  dangerouslySetInnerHTML={{ __html: t('logo.analyze_earn') }}
+                />
+              </span>
+            </SmallDesc>
+          </div>
+        )}
+      </Link>
+    );
+  } else {
+    return (
+      <div
+        style={!desc ? { borderRadius: '50%' } : {}}
+        className={styles.logo_wrapper}
+      >
+        <img src={logoSrc} alt="logo" />
+
+        {desc && (
+          <div className={styles.logo_desc}>
+            <RootDesc>
+              <span>
+                <b>Bull</b> <span className={styles.lightWeight}>Diary</span>
+              </span>
+            </RootDesc>
+
+            <SmallDesc>
+              <span>
+                <i
+                  className={styles.opacity}
+                  dangerouslySetInnerHTML={{ __html: t('logo.analyze_earn') }}
+                />
+              </span>
+            </SmallDesc>
+          </div>
+        )}
+      </div>
+    );
+  }
+});

@@ -24,6 +24,7 @@ import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
 import { Icon } from '@/components/ui/media/Icon';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { usePreloadComponent } from '@/hooks/useLazyComponent';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
 import i18n from '@/i18n';
 import { logout } from '@/redux/slices/candidateSlice';
 import {
@@ -42,6 +43,7 @@ export const SideBarItem = React.memo(({ item, open = false }) => {
   const location = useLocation();
   const { t } = useTranslation();
   const { showSuccess, showError } = useNotification();
+  const { isPathValid } = useRouteValidation();
 
   const routeToComponentMap = {
     '/wallet': 'WalletPage',
@@ -146,7 +148,10 @@ export const SideBarItem = React.memo(({ item, open = false }) => {
             open ||
             sideBar.open ||
             (sideBar.blocked_value === 'open' && !isTablet) ||
-            location.pathname.includes('home')
+            location.pathname.includes('home') ||
+            location.pathname.includes('privacy') ||
+            location.pathname.includes('terms') ||
+            !isPathValid
           }
           className={styles.sidebar_item_desc}
         >

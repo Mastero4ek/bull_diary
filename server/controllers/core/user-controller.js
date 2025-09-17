@@ -232,6 +232,26 @@ class UserController {
 			next(e)
 		}
 	}
+
+	async getUsersCount(req, res, next) {
+		try {
+			const usersCount = await userService.getUsersCount()
+
+			return res.json(usersCount)
+		} catch (e) {
+			next(e)
+		}
+	}
+
+	async getUsersActiveCount(req, res, next) {
+		try {
+			const usersActiveCount = await userService.getUsersActiveCount()
+
+			return res.json(usersActiveCount)
+		} catch (e) {
+			next(e)
+		}
+	}
 }
 
 module.exports = new UserController()

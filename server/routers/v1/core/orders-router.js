@@ -33,4 +33,6 @@ router.patch(
 	ordersController.updateOrderDescription
 )
 
+router.get('/orders/count', ordersController.getOrdersCount)
+
 module.exports = router

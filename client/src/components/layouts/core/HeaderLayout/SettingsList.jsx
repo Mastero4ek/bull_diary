@@ -7,6 +7,7 @@ import React, {
 
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-scroll';
 
 import {
@@ -14,6 +15,8 @@ import {
 } from '@/components/animations/AnimatedDropdownList';
 import { Icon } from '@/components/ui/media/Icon';
 import { SideBarItem } from '@/components/ui/navigation/SideBarItem';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
+import { useScrollOffset } from '@/hooks/useScrollOffset';
 
 import styles from './styles.module.scss';
 
@@ -21,7 +24,10 @@ export const SettingsList = React.memo(() => {
   const selectRef = useRef();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const location = useLocation();
   const { isTablet } = useSelector((state) => state.settings);
+  const { scrollOffset } = useScrollOffset();
+  const { isPathValid } = useRouteValidation();
 
   const themeItem = { name: t('sidebar.theme'), icon: 'theme' };
   const languageItem = { name: t('sidebar.language'), icon: 'language' };
@@ -36,6 +42,7 @@ export const SettingsList = React.memo(() => {
           spy={true}
           smooth={true}
           duration={500}
+          offset={scrollOffset}
         >
           <span>{t('nav.manual')}</span>
         </Link>
@@ -51,6 +58,7 @@ export const SettingsList = React.memo(() => {
           spy={true}
           smooth={true}
           duration={500}
+          offset={scrollOffset}
         >
           {t('nav.advantages')}
         </Link>
@@ -66,6 +74,7 @@ export const SettingsList = React.memo(() => {
           spy={true}
           smooth={true}
           duration={500}
+          offset={scrollOffset}
         >
           {t('nav.platform')}
         </Link>
@@ -81,6 +90,7 @@ export const SettingsList = React.memo(() => {
           spy={true}
           smooth={true}
           duration={500}
+          offset={scrollOffset}
         >
           {t('nav.contacts')}
         </Link>
@@ -124,6 +134,9 @@ export const SettingsList = React.memo(() => {
         isScrollable={false}
       >
         {isTablet &&
+          !location.pathname.includes('privacy') &&
+          !location.pathname.includes('terms') &&
+          isPathValid &&
           mobileMenu.map((item) => (
             <li key={item.id}>
               <SideBarItem item={item} />

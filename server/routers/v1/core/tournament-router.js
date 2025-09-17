@@ -44,4 +44,6 @@ router.get(
 	tournamentController.getTournamentUsersList
 )
 
+router.get('/tournaments/count', tournamentController.getTournamentsCount)
+
 module.exports = router

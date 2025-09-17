@@ -10,6 +10,8 @@ import {
 import { Logo } from '@/components/ui/navigation/Logo';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { useNavList } from '@/hooks/useNavigation';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
+import { useScrollOffset } from '@/hooks/useScrollOffset';
 
 import { Exchange } from './Exchange';
 import { SettingsWrapper } from './SettingsWrapper';
@@ -19,6 +21,8 @@ import { UserWrapper } from './UserWrapper';
 export const HeaderLayout = React.memo(() => {
   const location = useLocation();
   const { NAVLIST } = useNavList();
+  const { scrollOffset } = useScrollOffset();
+  const { isPathValid } = useRouteValidation();
 
   const { isTablet, isMobile } = useSelector((state) => state.settings);
   const { isAuth, user } = useSelector((state) => state.candidate);
@@ -28,7 +32,7 @@ export const HeaderLayout = React.memo(() => {
       style={
         isAuth && user.is_activated
           ? { paddingRight: isMobile ? '0' : isTablet ? '16rem' : '40rem' }
-          : {}
+          : { position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000 }
       }
     >
       <div className={styles.header_wrapper}>
@@ -50,6 +54,7 @@ export const HeaderLayout = React.memo(() => {
         {!isAuth &&
           !isTablet &&
           !user.is_activated &&
+          isPathValid &&
           !location.pathname.includes('privacy') &&
           !location.pathname.includes('terms') && (
             <nav className={styles.header_nav}>
@@ -64,6 +69,7 @@ export const HeaderLayout = React.memo(() => {
                           spy={true}
                           smooth={true}
                           duration={500}
+                          offset={scrollOffset}
                         >
                           <span>{nav?.name}</span>
                         </Link>

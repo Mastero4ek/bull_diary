@@ -1,5 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+
+import { animateScroll } from 'react-scroll';
 
 export const PrivacyPage = React.memo(() => {
-	return <div>Privacy</div>
-})
+  useEffect(() => {
+    animateScroll.scrollTo(0, {
+      duration: 500,
+      smooth: 'easeInOutQuad',
+    });
+  }, []);
+
+  return <div>Privacy</div>;
+});

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
+import { animateScroll } from 'react-scroll';
 
 import {
   usePopup,
@@ -26,6 +27,13 @@ export const HomePage = () => {
       }, 500);
     }
   }, [user.is_activated, user.source, openPopup, user.email]);
+
+  useEffect(() => {
+    animateScroll.scrollTo(0, {
+      duration: 500,
+      smooth: 'easeInOutQuad',
+    });
+  }, []);
 
   return (
     <>

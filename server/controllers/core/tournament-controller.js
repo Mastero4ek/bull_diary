@@ -93,6 +93,16 @@ class TournamentController {
 			next(e)
 		}
 	}
+
+	async getTournamentsCount(req, res, next) {
+		try {
+			const tournamentsCount = await TournamentService.getTournamentsCount()
+
+			return res.json(tournamentsCount)
+		} catch (e) {
+			next(e)
+		}
+	}
 }
 
 module.exports = new TournamentController()

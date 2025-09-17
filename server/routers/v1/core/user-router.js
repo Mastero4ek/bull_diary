@@ -54,6 +54,10 @@ router.get(
 
 router.get('/users/list', authMiddleware, userController.getUsersList)
 
+router.get('/users/count', userController.getUsersCount)
+
+router.get('/users/active-count', userController.getUsersActiveCount)
+
 router.get(
 	'/users/calendar-data',
 	authMiddleware,
