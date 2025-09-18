@@ -49,6 +49,7 @@
     "react-router-dom": "^6.30.1",
     "react-scroll": "^1.9.3",
     "react-table": "^7.8.0",
+    "react-typescript-scrollbar": "^1.4.2",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
     "sass": "^1.90.0",

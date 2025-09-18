@@ -1,0 +1,203 @@
+@use '@/styles/mixins.scss' as *;
+
+.nav_bar_wrapper {
+  width: 100%;
+  max-width: 300rem;
+  position: fixed;
+  top: 150rem;
+  right: 40rem;
+  z-index: 100;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+
+    li {
+      padding: 10rem;
+
+      a {
+        text-decoration: none;
+        transition: all 0.15s ease;
+
+        div {
+          width: 100%;
+
+          span {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+          }
+        }
+
+        &.active {
+          div span {
+            color: var(--primaryDef);
+          }
+        }
+      }
+    }
+  }
+}
+
+.paragraph {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20rem;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -40rem;
+    left: 0;
+    width: 100%;
+    height: 2rem;
+    background: var(--text);
+    opacity: 0.25;
+  }
+}
+
+.paragraph_title {
+  width: 100%;
+  color: var(--primaryDef);
+
+  @include tablet {
+    h2 {
+      @include font(700, 26rem, 125%);
+    }
+  }
+
+  @include phone {
+    h2 {
+      @include font(700, 22rem, 125%);
+    }
+  }
+}
+
+.paragraph_content {
+  display: flex;
+  flex-direction: column;
+  gap: 30rem;
+  padding-left: 45rem;
+
+  b,
+  a {
+    color: var(--primaryDef);
+  }
+
+  h2 {
+    color: var(--text);
+    @include font(700, 22rem, 125%);
+    margin-bottom: 15rem;
+  }
+
+  ul {
+    padding-left: 20rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+    margin-top: 10rem;
+
+    li {
+      list-style: disc;
+    }
+  }
+
+  @include tablet {
+    padding-left: 0;
+  }
+
+  @include phone {
+    h2 {
+      @include font(700, 20rem, 125%);
+    }
+  }
+}
+
+.info_card_wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+
+  article {
+    width: 50%;
+  }
+
+  @include tablet {
+    article {
+      width: 100%;
+    }
+  }
+}
+
+.info_card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rem;
+  padding: 20rem;
+  width: 100%;
+
+  svg {
+    width: 32rem;
+    height: 32rem;
+  }
+}
+
+.info_card_content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10rem;
+}
+
+.info_card_success {
+  border-left-color: var(--green);
+
+  svg {
+    fill: var(--green);
+  }
+
+  b {
+    color: var(--green) !important;
+  }
+}
+
+.info_card_error {
+  border-left-color: var(--red);
+
+  svg {
+    fill: var(--red);
+  }
+
+  b {
+    color: var(--red) !important;
+  }
+}
+
+.info_card_warning {
+  border-left-color: var(--orange);
+
+  svg {
+    fill: var(--orange);
+  }
+
+  b {
+    color: var(--orange) !important;
+  }
+}
+
+.info_card_info {
+  border-left-color: var(--text);
+
+  svg {
+    fill: var(--text);
+  }
+
+  b {
+    color: var(--text) !important;
+  }
+}

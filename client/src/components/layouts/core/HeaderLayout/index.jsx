@@ -1,12 +1,9 @@
 import React from 'react';
 
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import { Link } from 'react-scroll';
 
-import {
-  NotificationLayout,
-} from '@/components/layouts/specialized/NotificationLayout';
+import { NotificationLayout } from '@/components/layouts/specialized/NotificationLayout';
 import { Logo } from '@/components/ui/navigation/Logo';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { useNavList } from '@/hooks/useNavigation';
@@ -19,10 +16,9 @@ import styles from './styles.module.scss';
 import { UserWrapper } from './UserWrapper';
 
 export const HeaderLayout = React.memo(() => {
-  const location = useLocation();
   const { NAVLIST } = useNavList();
   const { scrollOffset } = useScrollOffset();
-  const { isPathValid } = useRouteValidation();
+  const { isPathValid, isInfoPage, isExchangePage } = useRouteValidation();
 
   const { isTablet, isMobile } = useSelector((state) => state.settings);
   const { isAuth, user } = useSelector((state) => state.candidate);
@@ -39,14 +35,7 @@ export const HeaderLayout = React.memo(() => {
     >
       <div className={styles.header_wrapper}>
         {isAuth && user.is_activated ? (
-          isMobile ||
-          isTablet ||
-          (!(
-            location.pathname.includes('all-users') ||
-            location.pathname.includes('profile') ||
-            location.pathname.includes('settings') ||
-            location.pathname.includes('contacts')
-          ) && <Exchange />)
+          isMobile || isTablet || (!isExchangePage && <Exchange />)
         ) : (
           <div className={styles.header_logo}>
             <Logo desc={isMobile ? false : true} />
@@ -57,8 +46,7 @@ export const HeaderLayout = React.memo(() => {
           !isTablet &&
           !user.is_activated &&
           isPathValid &&
-          !location.pathname.includes('privacy') &&
-          !location.pathname.includes('terms') && (
+          !isInfoPage && (
             <nav className={styles.header_nav}>
               <ul>
                 {NAVLIST &&

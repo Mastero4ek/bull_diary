@@ -160,6 +160,461 @@
     "name": "User_name"
   },
   "page": {
+    "terms": {
+      "title": "Terms of&nbsp;use",
+      "last_update": "<b>Bull&nbsp;Diary</b><br /><span>Last update: </span><b>30&nbsp;December&nbsp;2024</b>",
+      "risk": {
+        "title": "Important risk notice",
+        "content": "<b>Trading financial instruments is&nbsp;associated with a&nbsp;high risk of&nbsp;loss of&nbsp;funds.</b><br /><br />Our service provides only analytical tools and is&nbsp;not an&nbsp;investment advice. All&nbsp;trading decisions are&nbsp;made by&nbsp;the&nbsp;user at&nbsp;their own risk."
+      },
+      "termini": {
+        "title": "1.&nbsp;Terms and&nbsp;definitions",
+        "content": "<span>In&nbsp;this User Agreement, the&nbsp;following terms are&nbsp;used: </span><br /><br /><span><b>Bull&nbsp;Diary</b>&nbsp;— web platform for&nbsp;analyzing trading operations, providing users with the&nbsp;ability to&nbsp;store, analyze trading history, and&nbsp;participate in&nbsp;tournaments.</span><br /><br /><span><b>Company/Administration</b>&nbsp;— owner and&nbsp;operator of&nbsp;the&nbsp;&quot;Bull&nbsp;Diary&quot; service.</span><br /><br /><span><b>User</b>&nbsp;— physical or&nbsp;legal person who has&nbsp;passed the&nbsp;registration procedure in&nbsp;the&nbsp;service.</span><br /><br /><span><b>Materials/Content</b>&nbsp;— any information, messages, data, posted on&nbsp;the&nbsp;platform, including text materials, images, audio-visual works, graphics, design, trademarks.</span><br /><br /><span><b>API keys</b>&nbsp;— access keys to&nbsp;trading platforms, used exclusively for&nbsp;reading data.</span>"
+      },
+      "general": {
+        "title": "2.&nbsp;General provisions",
+        "content": {
+          "part_1": {
+            "title": "2.1.&nbsp;Subject of&nbsp;the&nbsp;agreement",
+            "content": "The&nbsp;present agreement regulates the&nbsp;relationship between the&nbsp;Company and&nbsp;the&nbsp;User when using the&nbsp;&quot;Bull&nbsp;Diary&quot; service."
+          },
+          "part_2": {
+            "title": "2.2.&nbsp;Acceptance of&nbsp;conditions",
+            "content": "By using the&nbsp;&quot;Bull&nbsp;Diary&quot; service, you confirm&nbsp;that: <ul><li>You have read and&nbsp;understood all the&nbsp;terms of&nbsp;this&nbsp;agreement</li><li>You agree to&nbsp;comply with all provisions of&nbsp;the&nbsp;agreement</li><li>You have the&nbsp;right to&nbsp;enter into this&nbsp;agreement</li></ul>"
+          },
+          "part_3": {
+            "title": "2.3.&nbsp;Changes in&nbsp;conditions",
+            "content": "The&nbsp;Company reserves the&nbsp;right to&nbsp;change the&nbsp;terms of&nbsp;this&nbsp;agreement. Users will be&nbsp;notified of&nbsp;significant changes: <ul><li>By email at&nbsp;least 30&nbsp;days before the&nbsp;changes take effect</li><li>Through notifications in&nbsp;the&nbsp;personal account</li><li>On&nbsp;the&nbsp;main page of&nbsp;the&nbsp;service</li></ul>"
+          }
+        }
+      },
+      "description": {
+        "title": "3.&nbsp;Description of&nbsp;the&nbsp;service",
+        "content": {
+          "part_1": {
+            "title": "3.1.&nbsp;Functionality",
+            "content": "The&nbsp;&quot;Bull&nbsp;Diary&quot; service provides the&nbsp;following opportunities: <ul><li><b>Connection of&nbsp;trading accounts</b> through API exchanges (Bybit, planned OKX, MEXC)</li><li><b>Analysis of&nbsp;trading operations</b> with detailed statistics</li><li><b>Trading diary</b> with the&nbsp;ability to&nbsp;add notes</li><li><b>Tournaments</b> for&nbsp;competitions between traders</li><li><b>Analytical reports</b> and&nbsp;data visualization</li><li><b>Bookmark system</b> for&nbsp;saving important deals</li><li><b>Real-time monitoring</b> of&nbsp;positions and&nbsp;PnL</li></ul>"
+          },
+          "part_2": {
+            "title": "3.2.&nbsp;Limitations",
+            "content": "The service is&nbsp;provided &quot;as&nbsp;is&quot; and&nbsp;does&nbsp;not guarantee: <ul><li>Continuous operation without technical interruptions</li><li>Absolute accuracy of&nbsp;data from external APIs</li><li>Data preservation in&nbsp;case of&nbsp;force majeure</li></ul>"
+          }
+        }
+      },
+      "connection": {
+        "title": "4.&nbsp;Connection of&nbsp;trading accounts",
+        "content": {
+          "part_1": {
+            "title": "4.1.&nbsp;Security of&nbsp;API keys",
+            "content": "<span><b>CRITICALLY IMPORTANT:</b> We&nbsp;use only read-only API keys.</span><span>When connecting a&nbsp;trading account, the&nbsp;User undertakes&nbsp;to:</span><ul><li>Use <b>ONLY</b> API keys with \"read-only\" permissions</li><li><b>NEVER</b> provide keys with trading permissions</li><li>Revoke access at&nbsp;any&nbsp;time through the&nbsp;exchange settings</li><li>Immediately report any&nbsp;key compromise</li></ul>"
+          },
+          "part_2": {
+            "title": "4.2.&nbsp;Encryption of&nbsp;data",
+            "content": "<ul><li>API keys are&nbsp;encrypted using AES-256</li><li>Each user has a&nbsp;unique encryption key</li><li>Data is&nbsp;stored in&nbsp;accordance with the&nbsp;requirements of&nbsp;the&nbsp;RF Law &quot;On&nbsp;Personal Data&quot;</li></ul>"
+          },
+          "part_3": {
+            "title": "4.3.&nbsp;Responsibility for&nbsp;keys",
+            "content": "<ul><li>The&nbsp;User is&nbsp;fully responsible&nbsp;for:</li><li>The security of&nbsp;their API keys</li><li>The consequences of&nbsp;their improper use</li><li>Losses incurred due to&nbsp;key compromise</li></ul>"
+          }
+        }
+      },
+      "rights": {
+        "title": "5.&nbsp;Rights and&nbsp;obligations of&nbsp;the&nbsp;parties",
+        "content": {
+          "part_1": {
+            "title": "5.1.&nbsp;Obligations of&nbsp;the&nbsp;Company",
+            "content": "The Company undertakes&nbsp;to: <ul><li>Provide access to&nbsp;the&nbsp;service in&nbsp;accordance with the&nbsp;terms of&nbsp;the&nbsp;agreement</li><li>Ensure the&nbsp;security of&nbsp;personal data of&nbsp;users</li><li>Notify about technical work and&nbsp;changes in&nbsp;the&nbsp;service</li><li>Provide technical support within reasonable limits</li></ul>"
+          },
+          "part_2": {
+            "title": "5.2.&nbsp;Rights of&nbsp;the&nbsp;Company",
+            "content": "The Company has the&nbsp;right: <ul><li>Change the&nbsp;functionality of&nbsp;the&nbsp;service</li><li>Suspend work for&nbsp;technical work</li><li>Block accounts in&nbsp;case of&nbsp;violation of&nbsp;conditions</li><li>Send information messages to&nbsp;users</li></ul>"
+          },
+          "part_3": {
+            "title": "5.3.&nbsp;Obligations of&nbsp;the&nbsp;User",
+            "content": "The&nbsp;User undertakes&nbsp;to: <ul><li>Provide accurate information when registering</li><li>Not transfer access to&nbsp;the&nbsp;account to&nbsp;third parties</li><li>Use the&nbsp;service only in&nbsp;lawful purposes</li><li>Not attempt to&nbsp;obtain unauthorized access to&nbsp;the&nbsp;system</li><li>Comply with the&nbsp;laws of&nbsp;the&nbsp;Russian Federation</li></ul>"
+          },
+          "part_4": {
+            "title": "5.4.&nbsp;Rights of&nbsp;the&nbsp;User",
+            "content": "The User has the&nbsp;right: <ul><li>Receive access to&nbsp;the&nbsp;service in&nbsp;accordance with the&nbsp;conditions</li><li>Refuse to&nbsp;receive advertising messages</li><li>Demand the&nbsp;deletion of&nbsp;personal data</li><li>Terminate the&nbsp;agreement at&nbsp;any&nbsp;time</li></ul>"
+          }
+        }
+      },
+      "responsibility": {
+        "title": "6.&nbsp;Liability and&nbsp;limitations",
+        "content": {
+          "part_1": {
+            "title": "6.1.&nbsp;Disclaimer",
+            "content": "<b>IMPORTANT:</b> Our service does&nbsp;not&nbsp;provide investment advice. All&nbsp;analytical data is&nbsp;for&nbsp;informational purposes only.<br/><br/>The&nbsp;Company is&nbsp;not&nbsp;responsible for:<ul><li>Users' trading decisions</li><li>Losses from trading operations</li><li>Quality and&nbsp;stability of&nbsp;internet connection</li><li>Operation of&nbsp;external exchange APIs</li><li>Consequences of&nbsp;force majeure circumstances</li></ul>"
+          },
+          "part_2": {
+            "title": "6.2.&nbsp;Limitation of&nbsp;liability",
+            "content": "The Company's total liability is&nbsp;limited to&nbsp;the&nbsp;amount paid by&nbsp;the&nbsp;User for&nbsp;using the&nbsp;service during the&nbsp;last&nbsp;12&nbsp;months."
+          }
+        }
+      },
+      "intellectual": {
+        "title": "7.&nbsp;Intellectual property",
+        "content": {
+          "part_1": {
+            "title": "7.1.&nbsp;Company rights",
+            "content": "All service materials, including:<ul><li>Design and&nbsp;user interface</li><li>Source code and&nbsp;software</li><li>Logos and&nbsp;trademarks</li><li>Documentation and&nbsp;training materials</li></ul><br/>are the&nbsp;property of&nbsp;the&nbsp;Company and&nbsp;protected by&nbsp;copyright."
+          },
+          "part_2": {
+            "title": "7.2.&nbsp;Use of&nbsp;materials",
+            "content": "The User <b>DOES&nbsp;NOT</b> have the&nbsp;right&nbsp;to:<ul><li>Copy, reproduce or&nbsp;distribute service materials</li><li>Create derivative works</li><li>Use trademarks and&nbsp;logos without permission</li></ul>"
+          }
+        }
+      },
+      "processing": {
+        "title": "8.&nbsp;Personal data processing",
+        "content": {
+          "part_1": {
+            "title": "8.1.&nbsp;Consent to&nbsp;processing",
+            "content": "By registering in&nbsp;the&nbsp;service, the&nbsp;User consents to&nbsp;the&nbsp;processing of&nbsp;personal data in&nbsp;accordance with:<ul><li>Federal Law No.&nbsp;152-FZ \"On&nbsp;Personal Data\"</li><li>Service privacy policy</li></ul>"
+          },
+          "part_2": {
+            "title": "8.2.&nbsp;Processing purposes",
+            "content": "Personal data is&nbsp;processed for:<ul><li>Providing service functionality</li><li>User identification</li><li>Communication with the&nbsp;user</li><li>Improving service quality</li></ul>"
+          },
+          "part_3": {
+            "title": "8.3.&nbsp;Rights of&nbsp;personal data subjects",
+            "content": "The User has the&nbsp;right&nbsp;to:<ul><li>Receive information about the&nbsp;processing of&nbsp;their data</li><li>Request correction of&nbsp;inaccurate data</li><li>Request data deletion</li><li>Withdraw consent to&nbsp;processing</li></ul>"
+          }
+        }
+      },
+      "agreement": {
+        "title": "9.&nbsp;Agreement validity",
+        "content": {
+          "part_1": {
+            "title": "9.1.&nbsp;Agreement conclusion",
+            "content": "The agreement is&nbsp;considered concluded from the&nbsp;moment of&nbsp;User registration in&nbsp;the&nbsp;service."
+          },
+          "part_2": {
+            "title": "9.2.&nbsp;Agreement termination",
+            "content": "The agreement may be&nbsp;terminated:<br/><br/><b>At&nbsp;the&nbsp;User's initiative:</b><ul><li>At any time through account settings</li><li>By sending an&nbsp;application to&nbsp;email: <a href=\"http://bull-diary.com/contact\" target=\"_blank\" rel=\"noopener noreferrer\">bull-diary.com</a></li></ul><b style=\"display: block; margin-top: 10px;\">At the Company's initiative:</b><ul><li>In case of&nbsp;violation of&nbsp;terms of&nbsp;use</li><li>In case of&nbsp;suspected fraud</li><li>When closing the&nbsp;service (with 90&nbsp;days notice)</li></ul>"
+          },
+          "part_3": {
+            "title": "9.3.&nbsp;Consequences of&nbsp;termination",
+            "content": "Upon termination of&nbsp;the&nbsp;agreement:<ul><li>Access to&nbsp;the&nbsp;service is&nbsp;terminated</li><li>Personal data is&nbsp;deleted within&nbsp;30&nbsp;days</li><li>No&nbsp;refund is&nbsp;made</li></ul>"
+          }
+        }
+      },
+      "dispute": {
+        "title": "10.&nbsp;Dispute resolution",
+        "content": {
+          "part_1": {
+            "title": "10.1.&nbsp;Pre-trial procedure",
+            "content": "All disputes are&nbsp;resolved through pre-trial negotiations."
+          },
+          "part_2": {
+            "title": "10.2.&nbsp;Court procedure",
+            "content": "If pre-trial settlement is&nbsp;impossible, disputes are&nbsp;considered in&nbsp;court at&nbsp;the&nbsp;Company's location in&nbsp;accordance with the&nbsp;legislation of&nbsp;the&nbsp;Russian Federation."
+          }
+        }
+      },
+      "force": {
+        "title": "11.&nbsp;Force majeure",
+        "content": {
+          "part_1": {
+            "title": "11.1.&nbsp;Force majeure circumstances",
+            "content": "The parties are&nbsp;released from liability for&nbsp;non-performance of&nbsp;obligations in&nbsp;case of&nbsp;force majeure circumstances, including:<ul><li>Natural disasters</li><li>Military actions</li><li>Technical failures of&nbsp;providers</li><li>Actions of&nbsp;government bodies</li></ul>"
+          },
+          "part_2": {
+            "title": "11.2.&nbsp;Force majeure notification",
+            "content": "The party for&nbsp;which force majeure circumstances have occurred is&nbsp;obliged to&nbsp;notify the&nbsp;other party within&nbsp;24&nbsp;hours."
+          }
+        }
+      },
+      "conclusion": {
+        "title": "12.&nbsp;Final provisions",
+        "content": {
+          "part_1": {
+            "title": "12.1.&nbsp;Applicable law",
+            "content": "This agreement is&nbsp;governed by&nbsp;the&nbsp;legislation of&nbsp;the&nbsp;Russian Federation."
+          },
+          "part_2": {
+            "title": "12.2.&nbsp;Validity of&nbsp;provisions",
+            "content": "If any provision of&nbsp;the&nbsp;agreement is&nbsp;declared invalid, the&nbsp;remaining provisions remain in&nbsp;force."
+          },
+          "part_3": {
+            "title": "12.3.&nbsp;Language of&nbsp;the&nbsp;agreement",
+            "content": "The agreement is&nbsp;drawn up&nbsp;in&nbsp;Russian. In&nbsp;case of&nbsp;contradictions between versions in&nbsp;different languages, the&nbsp;Russian version takes priority."
+          }
+        }
+      },
+      "contact": {
+        "title": "13.&nbsp;Contact information",
+        "content": {
+          "part_1": {
+            "title": "For all questions related to&nbsp;this&nbsp;agreement:",
+            "content": "<ul><li><b>Email:</b> <a href=\"http://bull-diary.com/contact\" target=\"_blank\" rel=\"noopener noreferrer\">bull-diary.com</a></li><li><b>Response time:</b> within&nbsp;5&nbsp;business days</li><li><b>Technical support:</b> <a href=\"http://bull-diary.com/contact\" target=\"_blank\" rel=\"noopener noreferrer\">support@bull-diary.com</a></li></ul>"
+          },
+          "part_2": {
+            "title": "Mailing address:",
+            "content": "123456,<br/>Moscow, Trader&nbsp;Street,&nbsp;1"
+          }
+        }
+      },
+      "effective_date": {
+        "content": "Effective date: <b>December&nbsp;30, 2024</b>"
+      },
+      "public_offer": {
+        "content": "This agreement is&nbsp;a&nbsp;public offer in&nbsp;accordance with Article&nbsp;437 of&nbsp;the&nbsp;Civil Code of&nbsp;the&nbsp;Russian Federation."
+      }
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "last_update": "<b>Bull Diary</b><br /><span>Last update: </span><b>December&nbsp;30, 2024</b>",
+      "gdpr": {
+        "title": "GDPR, CCPA and&nbsp;FZ-152 compliance",
+        "content": "We comply with the&nbsp;requirements:<ul><li><b>GDPR</b> (European Union)&nbsp;- Regulation (EU) 2016/679</li><li><b>CCPA</b> (California)&nbsp;- California Consumer Privacy Act</li><li><b>FZ-152</b> (Russia) - \"On&nbsp;Personal Data\"</li></ul><br/>Your privacy rights are&nbsp;protected in&nbsp;accordance with international and&nbsp;Russian standards."
+      },
+      "general": {
+        "title": "1.&nbsp;General provisions",
+        "content": {
+          "part_1": {
+            "title": "1.1.&nbsp;Purpose of&nbsp;the&nbsp;policy",
+            "content": "This Privacy Policy describes how we collect, use, store and&nbsp;protect your personal information when using the&nbsp;\"Bull&nbsp;Diary\" service."
+          },
+          "part_2": {
+            "title": "1.2.&nbsp;Legal basis",
+            "content": "The policy is&nbsp;developed in&nbsp;accordance with:<ul><li>Federal Law No.&nbsp;152-FZ \"On&nbsp;Personal Data\" of&nbsp;July&nbsp;27, 2006</li><li>Regulation (EU)&nbsp;2016/679 (GDPR)</li><li>California Consumer Privacy Act (CCPA)</li><li>Other applicable personal data protection laws</li></ul>"
+          },
+          "part_3": {
+            "title": "1.3.&nbsp;Applicability",
+            "content": "The policy applies to&nbsp;all users of&nbsp;the&nbsp;\"Bull&nbsp;Diary\" service, regardless of&nbsp;their location."
+          }
+        }
+      },
+      "termini": {
+        "title": "2.&nbsp;Terms and&nbsp;definitions",
+        "content": {
+          "part_1": {
+            "title": "2.1.&nbsp;Key terms",
+            "content": "<b>Personal data</b>&nbsp;- any information related to&nbsp;a&nbsp;directly or&nbsp;indirectly identifiable or&nbsp;identifiable physical person (subject of&nbsp;personal data).</br></br><b>Processing of&nbsp;personal data</b>&nbsp;- any action (operation) or&nbsp;a&nbsp;set of&nbsp;actions (operations) with personal data, including collection, recording, systematization, accumulation, storage, refinement, extraction, use, transfer, anonymization, blocking, deletion, destruction of&nbsp;personal data.</br></br><b>Automated processing</b>&nbsp;- processing of&nbsp;personal data using computer means.</br></br><b>Blocking of&nbsp;personal data</b>&nbsp;- temporary cessation of&nbsp;processing of&nbsp;personal data.</br></br><b>Automated processing</b>&nbsp;- processing of&nbsp;personal data using computer means.</br></br><b>Destruction of&nbsp;personal data</b>&nbsp;- actions, the&nbsp;result of&nbsp;which makes it&nbsp;impossible to&nbsp;restore the&nbsp;content of&nbsp;personal data.</br></br><b>Subject of&nbsp;personal data</b>&nbsp;- physical person to&nbsp;whom personal data relate.</br></br><b>Operator</b>&nbsp;- Company, determining the&nbsp;purposes and&nbsp;content of&nbsp;processing of&nbsp;personal data."
+          }
+        }
+      },
+      "data_collection": {
+        "title": "3.&nbsp;What data we collect",
+        "content": {
+          "part_1": {
+            "title": "3.1.&nbsp;Required information",
+            "content": "<span>When registering and&nbsp;using the&nbsp;service, we collect:</span></br></br><b>Identifying data:</b><ul><li>Name and&nbsp;surname</li><li>Email address</li><li>Password (encrypted)</li><li>Phone number (optional)</li></ul><b style=\"display: block; margin-top: 10px;\">Profile data:</b><ul><li>Account settings</li><li>Interface preferences</li><li>Language settings</li><li>Timezone</li></ul>"
+          },
+          "part_2": {
+            "title": "3.2.&nbsp;Trading data",
+            "content": "<b>Trading data:</b><ul><li>Trade history (only through read-only API)</li><li>Open positions</li><li>Balances of&nbsp;trading accounts</li><li>Portfolio statistics</li><li>Analytical metrics (PnL, ROI, Sharpe ratio)</li></ul><b style=\"display: block; margin-top: 10px;\">API keys and&nbsp;credentials:</b><ul><li>API keys of&nbsp;exchanges (encrypted)</li><li>Connection settings to&nbsp;exchanges</li><li>Authentication tokens</li></ul>"
+          },
+          "part_3": {
+            "title": "3.3.&nbsp;Automatically collected data",
+            "content": "<b>Technical data:</b><ul><li>IP address and&nbsp;geolocation</li><li>Browser and&nbsp;device data</li><li>Operating system</li><li>Time and&nbsp;duration of&nbsp;sessions</li></ul><b style=\"display: block; margin-top: 10px;\">Usage data:</b><ul><li>Access logs to&nbsp;the&nbsp;service</li><li>Function usage statistics</li><li>Errors and&nbsp;crashes</li><li>Performance data</li></ul>"
+          },
+          "part_4": {
+            "title": "3.4.&nbsp;Cookies and&nbsp;similar technologies",
+            "content": "<b>Types of&nbsp;cookies:</b><ul><li><b>Essential</b>&nbsp;- for&nbsp;authentication and&nbsp;session work</li><li><b>Functional</b>&nbsp;- for&nbsp;saving user settings</li><li><b>Analytical</b>&nbsp;- for&nbsp;improving the&nbsp;service (can be&nbsp;disabled)</li><li><b>Marketing</b>&nbsp;- for&nbsp;showing relevant advertising</li></ul>"
+          }
+        }
+      },
+      "purposes": {
+        "title": "4.&nbsp;Purposes of&nbsp;personal data processing",
+        "content": {
+          "part_1": {
+            "title": "4.1.&nbsp;Basic purposes",
+            "content": "<b>Providing services:</b><ul><li>Providing access to&nbsp;the&nbsp;&quot;Bull&nbsp;Diary&quot; service</li><li>Synchronization of&nbsp;data with trading exchanges</li><li>Generation of&nbsp;analytical reports</li><li>Technical support for&nbsp;users</li></ul><b style=\"display: block; margin-top: 10px;\">Security:</b><ul><li>Authentication and&nbsp;authorization of&nbsp;users</li><li>Protection from fraud and&nbsp;abuse</li><li>Monitoring suspicious activity</li><li>Compliance with legal requirements</li></ul>"
+          },
+          "part_2": {
+            "title": "4.2.&nbsp;Additional purposes",
+            "content": "<b>Improving the&nbsp;service:</b><ul><li>Analysis of&nbsp;function usage</li><li>Development of&nbsp;new&nbsp;features</li><li>Optimization of&nbsp;performance</li><li>Personalization of&nbsp;the&nbsp;user experience</li></ul><b style=\"display: block; margin-top: 10px;\">Communication:</b><ul><li>Notifications about important changes</li><li>Information about new features</li><li>Marketing messages (with consent)</li><li>Technical notifications</li></ul>"
+          }
+        }
+      },
+      "legal": {
+        "title": "5.&nbsp;Legal basis for&nbsp;processing",
+        "content": {
+          "part_1": {
+            "title": "5.1.&nbsp;Consent of&nbsp;the&nbsp;data subject",
+            "content": "<span>Processing of&nbsp;personal data is&nbsp;carried out on&nbsp;the&nbsp;basis&nbsp;of:</span><ul><li>Explicit consent of&nbsp;the&nbsp;user at&nbsp;registration</li><li>Consent to&nbsp;process cookies</li><li>Consent to&nbsp;marketing communications</li></ul>"
+          },
+          "part_2": {
+            "title": "5.2.&nbsp;Execution of&nbsp;the&nbsp;contract",
+            "content": "<span>Processing of&nbsp;data necessary&nbsp;for:</span><ul><li>Providing services in&nbsp;accordance with the&nbsp;user agreement</li><li>Fulfilling obligations to&nbsp;the&nbsp;user</li><li>Ensuring service functionality</li></ul>"
+          },
+          "part_3": {
+            "title": "5.3.&nbsp;Legal interests",
+            "content": "<span>Processing of&nbsp;data necessary&nbsp;for:</span><ul><li>Ensuring service security</li><li>Preventing fraud</li><li>Improving service quality</li><li>Compliance with legal requirements</li></ul>"
+          }
+        }
+      },
+      "security": {
+        "title": "6.&nbsp;Security of&nbsp;personal data",
+        "content": {
+          "part_1": {
+            "title": "6.1.&nbsp;Technical protection",
+            "content": "<b>Encryption:</b><ul><li>SSL/TLS for&nbsp;data transmission</li><li>AES-256 for&nbsp;storing sensitive data</li><li>Unique encryption keys for&nbsp;each user</li><li>HashiCorp Vault for&nbsp;secrets management</li></ul><b style=\"display: block; margin-top: 10px;\">Authentication and&nbsp;Authorization:</b><ul><li>Two-factor authentication (2FA)</li><li>JWT tokens with limited validity</li><li>OAuth integration (Google, GitHub)</li><li>Role and&nbsp;permission system</li></ul><b style=\"display: block; margin-top: 10px;\">Infrastructure Security:</b><ul><li>Regular security updates</li><li>Monitoring of&nbsp;suspicious activity</li><li>Automatic data backups</li><li>Incident response plan</li></ul>"
+          },
+          "part_2": {
+            "title": "6.2.&nbsp;Organizational protection",
+            "content": "<b>Data access:</b><ul><li>Principle of&nbsp;least privilege</li><li>Limited number of&nbsp;employees with access</li><li>Regular access audits</li><li>Employee training on&nbsp;data protection</li></ul><b style=\"display: block; margin-top: 10px;\">Security procedures:</b><ul><li>Data handling policies</li><li>Data breach response procedures</li><li>Regular penetration testing</li><li>Compliance with security standards</li></ul>"
+          }
+        }
+      },
+      "transfer": {
+        "title": "7.&nbsp;Transfer of&nbsp;data to&nbsp;third parties",
+        "content": {
+          "part_1": {
+            "title": "7.1.&nbsp;Principles of&nbsp;transfer",
+            "content": "We <b>DO&nbsp;NOT&nbsp;SELL</b> and&nbsp;<b>DO&nbsp;NOT&nbsp;TRANSFER</b> your personal data:<ul><li>To&nbsp;advertising companies</li><li>To data brokers</li><li>To marketing agencies</li><li>To other traders or&nbsp;users</li></ul>"
+          },
+          "part_2": {
+            "title": "7.2.&nbsp;Exceptions (only in&nbsp;case of&nbsp;legal basis)",
+            "content": "<b>Trading exchanges:</b><ul><li>For obtaining trading data through read-only API</li><li>Strictly within the&nbsp;scope of&nbsp;providing services</li><li>Without transferring personal data</li></ul><b style=\"display: block; margin-top: 10px;\">Cloud providers:</b><ul><li>With data protection agreements (DPA)</li><li>With compliance with security standards</li><li>With limited access to&nbsp;data</li></ul><b style=\"display: block; margin-top: 10px;\">Law enforcement agencies:</b><ul><li>In case of&nbsp;a&nbsp;court decision</li><li>Within the&nbsp;scope of&nbsp;investigating crimes</li><li>With notification to&nbsp;the&nbsp;user (if&nbsp;possible)</li></ul>"
+          },
+          "part_3": {
+            "title": "7.3.&nbsp;International transfers",
+            "content": "When transferring data beyond Russia/EU we&nbsp;ensure:<ul><li>Use standard contractual clauses (SCC)</li><li>Provide an&nbsp;adequate level of&nbsp;protection</li><li>Obtain user consent if&nbsp;necessary</li></ul>"
+          }
+        }
+      },
+      "rights": {
+        "title": "8.&nbsp;Your rights as&nbsp;a&nbsp;subject of&nbsp;personal data",
+        "content": {
+          "part_1": {
+            "title": "8.1.&nbsp;Right to&nbsp;information",
+            "content": "You have the right to&nbsp;obtain information about:<ul><li>What personal data we process</li><li>Purposes and&nbsp;methods of&nbsp;processing</li><li>Storage period</li><li>Third parties to&nbsp;whom data is&nbsp;transferred</li></ul>"
+          },
+          "part_2": {
+            "title": "8.2.&nbsp;Right to&nbsp;access",
+            "content": "<b>Request for&nbsp;a&nbsp;copy of&nbsp;data:</b><ul><li>Request for&nbsp;a&nbsp;copy of&nbsp;all your personal data</li><li>Information about the&nbsp;sources of&nbsp;obtaining data</li><li>Information about the&nbsp;purposes of&nbsp;processing</li><li>Data about third parties who have access</li></ul>"
+          },
+          "part_3": {
+            "title": "8.3.&nbsp;Right to&nbsp;correction",
+            "content": "<b>Updating data:</b><ul><li>Correction of&nbsp;inaccurate data</li><li>Completion of&nbsp;incomplete data</li><li>Updating outdated information</li><li>Notification of&nbsp;third parties about changes</li></ul>"
+          },
+          "part_4": {
+            "title": "8.4.&nbsp;Right to&nbsp;deletion (&quot;right to&nbsp;be&nbsp;forgotten&quot;)",
+            "content": "<b>Deletion of&nbsp;data when:</b><ul><li>Withdrawal of&nbsp;consent to&nbsp;processing</li><li>Illegal processing of&nbsp;data</li><li>Achieving the&nbsp;purposes of&nbsp;processing</li><li>Violation of&nbsp;legal requirements</li></ul>"
+          },
+          "part_5": {
+            "title": "8.5.&nbsp;Right to&nbsp;restriction of&nbsp;processing",
+            "content": "<b>Temporary restriction when:</b><ul><li>Dispute about the&nbsp;accuracy of&nbsp;data</li><li>Illegal processing of&nbsp;data</li><li>Need to&nbsp;preserve for&nbsp;legal purposes</li><li>Objection to&nbsp;processing</li></ul>"
+          },
+          "part_6": {
+            "title": "8.6.&nbsp;Right to&nbsp;portability",
+            "content": "<b>Export of&nbsp;data:</b><ul><li>Receiving data in&nbsp;a&nbsp;structured format</li><li>Machine-readable format (JSON, CSV)</li><li>Direct transfer to&nbsp;another operator</li><li>Only data provided by&nbsp;the&nbsp;user</li></ul>"
+          },
+          "part_7": {
+            "title": "8.7.&nbsp;Right to&nbsp;objection",
+            "content": "<b>Refusal to&nbsp;process:</b><ul><li>Against processing for&nbsp;marketing purposes</li><li>Against automated decision-making</li><li>Against processing in&nbsp;legal interests</li><li>Unconditional right to&nbsp;withdraw consent</li></ul>"
+          }
+        }
+      },
+      "storage": {
+        "title": "9.&nbsp;Storage periods",
+        "content": {
+          "part_1": {
+            "title": "9.1.&nbsp;Account data",
+            "content": "<ul><li><b>Before account deletion</b> by&nbsp;the&nbsp;user</li><li><b>30&nbsp;days</b> after deletion (for&nbsp;possible restoration)</li><li><b>7&nbsp;years</b> for&nbsp;data related to&nbsp;financial operations</li></ul>"
+          },
+          "part_2": {
+            "title": "9.2.&nbsp;Trading data",
+            "content": "<ul><li><b>7&nbsp;years</b>&nbsp;— requirements of&nbsp;legislation on&nbsp;financial operations</li><li><b>3&nbsp;years</b>&nbsp;— for&nbsp;analytical purposes</li><li><b>1&nbsp;year</b>&nbsp;— for&nbsp;performance data</li></ul>"
+          },
+          "part_3": {
+            "title": "9.3.&nbsp;Technical data",
+            "content": "<ul><li><b>Access logs</b>&nbsp;— 1&nbsp;year</li><li><b>Cookies</b>&nbsp;— according to&nbsp;browser settings</li><li><b>API keys</b>&nbsp;— until withdrawal by&nbsp;the&nbsp;user</li><li><b>Backup copies</b>&nbsp;— 30&nbsp;days</li></ul>"
+          },
+          "part_4": {
+            "title": "9.4.&nbsp;Criteria for&nbsp;determining storage periods",
+            "content": "<ul><li>Purposes of&nbsp;data processing</li><li>Legal requirements</li><li>Technical necessity</li><li>User consent</li></ul>"
+          }
+        }
+      },
+      "cookies": {
+        "title": "10.&nbsp;Cookies and&nbsp;web technologies",
+        "content": {
+          "part_1": {
+            "title": "10.1.&nbsp;Types of&nbsp;cookies used",
+            "content": "<b>Strictly necessary:</b><ul><li>Authentication of&nbsp;users</li><li>Session security</li><li>Protection from&nbsp;CSRF&nbsp;attacks</li><li>Basic service functionality</li></ul><b style=\"display: block; margin-top: 10px;\">Functional:</b><ul><li>Saving user settings</li><li>Language preferences</li><li>Theme settings</li><li>Personalization of&nbsp;the&nbsp;interface</li></ul><b style=\"display: block; margin-top: 10px;\">Analytical:</b><ul><li>Usage statistics</li><li>Service performance</li><li>Errors and&nbsp;crashes</li><li>Improvement of&nbsp;the&nbsp;user experience</li></ul><b style=\"display: block; margin-top: 10px;\">Marketing:</b><ul><li>Showing relevant advertising</li><li>Measuring campaign effectiveness</li><li>Personalization of&nbsp;advertising</li><li>Tracking conversions</li></ul>"
+          },
+          "part_2": {
+            "title": "10.2.&nbsp;Management of&nbsp;cookies",
+            "content": "<b>Browser settings:</b><ul><li>Blocking all &nbsp;cookies</li><li>Blocking third-party cookies</li><li>Notifications about cookies</li><li>Deletion of&nbsp;existing cookies</li></ul><b style=\"display: block; margin-top: 10px;\">Service settings:</b><ul><li>Cookie management panel</li><li>Selective disabling of&nbsp;types</li><li>Detailed information about each cookie</li><li>Simple management of&nbsp;preferences</li></ul>"
+          }
+        }
+      },
+      "children": {
+        "title": "11.&nbsp;Processing of&nbsp;personal data of&nbsp;minors",
+        "content": {
+          "part_1": {
+            "title": "11.1.&nbsp;Age restrictions",
+            "content": "<ul><li>The&nbsp;service is&nbsp;intended for&nbsp;persons over 18&nbsp;years&nbsp;old.</li><li>We do&nbsp;not collect personal data of&nbsp;minors.</li><li>Immediate deletion if&nbsp;minors data is&nbsp;discovered</li></ul>"
+          }
+        }
+      },
+      "automated": {
+        "title": "12.&nbsp;Automated decision-making",
+        "content": {
+          "part_1": {
+            "title": "12.1.&nbsp;Profiling",
+            "content": "<span>We can use automated processing&nbsp;for:<ul><li>Analysis of&nbsp;trading patterns</li><li>Recommendations for&nbsp;settings</li><li>Detection of&nbsp;suspicious activity</li><li>Personalization of&nbsp;the&nbsp;interface</li></ul></span>"
+          },
+          "part_2": {
+            "title": "12.2.&nbsp;Your rights",
+            "content": "<ul><li>Information about the&nbsp;logic of&nbsp;decision-making</li><li>Objection to&nbsp;automated processing</li><li>Request for&nbsp;human intervention</li><li>Explanation of&nbsp;the&nbsp;decisions made</li></ul>"
+          }
+        }
+      },
+      "changes": {
+        "title": "13.&nbsp;Changes in&nbsp;the&nbsp;privacy policy",
+        "content": {
+          "part_1": {
+            "title": "13.1.&nbsp;Notifications about changes",
+            "content": "We will notify you about significant changes:<ul><li>By&nbsp;email at&nbsp;least 30&nbsp;days before the&nbsp;changes take effect</li><li>Through notifications in&nbsp;the&nbsp;personal account</li><li>On the&nbsp;main page of&nbsp;the&nbsp;service</li></ul>"
+          },
+          "part_2": {
+            "title": "13.2.&nbsp;Consent to&nbsp;changes",
+            "content": "<ul><li>Continuing to&nbsp;use the&nbsp;service after changes means your consent to&nbsp;the&nbsp;new version of&nbsp;the&nbsp;policy.</li><li>Ability to&nbsp;withdraw consent and&nbsp;delete the&nbsp;account</li><li>Preservation of&nbsp;previous versions of&nbsp;the&nbsp;policy</li><li>Ability to&nbsp;compare changes with previous versions</li></ul>"
+          }
+        }
+      },
+      "contacts": {
+        "title": "14.&nbsp;Contact information",
+        "content": {
+          "part_1": {
+            "title": "14.1.&nbsp;For privacy questions",
+            "content": "<ul><li><b>Email:</b> <a href=\"http://bull-diary.com/contact\" target=\"_blank\" rel=\"noopener noreferrer\">bull-diary.com</a></li><li><b>Response time:</b> within 5&nbsp;working days</li><li><b>Technical support:</b> <a href=\"http://bull-diary.com/contact\" target=\"_blank\" rel=\"noopener noreferrer\">support@bull-diary.com</a></li></ul>"
+          },
+          "part_2": {
+            "title": "Mailing address:",
+            "content": "123456,<br/>Moscow, Trader&nbsp;Street,&nbsp;1"
+          }
+        }
+      },
+      "final": {
+        "title": "15.&nbsp;Final provisions",
+        "content": {
+          "part_1": {
+            "title": "15.1.&nbsp;Applicable law",
+            "content": "This policy is&nbsp;regulated&nbsp;by:<ul><li>Federal Law No.&nbsp;152-ФЗ \"On&nbsp;Personal Data\" from&nbsp;27.07.2006</li><li>Regulation (EU)&nbsp;2016/679 (GDPR)</li><li>California Consumer Privacy Act (CCPA)</li><li>Other applicable laws on&nbsp;the&nbsp;protection of&nbsp;personal data</li></ul>"
+          },
+          "part_2": {
+            "title": "15.2.&nbsp;Language of&nbsp;the&nbsp;policy",
+            "content": "The policy is&nbsp;written in&nbsp;Russian. In&nbsp;case of&nbsp;contradictions between versions in&nbsp;different languages, the&nbsp;Russian version takes precedence."
+          },
+          "part_3": {
+            "title": "15.3.&nbsp;Validity of&nbsp;provisions",
+            "content": "If any provision of&nbsp;the&nbsp;policy is&nbsp;deemed invalid, the&nbsp;remaining provisions remain in&nbsp;force."
+          }
+        }
+      },
+      "effective_date": {
+        "content": "Effective date: <b>December&nbsp;30, 2024</b>"
+      },
+      "agreement_part": {
+        "content": "This privacy policy is&nbsp;an&nbsp;integral part of&nbsp;the&nbsp;\"Bull&nbsp;Diary\" service user agreement."
+      }
+    },
     "not_found": {
       "title": "Page not&nbsp;found",
       "description": "It looks like you&nbsp;tried to&nbsp;access a&nbsp;page that doesn't exist.",

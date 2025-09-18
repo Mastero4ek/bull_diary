@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { AnimatedSidebar } from '@/components/animations/AnimatedSidebar';
 import { Logo } from '@/components/ui/navigation/Logo';
 import { SideBarItem } from '@/components/ui/navigation/SideBarItem';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
 import { setSideBar } from '@/redux/slices/settingsSlice';
 
 import styles from './styles.module.scss';
@@ -17,7 +14,13 @@ import styles from './styles.module.scss';
 export const SideBarLayout = React.memo(() => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const location = useLocation();
+  const {
+    isWalletDetailsPage,
+    isDiaryPositionPage,
+    isTablePositionPage,
+    isBookmarksPositionPage,
+    isAllUsersPage,
+  } = useRouteValidation();
   const { user } = useSelector((state) => state.candidate);
   const { sideBar, language, isTablet } = useSelector(
     (state) => state.settings
@@ -79,11 +82,11 @@ export const SideBarLayout = React.memo(() => {
 
   const shouldShowBackButton = (item) => {
     return (
-      (location.pathname.includes('/wallet/details') && item.id === 0) ||
-      (location.pathname.includes('/diary/position/') && item.id === 1) ||
-      (location.pathname.includes('/table/position/') && item.id === 2) ||
-      (location.pathname.includes('/bookmarks/position/') && item.id === 3) ||
-      (location.pathname.includes('/all-users/') && item.id === 5)
+      (isWalletDetailsPage && item.id === 0) ||
+      (isDiaryPositionPage && item.id === 1) ||
+      (isTablePositionPage && item.id === 2) ||
+      (isBookmarksPositionPage && item.id === 3) ||
+      (isAllUsersPage && item.id === 5 && user?.role === 'admin')
     );
   };
 

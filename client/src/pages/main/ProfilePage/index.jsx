@@ -1,40 +1,27 @@
 import './phone_input.scss';
 
-import {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import moment from 'moment/min/moment-with-locales';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import PhoneInput from 'react-phone-input-2';
 import ru from 'react-phone-input-2/lang/ru.json';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useParams,
-} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import avatarDefault from '@/assets/images/general/default_avatar.png';
 import { PageLayout } from '@/components/layouts/core/PageLayout';
 import { DescLayout } from '@/components/layouts/core/PageLayout/DescLayout';
-import {
-  usePopup,
-} from '@/components/layouts/popups/PopupLayout/PopupProvider';
-import {
-  useNotification,
-} from '@/components/layouts/specialized/NotificationLayout';
+import { usePopup } from '@/components/layouts/popups/PopupLayout/PopupProvider';
+import { useNotification } from '@/components/layouts/specialized/NotificationLayout';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { RootButton } from '@/components/ui/buttons/RootButton';
 import { RootInput } from '@/components/ui/inputs/RootInput';
 import { Icon } from '@/components/ui/media/Icon';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
 import { AvatarUserPopup } from '@/popups/user/AvatarUserPopup';
 import { RemoveUserPopup } from '@/popups/user/RemoveUserPopup';
 import {
@@ -63,10 +50,9 @@ export const ProfilePage = () => {
   const [photoFile, setPhotoFile] = useState(null);
   const { openPopup } = usePopup();
   const { showSuccess, showError } = useNotification();
+  const { isAdminContext } = useRouteValidation();
 
-  const location = useLocation();
   const params = useParams();
-  const isAdminContext = location.pathname.includes('/all-users');
   const editUser = isAdminContext ? editUserUsers : editUserCandidate;
   const getUser = isAdminContext ? getUserUsers : getUserCandidate;
   const removeCover = isAdminContext ? removeCoverUsers : removeCoverCandidate;

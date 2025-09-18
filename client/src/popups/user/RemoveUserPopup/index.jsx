@@ -2,30 +2,17 @@ import React, { useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import {
-  PopupDescLayout,
-} from '@/components/layouts/popups/PopupLayout/PopupDescLayout';
-import {
-  PopupFormLayout,
-} from '@/components/layouts/popups/PopupLayout/PopupFormLayout';
-import {
-  usePopup,
-} from '@/components/layouts/popups/PopupLayout/PopupProvider';
-import {
-  useNotification,
-} from '@/components/layouts/specialized/NotificationLayout/NotificationProvider';
+import { PopupDescLayout } from '@/components/layouts/popups/PopupLayout/PopupDescLayout';
+import { PopupFormLayout } from '@/components/layouts/popups/PopupLayout/PopupFormLayout';
+import { usePopup } from '@/components/layouts/popups/PopupLayout/PopupProvider';
+import { useNotification } from '@/components/layouts/specialized/NotificationLayout/NotificationProvider';
 import { RootButton } from '@/components/ui/buttons/RootButton';
 import { Loader } from '@/components/ui/feedback/Loader';
 import { RootInput } from '@/components/ui/inputs/RootInput';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
 import {
   removeUser as removeUserCandidate,
   setChangeUser as setChangeUserCandidate,
@@ -43,14 +30,13 @@ import styles from './styles.module.scss';
 export const RemoveUserPopup = React.memo(({ item }) => {
   const { t } = useTranslation();
   const { closePopup } = usePopup();
+  const { isAdminContext } = useRouteValidation();
   const location = useLocation();
   const navigate = useNavigate();
-  const isAdminContext = location.pathname.includes('/all-users');
 
   const { errorArray, serverStatus, isAuth } = useSelector((state) =>
     isAdminContext ? state.users : state.candidate
   );
-  const currentUser = useSelector((state) => state.candidate.user);
   const { sort, search, page, limit } = useSelector((state) => state.users);
   const { date } = useSelector((state) => state.filters);
   const dispatch = useDispatch();

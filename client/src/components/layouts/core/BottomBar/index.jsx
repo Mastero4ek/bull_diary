@@ -1,19 +1,24 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import {
-  Link,
-  useLocation,
-} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { Icon } from '@/components/ui/media/Icon';
 import { SmallDesc } from '@/components/ui/typography/descriptions/SmallDesc';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
 
 import styles from './styles.module.scss';
 
 export const BottomBar = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const {
+    isWalletDetailsPage,
+    isDiaryPositionPage,
+    isTablePositionPage,
+    isBookmarksPositionPage,
+    isAllUsersPage,
+  } = useRouteValidation();
 
   const { language } = useSelector((state) => state.settings);
 
@@ -45,11 +50,11 @@ export const BottomBar = () => {
 
   const shouldShowBackButton = (item) => {
     return (
-      (location.pathname.includes('/wallet/details') && item.id === 4) ||
-      (location.pathname.includes('/diary/position/') && item.id === 1) ||
-      (location.pathname.includes('/table/position/') && item.id === 2) ||
-      (location.pathname.includes('/bookmarks/position/') && item.id === 3) ||
-      (location.pathname.includes('/all-users/') && item.id === 5)
+      (isWalletDetailsPage && item.id === 4) ||
+      (isDiaryPositionPage && item.id === 1) ||
+      (isTablePositionPage && item.id === 2) ||
+      (isBookmarksPositionPage && item.id === 3) ||
+      (isAllUsersPage && item.id === 5)
     );
   };
 

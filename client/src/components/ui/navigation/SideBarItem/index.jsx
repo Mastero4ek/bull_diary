@@ -2,21 +2,11 @@ import React, { useCallback } from 'react';
 
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import {
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import {
-  AnimatedSidebarLink,
-} from '@/components/animations/AnimatedSidebarLink';
-import {
-  useNotification,
-} from '@/components/layouts/specialized/NotificationLayout/NotificationProvider';
+import { AnimatedSidebarLink } from '@/components/animations/AnimatedSidebarLink';
+import { useNotification } from '@/components/layouts/specialized/NotificationLayout/NotificationProvider';
 import { ClosedContent } from '@/components/layouts/utils/ClosedContent';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
@@ -43,7 +33,7 @@ export const SideBarItem = React.memo(({ item, open = false }) => {
   const location = useLocation();
   const { t } = useTranslation();
   const { showSuccess, showError } = useNotification();
-  const { isPathValid } = useRouteValidation();
+  const { isPathValid, isInfoPage } = useRouteValidation();
 
   const routeToComponentMap = {
     '/wallet': 'WalletPage',
@@ -149,8 +139,7 @@ export const SideBarItem = React.memo(({ item, open = false }) => {
             sideBar.open ||
             (sideBar.blocked_value === 'open' && !isTablet) ||
             location.pathname.includes('home') ||
-            location.pathname.includes('privacy') ||
-            location.pathname.includes('terms') ||
+            isInfoPage ||
             !isPathValid
           }
           className={styles.sidebar_item_desc}

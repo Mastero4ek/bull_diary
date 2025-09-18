@@ -1,13 +1,7 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import CountUp from 'react-countup';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 
 import bear from '@/assets/images/levels/bear.png';
 import bull from '@/assets/images/levels/bull.png';
@@ -20,13 +14,12 @@ import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { SmallDesc } from '@/components/ui/typography/descriptions/SmallDesc';
 import { capitalize } from '@/helpers/functions';
+import { useRouteValidation } from '@/hooks/useRouteValidation';
 
 import styles from './styles.module.scss';
 
 export const Level = () => {
-  const location = useLocation();
-
-  const isAdminContext = location.pathname.includes('/all-users');
+  const { isAdminContext } = useRouteValidation();
 
   const { isTablet, isMobile } = useSelector((state) => state.settings);
   const { user } = useSelector((state) =>

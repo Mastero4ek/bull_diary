@@ -1,10 +1,7 @@
 import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import {
-  Link,
-  useLocation,
-} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Link as LinkScroll } from 'react-scroll';
 
 import { Socials } from '@/components/ui/forms/Socials';
@@ -19,10 +16,9 @@ import styles from './styles.module.scss';
 
 export const FooterLayout = React.memo(() => {
   const { t } = useTranslation();
-  const location = useLocation();
   const { NAVLIST } = useNavList();
   const { scrollOffset } = useScrollOffset();
-  const { isPathValid } = useRouteValidation();
+  const { isPathValid, isInfoPage } = useRouteValidation();
 
   return (
     <footer className={styles.footer_wrapper}>
@@ -38,8 +34,7 @@ export const FooterLayout = React.memo(() => {
         <div className={styles.footer_links}>
           <ul>
             {isPathValid &&
-              !location.pathname.includes('privacy') &&
-              !location.pathname.includes('terms') &&
+              !isInfoPage &&
               NAVLIST &&
               NAVLIST.length > 0 &&
               NAVLIST.map((nav) => (
@@ -58,9 +53,7 @@ export const FooterLayout = React.memo(() => {
                 </li>
               ))}
 
-            {(!isPathValid ||
-              location.pathname.includes('privacy') ||
-              location.pathname.includes('terms')) && (
+            {(!isPathValid || isInfoPage) && (
               <li>
                 <RootDesc>
                   <Link to={'/home'}>{t('nav.home')}</Link>

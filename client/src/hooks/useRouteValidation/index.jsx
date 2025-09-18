@@ -2,11 +2,7 @@ import { useMemo } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import {
-  protectedRoutes,
-  publicRoutes,
-  specialRoutes,
-} from '@/routes';
+import { protectedRoutes, publicRoutes, specialRoutes } from '@/routes';
 
 export const useRouteValidation = () => {
   const location = useLocation();
@@ -36,5 +32,25 @@ export const useRouteValidation = () => {
   return {
     isPathValid,
     currentPath: location.pathname,
+    isAdminContext: location.pathname.includes('/all-users'),
+    isInfoPage:
+      location.pathname.includes('privacy') ||
+      location.pathname.includes('terms'),
+    isExchangePage:
+      location.pathname.includes('all-users') ||
+      location.pathname.includes('profile') ||
+      location.pathname.includes('settings') ||
+      location.pathname.includes('contacts'),
+    isAdditionalPage:
+      location.pathname.includes('/wallet/details') ||
+      location.pathname.includes('/diary/position/') ||
+      location.pathname.includes('/table/position/') ||
+      location.pathname.includes('/bookmarks/position/') ||
+      location.pathname.includes('/all-users/'),
+    isWalletDetailsPage: location.pathname.includes('/wallet/details'),
+    isDiaryPositionPage: location.pathname.includes('/diary/position/'),
+    isTablePositionPage: location.pathname.includes('/table/position/'),
+    isBookmarksPositionPage: location.pathname.includes('/bookmarks/position/'),
+    isAllUsersPage: location.pathname.includes('/all-users/'),
   };
 };

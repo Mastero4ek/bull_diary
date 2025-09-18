@@ -1,16 +1,8 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Cookies from 'js-cookie';
 import moment from 'moment/min/moment-with-locales';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { BottomBar } from '@/components/layouts/core/BottomBar';
@@ -53,7 +45,7 @@ export const App = () => {
 
   const dispatch = useDispatch();
   const location = useLocation();
-  const { isPathValid } = useRouteValidation();
+  const { isPathValid, isInfoPage } = useRouteValidation();
   const {
     connect,
     disconnect,
@@ -184,7 +176,7 @@ export const App = () => {
 
           <div
             style={
-              !isPathValid
+              !isPathValid || isInfoPage
                 ? { height: 'auto', minHeight: 'auto', gap: '60rem' }
                 : {}
             }

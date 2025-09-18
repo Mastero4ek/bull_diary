@@ -1,18 +1,10 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
 import { Link } from 'react-scroll';
 
-import {
-  AnimatedDropdownList,
-} from '@/components/animations/AnimatedDropdownList';
+import { AnimatedDropdownList } from '@/components/animations/AnimatedDropdownList';
 import { Icon } from '@/components/ui/media/Icon';
 import { SideBarItem } from '@/components/ui/navigation/SideBarItem';
 import { useRouteValidation } from '@/hooks/useRouteValidation';
@@ -24,10 +16,9 @@ export const SettingsList = React.memo(() => {
   const selectRef = useRef();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const location = useLocation();
   const { isTablet } = useSelector((state) => state.settings);
   const { scrollOffset } = useScrollOffset();
-  const { isPathValid } = useRouteValidation();
+  const { isPathValid, isInfoPage } = useRouteValidation();
 
   const themeItem = { name: t('sidebar.theme'), icon: 'theme' };
   const languageItem = { name: t('sidebar.language'), icon: 'language' };
@@ -134,8 +125,7 @@ export const SettingsList = React.memo(() => {
         isScrollable={false}
       >
         {isTablet &&
-          !location.pathname.includes('privacy') &&
-          !location.pathname.includes('terms') &&
+          !isInfoPage &&
           isPathValid &&
           mobileMenu.map((item) => (
             <li key={item.id}>

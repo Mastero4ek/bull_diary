@@ -1,0 +1,65 @@
+@use '@/styles/mixins.scss' as *;
+
+.info_page_wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 40rem 380rem 40rem 300rem;
+
+  @include tablet {
+    padding: 40rem 16rem;
+  }
+}
+
+.info_page_title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 30rem;
+
+  h1 {
+    color: var(--primaryDef);
+  }
+
+  svg {
+    width: 50rem;
+    height: 50rem;
+    fill: var(--text);
+  }
+
+  @include tablet {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 20rem;
+
+    h1 {
+      @include font(700, 28rem, 125%);
+    }
+  }
+
+  @include phone {
+    svg {
+      width: 40rem;
+      height: 40rem;
+    }
+
+    h1 {
+      @include font(700, 22rem, 125%);
+    }
+  }
+}
+
+.info_page_content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 80rem;
+
+  section {
+    &:first-child {
+      &::before {
+        display: none;
+      }
+    }
+  }
+}
