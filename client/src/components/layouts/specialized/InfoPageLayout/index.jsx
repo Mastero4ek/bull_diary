@@ -17,9 +17,9 @@ export const InfoPageLayout = ({ termsList, title, iconTitle, lastUpdate }) => {
       className={styles.info_page_wrapper}
       style={{
         padding:
-          isAuth && user.is_activated && !isMobile
+          isAuth && user.is_activated && !isMobile && !isTablet
             ? '0 40rem 40rem 0'
-            : isMobile
+            : isMobile || isTablet
               ? '40rem 16rem'
               : '40rem 380rem 40rem 300rem',
       }}
