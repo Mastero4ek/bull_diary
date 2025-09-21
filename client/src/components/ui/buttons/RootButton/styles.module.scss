@@ -13,7 +13,9 @@
   background: var(--primaryDef);
   position: relative;
 
+  a,
   span {
+    text-decoration: none;
     color: var(--white);
     transition: all 0.15s ease-in-out;
     animation: visible 0.15s ease-in-out;

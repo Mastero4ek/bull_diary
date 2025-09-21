@@ -105,7 +105,8 @@
     "remove_cover": "Remove cover",
     "details": "Details",
     "confirm": "Confirm",
-    "cancel_sync": "Cancel sync"
+    "cancel_sync": "Cancel sync",
+    "more": "More"
   },
   "closed_title": {
     "already_joined": "You have already joined this tournament!",
@@ -752,8 +753,19 @@
       "description": "Need help with your trading platform or&nbsp;have questions about&nbsp;Bull&nbsp;Diary? <br/><br/> <ul><li><strong>24/7 Support:</strong> Our dedicated team is&nbsp;always ready to&nbsp;assist you with any questions.</li><li><strong>Technical Help:</strong> Get assistance with platform features, API connections, and&nbsp;data synchronization.</li><li><strong>Feedback Welcome:</strong> Share your suggestions and&nbsp;help us improve the&nbsp;trading experience.</li><li><strong>Multiple Channels:</strong> Contact us&nbsp;via email, social media, or&nbsp;fill out the&nbsp;contact form.</li></ul>"
     },
     "settings": {
+      "keys": {
+        "title": "How to connect an exchange?",
+        "bybit": {
+          "title": "Bybit",
+          "content": "<ul><li>Visit the official website <a href=\"https://www.bybit.com/ru-RU/register?affiliate_id=40069\" target=\"_blank\">Bybit</a> and click on the user icon.</li><li>Click on &quot;API&quot;, then &quot;Create new key&quot; → &quot;API keys created by the system&quot;.</li><li>Select &quot;Binding to a third-party application&quot; and in the field &quot;App name&quot; enter &quot;Traders Diaries&quot;.</li><li>In the &quot;API key permission&quot; section, perform the following actions depending on your usage:<ul><li>Select &quot;Read-only&quot; and tick &quot;Single trading account&quot;.</li><li>After setting the parameters, click the &quot;Submit&quot; button.</li><li>The keys are created. Copy and enter them on the exchange connection page, then click the &quot;Save&quot; button.</li></ul></li></ul>"
+        }
+      },
+      "tuning": {
+        "title": "How to configure the application?",
+        "content": "<span>Go to the application settings and select &quot;Settings&quot;.</span><ul><li><strong>Language:</strong> Switch between Russian and&nbsp;English interfaces.</li><li><strong>Dark Theme:</strong> Enable dark mode for&nbsp;comfortable trading in&nbsp;low-light conditions.</li><li><strong>Show Markers:</strong> Display visual indicators for&nbsp;buy/sell positions in&nbsp;trade tables.</li><li><strong>Hide Amounts:</strong> Conceal financial data for&nbsp;privacy and&nbsp;security.</li><li><strong>Text Highlighting:</strong> Color-code positive and&nbsp;negative values for&nbsp;better readability.</li><li><strong>Hide Description:</strong> Hide page descriptions on&nbsp;mobile devices for&nbsp;easier reading.</li><li><strong>Sidebar:</strong> Manage sidebar visibility&nbsp;- keep&nbsp;it&nbsp;open, closed, or&nbsp;unblocked for&nbsp;easy navigation.</li></ul>"
+      },
       "tuning_title": "Application <br /> Settings",
-      "tuning_description": "Customize your trading experience with personalized settings. <br/><br/> <ul><li><strong>Language:</strong> Switch between Russian and&nbsp;English interfaces.</li><li><strong>Dark Theme:</strong> Enable dark mode for&nbsp;comfortable trading in&nbsp;low-light conditions.</li><li><strong>Show Markers:</strong> Display visual indicators for&nbsp;buy/sell positions in&nbsp;trade tables.</li><li><strong>Hide Amounts:</strong> Conceal financial data for&nbsp;privacy and&nbsp;security.</li><li><strong>Text Highlighting:</strong> Color-code positive and&nbsp;negative values for&nbsp;better readability.</li><li><strong>Hide Description:</strong> Hide page descriptions on&nbsp;mobile devices for&nbsp;easier reading.</li><li><strong>Sidebar:</strong> Manage sidebar visibility&nbsp;- keep&nbsp;it&nbsp;open, closed, or&nbsp;unblocked for&nbsp;easy navigation.</li></ul>",
+      "tuning_description": "Personalize the interface and&nbsp;functionality of&nbsp;the platform to&nbsp;meet your trading needs.<br/><br/>Configure visual data display, choose your preferred interface language, optimize information presentation for&nbsp;maximum convenience. Adapt the&nbsp;platform to&nbsp;your trading style and&nbsp;achieve maximum efficiency from&nbsp;using all available analysis and&nbsp;monitoring tools for&nbsp;trading operations.",
       "keys_title": "Exchange <br /> Connection",
       "keys_description": "Connect your cryptocurrency exchange accounts to&nbsp;import trading data. <br/><br/> <ul><li><strong>Supported Exchanges:</strong> Bybit, MEXC, and OKX with futures trading support.</li><li><strong>API Keys:</strong> Securely store your read-only API keys for&nbsp;automatic data synchronization.</li><li><strong>Data Sync:</strong> Import trading history from the&nbsp;last 180&nbsp;days with real-time progress tracking.</li><li><strong>Background Processing:</strong> Synchronization runs automatically without interrupting your workflow.</li><li><strong>Multi-Exchange:</strong> Connect multiple exchanges simultaneously for&nbsp;comprehensive portfolio analysis.</li></ul>",
       "keys_api_title": "Api keys",

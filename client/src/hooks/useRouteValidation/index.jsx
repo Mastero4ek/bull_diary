@@ -2,7 +2,11 @@ import { useMemo } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { protectedRoutes, publicRoutes, specialRoutes } from '@/routes';
+import {
+  protectedRoutes,
+  publicRoutes,
+  specialRoutes,
+} from '@/routes';
 
 export const useRouteValidation = () => {
   const location = useLocation();
@@ -52,5 +56,6 @@ export const useRouteValidation = () => {
     isTablePositionPage: location.pathname.includes('/table/position/'),
     isBookmarksPositionPage: location.pathname.includes('/bookmarks/position/'),
     isAllUsersPage: location.pathname.includes('/all-users/'),
+    isSettingsPage: location.pathname.includes('/settings/'),
   };
 };

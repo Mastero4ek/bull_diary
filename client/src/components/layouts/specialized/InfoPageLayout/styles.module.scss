@@ -27,6 +27,17 @@
     fill: var(--text);
   }
 
+  button {
+    margin: 0;
+    flex-direction: row-reverse;
+
+    svg {
+      width: 24rem;
+      height: 24rem;
+      fill: var(--white);
+    }
+  }
+
   @include tablet {
     flex-wrap: wrap;
     align-items: flex-start;
@@ -59,6 +70,16 @@
     &:first-child {
       &::before {
         display: none;
+      }
+    }
+  }
+
+  ul {
+    ul {
+      list-style: circle;
+
+      li {
+        list-style: circle;
       }
     }
   }

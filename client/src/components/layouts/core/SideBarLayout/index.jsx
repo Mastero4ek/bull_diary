@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 
 import { AnimatedSidebar } from '@/components/animations/AnimatedSidebar';
 import { Logo } from '@/components/ui/navigation/Logo';
@@ -20,6 +23,7 @@ export const SideBarLayout = React.memo(() => {
     isTablePositionPage,
     isBookmarksPositionPage,
     isAllUsersPage,
+    isSettingsPage,
   } = useRouteValidation();
   const { user } = useSelector((state) => state.candidate);
   const { sideBar, language, isTablet } = useSelector(
@@ -86,7 +90,8 @@ export const SideBarLayout = React.memo(() => {
       (isDiaryPositionPage && item.id === 1) ||
       (isTablePositionPage && item.id === 2) ||
       (isBookmarksPositionPage && item.id === 3) ||
-      (isAllUsersPage && item.id === 5 && user?.role === 'admin')
+      (isAllUsersPage && item.id === 5 && user?.role === 'admin') ||
+      (isSettingsPage && item.id === 7)
     );
   };
 

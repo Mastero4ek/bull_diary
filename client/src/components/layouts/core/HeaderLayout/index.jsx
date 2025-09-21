@@ -3,7 +3,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-scroll';
 
-import { NotificationLayout } from '@/components/layouts/specialized/NotificationLayout';
+import {
+  NotificationLayout,
+} from '@/components/layouts/specialized/NotificationLayout';
 import { Logo } from '@/components/ui/navigation/Logo';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
 import { useNavList } from '@/hooks/useNavigation';
@@ -27,7 +29,9 @@ export const HeaderLayout = React.memo(() => {
     <header
       style={
         isAuth && user.is_activated
-          ? { paddingRight: isMobile ? '0' : isTablet ? '16rem' : '40rem' }
+          ? {
+              paddingRight: isMobile ? '0' : isTablet ? '16rem' : '40rem',
+            }
           : isPathValid
             ? { position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000 }
             : { position: 'relative' }

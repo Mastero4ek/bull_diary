@@ -1,21 +1,20 @@
-import React, { useEffect, useMemo } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { animateScroll } from 'react-scroll';
 
-import { Icon } from '@/components/ui/media/Icon';
+import {
+  InfoPageLayout,
+} from '@/components/layouts/specialized/InfoPageLayout';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
-import { H1 } from '@/components/ui/typography/titles/H1';
 import { H2 } from '@/components/ui/typography/titles/H2';
 
 import { InfoCard } from '../components/InfoCard';
-import { NavBar } from '../components/NavBar';
-import { Paragraph } from '../components/Paragraph';
-import styles from '../styles.module.scss';
 
 export const TermsPage = React.memo(() => {
-  const { isTablet, isMobile } = useSelector((state) => state.settings);
   const { t } = useTranslation();
 
   const termsList = useMemo(
@@ -914,28 +913,11 @@ export const TermsPage = React.memo(() => {
   }, []);
 
   return (
-    <div className={styles.info_page_wrapper}>
-      {!isTablet && !isMobile && <NavBar items={termsList} />}
-
-      <div className={styles.info_page_content}>
-        <div className={styles.info_page_title}>
-          <Icon id="diary" />
-
-          <H1>
-            <span dangerouslySetInnerHTML={{ __html: t('page.terms.title') }} />
-          </H1>
-        </div>
-
-        <RootDesc>
-          <span
-            dangerouslySetInnerHTML={{ __html: t('page.terms.last_update') }}
-          />
-        </RootDesc>
-
-        {termsList &&
-          termsList.length > 0 &&
-          termsList.map((item) => <Paragraph key={item.id} item={item} />)}
-      </div>
-    </div>
+    <InfoPageLayout
+      lastUpdate={t('page.terms.last_update')}
+      termsList={termsList}
+      title={t('page.terms.title')}
+      iconTitle="diary"
+    />
   );
 });

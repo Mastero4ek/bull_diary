@@ -1,21 +1,20 @@
-import React, { useEffect, useMemo } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import { animateScroll } from 'react-scroll';
 
-import { Icon } from '@/components/ui/media/Icon';
+import {
+  InfoPageLayout,
+} from '@/components/layouts/specialized/InfoPageLayout';
 import { RootDesc } from '@/components/ui/typography/descriptions/RootDesc';
-import { H1 } from '@/components/ui/typography/titles/H1';
 import { H2 } from '@/components/ui/typography/titles/H2';
 
 import { InfoCard } from '../components/InfoCard';
-import { NavBar } from '../components/NavBar';
-import { Paragraph } from '../components/Paragraph';
-import styles from '../styles.module.scss';
 
 export const PrivacyPage = React.memo(() => {
-  const { isTablet, isMobile } = useSelector((state) => state.settings);
   const { t } = useTranslation();
 
   const privacyList = useMemo(
@@ -1072,30 +1071,11 @@ export const PrivacyPage = React.memo(() => {
   }, []);
 
   return (
-    <div className={styles.info_page_wrapper}>
-      {!isTablet && !isMobile && <NavBar items={privacyList} />}
-
-      <div className={styles.info_page_content}>
-        <div className={styles.info_page_title}>
-          <Icon id="diary" />
-
-          <H1>
-            <span
-              dangerouslySetInnerHTML={{ __html: t('page.privacy.title') }}
-            />
-          </H1>
-        </div>
-
-        <RootDesc>
-          <span
-            dangerouslySetInnerHTML={{ __html: t('page.privacy.last_update') }}
-          />
-        </RootDesc>
-
-        {privacyList &&
-          privacyList.length > 0 &&
-          privacyList.map((item) => <Paragraph key={item.id} item={item} />)}
-      </div>
-    </div>
+    <InfoPageLayout
+      lastUpdate={t('page.privacy.last_update')}
+      termsList={privacyList}
+      title={t('page.privacy.title')}
+      iconTitle="diary"
+    />
   );
 });

@@ -2,12 +2,21 @@ import React, { useCallback } from 'react';
 
 import Cookies from 'js-cookie';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-import { AnimatedSidebarLink } from '@/components/animations/AnimatedSidebarLink';
-import { useNotification } from '@/components/layouts/specialized/NotificationLayout/NotificationProvider';
-import { ClosedContent } from '@/components/layouts/utils/ClosedContent';
+import {
+  AnimatedSidebarLink,
+} from '@/components/animations/AnimatedSidebarLink';
+import {
+  useNotification,
+} from '@/components/layouts/specialized/NotificationLayout/NotificationProvider';
 import { InnerBlock } from '@/components/layouts/utils/InnerBlock';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
 import { CheckboxSwitch } from '@/components/ui/inputs/CheckboxSwitch';
@@ -110,16 +119,8 @@ export const SideBarItem = React.memo(({ item, open = false }) => {
 
   return (
     <ItemBlock>
-      {item?.link &&
-        item?.link.includes('battle') &&
-        user?.role !== 'admin' && <ClosedContent width={20} />}
-
       <div
-        onClick={
-          item?.link && item?.link.includes('battle') && user?.role !== 'admin'
-            ? undefined
-            : handleClickItem
-        }
+        onClick={handleClickItem}
         onMouseEnter={() => {
           if (componentName) {
             preload();
@@ -127,13 +128,22 @@ export const SideBarItem = React.memo(({ item, open = false }) => {
         }}
         className={`${item?.icon === 'theme' ? styles.item_theme : ''} ${
           styles.sidebar_body_item
-        } ${isActive ? styles.active : ''} ${
+        } ${
           item?.link === 'back' ? styles.sidebar_back_button : ''
-        }`}
+        } ${isActive ? styles.active : ''}`}
+        style={
+          item?.link === 'back' &&
+          ((sideBar.blocked_value === 'unblock' && !sideBar.open) ||
+            (sideBar.blocked_value === 'close' && sideBar.open) ||
+            (sideBar.blocked_value === 'close' && !sideBar.open))
+            ? { gap: '0' }
+            : { gap: '20rem' }
+        }
       >
         <Icon id={item?.icon} />
 
         <AnimatedSidebarLink
+          className={styles.sidebar_item_desc}
           open={
             open ||
             sideBar.open ||
@@ -142,7 +152,6 @@ export const SideBarItem = React.memo(({ item, open = false }) => {
             isInfoPage ||
             !isPathValid
           }
-          className={styles.sidebar_item_desc}
         >
           <RootDesc>
             <span>{item?.name}</span>

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { PageLayout } from '@/components/layouts/core/PageLayout';
 import { DescLayout } from '@/components/layouts/core/PageLayout/DescLayout';
 import { OuterBlock } from '@/components/layouts/utils/OuterBlock';
+import { RootButton } from '@/components/ui/buttons/RootButton';
 
 import { Keys } from './Keys';
 import styles from './styles.module.scss';
@@ -18,7 +20,7 @@ export const SettingsPage = React.memo(() => {
   const { help, isTablet, isMobile } = useSelector((state) => state.settings);
 
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
   const handleOpenTuning = () => {
     setOpenSection((prev) => (prev === 'tuning' ? null : 'tuning'));
     setChangeDesc(false);
@@ -69,7 +71,12 @@ export const SettingsPage = React.memo(() => {
                   }}
                 />
               }
-            />
+            >
+              <RootButton
+                onClickBtn={() => navigate('/settings/tuning')}
+                text={t('button.more')}
+              />
+            </DescLayout>
           ) : (
             <DescLayout
               icon={'keys'}
@@ -87,7 +94,12 @@ export const SettingsPage = React.memo(() => {
                   }}
                 />
               }
-            />
+            >
+              <RootButton
+                onClickBtn={() => navigate('/settings/keys')}
+                text={t('button.more')}
+              />
+            </DescLayout>
           )}
         </OuterBlock>
       )}
