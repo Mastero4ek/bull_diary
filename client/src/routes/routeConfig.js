@@ -36,14 +36,6 @@ export const publicRoutes = [
     component: PrivacyPage,
   },
   {
-    path: '/settings/keys',
-    component: KeysPage,
-  },
-  {
-    path: '/settings/tuning',
-    component: TuningPage,
-  },
-  {
     path: '/terms',
     component: TermsPage,
   },
@@ -101,6 +93,14 @@ export const protectedRoutes = [
   {
     path: '/contacts',
     component: ContactsPage,
+  },
+  {
+    path: '/settings/keys',
+    component: KeysPage,
+  },
+  {
+    path: '/settings/tuning',
+    component: TuningPage,
   },
 ];
 

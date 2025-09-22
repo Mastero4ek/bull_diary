@@ -5,13 +5,13 @@
   margin: 0 !important;
 
   button {
-    background-color: var(--red);
+    background-color: var(--red) !important;
 
     @include mixins.desktop {
-			&:hover:not(:disabled) {
-				background: var(--red);
-			}
-		}
+      &:hover:not(:disabled) {
+        background: var(--red) !important;
+      }
+    }
   }
 }
 
@@ -20,10 +20,12 @@
   margin: 0 !important;
 
   button {
-    background-color: var(--orange);
+    background-color: var(--orange) !important;
 
-    &:hover {
-      background-color: var(--orange);
+    @include mixins.desktop {
+      &:hover:not(:disabled) {
+        background: var(--orange) !important;
+      }
     }
 
     svg {
@@ -38,10 +40,12 @@
   margin: 0 !important;
 
   button {
-    background-color: var(--green);
+    background-color: var(--green) !important;
 
-    &:hover {
-      background-color: var(--green);
+    @include mixins.desktop {
+      &:hover:not(:disabled) {
+        background: var(--green) !important;
+      }
     }
 
     svg {

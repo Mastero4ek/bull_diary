@@ -75,6 +75,22 @@
   }
 
   ul {
+    li {
+      display: flex;
+      flex-direction: column;
+      gap: 10rem;
+
+      img {
+        width: 100%;
+        max-width: 1200rem;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10rem;
+        margin-bottom: 30rem;
+        box-shadow: var(--shadowOuter);
+      }
+    }
+
     ul {
       list-style: circle;
 
